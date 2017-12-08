@@ -6,6 +6,7 @@ public class Carta : MonoBehaviour {
 
     private int tipoCarta;
     private string rutaImatge;
+    private int ataque;
 
 	// Use this for initialization
 	void Start () {
