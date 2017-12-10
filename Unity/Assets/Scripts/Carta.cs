@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Carta : MonoBehaviour {
+public class Carta {
 
     private int tipoCarta;
     private string rutaImatge;
     private int ataque;
+    private GameObject card;
 
 	// Use this for initialization
-	void Start () {
-        tipoCarta = Global.TIPO_CARTA.Fuego;
+	public Carta (int tipoCarta) {
+        this.tipoCarta = tipoCarta;
 
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    public void Start()
+    {
+        card = Util.CargarCarta(tipoCarta);        
+    }
 }
