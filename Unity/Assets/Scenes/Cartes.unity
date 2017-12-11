@@ -158,7 +158,7 @@ Prefab:
     - target: {fileID: 224872610718910416, guid: 9c95642ed82ea2842b78c3cadd081659,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 577
+      value: 611
       objectReference: {fileID: 0}
     - target: {fileID: 224872610718910416, guid: 9c95642ed82ea2842b78c3cadd081659,
         type: 2}
@@ -262,7 +262,7 @@ Prefab:
     - target: {fileID: 224872610718910416, guid: 9c95642ed82ea2842b78c3cadd081659,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 661
+      value: 695
       objectReference: {fileID: 0}
     - target: {fileID: 224872610718910416, guid: 9c95642ed82ea2842b78c3cadd081659,
         type: 2}
@@ -596,7 +596,7 @@ Prefab:
     - target: {fileID: 224872610718910416, guid: 9c95642ed82ea2842b78c3cadd081659,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 493
+      value: 527
       objectReference: {fileID: 0}
     - target: {fileID: 224872610718910416, guid: 9c95642ed82ea2842b78c3cadd081659,
         type: 2}
@@ -696,7 +696,7 @@ Prefab:
     - target: {fileID: 224872610718910416, guid: 9c95642ed82ea2842b78c3cadd081659,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 493
+      value: 527
       objectReference: {fileID: 0}
     - target: {fileID: 224872610718910416, guid: 9c95642ed82ea2842b78c3cadd081659,
         type: 2}
@@ -882,7 +882,7 @@ Prefab:
     - target: {fileID: 224872610718910416, guid: 9c95642ed82ea2842b78c3cadd081659,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 409
+      value: 443
       objectReference: {fileID: 0}
     - target: {fileID: 224872610718910416, guid: 9c95642ed82ea2842b78c3cadd081659,
         type: 2}
@@ -1091,7 +1091,7 @@ Prefab:
     - target: {fileID: 224872610718910416, guid: 9c95642ed82ea2842b78c3cadd081659,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 577
+      value: 611
       objectReference: {fileID: 0}
     - target: {fileID: 224872610718910416, guid: 9c95642ed82ea2842b78c3cadd081659,
         type: 2}
