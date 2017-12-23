@@ -122,13 +122,14 @@ GameObject:
   - component: {fileID: 4353651643958108}
   - component: {fileID: 65137158250406342}
   - component: {fileID: 114740700403182966}
+  - component: {fileID: 114431371090518178}
   m_Layer: 0
   m_Name: Spell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1522116807054132
 GameObject:
   m_ObjectHideFlags: 1
@@ -561,6 +562,33 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114431371090518178
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1493717462574088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a317fd6efa69579419b938005f82e72c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardAsset: {fileID: 11400000, guid: ccdf228b08d2d2043a50a2de022d6ab8, type: 2}
+  PreviewManager: {fileID: 0}
+  NameText: {fileID: 114196763142585276}
+  ManaCostText: {fileID: 114435378239162236}
+  EvolutionText: {fileID: 0}
+  DescriptionText: {fileID: 114730206204763182}
+  TypeText: {fileID: 114511794427769688}
+  AttackText: {fileID: 0}
+  DefenseText: {fileID: 0}
+  CardTopRibbonImage: {fileID: 114225793085811102}
+  CardLowRibbonImage: {fileID: 114430406996323952}
+  CardGraphicImage: {fileID: 114994431014485332}
+  CardBodyImage: {fileID: 114070205773918546}
+  CardFaceFrameImage: {fileID: 114929389700674048}
+  CardFaceGlowImage: {fileID: 0}
+  CardBackGlowImage: {fileID: 0}
 --- !u!114 &114435378239162236
 MonoBehaviour:
   m_ObjectHideFlags: 1
