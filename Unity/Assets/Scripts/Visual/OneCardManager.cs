@@ -50,12 +50,12 @@ public class OneCardManager : MonoBehaviour {
     {
         // universal actions for any Card
         // 1) apply tint
-        if (cardAsset.characterAsset != null)
+        if (cardAsset.AssetPersonaje != null)
         {
-            CardBodyImage.color = cardAsset.characterAsset.ClassCardTint;
-            CardFaceFrameImage.color = cardAsset.characterAsset.ClassCardTint;
-            CardTopRibbonImage.color = cardAsset.characterAsset.ClassRibbonsTint;
-            CardLowRibbonImage.color = cardAsset.characterAsset.ClassRibbonsTint;
+            CardBodyImage.color = cardAsset.AssetPersonaje.ClassCardTint;
+            CardFaceFrameImage.color = cardAsset.AssetPersonaje.ClassCardTint;
+            CardTopRibbonImage.color = cardAsset.AssetPersonaje.ClassRibbonsTint;
+            CardLowRibbonImage.color = cardAsset.AssetPersonaje.ClassRibbonsTint;
         }
         else
         {
@@ -67,21 +67,20 @@ public class OneCardManager : MonoBehaviour {
         // 2) add card name
         NameText.text = cardAsset.name;
         // 3) add mana cost
-        ManaCostText.text = cardAsset.ManaCost.ToString();
+        ManaCostText.text = cardAsset.CosteMana.ToString();
         // 4) add description
-        DescriptionText.text = cardAsset.Description;
+        DescriptionText.text = cardAsset.Descripcion;
         // 5) add type
-        TypeText.text = cardAsset.Type;
-        // 6) add evolution
-        EvolutionText.text = cardAsset.Evolution;
+        TypeText.text = cardAsset.TipoDeCarta.ToString();        
         // 6) Change the card graphic sprite
-        CardGraphicImage.sprite = cardAsset.CardImage;
+        CardGraphicImage.sprite = cardAsset.ImagenCarta;
 
-        if (cardAsset.Defense != 0)
+        if (cardAsset.TipoDeCarta != TipoCarta.Magica)
         {
             // this is a creature
-            AttackText.text = cardAsset.Attack.ToString();
-            DefenseText.text = cardAsset.Defense.ToString();
+            AttackText.text = cardAsset.Ataque.ToString();
+            DefenseText.text = cardAsset.Defensa.ToString();
+            EvolutionText.text = cardAsset.Evolucion;
         }
 
         if (PreviewManager != null)

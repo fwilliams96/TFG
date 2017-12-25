@@ -13,30 +13,40 @@ public enum TargetingOptions
     YourCharacters
 }
 
+public enum TipoCarta
+{
+    Fuego,
+    Tierra,
+    Electrica,
+    Agua,
+    Magica,
+    Fusion,
+    Ancestral
+}
+
 public class CardAsset : ScriptableObject 
 {
     // this object will hold the info about the most general card
     [Header("General info")]
-    public CharacterAsset characterAsset;  // if this is null, it`s a neutral card
+    public CharacterAsset AssetPersonaje;  // if this is null, it`s a neutral card
     [TextArea(2,3)]
-    public string Description;  // Description for spell or character
-    public string Type;
-    public string Evolution;
-	public Sprite CardImage;
-    public int ManaCost;
+    public string Descripcion;  // Description for spell or character
+    public TipoCarta TipoDeCarta;
+    public Sprite ImagenCarta;
+    public int CosteMana;
 
-    [Header("Creature Info")]
-    public int Defense;
-    public int Attack;
-    public int AttacksForOneTurn = 1;
+    [Header("Carta no mágica")]
+    public int Defensa;
+    public int Ataque;
+    public int AtaquesPorTurno = 1;
+    public string Evolucion;
     public bool Taunt;
     public bool Charge;
     public string CreatureScriptName;
     public int specialCreatureAmount;
 
-    [Header("SpellInfo")]
+    [Header("Carta mágica")]
     public string SpellScriptName;
     public int specialSpellAmount;
     public TargetingOptions Targets;
-
 }
