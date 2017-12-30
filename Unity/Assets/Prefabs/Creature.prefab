@@ -358,9 +358,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4382903330124574}
   - component: {fileID: 65180125879875284}
-  - component: {fileID: 114241935478149268}
-  - component: {fileID: 114992196314660986}
   - component: {fileID: 114326795581893832}
+  - component: {fileID: 114971011823642570}
   m_Layer: 0
   m_Name: Creature
   m_TagString: Untagged
@@ -708,7 +707,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1568162844447348}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.3444118, y: 3.69, z: 0}
+  m_LocalPosition: {x: -3.48, y: -1.65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224801209008590364}
@@ -1015,21 +1014,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114241935478149268
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1568162844447348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 896a7ccb062a25743a7050e32dd8c59d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CardFront: {fileID: 0}
-  CardBack: {fileID: 0}
-  targetFacePoint: {fileID: 4123609306592830}
-  col: {fileID: 65180125879875284}
 --- !u!114 &114279425425578538
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1123,7 +1107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TurnThisOffWhenPreviewing: {fileID: 0}
-  TargetPosition: {x: 0, y: 0, z: 0}
+  TargetPosition: {x: 1.5, y: 0, z: 0}
   TargetScale: 1.5
   previewGameObject: {fileID: 1100243106943314}
   ActivateInAwake: 1
@@ -1730,6 +1714,23 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114971011823642570
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1568162844447348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e358dd2a0481814cb38312c5e510d48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardAsset: {fileID: 11400000, guid: 9392ea7cd777d574ba7a7227f3b3b60a, type: 2}
+  PreviewManager: {fileID: 114724303554253570}
+  HealthText: {fileID: 114437812813042112}
+  AttackText: {fileID: 114988342670511754}
+  CreatureGraphicImage: {fileID: 114890537477721686}
+  CreatureGlowImage: {fileID: 114320057053641964}
 --- !u!114 &114984150420568790
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1796,33 +1797,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 4
---- !u!114 &114992196314660986
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1568162844447348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a317fd6efa69579419b938005f82e72c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cardAsset: {fileID: 0}
-  PreviewManager: {fileID: 114724303554253570}
-  NameText: {fileID: 0}
-  ManaCostText: {fileID: 0}
-  EvolutionText: {fileID: 0}
-  DescriptionText: {fileID: 0}
-  TypeText: {fileID: 0}
-  AttackText: {fileID: 114988342670511754}
-  DefenseText: {fileID: 114437812813042112}
-  CardTopRibbonImage: {fileID: 0}
-  CardLowRibbonImage: {fileID: 0}
-  CardGraphicImage: {fileID: 114890537477721686}
-  CardBodyImage: {fileID: 0}
-  CardFaceFrameImage: {fileID: 0}
-  CardFaceGlowImage: {fileID: 114320057053641964}
-  CardBackGlowImage: {fileID: 0}
 --- !u!114 &114999843767997852
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2129,7 +2103,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.062253483, y: 0.049462046}
   m_AnchorMax: {x: 0.36254737, y: 0.25812897}
-  m_AnchoredPosition: {x: -1.2505322, y: 0.16088581}
+  m_AnchoredPosition: {x: -1.250534, y: 0.16088867}
   m_SizeDelta: {x: 1.7017212, y: -2.990425}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224114543105575422
@@ -2371,7 +2345,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.629, y: 0.049462046}
   m_AnchorMax: {x: 0.9523864, y: 0.25812897}
-  m_AnchoredPosition: {x: -0.5686369, y: 0.23138237}
+  m_AnchoredPosition: {x: -0.56863403, y: 0.23138428}
   m_SizeDelta: {x: -4.1304874, y: -2.9861488}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224440380906465500
