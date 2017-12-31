@@ -9,7 +9,6 @@ public class DragOnTargetTest : DraggingActionsTest
     private LineRenderer lr;
     private Transform triangle;
     private SpriteRenderer triangleSR;
-    private GameObject Target;
 
     void Awake()
     {

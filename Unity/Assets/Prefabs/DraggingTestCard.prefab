@@ -90,6 +90,8 @@ GameObject:
   - component: {fileID: 65839657783912662}
   - component: {fileID: 114768379293325640}
   - component: {fileID: 114621869651051106}
+  - component: {fileID: 114212195379083516}
+  - component: {fileID: 114300292586910366}
   m_Layer: 0
   m_Name: DraggingTestCard
   m_TagString: Untagged
@@ -504,7 +506,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1238524496813492}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224114350785458746}
@@ -573,7 +575,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 4000
+  m_Text: 3
 --- !u!114 &114061939855892450
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -748,6 +750,18 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 4
+--- !u!114 &114212195379083516
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1238524496813492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa22d1a9a56f59a4cbc5346b8df267bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UsePointerDisplacement: 1
 --- !u!114 &114223963581172948
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -792,6 +806,17 @@ MonoBehaviour:
   m_circleCount: 6
   m_firstSample: 4
   m_sampleIncrement: 2
+--- !u!114 &114300292586910366
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1238524496813492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93ad942ba27201c4199ebc1ee1cbcb2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114342455471497808
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -994,7 +1019,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a317fd6efa69579419b938005f82e72c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardAsset: {fileID: 11400000, guid: ccdf228b08d2d2043a50a2de022d6ab8, type: 2}
+  cardAsset: {fileID: 0}
   PreviewManager: {fileID: 0}
   NameText: {fileID: 114133602280919886}
   ManaCostText: {fileID: 114204148948106248}

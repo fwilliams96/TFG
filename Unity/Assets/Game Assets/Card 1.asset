@@ -9,21 +9,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c51f89dfb114fdf488bdb27d00a4e71d, type: 3}
-  m_Name: Dragon
+  m_Name: Card 1
   m_EditorClassIdentifier: 
-  characterAsset: {fileID: 0}
-  Description: Dragon del planeta fuego con ansias de quemar
-  Type: Fuego
-  Evolution: 2
-  CardImage: {fileID: 21300000, guid: 7499d994dd84377438b2eb87775cc31f, type: 3}
-  ManaCost: 5
-  Defense: 2000
-  Attack: 3000
-  AttacksForOneTurn: 1
+  AssetPersonaje: {fileID: 0}
+  Descripcion: 
+  TipoDeCarta: 0
+  ImagenCarta: {fileID: 21300000, guid: 6ef460bd5bbb1b340b472afde8429d6c, type: 3}
+  CosteMana: 1
+  Defensa: 1
+  Ataque: 1
+  AtaquesPorTurno: 1
+  Evolucion: 
   Taunt: 0
   Charge: 0
   CreatureScriptName: 
   specialCreatureAmount: 0
   SpellScriptName: 
-  specialSpellAmount: 7
-  Targets: 4
+  specialSpellAmount: 0
+  Targets: 0
