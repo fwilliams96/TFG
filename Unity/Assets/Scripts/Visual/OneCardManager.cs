@@ -80,7 +80,7 @@ public class OneCardManager : MonoBehaviour {
             // this is a creature
             AttackText.text = cardAsset.Ataque.ToString();
             DefenseText.text = cardAsset.Defensa.ToString();
-            EvolutionText.text = cardAsset.Evolucion;
+            //EvolutionText.text = cardAsset.Evolucion;
         }
 
         if (PreviewManager != null)
