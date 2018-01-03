@@ -140,6 +140,9 @@ GameObject:
   - component: {fileID: 114204502054924884}
   - component: {fileID: 114992442835012254}
   - component: {fileID: 114212148617299592}
+  - component: {fileID: 114785513328675656}
+  - component: {fileID: 114416269469763020}
+  - component: {fileID: 114207825728136256}
   m_Layer: 0
   m_Name: SpellCard
   m_TagString: Untagged
@@ -797,8 +800,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1177447655767556}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.5, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.15558824, y: 0.28365397, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224817341766734664}
@@ -1012,6 +1015,17 @@ MonoBehaviour:
   CardBack: {fileID: 224175950974241784}
   targetFacePoint: {fileID: 4388529534777832}
   col: {fileID: 65013966566128854}
+--- !u!114 &114207825728136256
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1177447655767556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cf5f2d9e277360488826c02dba4e1e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114212148617299592
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1256,6 +1270,17 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Spell
+--- !u!114 &114416269469763020
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1177447655767556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a55225750f3b57e4e9f1d964a5d1cdc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114420443470722986
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1636,6 +1661,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114785513328675656
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1177447655767556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 868c6c7874a089947a3bfc2e653885af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114785919600191208
 MonoBehaviour:
   m_ObjectHideFlags: 1

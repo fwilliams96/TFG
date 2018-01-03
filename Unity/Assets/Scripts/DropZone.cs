@@ -13,7 +13,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
             return;
         Debug.Log("OnPointerEnter");
 
-        Draggable d = eventData.pointerDrag.GetComponent<Draggable>();
+        Draggable2 d = eventData.pointerDrag.GetComponent<Draggable2>();
         if (d != null)
         {
             //if(typeOfItem == d.typeOfItem || typeOfItem == Draggable.Slot.INVENTORY)
@@ -28,7 +28,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         if (eventData.pointerDrag == null)
             return;
         Debug.Log("OnPointerExit");
-        Draggable d = eventData.pointerDrag.GetComponent<Draggable>();
+        Draggable2 d = eventData.pointerDrag.GetComponent<Draggable2>();
         if (d != null && d.placerHolderParent == this.transform)
         {
             //if(typeOfItem == d.typeOfItem || typeOfItem == Draggable.Slot.INVENTORY)
@@ -42,7 +42,7 @@ public class DropZone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
     {
         Debug.Log(eventData.pointerDrag.name + " was dropped on" + gameObject.name);
 
-        Draggable d = eventData.pointerDrag.GetComponent<Draggable>();
+        Draggable2 d = eventData.pointerDrag.GetComponent<Draggable2>();
         if (d != null)
         {
             //if(typeOfItem == d.typeOfItem || typeOfItem == Draggable.Slot.INVENTORY)

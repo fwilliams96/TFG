@@ -21,7 +21,8 @@ public enum TipoCarta
     Agua,
     Magica,
     Fusion,
-    Ancestral
+    Ancestral,
+    Spell
 }
 
 public class CardAsset : ScriptableObject 
