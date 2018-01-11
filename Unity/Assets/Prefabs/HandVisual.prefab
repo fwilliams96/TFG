@@ -64,6 +64,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4130978256238790}
+  - component: {fileID: 114241225056212598}
   m_Layer: 0
   m_Name: HandVisual
   m_TagString: Untagged
@@ -381,3 +382,21 @@ MonoBehaviour:
   - {fileID: 4187528825048216}
   - {fileID: 4866925547320122}
   - {fileID: 4747168217368418}
+--- !u!114 &114241225056212598
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1382872624277432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac3e7baa7f729fd49814a2394c7bbd08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: 1
+  TakeCardsOpenly: 1
+  slots: {fileID: 114165917708732684}
+  DrawPreviewSpot: {fileID: 0}
+  DeckTransform: {fileID: 0}
+  OtherCardDrawSourceTransform: {fileID: 0}
+  PlayPreviewSpot: {fileID: 0}
