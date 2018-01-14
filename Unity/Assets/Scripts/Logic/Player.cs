@@ -321,5 +321,11 @@ public class Player : MonoBehaviour, ICharacter
             PArea.AllowedToControlThisPlayer = true;
         }
     }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.D))
+            DrawACard();
+    }
         
 }
