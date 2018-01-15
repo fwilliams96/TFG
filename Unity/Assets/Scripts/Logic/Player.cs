@@ -309,7 +309,7 @@ public class Player : MonoBehaviour, ICharacter
 
     public void TransmitInfoAboutPlayerToVisual()
     {
-        PArea.Portrait.GetComponent<IDHolder>().UniqueID = PlayerID;
+        PArea.Portrait.gameObject.AddComponent<IDHolder>().UniqueID = PlayerID;
         if (GetComponent<TurnMaker>() is AITurnMaker)
         {
             // turn off turn making for this character
@@ -320,6 +320,12 @@ public class Player : MonoBehaviour, ICharacter
             // allow turn making for this character
             PArea.AllowedToControlThisPlayer = true;
         }
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.D))
+            DrawACard();
     }
         
 }
