@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 114932845435262272}
   m_Layer: 0
   m_Name: PlayerPortrait
-  m_TagString: Untagged
+  m_TagString: LowPlayer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -403,7 +403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6542d6aedf33ab428397165672759c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  charAsset: {fileID: 0}
+  charAsset: {fileID: 11400000, guid: 76c89d54e3f02c3409c48207d3e1383e, type: 2}
   HealthText: {fileID: 114978816272019762}
   HeroPowerIconImage: {fileID: 0}
   HeroPowerBackgroundImage: {fileID: 0}

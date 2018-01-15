@@ -56,7 +56,7 @@ public class TurnManager : MonoBehaviour {
 
     void Start()
     {
-        //TODO OnGameStart();
+        OnGameStart();
     }
 
     public void OnGameStart()

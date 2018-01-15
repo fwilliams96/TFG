@@ -15,7 +15,7 @@ MonoBehaviour:
   Descripcion: 
   TipoDeCarta: 0
   ImagenCarta: {fileID: 21300000, guid: a31d93645ca57774c83633e70f1be8df, type: 3}
-  CosteMana: 1
+  CosteMana: 0
   Defensa: 1
   Ataque: 1
   AtaquesPorTurno: 1

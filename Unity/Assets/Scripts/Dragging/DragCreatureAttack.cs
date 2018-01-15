@@ -34,11 +34,12 @@ public class DragCreatureAttack : DraggingActions {
     public override bool CanDrag
     {
         get
-        {   
+        {
             // we can drag this card if 
             // a) we can control this our player (this is checked in base.canDrag)
             // b) creature "CanAttackNow" - this info comes from logic part of our code into each creature`s manager script
-            return base.CanDrag && manager.CanAttackNow;
+            return true;
+            //return base.CanDrag && manager.CanAttackNow;
         }
     }
 
