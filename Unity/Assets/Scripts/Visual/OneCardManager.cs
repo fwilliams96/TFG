@@ -75,7 +75,7 @@ public class OneCardManager : MonoBehaviour {
         // 6) Change the card graphic sprite
         CardGraphicImage.sprite = cardAsset.ImagenCarta;
 
-        if (cardAsset.TipoDeCarta != TipoCarta.Magica)
+        if (cardAsset.TipoDeCarta != TipoCarta.Magica && cardAsset.TipoDeCarta != TipoCarta.Spell)
         {
             // this is a creature
             AttackText.text = cardAsset.Ataque.ToString();

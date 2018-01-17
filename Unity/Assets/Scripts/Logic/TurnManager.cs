@@ -74,7 +74,7 @@ public class TurnManager : MonoBehaviour {
             p.TransmitInfoAboutPlayerToVisual();
             p.PArea.PDeck.CardsInDeck = p.deck.cards.Count;
             // move both portraits to the center
-            p.PArea.Portrait.transform.position = p.PArea.handVisual.OtherCardDrawSourceTransform.position;
+            p.PArea.Portrait.transform.position = p.PArea.InitialPortraitPosition.position;
         }
 
         Sequence s = DOTween.Sequence();
