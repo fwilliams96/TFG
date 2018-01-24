@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEditor;
 
 // this class will take care of switching turns and counting down time until the turn expires
 public class TurnManager : MonoBehaviour {
@@ -56,7 +57,13 @@ public class TurnManager : MonoBehaviour {
 
     void Start()
     {
-        OnGameStart();
+        //OnGameStart();
+        /*CardAsset cat = new CardAsset();
+        string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath("/Assets/New " + cat.name + ".asset");
+        AssetDatabase.CreateAsset(cat, "hola.asset");
+        AssetDatabase.SaveAssets();*/
+        var asset = ScriptableObject.CreateInstance<ScriptableObject>() ;
+        ProjectWindowUtil.CreateAsset(asset, "New " + typeof(ScriptableObject).Name + ".asset");
     }
 
     public void OnGameStart()

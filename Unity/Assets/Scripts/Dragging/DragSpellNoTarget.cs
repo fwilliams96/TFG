@@ -6,10 +6,20 @@ public class DragSpellNoTarget: DraggingActions{
 
     private int savedHandSlot;
     private WhereIsTheCardOrCreature whereIsCard;
+    private OneCardManager manager;
+
+    public override bool CanDrag
+    {
+        get
+        {
+            return base.CanDrag && manager.CanBePlayedNow;
+        }
+    }
 
     void Awake()
     {
         whereIsCard = GetComponent<WhereIsTheCardOrCreature>();
+        manager = GetComponent<OneCardManager>();
     }
 
     public override void OnStartDrag()

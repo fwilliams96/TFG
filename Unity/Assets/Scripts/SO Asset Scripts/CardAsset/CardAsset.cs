@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 
 public enum TargetingOptions
 {
@@ -50,4 +51,10 @@ public class CardAsset : ScriptableObject
     public string SpellScriptName;
     public int specialSpellAmount;
     public TargetingOptions Targets;
+
+    public CardAsset()
+    {
+        TipoDeCarta = TipoCarta.Ancestral;
+        Defensa = 2;
+    }
 }

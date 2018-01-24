@@ -14,8 +14,14 @@ public abstract class CreatureEffect
         this.specialAmount = specialAmount;
     }
 
-    public abstract void RegisterEffect();
+    public virtual void RegisterEventEffect() { }
 
-    public abstract void CauseEffect();
+    public virtual void CauseEventEffect() { }
+
+    //BattleCry
+    public virtual void WhenACreatureIsPlayed() { }
+
+    //DeathRattle
+    public virtual void WhenACreatureDies() { }
 
 }
