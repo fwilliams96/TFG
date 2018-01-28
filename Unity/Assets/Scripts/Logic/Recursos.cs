@@ -6,7 +6,7 @@ public class Recursos  {
     {
         //string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, "/JSON");
 
-        string filePath = Application.streamingAssetsPath + "/JSON";
+        string filePath = Application.streamingAssetsPath +"/XML";
         string cardPath;
         foreach (string familia in Global.CARTAS.FAMILIAS)
         {
