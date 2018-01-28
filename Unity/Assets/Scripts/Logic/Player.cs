@@ -245,6 +245,9 @@ public class Player : MonoBehaviour, ICharacter
         table.CreaturesOnTable.Insert(tablePos, newCreature);
         // no matter what happens, move this card to PlayACardSpot
         new PlayACreatureCommand(playedCard, this, tablePos, newCreature.UniqueCreatureID).AddToQueue();
+        //causa battlecry effect
+        if (newCreature.effect != null)
+            newCreature.effect.WhenACreatureIsPlayed();
         // remove this card from hand
         hand.CardsInHand.Remove(playedCard);
         HighlightPlayableCards();

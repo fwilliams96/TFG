@@ -2,6 +2,9 @@
 using System.Collections;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEditor;
+using System;
+using System.Reflection;
 
 // this class will take care of switching turns and counting down time until the turn expires
 public class TurnManager : MonoBehaviour {
@@ -56,7 +59,17 @@ public class TurnManager : MonoBehaviour {
 
     void Start()
     {
-        OnGameStart();
+        //OnGameStart();
+        Recursos.InicializarCartas();
+       
+        //PropertyInfo CurCultProp =(typeof(Global.CARTAS.FAMILIA)).GetProperty("AGUA");
+        // PropertyInfo nestedProperty = myType.GetProperty("AGUA");
+        //var defaultMember = (DefaultMemberAttribute)Attribute.GetCustomAttribute(nestedProperty.PropertyType, typeof(DefaultMemberAttribute));
+        //var nestedIndexer = nestedProperty.PropertyType.GetProperty(defaultMember.MemberName);
+        // Debug.Log(defaultMember);
+        //Debug.Log(nestedIndexer);
+        //var value = nestedIndexer.GetValue(bands, new object[] { 0 });
+        //string a = myPropInfo.Name;
     }
 
     public void OnGameStart()
@@ -74,7 +87,7 @@ public class TurnManager : MonoBehaviour {
             p.TransmitInfoAboutPlayerToVisual();
             p.PArea.PDeck.CardsInDeck = p.deck.cards.Count;
             // move both portraits to the center
-            p.PArea.Portrait.transform.position = p.PArea.handVisual.OtherCardDrawSourceTransform.position;
+            p.PArea.Portrait.transform.position = p.PArea.InitialPortraitPosition.position;
         }
 
         Sequence s = DOTween.Sequence();
@@ -84,7 +97,8 @@ public class TurnManager : MonoBehaviour {
         s.OnComplete(() =>
             {
                 // determine who starts the game.
-                int rnd = Random.Range(0,2);  // 2 is exclusive boundary
+                //int rnd = Random.Range(0,2);  // 2 is exclusive boundary
+                int rnd = 1;
                 // Debug.Log(Player.Players.Length);
                 Player whoGoesFirst = Player.Players[rnd];
                 // Debug.Log(whoGoesFirst);

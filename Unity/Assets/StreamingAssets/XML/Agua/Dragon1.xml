@@ -1,0 +1,17 @@
+<carta>
+  <delante>
+    <tipo>Agua</tipo>
+    <titulo>Dragon</titulo>
+    <nombreImagen>Dragon.png</nombreImagen>
+    <descripcion>Dragon de agua ansioso de ahogar</descripcion>
+    <evolucion>1</evolucion>
+    <mana>3</mana>
+    <ataque>3000</ataque>
+    <defensa>1500</defensa>
+  </delante>
+  <detras>
+    <simbolo>cuadrado.png</simbolo>
+    <elemento>trebol.png</elemento>
+    <elemento2>pocion.png</elemento2>
+  </detras>
+</carta>
