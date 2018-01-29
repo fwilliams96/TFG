@@ -6,17 +6,6 @@ using UnityEngine;
 
 public class Global {
 
-    public static class TIPO_CARTA
-    {
-        public const int Fuego = 0;
-        public const int Tierra = 1;
-        public const int Agua = 2;
-        public const int Electrica = 3;
-        public const int Fusion = 4;
-        public const int Magica = 5;
-        public const int Ancestral = 6;
-    }
-
     public static class CARTAS
     {
         public static string[] FAMILIAS = { "Agua", "Fuego", "Tierra", "Electricidad", "Magica", "Fusion", "Ancestral" };
@@ -32,6 +21,17 @@ public class Global {
             public static string[] ANCESTRAL = { "Dragon" };
         }
 
-        
+        public static class TIPO_CARTA
+        {
+            public const string FUEGO = "fuego";
+            public const string TIERRA = "tierra";
+            public const string AGUA = "agua";
+            public const string ELECTRICIDAD = "electricidad";
+            public const string FUSION = "fusion";
+            public const string MAGICA = "magica";
+            public const string ANCESTRAL = "ancestral";
+        }
+
+
     }
 }
