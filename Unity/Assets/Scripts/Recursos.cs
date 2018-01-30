@@ -73,7 +73,7 @@ public class Recursos  {
                     asset.Descripcion = descripcion;
                     asset.TipoDeCarta = tipoCarta;
                     //Cargar imagen a partir de la rutaImagen y setearla en el Sprite de CardAsset
-                    asset.ImagenCarta = Resources.Load(rutaImagen) as Sprite;
+                    asset.ImagenCarta = Resources.Load<Sprite>(rutaImagen);
                     asset.CosteMana = mana;
                     asset.Defensa = defensa;
                     asset.Ataque = ataque;

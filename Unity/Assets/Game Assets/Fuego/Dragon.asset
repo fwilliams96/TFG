@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Name: Dragon
   m_EditorClassIdentifier: 
   AssetPersonaje: {fileID: 0}
-  Descripcion: Dragon de fuego con ansiar de quemar
-  TipoDeCarta: 0
-  ImagenCarta: {fileID: 21300000, guid: 7499d994dd84377438b2eb87775cc31f, type: 3}
-  CosteMana: 5
-  Defensa: 1000
-  Ataque: 3000
+  Descripcion: Dragon de fuego ansioso de quemar
+  TipoDeCarta: 3
+  ImagenCarta: {fileID: 21300000, guid: 453237927664cd849b70b30a5a297539, type: 3}
+  CosteMana: 3
+  Defensa: 1500
+  Ataque: 4000
   AtaquesPorTurno: 1
   Evolucion: 1
   Taunt: 0
@@ -25,5 +25,5 @@ MonoBehaviour:
   CreatureScriptName: 
   specialCreatureAmount: 0
   SpellScriptName: 
-  specialSpellAmount: 7
-  Targets: 4
+  specialSpellAmount: 0
+  Targets: 0

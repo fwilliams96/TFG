@@ -59,8 +59,8 @@ public class TurnManager : MonoBehaviour {
 
     void Start()
     {
-        //OnGameStart();
-        Recursos.InicializarCartas();
+        OnGameStart();
+        //Recursos.InicializarCartas();
        
     }
 

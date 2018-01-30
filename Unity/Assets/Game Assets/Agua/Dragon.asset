@@ -9,14 +9,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c51f89dfb114fdf488bdb27d00a4e71d, type: 3}
-  m_Name: Prueba
+  m_Name: Dragon
   m_EditorClassIdentifier: 
   AssetPersonaje: {fileID: 0}
-  Descripcion: Dragon de fuego con ansiar de quemar
-  TipoDeCarta: 1
-  ImagenCarta: {fileID: 21300000, guid: ddd71c5bdfade944c8bf233172439003, type: 3}
-  CosteMana: 5
-  Defensa: 1000
+  Descripcion: Dragon de agua ansioso de ahogar
+  TipoDeCarta: 3
+  ImagenCarta: {fileID: 21300000, guid: 3ef79d7e64ae2bb4d8a068547cd2355d, type: 3}
+  CosteMana: 3
+  Defensa: 1500
   Ataque: 3000
   AtaquesPorTurno: 1
   Evolucion: 1
@@ -25,5 +25,5 @@ MonoBehaviour:
   CreatureScriptName: 
   specialCreatureAmount: 0
   SpellScriptName: 
-  specialSpellAmount: 7
-  Targets: 4
+  specialSpellAmount: 0
+  Targets: 0
