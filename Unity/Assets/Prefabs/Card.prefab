@@ -233,6 +233,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentToReturnTo: {fileID: 0}
+  placerHolderParent: {fileID: 0}
 --- !u!222 &222000746752436058
 CanvasRenderer:
   m_ObjectHideFlags: 1
