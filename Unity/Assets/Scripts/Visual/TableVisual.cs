@@ -64,12 +64,24 @@ public class TableVisual : MonoBehaviour
     }
    
 
-    public void AddCreatureAtIndex(CardAsset ca, int UniqueID ,int index)
+    public void AddCreatureAtIndex(CardAsset ca, int UniqueID ,int index, bool posicionAtaque)
     {
+        Debug.Log("AddCreatureAtIndex ataque " + posicionAtaque);
         // create a new creature from prefab
         GameObject creature = GameObject.Instantiate(GlobalSettings.Instance.CreaturePrefab, slots.Children[index].transform.position, Quaternion.identity) as GameObject;
         // apply the look from CardAsset
         OneCreatureManager manager = creature.GetComponent<OneCreatureManager>();
+        if (!posicionAtaque)
+        {
+            /*float x = creature.transform.localEulerAngles.x;
+            float y = creature.transform.localEulerAngles.y;
+            float z = creature.transform.localEulerAngles.z + 90;
+            creature.transform.DOLocalRotate(new Vector3(x, y, z), 1);*/
+            float x = creature.transform.eulerAngles.x;
+            float y = creature.transform.eulerAngles.y;
+            float z = creature.transform.eulerAngles.z + 90;
+            creature.transform.DORotate(new Vector3(x, y, z), 1);
+        }
         manager.cardAsset = ca;
         manager.ReadCreatureFromAsset();
         // add tag according to owner
