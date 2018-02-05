@@ -228,13 +228,13 @@ public class Player : MonoBehaviour, ICharacter
 
     // METHODS TO PLAY CREATURES 
     // 1st overload - by ID
-    public void PlayACreatureFromHand(int UniqueID, int tablePos)
+    public void PlayACreatureFromHand(int UniqueID, int tablePos, bool posicionAtaque)
     {
-        PlayACreatureFromHand(CardLogic.CardsCreatedThisGame[UniqueID], tablePos);
+        PlayACreatureFromHand(CardLogic.CardsCreatedThisGame[UniqueID], tablePos, posicionAtaque);
     }
 
     // 2nd overload - by logic units
-    public void PlayACreatureFromHand(CardLogic playedCard, int tablePos)
+    public void PlayACreatureFromHand(CardLogic playedCard, int tablePos, bool posicionAtaque)
     {
         // Debug.Log(ManaLeft);
         // Debug.Log(playedCard.CurrentManaCost);
@@ -244,7 +244,7 @@ public class Player : MonoBehaviour, ICharacter
         CreatureLogic newCreature = new CreatureLogic(this, playedCard.ca);
         table.CreaturesOnTable.Insert(tablePos, newCreature);
         // no matter what happens, move this card to PlayACardSpot
-        new PlayACreatureCommand(playedCard, this, tablePos, newCreature.UniqueCreatureID).AddToQueue();
+        new PlayACreatureCommand(playedCard, this, tablePos, posicionAtaque, newCreature.UniqueCreatureID).AddToQueue();
         //causa battlecry effect
         if (newCreature.effect != null)
             newCreature.effect.WhenACreatureIsPlayed();

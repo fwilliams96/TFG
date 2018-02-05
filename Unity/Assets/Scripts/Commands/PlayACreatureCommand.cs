@@ -7,12 +7,14 @@ public class PlayACreatureCommand : Command
     private int tablePos;
     private Player p;
     private int creatureID;
+    private bool posicionAtaque;
 
-    public PlayACreatureCommand(CardLogic cl, Player p, int tablePos, int creatureID)
+    public PlayACreatureCommand(CardLogic cl, Player p, int tablePos, bool posicionAtaque, int creatureID)
     {
         this.p = p;
         this.cl = cl;
         this.tablePos = tablePos;
+        this.posicionAtaque = posicionAtaque;
         this.creatureID = creatureID;
     }
 
@@ -26,6 +28,6 @@ public class PlayACreatureCommand : Command
         // enable Hover Previews Back
         HoverPreview.PreviewsAllowed = true;
         // move this card to the spot 
-        p.PArea.tableVisual.AddCreatureAtIndex(cl.ca, creatureID, tablePos);
+        p.PArea.tableVisual.AddCreatureAtIndex(cl.ca, creatureID, tablePos, posicionAtaque);
     }
 }

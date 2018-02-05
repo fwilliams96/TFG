@@ -8,30 +8,30 @@ using UnityEngine;
 
 public class Util {
 
-    public static GameObject CargarCarta(int tipoCarta)
+    public static GameObject CargarCarta(string tipoCarta)
     {
         GameObject card = null;
         switch (tipoCarta)
         {
-            case Global.TIPO_CARTA.Agua:
+            case Global.CARTAS.TIPO_CARTA.AGUA:
                 card = Resources.Load("Cartas/Agua") as GameObject;
                 break;
-            case Global.TIPO_CARTA.Fuego:
+            case Global.CARTAS.TIPO_CARTA.FUEGO:
                 card = Resources.Load("Cartas/Fuego") as GameObject;
                 break;
-            case Global.TIPO_CARTA.Electrica:
+            case Global.CARTAS.TIPO_CARTA.ELECTRICIDAD:
                 card = Resources.Load("Cartas/Electricidad") as GameObject;
                 break;
-            case Global.TIPO_CARTA.Tierra:
+            case Global.CARTAS.TIPO_CARTA.TIERRA:
                 card = Resources.Load("Cartas/Tierra") as GameObject;
                 break;
-            case Global.TIPO_CARTA.Fusion:
+            case Global.CARTAS.TIPO_CARTA.FUSION:
                 card = Resources.Load("Cartas/Fusion") as GameObject;
                 break;
-            case Global.TIPO_CARTA.Magica:
+            case Global.CARTAS.TIPO_CARTA.MAGICA:
                 card = Resources.Load("Cartas/Magica") as GameObject;
                 break;
-            case Global.TIPO_CARTA.Ancestral:
+            case Global.CARTAS.TIPO_CARTA.ANCESTRAL:
                 card = Resources.Load("Cartas/Ancestral") as GameObject;
                 break;
             default:

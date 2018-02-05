@@ -62,7 +62,7 @@ public class AITurnMaker: TurnMaker {
                 else
                 {
                     // it is a creature card
-                    p.PlayACreatureFromHand(c, 0);
+                    p.PlayACreatureFromHand(c, 0, true);
                     InsertDelay(1.5f);
                     return true;
                 }

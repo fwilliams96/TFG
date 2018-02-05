@@ -41,7 +41,7 @@ public class CardAsset : ScriptableObject
     public int Defensa;
     public int Ataque;
     public int AtaquesPorTurno = 1;
-    public string Evolucion;
+    public int Evolucion;
     public bool Taunt;
     public bool Charge;
     public string CreatureScriptName;
@@ -54,7 +54,7 @@ public class CardAsset : ScriptableObject
 
     public CardAsset()
     {
-        TipoDeCarta = TipoCarta.Ancestral;
-        Defensa = 2;
+        //TipoDeCarta = TipoCarta.Ancestral;
+        //Defensa = 2;
     }
 }

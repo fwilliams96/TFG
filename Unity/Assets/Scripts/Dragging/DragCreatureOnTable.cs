@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class DragCreatureOnTable : DraggingActions {
 
@@ -16,6 +17,7 @@ public class DragCreatureOnTable : DraggingActions {
         {
             // TODO : include full field check
             //return true;
+            //manage es si está con glow
             return base.CanDrag && manager.CanBePlayedNow;
         }
     }
@@ -46,12 +48,11 @@ public class DragCreatureOnTable : DraggingActions {
         // 1) Check if we are holding a card over the table
         if (DragSuccessful())
         {
-            // determine table position
-            int tablePos = playerOwner.PArea.tableVisual.TablePosForNewCreature(Camera.main.ScreenToWorldPoint(
-                new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z - Camera.main.transform.position.z)).x);
-            // Debug.Log("Table Pos for new Creature: " + tablePos.ToString());
-            // play this card
-            playerOwner.PlayACreatureFromHand(GetComponent<IDHolder>().UniqueID, tablePos);
+            //Activar pop-up de tipo de posicion
+            PosicionCriatura.Instance.MostrarPopupEleccionPosicion();
+            while (!PosicionCriatura.Instance.Closed);
+            ColocarCartaTablero(PosicionCriatura.Instance.Ataque);
+
         }
         else
         {
@@ -63,6 +64,17 @@ public class DragCreatureOnTable : DraggingActions {
             Vector3 oldCardPos = PlayerHand.slots.Children[savedHandSlot].transform.localPosition;
             transform.DOLocalMove(oldCardPos, 1f);
         } 
+    }
+
+    private void ColocarCartaTablero(bool ataque)
+    {
+        Debug.Log("ColocarCartaTablero ataque " + ataque);
+        // determine table position
+        int tablePos = playerOwner.PArea.tableVisual.TablePosForNewCreature(Camera.main.ScreenToWorldPoint(
+                new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z - Camera.main.transform.position.z)).x);
+        // Debug.Log("Table Pos for new Creature: " + tablePos.ToString());
+        // play this card
+        playerOwner.PlayACreatureFromHand(GetComponent<IDHolder>().UniqueID, tablePos,ataque);
     }
 
     protected override bool DragSuccessful()

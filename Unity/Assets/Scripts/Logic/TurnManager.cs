@@ -59,17 +59,9 @@ public class TurnManager : MonoBehaviour {
 
     void Start()
     {
-        //OnGameStart();
-        Recursos.InicializarCartas();
+        OnGameStart();
+        //Recursos.InicializarCartas();
        
-        //PropertyInfo CurCultProp =(typeof(Global.CARTAS.FAMILIA)).GetProperty("AGUA");
-        // PropertyInfo nestedProperty = myType.GetProperty("AGUA");
-        //var defaultMember = (DefaultMemberAttribute)Attribute.GetCustomAttribute(nestedProperty.PropertyType, typeof(DefaultMemberAttribute));
-        //var nestedIndexer = nestedProperty.PropertyType.GetProperty(defaultMember.MemberName);
-        // Debug.Log(defaultMember);
-        //Debug.Log(nestedIndexer);
-        //var value = nestedIndexer.GetValue(bands, new object[] { 0 });
-        //string a = myPropInfo.Name;
     }
 
     public void OnGameStart()
