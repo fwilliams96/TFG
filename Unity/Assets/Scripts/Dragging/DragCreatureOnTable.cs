@@ -48,10 +48,21 @@ public class DragCreatureOnTable : DraggingActions {
         // 1) Check if we are holding a card over the table
         if (DragSuccessful())
         {
+            
             //Activar pop-up de tipo de posicion
-            PosicionCriatura.Instance.MostrarPopupEleccionPosicion();
-            while (!PosicionCriatura.Instance.Closed);
-            ColocarCartaTablero(PosicionCriatura.Instance.Ataque);
+            if (!manager.TypeText.text.Equals("Magica"))
+            {
+                this.gameObject.SetActive(false);
+                PosicionCriatura.Instance.MostrarPopupEleccionPosicion();
+                PosicionCriatura.Instance.RegistrarCallBack(ColocarCartaTablero);
+            }
+            else
+            {
+                ColocarCartaTablero(true);
+            }
+            
+            //while (!PosicionCriatura.Instance.Closed);
+            //ColocarCartaTablero(PosicionCriatura.Instance.Ataque);
 
         }
         else
@@ -66,7 +77,7 @@ public class DragCreatureOnTable : DraggingActions {
         } 
     }
 
-    private void ColocarCartaTablero(bool ataque)
+    public void ColocarCartaTablero(bool ataque)
     {
         Debug.Log("ColocarCartaTablero ataque " + ataque);
         // determine table position

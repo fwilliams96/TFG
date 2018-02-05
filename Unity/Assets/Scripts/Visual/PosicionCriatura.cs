@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,10 @@ public class PosicionCriatura : MonoBehaviour {
     public GameObject PosicionCriaturaPanel;
     private bool ataque;
     private bool closed;
+    private DragCreatureOnTable creature;
+    public delegate void RegistrarFuncion(bool result);
+    public event RegistrarFuncion metodo;
+
     public bool Ataque
     {
         get { return ataque; }
@@ -22,19 +27,25 @@ public class PosicionCriatura : MonoBehaviour {
     {
         Instance = this;
         PosicionCriaturaPanel.SetActive(false);
-        closed = true;
     }
 
     public void MostrarPopupEleccionPosicion()
     {
         PosicionCriaturaPanel.SetActive(true);
-        closed = false;
+    }
+
+    public void RegistrarCallBack(RegistrarFuncion funcion)
+    {
+        metodo = funcion;
     }
 
     public void PosicionCriaturaElegida(bool ataque = true)
     {
         this.ataque = ataque;
         PosicionCriaturaPanel.SetActive(false);
-        closed = true;
+        //Llamar a metodo registrado
+        metodo.Invoke(ataque);
+        //metodo = null;
+
     }
 }
