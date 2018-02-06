@@ -73,7 +73,9 @@ public class DragCreatureOnTable : DraggingActions {
         //Se ha seleccionado ataque o defensa en el popup
         if (resultOK)
         {
-            bool ataque = PosicionCriatura.Instance.Ataque;
+            bool ataque = true;
+            if(!manager.TypeText.text.Equals("Magica"))
+                ataque = PosicionCriatura.Instance.Ataque;
             Debug.Log("ColocarCartaTablero ataque " + ataque);
             // determine table position
             int tablePos = playerOwner.PArea.tableVisual.TablePosForNewCreature(Camera.main.ScreenToWorldPoint(
