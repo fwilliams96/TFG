@@ -6,6 +6,7 @@
     <descripcion>Dragon de agua ansioso de ahogar</descripcion>
     <evolucion>1</evolucion>
     <mana>3</mana>
+    <fondo></fondo>
     <ataque>3000</ataque>
     <defensa>1500</defensa>
   </delante>
