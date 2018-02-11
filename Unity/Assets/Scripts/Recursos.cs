@@ -59,7 +59,7 @@ public class Recursos  {
                     //Modelo:
                     //extraerDatosComunes(entrada);
                     //extraerDatosNoComunes(entrada);
-                    string carpetaCarta = entrada.Key;
+                    string carpetaCarta = obtenerFormatoNombreCorrectoDirectorio(entrada.Key);
                     Debug.Log(entrada.Value);
                     string nombre = entrada.Value["carta"]["delante"]["titulo"];
                     Familia tipoCarta = obtenerTipoCarta(entrada.Value["carta"]["delante"]["tipo"]);
@@ -77,14 +77,15 @@ public class Recursos  {
                     asset.Descripcion = descripcion;
                     asset.Familia = tipoCarta;
                     //Cargar imagen a partir de la rutaImagen y setearla en el Sprite de CardAsset
-                    if (File.Exists(rutaImagen))
+                    /*if (File.Exists(rutaImagen))
                     {
                         asset.ImagenCarta = Resources.Load<Sprite>(rutaImagen);
-                    }
+                    }*/
+                    asset.ImagenCarta = Resources.Load<Sprite>(rutaImagen);
                     asset.CosteMana = mana;
                     if (!"".Equals(fondo))
                     {
-                        string rutaImagenFondo = obtenerRutaFamilia(familia) + fondo;
+                        string rutaImagenFondo = obtenerRutaFamiliaImagen(familia) + fondo;
                         if (File.Exists(rutaImagenFondo))
                         {
                             asset.Fondo = Resources.Load<Sprite>(rutaImagenFondo);
@@ -96,7 +97,8 @@ public class Recursos  {
                     if (evolucion != -1)
                         asset.Evolucion = evolucion;
 
-                    AssetDatabase.CreateAsset(asset, "Assets/Game Assets/"+ obtenerCarpetaFamilia(familia) + nombre+".asset");
+                    //AssetDatabase.CreateAsset(asset, "Assets/Game Assets/"+ obtenerCarpetaFamilia(familia) + nombre+".asset");
+                    AssetDatabase.CreateAsset(asset, obtenerRutaAsset(familia, carpetaCarta, nombre + ".asset"));
                 }
             }
             
@@ -104,16 +106,29 @@ public class Recursos  {
 
     }
 
-    private static string obtenerRutaImagen(string familia, string carpetaCarta, string nombreImagen)
+    private static string obtenerFormatoNombreCorrectoDirectorio(string carpeta)
     {
-        //string carpetaFamilia = obtenerCarpetaFamilia(familia);
-        //return "Sprites/Cartas/" + carpetaFamilia + "/" + carpetaCarta + "/" + nombreImagen;
-        return obtenerRutaFamilia(familia) + carpetaCarta + "/" + nombreImagen;
+        return carpeta.Substring(0,1).ToUpper() + carpeta.Substring(1, carpeta.Length-1) ;
     }
 
-    private static string obtenerRutaFamilia(string familia)
+    private static string obtenerRutaImagen(string familia, string carpetaCarta, string nombreImagen)
+    {
+        return obtenerRutaFamiliaImagen(familia) + carpetaCarta + "/" + nombreImagen;
+    }
+
+    private static string obtenerRutaAsset(string familia, string carpetaCarta, string nombreAsset)
+    {
+        return obtenerRutaFamiliaAsset(familia) + carpetaCarta + "/" + nombreAsset;
+    }
+
+    private static string obtenerRutaFamiliaImagen(string familia)
     {
         return "Sprites/Cartas/" + obtenerCarpetaFamilia(familia);
+    }
+
+    private static string obtenerRutaFamiliaAsset(string familia)
+    {
+        return "Assets/Game Assets/" + obtenerCarpetaFamilia(familia);
     }
 
     private static string obtenerCarpetaFamilia(string familia)

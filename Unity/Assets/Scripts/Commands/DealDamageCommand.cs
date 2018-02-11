@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DealDamageCommand : Command {
+public class DealDamageCommand : Comanda {
 
     private int targetID;
     private int amount;
@@ -14,7 +14,7 @@ public class DealDamageCommand : Command {
         this.healthAfter = healthAfter;
     }
 
-    public override void StartCommandExecution()
+    public override void EmpezarEjecucionComanda()
     {
         Debug.Log("In deal damage command!");
 
@@ -29,6 +29,6 @@ public class DealDamageCommand : Command {
             // target is a creature
             target.GetComponent<OneCreatureManager>().TakeDamage(amount, healthAfter);
         }
-        CommandExecutionComplete();
+        comandas.CompletarEjecucionComanda();
     }
 }

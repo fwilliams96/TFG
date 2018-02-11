@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayACreatureCommand : Command
+public class PlayACreatureCommand : Comanda
 {
     private CardLogic cl;
     private int tablePos;
@@ -18,7 +18,7 @@ public class PlayACreatureCommand : Command
         this.creatureID = creatureID;
     }
 
-    public override void StartCommandExecution()
+    public override void EmpezarEjecucionComanda()
     {
         // remove and destroy the card in hand 
         HandVisual PlayerHand = p.PArea.handVisual;

@@ -45,7 +45,7 @@ public class CreatureAttackVisual : MonoBehaviour
                 manager.HealthText.text = attackerHealthAfter.ToString();
                 Sequence s = DOTween.Sequence();
                 s.AppendInterval(1f);
-                s.OnComplete(Command.CommandExecutionComplete);
+                s.OnComplete(Comandas.Instance.CompletarEjecucionComanda);
                 //Command.CommandExecutionComplete();
             });
     }

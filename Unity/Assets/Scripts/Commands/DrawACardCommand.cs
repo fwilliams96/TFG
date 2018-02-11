@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DrawACardCommand : Command {
+public class DrawACardCommand : Comanda {
 
     private Player p;
     private CardLogic cl;
@@ -16,7 +16,7 @@ public class DrawACardCommand : Command {
         this.fromDeck = fromDeck;
     }
 
-    public override void StartCommandExecution()
+    public override void EmpezarEjecucionComanda()
     {
         p.PArea.PDeck.CardsInDeck--;
         p.PArea.handVisual.GivePlayerACard(cl.ca, cl.UniqueCardID, fast, fromDeck);

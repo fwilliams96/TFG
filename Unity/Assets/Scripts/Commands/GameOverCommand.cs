@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameOverCommand : Command{
+public class GameOverCommand : Comanda{
 
     private Player looser;
 
@@ -10,7 +10,7 @@ public class GameOverCommand : Command{
         this.looser = looser;
     }
 
-    public override void StartCommandExecution()
+    public override void EmpezarEjecucionComanda()
     {
         looser.PArea.Portrait.Explode();
     }

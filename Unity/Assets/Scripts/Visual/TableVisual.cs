@@ -125,7 +125,7 @@ public class TableVisual : MonoBehaviour
         ShiftSlotsGameObjectAccordingToNumberOfCreatures();
         PlaceCreaturesOnNewSlots();
         // TODO: remove this
-        Command.CommandExecutionComplete();
+        Comandas.Instance.CompletarEjecucionComanda();
     }
 
     public int TablePosForNewCreature(float MouseX)
@@ -162,7 +162,7 @@ public class TableVisual : MonoBehaviour
 
         ShiftSlotsGameObjectAccordingToNumberOfCreatures();
         PlaceCreaturesOnNewSlots();
-        Command.CommandExecutionComplete();
+        Comandas.Instance.CompletarEjecucionComanda();
     }
 
     /// <summary>

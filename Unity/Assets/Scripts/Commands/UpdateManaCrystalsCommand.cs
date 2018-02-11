@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class UpdateManaCrystalsCommand : Command {
+public class UpdateManaCrystalsCommand : Comanda {
 
     private Player p;
     private int TotalMana;
@@ -14,10 +14,10 @@ public class UpdateManaCrystalsCommand : Command {
         this.AvailableMana = AvailableMana;
     }
 
-    public override void StartCommandExecution()
+    public override void EmpezarEjecucionComanda()
     {
         p.PArea.ManaBar.TotalCrystals = TotalMana;
         p.PArea.ManaBar.AvailableCrystals = AvailableMana;
-        CommandExecutionComplete();
+        comandas.CompletarEjecucionComanda();
     }
 }

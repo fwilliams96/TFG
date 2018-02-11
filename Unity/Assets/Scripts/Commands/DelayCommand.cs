@@ -2,7 +2,7 @@
 using System.Collections;
 using DG.Tweening;
 
-public class DelayCommand : Command 
+public class DelayCommand : Comanda 
 {
     float delay;
 
@@ -11,10 +11,10 @@ public class DelayCommand : Command
         delay = timeToWait;    
     }
 
-    public override void StartCommandExecution()
+    public override void EmpezarEjecucionComanda()
     {
         Sequence s = DOTween.Sequence();
         s.PrependInterval(delay);
-        s.OnComplete(Command.CommandExecutionComplete);
+        s.OnComplete(comandas.CompletarEjecucionComanda);
     }
 }

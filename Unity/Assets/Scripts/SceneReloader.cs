@@ -11,8 +11,8 @@ public class SceneReloader: MonoBehaviour {
         // reset all card and creature IDs
         IDFactory.ResetIDs();
         IDHolder.ClearIDHoldersList();
-        Command.CommandQueue.Clear();
-        Command.CommandExecutionComplete();
+        Comandas.Instance.Clear();
+        Comandas.Instance.CompletarEjecucionComanda();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

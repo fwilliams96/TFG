@@ -15,7 +15,7 @@ public class BiteOwner : CreatureEffect
     public override void CauseEventEffect()
     {
         Debug.Log("InCauseEffect: owner: "+ owner + " specialAmount: "+ specialAmount);
-        new DealDamageCommand(owner.PlayerID, specialAmount, owner.Health - specialAmount).AddToQueue();
+        new DealDamageCommand(owner.PlayerID, specialAmount, owner.Health - specialAmount).AñadirAlaCola();
         owner.Health -= specialAmount;
     }
 }

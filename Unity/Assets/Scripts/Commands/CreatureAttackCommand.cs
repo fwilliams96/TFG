@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CreatureAttackCommand : Command 
+public class CreatureAttackCommand : Comanda 
 {
     // position of creature on enemy`s table that will be attacked
     // if enemyindex == -1 , attack an enemy character 
@@ -22,7 +22,7 @@ public class CreatureAttackCommand : Command
         this.DamageTakenByAttacker = damageTakenByAttacker;
     }
 
-    public override void StartCommandExecution()
+    public override void EmpezarEjecucionComanda()
     {
         GameObject Attacker = IDHolder.GetGameObjectWithID(AttackerUniqueID);
 

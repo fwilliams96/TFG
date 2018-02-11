@@ -59,7 +59,7 @@ public class Player : MonoBehaviour, ICharacter
         {
             manaThisTurn = value;
             //PArea.ManaBar.TotalCrystals = manaThisTurn;
-            new UpdateManaCrystalsCommand(this, manaThisTurn, manaLeft).AddToQueue();
+            new UpdateManaCrystalsCommand(this, manaThisTurn, manaLeft).AñadirAlaCola();
         }
     }
 
@@ -73,7 +73,7 @@ public class Player : MonoBehaviour, ICharacter
         {
             manaLeft = value;
             //PArea.ManaBar.AvailableCrystals = manaLeft;
-            new UpdateManaCrystalsCommand(this, ManaThisTurn, manaLeft).AddToQueue();
+            new UpdateManaCrystalsCommand(this, ManaThisTurn, manaLeft).AñadirAlaCola();
             //Debug.Log(ManaLeft);
             if (TurnManager.Instance.whoseTurn == this)
                 HighlightPlayableCards();
@@ -157,7 +157,7 @@ public class Player : MonoBehaviour, ICharacter
                 // 2) logic: remove the card from the deck
                 deck.cards.RemoveAt(0);
                 // 2) create a command
-                new DrawACardCommand(hand.CardsInHand[0], this, fast, fromDeck: true).AddToQueue(); 
+                new DrawACardCommand(hand.CardsInHand[0], this, fast, fromDeck: true).AñadirAlaCola(); 
             }
         }
         else
@@ -177,7 +177,7 @@ public class Player : MonoBehaviour, ICharacter
             newCard.owner = this;
             hand.CardsInHand.Insert(0, newCard);
             // 2) send message to the visual Deck
-            new DrawACardCommand(hand.CardsInHand[0], this, fast: true, fromDeck: false).AddToQueue(); 
+            new DrawACardCommand(hand.CardsInHand[0], this, fast: true, fromDeck: false).AñadirAlaCola(); 
         }
         // no removal from deck because the card was not in the deck
     }
@@ -220,7 +220,7 @@ public class Player : MonoBehaviour, ICharacter
             Debug.LogWarning("No effect found on card " + playedCard.ca.name);
         }
         // no matter what happens, move this card to PlayACardSpot
-        new PlayASpellCardCommand(this, playedCard).AddToQueue();
+        new PlayASpellCardCommand(this, playedCard).AñadirAlaCola();
         // remove this card from hand
         hand.CardsInHand.Remove(playedCard);
         // check if this is a creature or a spell
@@ -244,7 +244,7 @@ public class Player : MonoBehaviour, ICharacter
         CreatureLogic newCreature = new CreatureLogic(this, playedCard.ca);
         table.CreaturesOnTable.Insert(tablePos, newCreature);
         // no matter what happens, move this card to PlayACardSpot
-        new PlayACreatureCommand(playedCard, this, tablePos, posicionAtaque, newCreature.UniqueCreatureID).AddToQueue();
+        new PlayACreatureCommand(playedCard, this, tablePos, posicionAtaque, newCreature.UniqueCreatureID).AñadirAlaCola();
         //causa battlecry effect
         if (newCreature.effect != null)
             newCreature.effect.WhenACreatureIsPlayed();
@@ -260,7 +260,7 @@ public class Player : MonoBehaviour, ICharacter
         PArea.ControlsON = false;
         otherPlayer.PArea.ControlsON = false;
         TurnManager.Instance.StopTheTimer();
-        new GameOverCommand(this).AddToQueue();
+        new GameOverCommand(this).AñadirAlaCola();
     }
 
     // METHOD TO SHOW GLOW HIGHLIGHTS
