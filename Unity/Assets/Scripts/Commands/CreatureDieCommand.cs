@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CreatureDieCommand : Command 
+public class CreatureDieCommand : Comanda 
 {
     private Player p;
     private int DeadCreatureID;
@@ -12,7 +12,7 @@ public class CreatureDieCommand : Command
         this.DeadCreatureID = CreatureID;
     }
 
-    public override void StartCommandExecution()
+    public override void EmpezarEjecucionComanda()
     {
         p.PArea.tableVisual.RemoveCreatureWithID(DeadCreatureID);
     }

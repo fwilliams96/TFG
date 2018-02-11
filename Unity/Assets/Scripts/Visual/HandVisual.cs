@@ -29,7 +29,7 @@ public class HandVisual : MonoBehaviour
 
     public void PlayASpellFromHand(GameObject CardVisual)
     {
-        Command.CommandExecutionComplete();
+        Comandas.Instance.CompletarEjecucionComanda();
         CardVisual.GetComponent<WhereIsTheCardOrCreature>().VisualState = VisualStates.Transition;
         RemoveCard(CardVisual);
 
@@ -169,7 +169,7 @@ public class HandVisual : MonoBehaviour
             w.VisualState = VisualStates.TopHand;
 
         w.SetHandSortingOrder();
-        Command.CommandExecutionComplete();
+        Comandas.Instance.CompletarEjecucionComanda();
     }
 
     GameObject CreateACardAtPosition(CardAsset c, Vector3 position, Vector3 eulerAngles)

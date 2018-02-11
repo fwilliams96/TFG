@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayASpellCardCommand: Command
+public class PlayASpellCardCommand: Comanda
 {
     private CardLogic card;
     private Player p;
@@ -13,7 +13,7 @@ public class PlayASpellCardCommand: Command
         this.p = p;
     }
 
-    public override void StartCommandExecution()
+    public override void EmpezarEjecucionComanda()
     {
         // move this card to the spot
         p.PArea.handVisual.PlayASpellFromHand(card.UniqueCardID);

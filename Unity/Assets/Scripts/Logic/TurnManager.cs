@@ -31,21 +31,7 @@ public class TurnManager : MonoBehaviour {
 
         set
         {
-            _whoseTurn = value;
-            timer.StartTimer();
-
-            GlobalSettings.Instance.EnableEndTurnButtonOnStart(_whoseTurn);
-
-            TurnMaker tm = whoseTurn.GetComponent<TurnMaker>();
-            // player`s method OnTurnStart() will be called in tm.OnTurnStart();
-            tm.OnTurnStart();
-            if (tm is PlayerTurnMaker)
-            {
-                whoseTurn.HighlightPlayableCards();
-            }
-            // remove highlights for opponent.
-            whoseTurn.otherPlayer.HighlightPlayableCards(true);
-                
+            _whoseTurn = value;   
         }
     }
 
@@ -110,7 +96,7 @@ public class TurnManager : MonoBehaviour {
                 whoGoesSecond.DrawACard(true);
                 //new GivePlayerACoinCommand(null, whoGoesSecond).AddToQueue();
                 whoGoesSecond.GetACardNotFromDeck(CoinCard);
-                new StartATurnCommand(whoGoesFirst).AddToQueue();
+                new StartATurnCommand(whoGoesFirst).AñadirAlaCola();
             });
     }
 
@@ -133,12 +119,29 @@ public class TurnManager : MonoBehaviour {
         // send all commands in the end of current player`s turn
         whoseTurn.OnTurnEnd();
 
-        new StartATurnCommand(whoseTurn.otherPlayer).AddToQueue();
+        new StartATurnCommand(whoseTurn.otherPlayer).AñadirAlaCola();
     }
 
     public void StopTheTimer()
     {
         timer.StopTimer();
+    }
+
+    public void ActualizarValoresJugador()
+    {
+        timer.StartTimer();
+
+        GlobalSettings.Instance.EnableEndTurnButtonOnStart(_whoseTurn);
+
+        TurnMaker tm = whoseTurn.GetComponent<TurnMaker>();
+        // player`s method OnTurnStart() will be called in tm.OnTurnStart();
+        tm.OnTurnStart();
+        if (tm is PlayerTurnMaker)
+        {
+            whoseTurn.HighlightPlayableCards();
+        }
+        // remove highlights for opponent.
+        whoseTurn.otherPlayer.HighlightPlayableCards(true);
     }
 
 }

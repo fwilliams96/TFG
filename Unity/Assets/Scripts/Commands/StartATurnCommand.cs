@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StartATurnCommand : Command {
+public class StartATurnCommand : Comanda {
 
     private Player p;
 
@@ -10,10 +10,11 @@ public class StartATurnCommand : Command {
         this.p = p;
     }
 
-    public override void StartCommandExecution()
+    public override void EmpezarEjecucionComanda()
     {
         TurnManager.Instance.whoseTurn = p;
+        TurnManager.Instance.ActualizarValoresJugador();
         // this command is completed instantly
-        CommandExecutionComplete();
+        comandas.CompletarEjecucionComanda();
     }
 }

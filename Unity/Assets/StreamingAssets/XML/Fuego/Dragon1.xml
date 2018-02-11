@@ -6,6 +6,7 @@
     <descripcion>Dragon de fuego ansioso de quemar</descripcion>
     <evolucion>1</evolucion>
     <mana>3</mana>
+    <fondo></fondo>
     <ataque>4000</ataque>
     <defensa>1500</defensa>
   </delante>

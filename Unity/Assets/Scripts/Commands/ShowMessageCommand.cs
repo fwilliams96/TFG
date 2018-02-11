@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-public class ShowMessageCommand : Command {
+public class ShowMessageCommand : Comanda {
 
     string message;
     float duration;
@@ -13,7 +13,7 @@ public class ShowMessageCommand : Command {
         this.duration = duration;
     }
 
-    public override void StartCommandExecution()
+    public override void EmpezarEjecucionComanda()
     {
         MessageManager.Instance.ShowMessage(message, duration);
     }

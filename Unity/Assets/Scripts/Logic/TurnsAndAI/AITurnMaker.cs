@@ -9,7 +9,7 @@ public class AITurnMaker: TurnMaker {
     {
         base.OnTurnStart();
         // dispay a message that it is enemy`s turn
-        new ShowMessageCommand("Enemy`s Turn!", 2.0f).AddToQueue();
+        new ShowMessageCommand("Enemy`s Turn!", 2.0f).AñadirAlaCola();
         p.DrawACard();
         StartCoroutine(MakeAITurn());
     }
@@ -33,7 +33,7 @@ public class AITurnMaker: TurnMaker {
 
     bool MakeOneAIMove(bool attackFirst)
     {
-        if (Command.CardDrawPending())
+        if (Comandas.Instance.ComandasDeDibujoCartaPendientes())
             return true;
         else if (attackFirst)
             return AttackWithACreature() || PlayACardFromHand() || UseHeroPower();
@@ -112,7 +112,7 @@ public class AITurnMaker: TurnMaker {
 
     void InsertDelay(float delay)
     {
-        new DelayCommand(delay).AddToQueue();
+        new DelayCommand(delay).AñadirAlaCola();
     }
 
 }

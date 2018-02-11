@@ -55,32 +55,50 @@ public class Recursos  {
             {
                 foreach(KeyValuePair<string, SimpleJSON.JSONNode> entrada in cartas[familia])
                 {
-                    string carpetaCarta = entrada.Key;
+                    //Leer todos los datos comunes, si la carta es ancestral no hay evolucion, si tiene ataque y defensa no es magica. En caso de no cumplirse estas cosas se lanzara una excepcion y no se creara el asset
+                    //Modelo:
+                    //extraerDatosComunes(entrada);
+                    //extraerDatosNoComunes(entrada);
+                    string carpetaCarta = obtenerFormatoNombreCorrectoDirectorio(entrada.Key);
                     Debug.Log(entrada.Value);
-                    
                     string nombre = entrada.Value["carta"]["delante"]["titulo"];
-                    TipoCarta tipoCarta = obtenerTipoCarta(entrada.Value["carta"]["delante"]["tipo"]);
+                    Familia tipoCarta = obtenerTipoCarta(entrada.Value["carta"]["delante"]["tipo"]);
                     string descripcion = entrada.Value["carta"]["delante"]["descripcion"];
                     int mana = System.Int32.Parse(entrada.Value["carta"]["delante"]["mana"]);
                     string rutaImagen = obtenerRutaImagen(familia, carpetaCarta, entrada.Value["carta"]["delante"]["nombreImagen"]);
                     int defensa = System.Int32.Parse(entrada.Value["carta"]["delante"]["defensa"]);
                     int ataque = System.Int32.Parse(entrada.Value["carta"]["delante"]["ataque"]);
+                    string fondo = entrada.Value["carta"]["delante"]["fondo"];
                     int evolucion = -1;
                     if(!tipoCarta.Equals(TipoCarta.Ancestral))
                         evolucion = System.Int32.Parse(entrada.Value["carta"]["delante"]["evolucion"]);
 
-                    var asset = ScriptableObject.CreateInstance<CardAsset>();
+                    var asset = ScriptableObject.CreateInstance<CartaAsset>();
                     asset.Descripcion = descripcion;
-                    asset.TipoDeCarta = tipoCarta;
+                    asset.Familia = tipoCarta;
                     //Cargar imagen a partir de la rutaImagen y setearla en el Sprite de CardAsset
+                    /*if (File.Exists(rutaImagen))
+                    {
+                        asset.ImagenCarta = Resources.Load<Sprite>(rutaImagen);
+                    }*/
                     asset.ImagenCarta = Resources.Load<Sprite>(rutaImagen);
                     asset.CosteMana = mana;
+                    if (!"".Equals(fondo))
+                    {
+                        string rutaImagenFondo = obtenerRutaFamiliaImagen(familia) + fondo;
+                        if (File.Exists(rutaImagenFondo))
+                        {
+                            asset.Fondo = Resources.Load<Sprite>(rutaImagenFondo);
+                        }
+
+                    }
                     asset.Defensa = defensa;
                     asset.Ataque = ataque;
                     if (evolucion != -1)
                         asset.Evolucion = evolucion;
 
-                    AssetDatabase.CreateAsset(asset, "Assets/Game Assets/"+ obtenerCarpetaFamilia(familia)+ "/" +nombre+".asset");
+                    //AssetDatabase.CreateAsset(asset, "Assets/Game Assets/"+ obtenerCarpetaFamilia(familia) + nombre+".asset");
+                    AssetDatabase.CreateAsset(asset, obtenerRutaAsset(familia, carpetaCarta, nombre + ".asset"));
                 }
             }
             
@@ -88,11 +106,29 @@ public class Recursos  {
 
     }
 
+    private static string obtenerFormatoNombreCorrectoDirectorio(string carpeta)
+    {
+        return carpeta.Substring(0,1).ToUpper() + carpeta.Substring(1, carpeta.Length-1) ;
+    }
+
     private static string obtenerRutaImagen(string familia, string carpetaCarta, string nombreImagen)
     {
-        string carpetaFamilia = obtenerCarpetaFamilia(familia);
-  
-        return "Sprites/Cartas/" + carpetaFamilia + "/" + carpetaCarta + "/" + nombreImagen;
+        return obtenerRutaFamiliaImagen(familia) + carpetaCarta + "/" + nombreImagen;
+    }
+
+    private static string obtenerRutaAsset(string familia, string carpetaCarta, string nombreAsset)
+    {
+        return obtenerRutaFamiliaAsset(familia) + carpetaCarta + "/" + nombreAsset;
+    }
+
+    private static string obtenerRutaFamiliaImagen(string familia)
+    {
+        return "Sprites/Cartas/" + obtenerCarpetaFamilia(familia);
+    }
+
+    private static string obtenerRutaFamiliaAsset(string familia)
+    {
+        return "Assets/Game Assets/" + obtenerCarpetaFamilia(familia);
     }
 
     private static string obtenerCarpetaFamilia(string familia)
@@ -101,25 +137,25 @@ public class Recursos  {
         switch (familia.ToLower())
         {
             case Global.CARTAS.TIPO_CARTA.AGUA:
-                carpetaFamilia = "Agua";
+                carpetaFamilia = "Agua/";
                 break;
             case Global.CARTAS.TIPO_CARTA.FUEGO:
-                carpetaFamilia = "Fuego";
+                carpetaFamilia = "Fuego/";
                 break;
             case Global.CARTAS.TIPO_CARTA.TIERRA:
-                carpetaFamilia = "Tierra";
+                carpetaFamilia = "Tierra/";
                 break;
             case Global.CARTAS.TIPO_CARTA.ELECTRICIDAD:
-                carpetaFamilia = "Electricidad";
+                carpetaFamilia = "Electricidad/";
                 break;
             case Global.CARTAS.TIPO_CARTA.MAGICA:
-                carpetaFamilia = "Magica";
+                carpetaFamilia = "Magica/";
                 break;
             case Global.CARTAS.TIPO_CARTA.FUSION:
-                carpetaFamilia = "Fusion";
+                carpetaFamilia = "Fusion/";
                 break;
             case Global.CARTAS.TIPO_CARTA.ANCESTRAL:
-                carpetaFamilia = "Ancestral";
+                carpetaFamilia = "Ancestral/";
                 break;
             default:
                 carpetaFamilia = "";
@@ -128,34 +164,34 @@ public class Recursos  {
         return carpetaFamilia;
     }
 
-    private static TipoCarta obtenerTipoCarta(string familia)
+    private static Familia obtenerTipoCarta(string familia)
     {
-        TipoCarta tipo = TipoCarta.Spell;
+        Familia tipo = Familia.Magica;
         switch (familia.ToLower())
         {
             case Global.CARTAS.TIPO_CARTA.AGUA:
-                tipo = TipoCarta.Agua;
+                tipo = Familia.Agua;
                 break;
             case Global.CARTAS.TIPO_CARTA.FUEGO:
-                tipo = TipoCarta.Agua;
+                tipo = Familia.Fuego;
                 break;
             case Global.CARTAS.TIPO_CARTA.TIERRA:
-                tipo = TipoCarta.Agua;
+                tipo = Familia.Tierra;
                 break;
             case Global.CARTAS.TIPO_CARTA.ELECTRICIDAD:
-                tipo = TipoCarta.Agua;
+                tipo = Familia.Electrica;
                 break;
             case Global.CARTAS.TIPO_CARTA.MAGICA:
-                tipo = TipoCarta.Agua;
+                tipo = Familia.Magica;
                 break;
             case Global.CARTAS.TIPO_CARTA.FUSION:
-                tipo = TipoCarta.Agua;
+                tipo = Familia.Fusion;
                 break;
             case Global.CARTAS.TIPO_CARTA.ANCESTRAL:
-                tipo = TipoCarta.Agua;
+                tipo = Familia.Ancestral;
                 break;
             default:
-                tipo = TipoCarta.Spell;
+                tipo = Familia.Magica;
                 break;
         }
         return tipo;

@@ -35,7 +35,7 @@ public class MessageManager : MonoBehaviour
         }
 
         MessagePanel.SetActive(false);
-        Command.CommandExecutionComplete();
+        Comandas.Instance.CompletarEjecucionComanda();
     }
 
     void Update()

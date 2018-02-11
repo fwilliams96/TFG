@@ -102,14 +102,14 @@ public class CreatureLogic: ICharacter
         //cause deathrattle effect
         if (effect != null)
             effect.WhenACreatureDies();
-        new CreatureDieCommand(UniqueCreatureID, owner).AddToQueue();
+        new CreatureDieCommand(UniqueCreatureID, owner).AñadirAlaCola();
     }
 
     public void GoFace()
     {
         AttacksLeftThisTurn--;
         int targetHealthAfter = owner.otherPlayer.Health - Attack;
-        new CreatureAttackCommand(owner.otherPlayer.PlayerID, UniqueCreatureID, 0, Attack, Health, targetHealthAfter).AddToQueue();
+        new CreatureAttackCommand(owner.otherPlayer.PlayerID, UniqueCreatureID, 0, Attack, Health, targetHealthAfter).AñadirAlaCola();
         owner.otherPlayer.Health -= Attack;
     }
 
@@ -119,7 +119,7 @@ public class CreatureLogic: ICharacter
         // calculate the values so that the creature does not fire the DIE command before the Attack command is sent
         int targetHealthAfter = target.Health - Attack;
         int attackerHealthAfter = Health - target.Attack;
-        new CreatureAttackCommand(target.UniqueCreatureID, UniqueCreatureID, target.Attack, Attack, attackerHealthAfter, targetHealthAfter).AddToQueue();
+        new CreatureAttackCommand(target.UniqueCreatureID, UniqueCreatureID, target.Attack, Attack, attackerHealthAfter, targetHealthAfter).AñadirAlaCola();
 
         target.Health -= Attack;
         Health -= target.Attack;
