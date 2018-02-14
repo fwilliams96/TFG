@@ -69,8 +69,8 @@ public class TurnManager : MonoBehaviour {
         }
 
         Sequence s = DOTween.Sequence();
-        s.Append(Player.Players[0].PArea.Portrait.transform.DOMove(Player.Players[0].PArea.PortraitPosition.position, 1f).SetEase(Ease.InQuad));
-        s.Insert(0f, Player.Players[1].PArea.Portrait.transform.DOMove(Player.Players[1].PArea.PortraitPosition.position, 1f).SetEase(Ease.InQuad));
+        s.Append(Players.Instance.GetPlayers()[0].PArea.Portrait.transform.DOMove(Players.Instance.GetPlayers()[0].PArea.PortraitPosition.position, 1f).SetEase(Ease.InQuad));
+        s.Insert(0f, Players.Instance.GetPlayers()[1].PArea.Portrait.transform.DOMove(Players.Instance.GetPlayers()[1].PArea.PortraitPosition.position, 1f).SetEase(Ease.InQuad));
         s.PrependInterval(3f);
         s.OnComplete(() =>
             {
@@ -78,7 +78,7 @@ public class TurnManager : MonoBehaviour {
                 //int rnd = Random.Range(0,2);  // 2 is exclusive boundary
                 int rnd = 1;
                 // Debug.Log(Player.Players.Length);
-                Player whoGoesFirst = Player.Players[rnd];
+                Player whoGoesFirst = Players.Instance.GetPlayers()[rnd];
                 // Debug.Log(whoGoesFirst);
                 Player whoGoesSecond = whoGoesFirst.otherPlayer;
                 // Debug.Log(whoGoesSecond);
