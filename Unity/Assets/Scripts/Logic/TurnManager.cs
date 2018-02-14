@@ -57,7 +57,7 @@ public class TurnManager : MonoBehaviour {
         CardLogic.CardsCreatedThisGame.Clear();
         CreatureLogic.CreaturesCreatedThisGame.Clear();
 
-        foreach (Player p in Player.Players)
+        foreach (Player p in Players.Instance.GetPlayers())
         {
             p.ManaThisTurn = 0;
             p.ManaLeft = 0;

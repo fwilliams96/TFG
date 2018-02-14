@@ -4,7 +4,7 @@ using System.Collections;
 public class Player : MonoBehaviour, ICharacter
 {
 
-
+    #region Atributos
     // PUBLIC FIELDS
     // int ID that we get from ID factory
     public int PlayerID;
@@ -26,10 +26,8 @@ public class Player : MonoBehaviour, ICharacter
     public Table table;
 
     // a static array that will store both players, should always have 2 players
-    public static Player[] Players;
-
-
-
+    public Players players;
+    #endregion Atributos
 
     // PROPERTIES 
     // this property is a part of interface ICharacter
@@ -43,10 +41,10 @@ public class Player : MonoBehaviour, ICharacter
     {
         get
         {
-            if (Players[0] == this)
-                return Players[1];
+            if (players[0] == this)
+                return players[1];
             else
-                return Players[0];
+                return players[0];
         }
     }
 
@@ -106,7 +104,8 @@ public class Player : MonoBehaviour, ICharacter
     {
         // find all scripts of type Player and store them in Players array
         // (we should have only 2 players in the scene)
-        Players = GameObject.FindObjectsOfType<Player>();
+        players = Players.Instance;
+        players.Add(this);
         // obtain unique id from IDFactory
         PlayerID = IDFactory.GetUniqueID();
     }

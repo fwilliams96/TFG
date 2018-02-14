@@ -10,7 +10,6 @@ public class Comandas
 
     private Comandas()
     {
-        instance = this;
         CommandQueue = new Queue<Comanda>();
     }
 
@@ -18,7 +17,7 @@ public class Comandas
     {
         get{
             if (instance == null)
-                new Comandas();
+                instance = new Comandas();
             return instance;
         }
     }
