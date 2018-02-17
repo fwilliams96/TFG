@@ -12,7 +12,7 @@ public class StartATurnCommand : Comanda {
 
     public override void EmpezarEjecucionComanda()
     {
-        ControladorTurno.Instance.whoseTurn = p;
+        ControladorTurno.Instance.jugadorActual = p;
         ControladorTurno.Instance.ActualizarValoresJugador();
         // this command is completed instantly
         comandas.CompletarEjecucionComanda();

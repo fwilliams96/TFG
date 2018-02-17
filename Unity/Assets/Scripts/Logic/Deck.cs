@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public class Deck : MonoBehaviour {
 
-    public List<CardAsset> cards = new List<CardAsset>();
+    public List<CardAsset> cartas = new List<CardAsset>();
 
     void Awake()
     {
-        cards.Shuffle();
+        cartas.Shuffle();
     }
 	
 }

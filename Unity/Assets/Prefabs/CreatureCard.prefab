@@ -1838,7 +1838,7 @@ MonoBehaviour:
   TurnThisOffWhenPreviewing: {fileID: 1142165684716618}
   TargetPosition: {x: 0, y: 0, z: 0}
   TargetScale: 1.5
-  previewGameObject: {fileID: 1585132338905444}
+  objetoPrevisualizado: {fileID: 1585132338905444}
   ActivateInAwake: 1
 --- !u!114 &114556459532171782
 MonoBehaviour:

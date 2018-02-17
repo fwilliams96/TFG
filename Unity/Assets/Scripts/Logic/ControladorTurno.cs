@@ -21,17 +21,17 @@ public class ControladorTurno : MonoBehaviour {
 
 
     // PROPERTIES
-    private Player _whoseTurn;
-    public Player whoseTurn
+    private Player _jugadorActual;
+    public Player jugadorActual
     {
         get
         {
-            return _whoseTurn;
+            return _jugadorActual;
         }
 
         set
         {
-            _whoseTurn = value;   
+            _jugadorActual = value;   
         }
     }
 
@@ -54,8 +54,8 @@ public class ControladorTurno : MonoBehaviour {
     {
         //Debug.Log("In TurnManager.OnGameStart()");
 
-        CardLogic.CardsCreatedThisGame.Clear();
-        CreatureLogic.CreaturesCreatedThisGame.Clear();
+        Recursos.CartasCreadasEnElJuego.Clear();
+        Recursos.CriaturasCreadasEnElJuego.Clear();
 
         foreach (Player p in Players.Instance.GetPlayers())
         {
@@ -63,8 +63,10 @@ public class ControladorTurno : MonoBehaviour {
         }
 
         Sequence s = DOTween.Sequence();
-        s.Append(Players.Instance.GetPlayers()[0].PArea.Portrait.transform.DOMove(Players.Instance.GetPlayers()[0].PArea.PortraitPosition.position, 1f).SetEase(Ease.InQuad));
-        s.Insert(0f, Players.Instance.GetPlayers()[1].PArea.Portrait.transform.DOMove(Players.Instance.GetPlayers()[1].PArea.PortraitPosition.position, 1f).SetEase(Ease.InQuad));
+        //mueve los jugadores del centro a su posición
+        s.Append(Players.Instance.GetPlayers()[0].PArea.Personaje.transform.DOMove(Players.Instance.GetPlayers()[0].PArea.PosicionPersonaje.position, 1f).SetEase(Ease.InQuad));
+        s.Insert(0f, Players.Instance.GetPlayers()[1].PArea.Personaje.transform.DOMove(Players.Instance.GetPlayers()[1].PArea.PosicionPersonaje.position, 1f).SetEase(Ease.InQuad));
+        //espera 3 segundos antes de ejecutar el onComplete
         s.PrependInterval(3f);
         s.OnComplete(() =>
             {
@@ -74,22 +76,17 @@ public class ControladorTurno : MonoBehaviour {
                 // Debug.Log(Player.Players.Length);
                 Player whoGoesFirst = Players.Instance.GetPlayers()[rnd];
                 // Debug.Log(whoGoesFirst);
-                Player whoGoesSecond = whoGoesFirst.otherPlayer;
+                Player whoGoesSecond = whoGoesFirst.otroJugador;
                 // Debug.Log(whoGoesSecond);
-         
                 // draw 4 cards for first player and 5 for second player
-                int initDraw = 4;
-                for (int i = 0; i < initDraw; i++)
-                {            
-                    // second player draws a card
-                    whoGoesSecond.DrawACard(true);
-                    // first player draws a card
-                    whoGoesFirst.DrawACard(true);
-                }
+                // first player draws a card
+                whoGoesFirst.DibujarCartasMazo(4, true);
+                // second player draws a card
+                whoGoesSecond.DibujarCartasMazo(4, true);
                 // add one more card to second player`s hand
-                whoGoesSecond.DrawACard(true);
+               // whoGoesSecond.DibujarCartaMazo(true);
                 //new GivePlayerACoinCommand(null, whoGoesSecond).AddToQueue();
-                whoGoesSecond.GetACardNotFromDeck(CoinCard);
+               // whoGoesSecond.DibujarCartaFueraMazo(CoinCard);
                 new StartATurnCommand(whoGoesFirst).AñadirAlaCola();
             });
     }
@@ -111,9 +108,9 @@ public class ControladorTurno : MonoBehaviour {
         // stop timer
         timer.StopTimer();
         // send all commands in the end of current player`s turn
-        whoseTurn.OnTurnEnd();
+        jugadorActual.OnTurnEnd();
 
-        new StartATurnCommand(whoseTurn.otherPlayer).AñadirAlaCola();
+        new StartATurnCommand(jugadorActual.otroJugador).AñadirAlaCola();
     }
 
     public void StopTheTimer()
@@ -125,17 +122,33 @@ public class ControladorTurno : MonoBehaviour {
     {
         timer.StartTimer();
 
-        GlobalSettings.Instance.EnableEndTurnButtonOnStart(_whoseTurn);
+        ActivarBotonFinDeTurno(_jugadorActual);
 
-        TurnMaker tm = whoseTurn.GetComponent<TurnMaker>();
+        TurnMaker tm = jugadorActual.GetComponent<TurnMaker>();
         // player`s method OnTurnStart() will be called in tm.OnTurnStart();
         tm.OnTurnStart();
         if (tm is PlayerTurnMaker)
         {
-            whoseTurn.MostrarCartasJugables();
+            jugadorActual.MostrarCartasJugables();
         }
         // remove highlights for opponent.
-        whoseTurn.otherPlayer.MostrarCartasJugables(true);
+        jugadorActual.otroJugador.MostrarCartasJugables(true);
+    }
+    //TODO creo que falta añadir en que area se esta mirando
+    public bool SePermiteControlarElJugador(Player ownerPlayer)
+    {
+        bool TurnoDelJugador = (ControladorTurno.Instance.jugadorActual == ownerPlayer);
+        bool NoCartasPendientesPorMostrar = !Comandas.Instance.ComandasDeDibujoCartaPendientes();
+        return ownerPlayer.PArea.PermitirControlJugador && ownerPlayer.PArea.ControlActivado && TurnoDelJugador && NoCartasPendientesPorMostrar;
+    }
+
+    public void ActivarBotonFinDeTurno(Player P)
+    {
+        if (SePermiteControlarElJugador(P))
+            DatosGenerales.Instance.EndTurnButton.interactable = true;
+        else
+            DatosGenerales.Instance.EndTurnButton.interactable = false;
+
     }
 
 }

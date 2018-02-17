@@ -9,11 +9,11 @@ public abstract class DraggingActions : MonoBehaviour {
 
     public abstract void OnDraggingInUpdate();
 
-    public virtual bool CanDrag
+    public virtual bool PuedeSerLanzada
     {
         get
         {            
-            return GlobalSettings.Instance.CanControlThisPlayer(playerOwner);
+            return ControladorTurno.Instance.SePermiteControlarElJugador(playerOwner);
         }
     }
 
@@ -22,9 +22,9 @@ public abstract class DraggingActions : MonoBehaviour {
         get{
             
             if (tag.Contains("Low"))
-                return GlobalSettings.Instance.LowPlayer;
+                return DatosGenerales.Instance.LowPlayer;
             else if (tag.Contains("Top"))
-                return GlobalSettings.Instance.TopPlayer;
+                return DatosGenerales.Instance.TopPlayer;
             else
             {
                 Debug.LogError("Untagged Card or creature " + transform.parent.name);

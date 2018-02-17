@@ -16,7 +16,7 @@ public class PlayASpellCardCommand: Comanda
     public override void EmpezarEjecucionComanda()
     {
         // move this card to the spot
-        p.PArea.handVisual.PlayASpellFromHand(card.UniqueCardID);
+        p.PArea.manoVisual.PlayASpellFromHand(card.idCarta);
         // do all the visual stuff (for each spell separately????)
     }
 }

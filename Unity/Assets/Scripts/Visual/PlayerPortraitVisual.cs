@@ -13,27 +13,24 @@ public class PlayerPortraitVisual : MonoBehaviour {
     //public Text NameText;
     public Text HealthText;
     [Header("Image References")]
-    public Image HeroPowerIconImage;
-    public Image HeroPowerBackgroundImage;
-    public Image PortraitImage;
-    public Image PortraitBackgroundImage;
+    //public Image HeroPowerIconImage;
+    //public Image HeroPowerBackgroundImage;
+    public Image ImagenPersonaje;
+    public Image ImagenFondoPersonaje;
 
     void Awake()
     {
         if (charAsset != null)
-            ApplyLookFromAsset();
+            AplicarEstiloPersonajeAsset();
     }
 
-    public void ApplyLookFromAsset()
+    public void AplicarEstiloPersonajeAsset()
     {
         HealthText.text = charAsset.MaxHealth.ToString();
-        HeroPowerIconImage.sprite = charAsset.HeroPowerIconImage;
-        HeroPowerBackgroundImage.sprite = charAsset.HeroPowerBGImage;
-        PortraitImage.sprite = charAsset.AvatarImage;
-        PortraitBackgroundImage.sprite = charAsset.AvatarBGImage;
+        ImagenPersonaje.sprite = charAsset.AvatarImage;
+        ImagenFondoPersonaje.sprite = charAsset.AvatarBGImage;
 
-        HeroPowerBackgroundImage.color = charAsset.HeroPowerBGTint;
-        PortraitBackgroundImage.color = charAsset.AvatarBGTint;
+        ImagenFondoPersonaje.color = charAsset.AvatarBGTint;
 
     }
 
@@ -46,12 +43,12 @@ public class PlayerPortraitVisual : MonoBehaviour {
         }
     }
 
-    public void Explode()
+    public void Explotar()
     {
-        Instantiate(GlobalSettings.Instance.ExplosionPrefab, transform.position, Quaternion.identity);
+        Instantiate(DatosGenerales.Instance.ExplosionPrefab, transform.position, Quaternion.identity);
         Sequence s = DOTween.Sequence();
         s.PrependInterval(2f);
-        s.OnComplete(() => GlobalSettings.Instance.GameOverPanel.SetActive(true));
+        s.OnComplete(() => DatosGenerales.Instance.GameOverPanel.SetActive(true));
 
     }
 

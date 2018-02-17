@@ -8,7 +8,7 @@ public class DragCreatureAttack : DraggingActions {
     // LineRenderer that is attached to a child game object to draw the arrow
     private LineRenderer lr;
     // reference to WhereIsTheCardOrCreature to track this object`s state in the game
-    private WhereIsTheCardOrCreature whereIsThisCreature;
+    private WhereIsTheCardOrCreature dondeEstaCartaOCriatura;
     // the pointy end of the arrow, should be called "Triangle" in the Hierarchy
     private Transform triangle;
     // SpriteRenderer of triangle. We need this to disable the pointy end if the target is too close.
@@ -28,10 +28,10 @@ public class DragCreatureAttack : DraggingActions {
         triangleSR = triangle.GetComponent<SpriteRenderer>();
 
         manager = GetComponentInParent<OneCreatureManager>();
-        whereIsThisCreature = GetComponentInParent<WhereIsTheCardOrCreature>();
+        dondeEstaCartaOCriatura = GetComponentInParent<WhereIsTheCardOrCreature>();
     }
 
-    public override bool CanDrag
+    public override bool PuedeSerLanzada
     {
         get
         {
@@ -39,13 +39,13 @@ public class DragCreatureAttack : DraggingActions {
             // a) we can control this our player (this is checked in base.canDrag)
             // b) creature "CanAttackNow" - this info comes from logic part of our code into each creature`s manager script
             //return true;
-            return base.CanDrag && manager.CanAttackNow;
+            return base.PuedeSerLanzada && manager.PuedeAtacar;
         }
     }
 
     public override void OnStartDrag()
     {
-        whereIsThisCreature.VisualState = VisualStates.Dragging;
+        dondeEstaCartaOCriatura.EstadoVisual = VisualStates.Arrastrando;
         // enable target graphic
         sr.enabled = true;
         // enable line renderer to start drawing the line.
@@ -91,6 +91,7 @@ public class DragCreatureAttack : DraggingActions {
 
         foreach (RaycastHit h in hits)
         {
+            //TODO este hit no se debera tomar en cuenta puesto que se trata del personaje del jugador  y no una carta
             if ((h.transform.tag == "TopPlayer" && this.tag == "LowCreature") ||
                 (h.transform.tag == "LowPlayer" && this.tag == "TopCreature"))
             {
@@ -112,19 +113,19 @@ public class DragCreatureAttack : DraggingActions {
         {
             int targetID = Target.GetComponent<IDHolder>().UniqueID;
             Debug.Log("Target ID: " + targetID);
-            if (targetID == GlobalSettings.Instance.LowPlayer.PlayerID || targetID == GlobalSettings.Instance.TopPlayer.PlayerID)
+            if (targetID == DatosGenerales.Instance.LowPlayer.PlayerID || targetID == DatosGenerales.Instance.TopPlayer.PlayerID)
             {
                 // attack character
                 Debug.Log("Attacking "+Target);
                 Debug.Log("TargetID: " + targetID);
-                CreatureLogic.CreaturesCreatedThisGame[GetComponentInParent<IDHolder>().UniqueID].GoFace();
+                Recursos.CriaturasCreadasEnElJuego[GetComponentInParent<IDHolder>().UniqueID].GoFace();
                 targetValid = true;
             }
-            else if (CreatureLogic.CreaturesCreatedThisGame[targetID] != null)
+            else if (Recursos.CriaturasCreadasEnElJuego[targetID] != null)
             {
                 // if targeted creature is still alive, attack creature
                 targetValid = true;
-                CreatureLogic.CreaturesCreatedThisGame[GetComponentInParent<IDHolder>().UniqueID].AttackCreatureWithID(targetID);
+                Recursos.CriaturasCreadasEnElJuego[GetComponentInParent<IDHolder>().UniqueID].AtacarCriaturaPorID(targetID);
                 Debug.Log("Attacking "+Target);
             }
                 
@@ -134,10 +135,10 @@ public class DragCreatureAttack : DraggingActions {
         {
             // not a valid target, return
             if(tag.Contains("Low"))
-                whereIsThisCreature.VisualState = VisualStates.LowTable;
+                dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorAbajo;
             else
-                whereIsThisCreature.VisualState = VisualStates.TopTable;
-            whereIsThisCreature.SetTableSortingOrder();
+                dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorArriba;
+            dondeEstaCartaOCriatura.SetearOrdenCriatura();
         }
 
         // return target and arrow to original position

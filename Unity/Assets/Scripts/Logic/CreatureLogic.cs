@@ -6,64 +6,64 @@ using System.Collections.Generic;
 public class CreatureLogic: ICharacter 
 {
     // PUBLIC FIELDS
-    public Player owner;
-    public CardAsset ca;
-    public CreatureEffect effect;
-    public int UniqueCreatureID;
+    public Player jugador;
+    public CardAsset assetCarta;
+    public CreatureEffect efecto;
+    public int idCriatura;
     public bool Frozen = false;
 
     // PROPERTIES
     // property from ICharacter interface
     public int ID
     {
-        get{ return UniqueCreatureID; }
+        get{ return idCriatura; }
     }
         
     // the basic health that we have in CardAsset
-    private int baseHealth;
+    private int vidaBase;
     // health with all the current buffs taken into account
-    public int MaxHealth
+    public int VidaMaxima
     {
-        get{ return baseHealth;}
+        get{ return vidaBase;}
     }
 
     // current health of this creature
-    private int health;
-    public int Health
+    private int vida;
+    public int Vida
     {
-        get{ return health; }
+        get{ return vida; }
 
         set
         {
-            if (value > MaxHealth)
-                health = MaxHealth;
+            if (value > VidaMaxima)
+                vida = VidaMaxima;
             else if (value <= 0)
-                Die();
+                Morir();
             else
-                health = value;
+                vida = value;
         }
     }
 
     // returns true if we can attack with this creature now
-    public bool CanAttack
+    public bool PuedeAtacar
     {
         get
         {
-            bool ownersTurn = (ControladorTurno.Instance.whoseTurn == owner);
-            return (ownersTurn && (AttacksLeftThisTurn > 0) && !Frozen);
+            bool nuestroTurno = (ControladorTurno.Instance.jugadorActual == jugador);
+            return (nuestroTurno && (AtaquesRestantesEnTurno > 0) && !Frozen);
         }
     }
 
     // property for Attack
-    private int baseAttack;
-    public int Attack
+    private int ataqueBasico;
+    public int Ataque
     {
-        get{ return baseAttack; }
+        get{ return ataqueBasico; }
     }
      
     // number of attacks for one turn if (attacksForOneTurn==2) => Windfury
     private int attacksForOneTurn = 1;
-    public int AttacksLeftThisTurn
+    public int AtaquesRestantesEnTurno
     {
         get;
         set;
@@ -72,66 +72,65 @@ public class CreatureLogic: ICharacter
     // CONSTRUCTOR
     public CreatureLogic(Player owner, CardAsset ca)
     {
-        this.ca = ca;
-        baseHealth = ca.Defensa;
-        Health = ca.Defensa;
-        baseAttack = ca.Ataque;
+        this.assetCarta = ca;
+        vidaBase = ca.Defensa;
+        Vida = ca.Defensa;
+        ataqueBasico = ca.Ataque;
         attacksForOneTurn = ca.AtaquesPorTurno;
         // AttacksLeftThisTurn is now equal to 0
         if (ca.Charge)
-            AttacksLeftThisTurn = attacksForOneTurn;
-        this.owner = owner;
-        UniqueCreatureID = IDFactory.GetUniqueID();
+            AtaquesRestantesEnTurno = attacksForOneTurn;
+        this.jugador = owner;
+        idCriatura = IDFactory.GetUniqueID();
         if (ca.CreatureScriptName!= null && ca.CreatureScriptName!= "")
         {
-            effect = System.Activator.CreateInstance(System.Type.GetType(ca.CreatureScriptName), new System.Object[]{owner, this, ca.specialCreatureAmount}) as CreatureEffect;
-            effect.RegisterEventEffect();
+            efecto = System.Activator.CreateInstance(System.Type.GetType(ca.CreatureScriptName), new System.Object[]{owner, this, ca.specialCreatureAmount}) as CreatureEffect;
+            efecto.RegisterEventEffect();
         }
-        CreaturesCreatedThisGame.Add(UniqueCreatureID, this);
+        Recursos.CriaturasCreadasEnElJuego.Add(idCriatura, this);
     }
 
     // METHODS
     public void OnTurnStart()
     {
-        AttacksLeftThisTurn = attacksForOneTurn;
+        AtaquesRestantesEnTurno = attacksForOneTurn;
     }
 
-    public void Die()
-    {   
-        owner.table.CreaturesOnTable.Remove(this);
+    public void Morir()
+    {
+        jugador.EliminarCriaturaMesa(this);
         //cause deathrattle effect
-        if (effect != null)
-            effect.WhenACreatureDies();
-        new CreatureDieCommand(UniqueCreatureID, owner).AñadirAlaCola();
+        if (efecto != null)
+            efecto.WhenACreatureDies();
+        new CreatureDieCommand(idCriatura, jugador).AñadirAlaCola();
     }
 
+    //TODO POR ELIMINAR, NO SE PODRÁ IR DE CARA
     public void GoFace()
     {
-        AttacksLeftThisTurn--;
-        int targetHealthAfter = owner.otherPlayer.Health - Attack;
-        new CreatureAttackCommand(owner.otherPlayer.PlayerID, UniqueCreatureID, 0, Attack, Health, targetHealthAfter).AñadirAlaCola();
-        owner.otherPlayer.Health -= Attack;
+        AtaquesRestantesEnTurno--;
+        int targetHealthAfter = jugador.otroJugador.Vida - Ataque;
+        new CreatureAttackCommand(jugador.otroJugador.PlayerID, idCriatura, 0, Ataque, Vida, targetHealthAfter).AñadirAlaCola();
+        jugador.otroJugador.Vida -= Ataque;
     }
 
-    public void AttackCreature (CreatureLogic target)
+    public void AtacarCriatura (CreatureLogic target)
     {
-        AttacksLeftThisTurn--;
+        AtaquesRestantesEnTurno--;
         // calculate the values so that the creature does not fire the DIE command before the Attack command is sent
-        int targetHealthAfter = target.Health - Attack;
-        int attackerHealthAfter = Health - target.Attack;
-        new CreatureAttackCommand(target.UniqueCreatureID, UniqueCreatureID, target.Attack, Attack, attackerHealthAfter, targetHealthAfter).AñadirAlaCola();
+        int targetHealthAfter = target.Vida - Ataque;
+        int attackerHealthAfter = Vida - target.Ataque;
+        new CreatureAttackCommand(target.idCriatura, idCriatura, target.Ataque, Ataque, attackerHealthAfter, targetHealthAfter).AñadirAlaCola();
 
-        target.Health -= Attack;
-        Health -= target.Attack;
+        target.Vida -= Ataque;
+        //TODO esta linea sobraria, es la que hace que la propia criatura se quite vida
+        Vida -= target.Ataque;
     }
 
-    public void AttackCreatureWithID(int uniqueCreatureID)
+    public void AtacarCriaturaPorID(int uniqueCreatureID)
     {
-        CreatureLogic target = CreatureLogic.CreaturesCreatedThisGame[uniqueCreatureID];
-        AttackCreature(target);
+        CreatureLogic target = Recursos.CriaturasCreadasEnElJuego[uniqueCreatureID];
+        AtacarCriatura(target);
     }
-
-    // STATIC For managing IDs
-    public static Dictionary<int, CreatureLogic> CreaturesCreatedThisGame = new Dictionary<int, CreatureLogic>();
 
 }

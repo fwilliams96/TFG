@@ -16,26 +16,26 @@ public class OneCreatureManager : MonoBehaviour
     void Awake()
     {
         if (cardAsset != null)
-            ReadCreatureFromAsset();
+            LeerDatosAsset();
     }
 
-    private bool canAttackNow = false;
-    public bool CanAttackNow
+    private bool puedeAtacar = false;
+    public bool PuedeAtacar
     {
         get
         {
-            return canAttackNow;
+            return puedeAtacar;
         }
 
         set
         {
-            canAttackNow = value;
+            puedeAtacar = value;
 
             CreatureGlowImage.enabled = value;
         }
     }
 
-    public void ReadCreatureFromAsset()
+    public void LeerDatosAsset()
     {
         // Change the card graphic sprite
         CreatureGraphicImage.sprite = cardAsset.ImagenCarta;
@@ -46,15 +46,15 @@ public class OneCreatureManager : MonoBehaviour
         if (PreviewManager != null)
         {
             PreviewManager.cardAsset = cardAsset;
-            PreviewManager.ReadCardFromAsset();
+            PreviewManager.LeerDatosAsset();
         }
     }	
 
-    public void TakeDamage(int amount, int healthAfter)
+    public void HacerDaño(int daño, int healthAfter)
     {
-        if (amount > 0)
+        if (daño > 0)
         {
-            DamageEffect.CreateDamageEffect(transform.position, amount);
+            DamageEffect.CreateDamageEffect(transform.position, daño);
             HealthText.text = healthAfter.ToString();
         }
     }

@@ -5,12 +5,12 @@ using System.Collections.Generic;
 // an enum to store the info about where this object is
 public enum VisualStates
 {
-    Transition,
-    LowHand, 
-    TopHand,
-    LowTable,
-    TopTable,
-    Dragging
+    Transicion,
+    ManoJugadorAbajo, 
+    ManoJugadorArriba,
+    MesaJugadorAbajo,
+    MesaJugadorArriba,
+    Arrastrando
 }
 
 public class WhereIsTheCardOrCreature : MonoBehaviour {
@@ -22,7 +22,7 @@ public class WhereIsTheCardOrCreature : MonoBehaviour {
     private Canvas canvas;
 
     // a value for canvas sorting order when we want to show this object above everything
-    private int TopSortingOrder = 500;
+    private int ValorClasificacionOrden = 500;
 
     // PROPERTIES
     private int slot = -1;
@@ -40,31 +40,33 @@ public class WhereIsTheCardOrCreature : MonoBehaviour {
         }
     }
 
-    private VisualStates state;
-    public VisualStates VisualState
+    private VisualStates estadoVisual;
+    public VisualStates EstadoVisual
     {
-        get{ return state; }  
+        get{ return estadoVisual; }  
 
         set
         {
-            state = value;
-            switch (state)
+            estadoVisual = value;
+            switch (estadoVisual)
             {
-                case VisualStates.LowHand:
-                    hover.ThisPreviewEnabled = true;
+                case VisualStates.ManoJugadorArriba:
+                    hover.PrevisualizacionActivada = true;
                     break;
-                case VisualStates.LowTable:
-                case VisualStates.TopTable:
-                    hover.ThisPreviewEnabled = true;
+                case VisualStates.ManoJugadorAbajo:
+                    hover.PrevisualizacionActivada = true;
                     break;
-                case VisualStates.Transition:
-                    hover.ThisPreviewEnabled = false;
+                case VisualStates.MesaJugadorAbajo:
+                    hover.PrevisualizacionActivada = true;
                     break;
-                case VisualStates.Dragging:
-                    hover.ThisPreviewEnabled = false;
+                case VisualStates.MesaJugadorArriba:
+                    hover.PrevisualizacionActivada = true;
                     break;
-                case VisualStates.TopHand:
-                    hover.ThisPreviewEnabled = false;
+                case VisualStates.Transicion:
+                    hover.PrevisualizacionActivada = false;
+                    break;
+                case VisualStates.Arrastrando:
+                    hover.PrevisualizacionActivada = false;
                     break;
             }
         }
@@ -79,22 +81,22 @@ public class WhereIsTheCardOrCreature : MonoBehaviour {
         canvas = GetComponentInChildren<Canvas>();
     }
 
-    public void BringToFront()
+    public void TraerAlFrente()
     {
-        canvas.sortingOrder = TopSortingOrder;
+        canvas.sortingOrder = ValorClasificacionOrden;
         canvas.sortingLayerName = "AboveEverything";
     }
 
     // not setting sorting order inside of VisualStaes property because when the card is drawn, 
     // we want to set an index first and set the sorting order only when the card arrives to hand. 
-    public void SetHandSortingOrder()
+    public void SetearOrdenCarta()
     {
         if (slot != -1)
             canvas.sortingOrder = HandSortingOrder(slot);
         canvas.sortingLayerName = "Cards";
     }
 
-    public void SetTableSortingOrder()
+    public void SetearOrdenCriatura()
     {
         canvas.sortingOrder = 0;
         canvas.sortingLayerName = "Creatures";

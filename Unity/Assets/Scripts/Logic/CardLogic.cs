@@ -7,39 +7,35 @@ using System;
 public class CardLogic: IIdentifiable
 {
     // reference to a player who holds this card in his hand
-    public Player owner;
+    public Player jugador;
     // an ID of this card
-    public int UniqueCardID; 
+    public int idCarta; 
     // a reference to the card asset that stores all the info about this card
-    public CardAsset ca;
+    public CardAsset assetCarta;
     // a script of type spell effect that will be attached to this card when it`s created
-    public SpellEffect effect;
-
-
-    // STATIC (for managing IDs)
-    public static Dictionary<int, CardLogic> CardsCreatedThisGame = new Dictionary<int, CardLogic>();
-
+    public SpellEffect efecto;
 
     // PROPERTIES
     public int ID
     {
-        get{ return UniqueCardID; }
+        get{ return idCarta; }
     }
 
-    public int CurrentManaCost{ get; set; }
+    public int CosteManaActual{ get; set; }
 
-    public bool CanBePlayed
+    public bool PuedeSerJugada
     {
         get
         {
-            bool ownersTurn = (ControladorTurno.Instance.whoseTurn == owner);
+            bool nuestroTurno = (ControladorTurno.Instance.jugadorActual == jugador);
             // for spells the amount of characters on the field does not matter
             bool fieldNotFull = true;
             // but if this is a creature, we have to check if there is room on board (table)
-            if (ca.Defensa > 0)
-                fieldNotFull = (owner.table.CreaturesOnTable.Count < 7);
+            //TODO Esto de momento sobrará porque todas las cartas ocuparan sitio en la mesa
+            if (assetCarta.Defensa > 0)
+                fieldNotFull = (jugador.NumCriaturasEnLaMesa() < DatosGenerales.Instance.NumMaximoCriaturasMesa);
             //Debug.Log("Card: " + ca.name + " has params: ownersTurn=" + ownersTurn + "fieldNotFull=" + fieldNotFull + " hasMana=" + (CurrentManaCost <= owner.ManaLeft));
-            return ownersTurn && fieldNotFull && (CurrentManaCost <= owner.ManaLeft);
+            return nuestroTurno && fieldNotFull && (CosteManaActual <= jugador.ManaRestante);
         }
     }
 
@@ -47,25 +43,25 @@ public class CardLogic: IIdentifiable
     public CardLogic(CardAsset ca)
     {
         // set the CardAsset reference
-        this.ca = ca;
+        this.assetCarta = ca;
         // get unique int ID
-        UniqueCardID = IDFactory.GetUniqueID();
+        idCarta = IDFactory.GetUniqueID();
         //UniqueCardID = IDFactory.GetUniqueID();
-        ResetManaCost();
+        ResetCosteMana();
         // create an instance of SpellEffect with a name from our CardAsset
         // and attach it to 
         if (ca.SpellScriptName!= null && ca.SpellScriptName!= "")
         {
-            effect = System.Activator.CreateInstance(System.Type.GetType(ca.SpellScriptName)) as SpellEffect;
+            efecto = System.Activator.CreateInstance(System.Type.GetType(ca.SpellScriptName)) as SpellEffect;
         }
         // add this card to a dictionary with its ID as a key
-        CardsCreatedThisGame.Add(UniqueCardID, this);
+        Recursos.CartasCreadasEnElJuego.Add(idCarta, this);
     }
 
     // method to set or reset mana cost
-    public void ResetManaCost()
+    public void ResetCosteMana()
     {
-        CurrentManaCost = ca.CosteMana;
+        CosteManaActual = assetCarta.CosteMana;
     }
 
 }

@@ -10,7 +10,7 @@ public class AITurnMaker: TurnMaker {
         base.OnTurnStart();
         // dispay a message that it is enemy`s turn
         new ShowMessageCommand("Enemy`s Turn!", 2.0f).AñadirAlaCola();
-        p.DrawACard();
+        p.DibujarCartaMazo();
         StartCoroutine(MakeAITurn());
     }
 
@@ -26,7 +26,7 @@ public class AITurnMaker: TurnMaker {
             yield return null;
         }
 
-        InsertDelay(1f);
+        InsertarRetraso(1f);
 
         ControladorTurno.Instance.EndTurn();
     }
@@ -36,25 +36,25 @@ public class AITurnMaker: TurnMaker {
         if (Comandas.Instance.ComandasDeDibujoCartaPendientes())
             return true;
         else if (attackFirst)
-            return AttackWithACreature() || PlayACardFromHand() || UseHeroPower();
-        else 
-            return PlayACardFromHand() || AttackWithACreature() || UseHeroPower();
+            return AttackWithACreature() || PlayACardFromHand();
+        else
+            return PlayACardFromHand() || AttackWithACreature();
     }
 
     bool PlayACardFromHand()
     {
-        foreach (CardLogic c in p.hand.CardsInHand)
+        foreach (CardLogic c in p.CartasEnLaMano())
         {
-            if (c.CanBePlayed)
+            if (c.PuedeSerJugada)
             {
-                if (c.ca.Defensa == 0)
+                if (c.assetCarta.Defensa == 0)
                 {
                     // code to play a spell from hand
                     // TODO: depending on the targeting options, select a random target.
-                    if (c.ca.Targets == TargetingOptions.NoTarget)
+                    if (c.assetCarta.Targets == TargetingOptions.NoTarget)
                     {
-                        p.PlayASpellFromHand(c, null);
-                        InsertDelay(1.5f);
+                        p.JugarSpellMano(c, null);
+                        InsertarRetraso(1.5f);
                         //Debug.Log("Card: " + c.ca.name + " can be played");
                         return true;
                     }                        
@@ -62,8 +62,8 @@ public class AITurnMaker: TurnMaker {
                 else
                 {
                     // it is a creature card
-                    p.PlayACreatureFromHand(c, 0, true);
-                    InsertDelay(1.5f);
+                    p.JugarCartaMano(c, 0, true);
+                    InsertarRetraso(1.5f);
                     return true;
                 }
 
@@ -73,36 +73,23 @@ public class AITurnMaker: TurnMaker {
         return false;
     }
 
-    bool UseHeroPower()
-    {
-        if (p.ManaLeft >= 2 && !p.usedHeroPowerThisTurn)
-        {
-            // use HP
-            p.UseHeroPower();
-            InsertDelay(1.5f);
-            //Debug.Log("AI used hero power");
-            return true;
-        }
-        return false;
-    }
-
     bool AttackWithACreature()
     {
-        foreach (CreatureLogic cl in p.table.CreaturesOnTable)
+        foreach (CreatureLogic cl in p.CriaturasEnLaMesa())
         {
-            if (cl.AttacksLeftThisTurn > 0)
+            if (cl.AtaquesRestantesEnTurno > 0)
             {
                 // attack a random target with a creature
-                if (p.otherPlayer.table.CreaturesOnTable.Count > 0)
+                if (p.otroJugador.NumCriaturasEnLaMesa() > 0)
                 {
-                    int index = Random.Range(0, p.otherPlayer.table.CreaturesOnTable.Count);
-                    CreatureLogic targetCreature = p.otherPlayer.table.CreaturesOnTable[index];
-                    cl.AttackCreature(targetCreature);
+                    int index = Random.Range(0, p.otroJugador.NumCriaturasEnLaMesa());
+                    CreatureLogic targetCreature = p.otroJugador.CriaturasEnLaMesa()[index];
+                    cl.AtacarCriatura(targetCreature);
                 }                    
                 else
                     cl.GoFace();
                 
-                InsertDelay(1f);
+                InsertarRetraso(1f);
                 //Debug.Log("AI attacked with creature");
                 return true;
             }
@@ -110,7 +97,7 @@ public class AITurnMaker: TurnMaker {
         return false;
     }
 
-    void InsertDelay(float delay)
+    void InsertarRetraso(float delay)
     {
         new DelayCommand(delay).AñadirAlaCola();
     }

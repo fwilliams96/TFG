@@ -7,6 +7,12 @@ public class Recursos  {
 
     private static Dictionary<string, Dictionary<string, SimpleJSON.JSONNode>> cartas;
 
+    public static Dictionary<int, CardLogic> CartasCreadasEnElJuego = new Dictionary<int, CardLogic>();
+
+    public static Dictionary<int, CreatureLogic> CriaturasCreadasEnElJuego = new Dictionary<int, CreatureLogic>();
+
+    public static List<CartaAsset> AssetsCreadosCartas = new List<CartaAsset>();
+
     public static void InicializarCartas()
     {
         //string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, "/JSON");
@@ -73,7 +79,7 @@ public class Recursos  {
                     if(!tipoCarta.Equals(TipoCarta.Ancestral))
                         evolucion = System.Int32.Parse(entrada.Value["carta"]["delante"]["evolucion"]);
 
-                    var asset = ScriptableObject.CreateInstance<CartaAsset>();
+                    CartaAsset asset = ScriptableObject.CreateInstance<CartaAsset>();
                     asset.Descripcion = descripcion;
                     asset.Familia = tipoCarta;
                     //Cargar imagen a partir de la rutaImagen y setearla en el Sprite de CardAsset
@@ -99,6 +105,7 @@ public class Recursos  {
 
                     //AssetDatabase.CreateAsset(asset, "Assets/Game Assets/"+ obtenerCarpetaFamilia(familia) + nombre+".asset");
                     AssetDatabase.CreateAsset(asset, obtenerRutaAsset(familia, carpetaCarta, nombre + ".asset"));
+                    AssetsCreadosCartas.Add(asset);
                 }
             }
             

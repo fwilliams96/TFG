@@ -19,7 +19,7 @@ public class TableVisual : MonoBehaviour
     private List<GameObject> CreaturesOnTable = new List<GameObject>();
 
     // are we hovering over this table`s collider with a mouse
-    private bool cursorOverThisTable = false;
+    private bool cursorSobreEstaMesa = false;
 
     // A 3D collider attached to this game object
     private BoxCollider col;
@@ -27,19 +27,19 @@ public class TableVisual : MonoBehaviour
     // PROPERTIES
 
     // returns true if we are hovering over any player`s table collider
-    public static bool CursorOverSomeTable
+    public static bool CursorSobreAlgunaMesa
     {
         get
         {
             TableVisual[] bothTables = GameObject.FindObjectsOfType<TableVisual>();
-            return (bothTables[0].CursorOverThisTable || bothTables[1].CursorOverThisTable);
+            return (bothTables[0].CursorSobreEstaMesa || bothTables[1].CursorSobreEstaMesa);
         }
     }
 
     // returns true only if we are hovering over this table`s collider
-    public bool CursorOverThisTable
+    public bool CursorSobreEstaMesa
     {
-        get{ return cursorOverThisTable; }
+        get{ return cursorSobreEstaMesa; }
     }
 
     // MONOBEHAVIOUR SCRIPTS (mouse over collider detection)
@@ -54,17 +54,17 @@ public class TableVisual : MonoBehaviour
         // we need to Raycast because OnMouseEnter, etc reacts to colliders on cards and cards "cover" the table
         RaycastHit[] hits;
         hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition), 30f);
-        bool passedThroughTableCollider = false;
+        bool haPasadoPorColider = false;
         foreach (RaycastHit h in hits)
         {
             if (h.collider == col)
-                passedThroughTableCollider = true;
+                haPasadoPorColider = true;
         }
-        cursorOverThisTable = passedThroughTableCollider;
+        cursorSobreEstaMesa = haPasadoPorColider;
     }
    
-
-    public void AddCreatureAtIndex(CardAsset ca, int UniqueID ,int index, bool posicionAtaque)
+    //TODO mejorar codigo
+    public void AñadirCriatura(CardAsset ca, int idUnico ,int indiceSlot, bool posicionAtaque)
     {
         Debug.Log("AddCreatureAtIndex ataque " + posicionAtaque);
         bool magica = ca.TipoDeCarta.Equals(TipoCarta.Magica);
@@ -72,12 +72,12 @@ public class TableVisual : MonoBehaviour
         if (!magica)
         {
             // create a new creature from prefab
-            creature = GameObject.Instantiate(GlobalSettings.Instance.CreaturePrefab, slots.Children[index].transform.position, Quaternion.identity) as GameObject;
+            creature = GameObject.Instantiate(DatosGenerales.Instance.CreaturePrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
 
         }
         else
         {
-            creature = GameObject.Instantiate(GlobalSettings.Instance.CriaturaPrefab, slots.Children[index].transform.position, Quaternion.identity) as GameObject;
+            creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
         }
         
         // apply the look from CardAsset
@@ -105,7 +105,7 @@ public class TableVisual : MonoBehaviour
             }
         }
         manager.cardAsset = ca;
-        manager.ReadCreatureFromAsset();
+        manager.LeerDatosAsset();
         // add tag according to owner
         foreach (Transform t in creature.GetComponentsInChildren<Transform>())
             t.tag = owner.ToString()+"Creature";
@@ -113,14 +113,14 @@ public class TableVisual : MonoBehaviour
         creature.transform.SetParent(slots.transform);
         // add a new creature to the list
         // Debug.Log ("insert index: " + index.ToString());
-        CreaturesOnTable.Insert(index, creature);
+        CreaturesOnTable.Insert(indiceSlot, creature);
         // let this creature know about its position
         WhereIsTheCardOrCreature w = creature.GetComponent<WhereIsTheCardOrCreature>();
-        w.Slot = index;
-        w.VisualState = VisualStates.LowTable;
+        w.Slot = indiceSlot;
+        w.EstadoVisual = VisualStates.MesaJugadorAbajo;
         // add our unique ID to this creature
         IDHolder id = creature.AddComponent<IDHolder>();
-        id.UniqueID = UniqueID;
+        id.UniqueID = idUnico;
 
         ShiftSlotsGameObjectAccordingToNumberOfCreatures();
         PlaceCreaturesOnNewSlots();
@@ -128,7 +128,7 @@ public class TableVisual : MonoBehaviour
         Comandas.Instance.CompletarEjecucionComanda();
     }
 
-    public int TablePosForNewCreature(float MouseX)
+    public int PosicionSlotNuevaCriatura(float MouseX)
     {
         // if there are no creatures or if we are pointing to the right of all creatures with a mouse.
         // right - because the table slots are flipped and 0 is on the right side.
@@ -145,7 +145,7 @@ public class TableVisual : MonoBehaviour
         return 0;
     }
 
-    public void RemoveCreatureWithID(int IDToRemove)
+    public void EliminarCriaturaID(int IDToRemove)
     {
         // TODO: This has to last for some time
         // Adding delay here did not work because it shows one creature die, then another creature die. 

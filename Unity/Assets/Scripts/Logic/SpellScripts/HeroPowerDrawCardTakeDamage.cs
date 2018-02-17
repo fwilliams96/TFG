@@ -6,10 +6,10 @@ public class HeroPowerDrawCardTakeDamage : SpellEffect {
     public override void ActivateEffect(int specialAmount = 0, ICharacter target = null)
     {
         // Take 2 damage
-        new DealDamageCommand(ControladorTurno.Instance.whoseTurn.PlayerID, 2, ControladorTurno.Instance.whoseTurn.Health - 2).AñadirAlaCola();
-        ControladorTurno.Instance.whoseTurn.Health -= 2;
+        new DealDamageCommand(ControladorTurno.Instance.jugadorActual.PlayerID, 2, ControladorTurno.Instance.jugadorActual.Vida - 2).AñadirAlaCola();
+        ControladorTurno.Instance.jugadorActual.Vida -= 2;
         // Draw a card
-        ControladorTurno.Instance.whoseTurn.DrawACard();
+        ControladorTurno.Instance.jugadorActual.DibujarCartaMazo();
 
     }
 }

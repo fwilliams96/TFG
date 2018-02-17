@@ -19,7 +19,8 @@ public class DealDamageCommand : Comanda {
         Debug.Log("In deal damage command!");
 
         GameObject target = IDHolder.GetGameObjectWithID(targetID);
-        if (targetID == GlobalSettings.Instance.LowPlayer.PlayerID || targetID == GlobalSettings.Instance.TopPlayer.PlayerID)
+        //TODO esta comprobacion se quitara puesto que no se podrá ir de cara
+        if (targetID == DatosGenerales.Instance.LowPlayer.PlayerID || targetID == DatosGenerales.Instance.TopPlayer.PlayerID)
         {
             // target is a hero
             target.GetComponent<PlayerPortraitVisual>().TakeDamage(amount,healthAfter);
@@ -27,7 +28,7 @@ public class DealDamageCommand : Comanda {
         else
         {
             // target is a creature
-            target.GetComponent<OneCreatureManager>().TakeDamage(amount, healthAfter);
+            target.GetComponent<OneCreatureManager>().HacerDaño(amount, healthAfter);
         }
         comandas.CompletarEjecucionComanda();
     }

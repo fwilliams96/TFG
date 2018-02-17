@@ -10,7 +10,7 @@ public abstract class DamageOpponentBattleCry : CreatureEffect
     //BattleCry
     public override void WhenACreatureIsPlayed()
     {
-        new DealDamageCommand(owner.otherPlayer.PlayerID, specialAmount, owner.otherPlayer.Health - specialAmount).AñadirAlaCola();
-        owner.otherPlayer.Health = owner.otherPlayer.Health - specialAmount;
+        new DealDamageCommand(owner.otroJugador.PlayerID, specialAmount, owner.otroJugador.Vida - specialAmount).AñadirAlaCola();
+        owner.otroJugador.Vida = owner.otroJugador.Vida - specialAmount;
     }
 }

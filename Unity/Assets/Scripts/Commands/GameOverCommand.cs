@@ -12,6 +12,6 @@ public class GameOverCommand : Comanda{
 
     public override void EmpezarEjecucionComanda()
     {
-        looser.PArea.Portrait.Explode();
+        looser.PArea.Personaje.Explotar();
     }
 }

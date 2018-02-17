@@ -12,21 +12,16 @@ public class Player : MonoBehaviour, ICharacter
     public CharacterAsset charAsset;
     // a script with references to all the visual game objects for this player
     public PlayerArea PArea;
-    // a script of type Spell effect that will be used for our hero power
-    // (essenitially, using hero power is like playing a spell in a way)
-    public SpellEffect HeroPowerEffect;
     // this value used exclusively for our coin spell
     private int bonusManaThisTurn = 0;
-    // a flag not to use hero power twice
-    public bool usedHeroPowerThisTurn = false;
 
     // REFERENCES TO LOGICAL STUFF THAT BELONGS TO THIS PLAYER
-    public Deck deck;
-    public Hand hand;
-    public Table table;
+    private Deck mazo;
+    private Hand mano;
+    private Table mesa;
 
     // a static array that will store both players, should always have 2 players
-    public Players players;
+    public Players jugadores;
     #endregion Atributos
 
     // PROPERTIES 
@@ -37,56 +32,56 @@ public class Player : MonoBehaviour, ICharacter
     }
 
     // opponent player
-    public Player otherPlayer
+    public Player otroJugador
     {
         get
         {
-            if (players[0] == this)
-                return players[1];
+            if (jugadores[0] == this)
+                return jugadores[1];
             else
-                return players[0];
+                return jugadores[0];
         }
     }
 
     // total mana crystals that this player has this turn
-    private int manaThisTurn;
-    public int ManaThisTurn
+    private int manaEnEsteTurno;
+    public int ManaEnEsteTurno
     {
-        get{ return manaThisTurn;}
+        get{ return manaEnEsteTurno;}
         set
         {
-            manaThisTurn = value;
+            manaEnEsteTurno = value;
             //PArea.ManaBar.TotalCrystals = manaThisTurn;
-            new UpdateManaCrystalsCommand(this, manaThisTurn, manaLeft).AñadirAlaCola();
+            new UpdateManaCrystalsCommand(this, manaEnEsteTurno, manaRestante).AñadirAlaCola();
         }
     }
 
     // full mana crystals available right now to play cards / use hero power 
-    private int manaLeft;
-    public int ManaLeft
+    private int manaRestante;
+    public int ManaRestante
     {
         get
-        { return manaLeft;}
+        { return manaRestante;}
         set
         {
-            manaLeft = value;
+            manaRestante = value;
             //PArea.ManaBar.AvailableCrystals = manaLeft;
-            new UpdateManaCrystalsCommand(this, ManaThisTurn, manaLeft).AñadirAlaCola();
+            new UpdateManaCrystalsCommand(this, ManaEnEsteTurno, manaRestante).AñadirAlaCola();
             //Debug.Log(ManaLeft);
-            if (ControladorTurno.Instance.whoseTurn == this)
+            if (ControladorTurno.Instance.jugadorActual == this)
                 MostrarCartasJugables();
         }
     }
 
     private int health;
-    public int Health
+    public int Vida
     {
         get { return health;}
         set
         {
             health = value;
             if (value <= 0)
-                Die(); 
+                Morir(); 
         }
     }
 
@@ -104,59 +99,69 @@ public class Player : MonoBehaviour, ICharacter
     {
         // find all scripts of type Player and store them in Players array
         // (we should have only 2 players in the scene)
-        players = Players.Instance;
-        players.Add(this);
+        jugadores = Players.Instance;
+        jugadores.Add(this);
         // obtain unique id from IDFactory
         PlayerID = IDFactory.GetUniqueID();
+        mazo = GetComponentInChildren<Deck>();
+        mano = GetComponentInChildren<Hand>();
+        mesa = GetComponentInChildren<Table>();
     }
 
     public virtual void OnTurnStart()
     {
         // add one mana crystal to the pool;
         Debug.Log("In ONTURNSTART for "+ gameObject.name);
-        usedHeroPowerThisTurn = false;
-        ManaThisTurn++;
-        ManaLeft = ManaThisTurn;
-        foreach (CreatureLogic cl in table.CreaturesOnTable)
+        ManaEnEsteTurno++;
+        ManaRestante = ManaEnEsteTurno;
+        foreach (CreatureLogic cl in mesa.CreaturesOnTable)
             cl.OnTurnStart();
-        PArea.HeroPower.WasUsedThisTurn = false;
     }
 
     public void OnTurnEnd()
     {
         if(EndTurnEvent != null)
             EndTurnEvent.Invoke();
-        ManaThisTurn -= bonusManaThisTurn;
-        bonusManaThisTurn = 0;
+        //ManaEnEsteTurno -= bonusManaThisTurn;
+        //bonusManaThisTurn = 0;
         GetComponent<TurnMaker>().StopAllCoroutines();
     }
 
     // STUFF THAT OUR PLAYER CAN DO
 
     // get mana from coin or other spells 
-    public void GetBonusMana(int amount)
+    public void ConseguirManaExtra(int amount)
     {
         bonusManaThisTurn += amount;
-        ManaThisTurn += amount;
-        ManaLeft += amount;
+        ManaEnEsteTurno += amount;
+        ManaRestante += amount;
     }
 
-    // draw a single card from the deck
-    public void DrawACard(bool fast = false)
+    public void DibujarCartasMazo(int numCartas, bool fast = false)
     {
-        if (deck.cards.Count > 0)
+        for(int i = 0; i < numCartas; i++)
         {
-            if (hand.CardsInHand.Count < PArea.handVisual.slots.Children.Length)
+            DibujarCartaMazo(fast);
+        }
+    }
+
+
+    // draw a single card from the deck
+    public void DibujarCartaMazo(bool fast = false)
+    {
+        if (mazo.cartas.Count > 0)
+        {
+            if (mano.CartasEnMano.Count < PArea.manoVisual.slots.Children.Length)
             {
                 // 1) logic: add card to hand
-                CardLogic newCard = new CardLogic(deck.cards[0]);
-                newCard.owner = this;
-                hand.CardsInHand.Insert(0, newCard);
+                CardLogic newCard = new CardLogic(mazo.cartas[0]);
+                newCard.jugador = this;
+                mano.CartasEnMano.Insert(0, newCard);
                 // Debug.Log(hand.CardsInHand.Count);
                 // 2) logic: remove the card from the deck
-                deck.cards.RemoveAt(0);
+                mazo.cartas.RemoveAt(0);
                 // 2) create a command
-                new DrawACardCommand(hand.CardsInHand[0], this, fast, fromDeck: true).AñadirAlaCola(); 
+                new DrawACardCommand(mano.CartasEnMano[0], this, fast, fromDeck: true).AñadirAlaCola(); 
             }
         }
         else
@@ -167,16 +172,17 @@ public class Player : MonoBehaviour, ICharacter
     }
 
     // get card NOT from deck (a token or a coin)
-    public void GetACardNotFromDeck(CardAsset cardAsset)
+    //TODO
+    public void DibujarCartaFueraMazo(CardAsset assetCarta)
     {
-        if (hand.CardsInHand.Count < PArea.handVisual.slots.Children.Length)
+        if (mano.CartasEnMano.Count < PArea.manoVisual.slots.Children.Length)
         {
             // 1) logic: add card to hand
-            CardLogic newCard = new CardLogic(cardAsset);
-            newCard.owner = this;
-            hand.CardsInHand.Insert(0, newCard);
+            CardLogic newCard = new CardLogic(assetCarta);
+            newCard.jugador = this;
+            mano.CartasEnMano.Insert(0, newCard);
             // 2) send message to the visual Deck
-            new DrawACardCommand(hand.CardsInHand[0], this, fast: true, fromDeck: false).AñadirAlaCola(); 
+            new DrawACardCommand(mano.CartasEnMano[0], this, fast: true, fromDeck: false).AñadirAlaCola(); 
         }
         // no removal from deck because the card was not in the deck
     }
@@ -184,161 +190,168 @@ public class Player : MonoBehaviour, ICharacter
     // 2 METHODS FOR PLAYING SPELLS
     // 1st overload - takes ids as arguments
     // it is cnvenient to call this method from visual part
-    public void PlayASpellFromHand(int SpellCardUniqueID, int TargetUniqueID)
+    public void JugarSpellMano(int idCartaSpell, int idObjetivo)
     {
         // TODO: !!!
         // if TargetUnique ID < 0 , for example = -1, there is no target.
-        if (TargetUniqueID < 0)
-            PlayASpellFromHand(CardLogic.CardsCreatedThisGame[SpellCardUniqueID], null);
-        else if (TargetUniqueID == ID)
+        if (idObjetivo < 0)
+            JugarSpellMano(Recursos.CartasCreadasEnElJuego[idCartaSpell], null);
+        //TODO estas dos siguientes condiciones sobraran puesto que no se podrá ir de cara al personaje
+        else if (idObjetivo == ID)
         {
-            PlayASpellFromHand(CardLogic.CardsCreatedThisGame[SpellCardUniqueID], this);
+            JugarSpellMano(Recursos.CartasCreadasEnElJuego[idCartaSpell], this);
         }
-        else if (TargetUniqueID == otherPlayer.ID)
+        else if (idObjetivo == otroJugador.ID)
         {
-            PlayASpellFromHand(CardLogic.CardsCreatedThisGame[SpellCardUniqueID], this.otherPlayer);
+            JugarSpellMano(Recursos.CartasCreadasEnElJuego[idCartaSpell], this.otroJugador);
         }
         else
         {
             // target is a creature
-            PlayASpellFromHand(CardLogic.CardsCreatedThisGame[SpellCardUniqueID], CreatureLogic.CreaturesCreatedThisGame[TargetUniqueID]);
+            JugarSpellMano(Recursos.CartasCreadasEnElJuego[idCartaSpell], Recursos.CriaturasCreadasEnElJuego[idObjetivo]);
         }
           
     }
 
     // 2nd overload - takes CardLogic and ICharacter interface - 
     // this method is called from Logic, for example by AI
-    public void PlayASpellFromHand(CardLogic playedCard, ICharacter target)
+    public void JugarSpellMano(CardLogic playedCard, ICharacter target)
     {
-        ManaLeft -= playedCard.CurrentManaCost;
+        ManaRestante -= playedCard.CosteManaActual;
         // cause effect instantly:
-        if (playedCard.effect != null)
-            playedCard.effect.ActivateEffect(playedCard.ca.specialSpellAmount, target);
+        if (playedCard.efecto != null)
+            playedCard.efecto.ActivateEffect(playedCard.assetCarta.specialSpellAmount, target);
         else
         {
-            Debug.LogWarning("No effect found on card " + playedCard.ca.name);
+            Debug.LogWarning("No effect found on card " + playedCard.assetCarta.name);
         }
         // no matter what happens, move this card to PlayACardSpot
         new PlayASpellCardCommand(this, playedCard).AñadirAlaCola();
         // remove this card from hand
-        hand.CardsInHand.Remove(playedCard);
+        mano.CartasEnMano.Remove(playedCard);
         // check if this is a creature or a spell
     }
 
     // METHODS TO PLAY CREATURES 
     // 1st overload - by ID
-    public void PlayACreatureFromHand(int UniqueID, int tablePos, bool posicionAtaque)
+    public void JugarCartaMano(int UniqueID, int tablePos, bool posicionAtaque)
     {
-        PlayACreatureFromHand(CardLogic.CardsCreatedThisGame[UniqueID], tablePos, posicionAtaque);
+        JugarCartaMano(Recursos.CartasCreadasEnElJuego[UniqueID], tablePos, posicionAtaque);
     }
 
     // 2nd overload - by logic units
-    public void PlayACreatureFromHand(CardLogic playedCard, int tablePos, bool posicionAtaque)
+    public void JugarCartaMano(CardLogic cartaJugada, int tablePos, bool posicionAtaque)
     {
         // Debug.Log(ManaLeft);
         // Debug.Log(playedCard.CurrentManaCost);
-        ManaLeft -= playedCard.CurrentManaCost;
+        ManaRestante -= cartaJugada.CosteManaActual;
         // Debug.Log("Mana Left after played a creature: " + ManaLeft);
         // create a new creature object and add it to Table
-        CreatureLogic newCreature = new CreatureLogic(this, playedCard.ca);
-        table.CreaturesOnTable.Insert(tablePos, newCreature);
+        CreatureLogic newCreature = new CreatureLogic(this, cartaJugada.assetCarta);
+        mesa.CreaturesOnTable.Insert(tablePos, newCreature);
         // no matter what happens, move this card to PlayACardSpot
-        new PlayACreatureCommand(playedCard, this, tablePos, posicionAtaque, newCreature.UniqueCreatureID).AñadirAlaCola();
+        new PlayACreatureCommand(cartaJugada, this, tablePos, posicionAtaque, newCreature.idCriatura).AñadirAlaCola();
         //causa battlecry effect
-        if (newCreature.effect != null)
-            newCreature.effect.WhenACreatureIsPlayed();
+        if (newCreature.efecto != null)
+            newCreature.efecto.WhenACreatureIsPlayed();
         // remove this card from hand
-        hand.CardsInHand.Remove(playedCard);
+        mano.CartasEnMano.Remove(cartaJugada);
         MostrarCartasJugables();
     }
 
-    public void Die()
+    public void Morir()
     {
         // game over
         // block both players from taking new moves 
-        PArea.ControlsON = false;
-        otherPlayer.PArea.ControlsON = false;
+        PArea.ControlActivado = false;
+        otroJugador.PArea.ControlActivado = false;
         ControladorTurno.Instance.StopTheTimer();
         new GameOverCommand(this).AñadirAlaCola();
     }
 
     // METHOD TO SHOW GLOW HIGHLIGHTS
-    public void MostrarCartasJugables(bool removeAllHighlights = false)
+    public void MostrarCartasJugables(bool quitarTodasRemarcadas = false)
     {
         //Debug.Log("HighlightPlayable remove: "+ removeAllHighlights);
-        foreach (CardLogic cl in hand.CardsInHand)
+        foreach (CardLogic cl in mano.CartasEnMano)
         {
-            GameObject g = IDHolder.GetGameObjectWithID(cl.UniqueCardID);
+            GameObject g = IDHolder.GetGameObjectWithID(cl.idCarta);
             if (g!=null)
-                g.GetComponent<OneCardManager>().CanBePlayedNow = (cl.CurrentManaCost <= ManaLeft) && !removeAllHighlights;
+                g.GetComponent<OneCardManager>().PuedeSerJugada = (cl.CosteManaActual <= ManaRestante) && !quitarTodasRemarcadas;
         }
 
-        foreach (CreatureLogic crl in table.CreaturesOnTable)
+        foreach (CreatureLogic crl in mesa.CreaturesOnTable)
         {
-            GameObject g = IDHolder.GetGameObjectWithID(crl.UniqueCreatureID);
+            GameObject g = IDHolder.GetGameObjectWithID(crl.idCriatura);
             if(g!= null)
-                g.GetComponent<OneCreatureManager>().CanAttackNow = (crl.AttacksLeftThisTurn > 0) && !removeAllHighlights;
+                g.GetComponent<OneCreatureManager>().PuedeAtacar = (crl.AtaquesRestantesEnTurno > 0) && !quitarTodasRemarcadas;
         }   
-        // highlight hero power
-        PArea.HeroPower.Highlighted = (!usedHeroPowerThisTurn) && (ManaLeft > 1) && !removeAllHighlights;
-    }
-
-    // use hero power - activate is effect like you`ve payed a spell
-    public void UseHeroPower()
-    {
-        ManaLeft -= 2;
-        usedHeroPowerThisTurn = true;
-        HeroPowerEffect.ActivateEffect();
     }
 
     // START GAME METHODS
-    public void LoadCharacterInfoFromAsset()
+    //TODO
+    public void LeerInformacionPersonajeAsset()
     {
-        Health = charAsset.MaxHealth;
+        Vida = charAsset.MaxHealth;
         // change the visuals for portrait, hero power, etc...
-        PArea.Portrait.charAsset = charAsset;
-        PArea.Portrait.ApplyLookFromAsset();
-        // TODO: insert the code to attach hero power script here. 
-        if (charAsset.HeroPowerName != null && charAsset.HeroPowerName != "")
-        {
-            HeroPowerEffect = System.Activator.CreateInstance(System.Type.GetType(charAsset.HeroPowerName)) as SpellEffect;
-        }
-        else
-        {
-            Debug.LogWarning("Check hero powr name for character " + charAsset.ClassName);
-        }
+        PArea.Personaje.charAsset = charAsset;
+        PArea.Personaje.AplicarEstiloPersonajeAsset();
     }
 
-    public void TransmitInfoAboutPlayerToVisual()
+    public void TransmitirInformacionAcercaJugadorVisual()
     {
-        PArea.Portrait.gameObject.AddComponent<IDHolder>().UniqueID = PlayerID;
+        PArea.Personaje.gameObject.AddComponent<IDHolder>().UniqueID = PlayerID;
         if (GetComponent<TurnMaker>() is AITurnMaker)
         {
             // turn off turn making for this character
-            PArea.AllowedToControlThisPlayer = false;
+            PArea.PermitirControlJugador = false;
         }
         else
         {
             // allow turn making for this character
-            PArea.AllowedToControlThisPlayer = true;
+            PArea.PermitirControlJugador = true;
         }
     }
 
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.D))
-            DrawACard();
+            DibujarCartaMazo();
     }
 
     public void InicializarValores()
     {
-        ManaThisTurn = 0;
-        ManaLeft = 0;
-        LoadCharacterInfoFromAsset();
-        TransmitInfoAboutPlayerToVisual();
-        PArea.PDeck.CardsInDeck = deck.cards.Count;
+        ManaEnEsteTurno = 0;
+        ManaRestante = 0;
+        LeerInformacionPersonajeAsset();
+        TransmitirInformacionAcercaJugadorVisual();
+        PArea.mazoVisual.CartasEnMazo = mazo.cartas.Count;
         // move both portraits to the center
-        PArea.Portrait.transform.position = PArea.InitialPortraitPosition.position;
+        PArea.Personaje.transform.position = PArea.PosicionInicialPersonaje.position;
     }
-        
+
+    public int NumCriaturasEnLaMesa()
+    {
+        return mesa.CreaturesOnTable.Count;
+    }
+
+    public void EliminarCriaturaMesa(CreatureLogic criatura)
+    {
+        mesa.CreaturesOnTable.Remove(criatura);
+    }
+
+    public CreatureLogic[] CriaturasEnLaMesa()
+    {
+        return mesa.CreaturesOnTable.ToArray();
+    }
+
+    public int NumCartasMano()
+    {
+        return mano.CartasEnMano.Count;
+    }
+
+    public CardLogic[] CartasEnLaMano()
+    {
+        return mano.CartasEnMano.ToArray();
+    }
 }

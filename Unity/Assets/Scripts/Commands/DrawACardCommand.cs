@@ -18,7 +18,7 @@ public class DrawACardCommand : Comanda {
 
     public override void EmpezarEjecucionComanda()
     {
-        p.PArea.PDeck.CardsInDeck--;
-        p.PArea.handVisual.GivePlayerACard(cl.ca, cl.UniqueCardID, fast, fromDeck);
+        p.PArea.mazoVisual.CartasEnMazo--;
+        p.PArea.manoVisual.DarCartaJugador(cl.assetCarta, cl.idCarta, fast, fromDeck);
     }
 }

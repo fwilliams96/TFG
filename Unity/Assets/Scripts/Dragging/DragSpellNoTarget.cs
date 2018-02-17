@@ -8,11 +8,11 @@ public class DragSpellNoTarget: DraggingActions{
     private WhereIsTheCardOrCreature whereIsCard;
     private OneCardManager manager;
 
-    public override bool CanDrag
+    public override bool PuedeSerLanzada
     {
         get
         {
-            return base.CanDrag && manager.CanBePlayedNow;
+            return base.PuedeSerLanzada && manager.PuedeSerJugada;
         }
     }
 
@@ -26,8 +26,8 @@ public class DragSpellNoTarget: DraggingActions{
     {
         savedHandSlot = whereIsCard.Slot;
 
-        whereIsCard.VisualState = VisualStates.Dragging;
-        whereIsCard.BringToFront();
+        whereIsCard.EstadoVisual = VisualStates.Arrastrando;
+        whereIsCard.TraerAlFrente();
 
     }
 
@@ -42,15 +42,15 @@ public class DragSpellNoTarget: DraggingActions{
         if (DragSuccessful())
         {
             // play this card
-            playerOwner.PlayASpellFromHand(GetComponent<IDHolder>().UniqueID, -1);
+            playerOwner.JugarSpellMano(GetComponent<IDHolder>().UniqueID, -1);
         }
         else
         {
             // Set old sorting order 
             whereIsCard.Slot = savedHandSlot;
-            whereIsCard.VisualState = VisualStates.LowHand;
+            whereIsCard.EstadoVisual = VisualStates.ManoJugadorAbajo;
             // Move this card back to its slot position
-            HandVisual PlayerHand = ControladorTurno.Instance.whoseTurn.PArea.handVisual;
+            HandVisual PlayerHand = ControladorTurno.Instance.jugadorActual.PArea.manoVisual;
             Vector3 oldCardPos = PlayerHand.slots.Children[savedHandSlot].transform.localPosition;
             transform.DOLocalMove(oldCardPos, 1f);
         } 
@@ -60,7 +60,7 @@ public class DragSpellNoTarget: DraggingActions{
     {
         //bool TableNotFull = (TurnManager.Instance.whoseTurn.table.CreaturesOnTable.Count < 8);
 
-        return TableVisual.CursorOverSomeTable; //&& TableNotFull;
+        return TableVisual.CursorSobreAlgunaMesa; //&& TableNotFull;
     }
 
 

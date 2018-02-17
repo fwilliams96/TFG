@@ -27,26 +27,26 @@ public class OneCardManager : MonoBehaviour {
     void Awake()
     {
         if (cardAsset != null)
-            ReadCardFromAsset();
+            LeerDatosAsset();
     }
 
-    private bool canBePlayedNow = false;
-    public bool CanBePlayedNow
+    private bool puedeSerJugada = false;
+    public bool PuedeSerJugada
     {
         get
         {
-            return canBePlayedNow;
+            return puedeSerJugada;
         }
 
         set
         {
-            canBePlayedNow = value;
+            puedeSerJugada = value;
 
             CardFaceGlowImage.enabled = value;
         }
     }
 
-    public void ReadCardFromAsset()
+    public void LeerDatosAsset()
     {
         // universal actions for any Card
         // 1) apply tint
@@ -89,7 +89,7 @@ public class OneCardManager : MonoBehaviour {
             // Preview GameObject will have OneCardManager as well, but PreviewManager should be null there
 
             PreviewManager.cardAsset = cardAsset;
-            PreviewManager.ReadCardFromAsset();
+            PreviewManager.LeerDatosAsset();
         }
     }
 }
