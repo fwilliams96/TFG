@@ -28,7 +28,7 @@ public class AITurnMaker: TurnMaker {
 
         InsertDelay(1f);
 
-        TurnManager.Instance.EndTurn();
+        ControladorTurno.Instance.EndTurn();
     }
 
     bool MakeOneAIMove(bool attackFirst)

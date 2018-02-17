@@ -7,13 +7,13 @@ using System;
 using System.Reflection;
 
 // this class will take care of switching turns and counting down time until the turn expires
-public class TurnManager : MonoBehaviour {
+public class ControladorTurno : MonoBehaviour {
 
     // PUBLIC FIELDS
     public CardAsset CoinCard;
 
     // for Singleton Pattern
-    public static TurnManager Instance;
+    public static ControladorTurno Instance;
 
     // PRIVATE FIELDS
     // reference to a timer to measure 
@@ -57,20 +57,14 @@ public class TurnManager : MonoBehaviour {
         CardLogic.CardsCreatedThisGame.Clear();
         CreatureLogic.CreaturesCreatedThisGame.Clear();
 
-        foreach (Player p in Player.Players)
+        foreach (Player p in Players.Instance.GetPlayers())
         {
-            p.ManaThisTurn = 0;
-            p.ManaLeft = 0;
-            p.LoadCharacterInfoFromAsset();
-            p.TransmitInfoAboutPlayerToVisual();
-            p.PArea.PDeck.CardsInDeck = p.deck.cards.Count;
-            // move both portraits to the center
-            p.PArea.Portrait.transform.position = p.PArea.InitialPortraitPosition.position;
+            p.InicializarValores();
         }
 
         Sequence s = DOTween.Sequence();
-        s.Append(Player.Players[0].PArea.Portrait.transform.DOMove(Player.Players[0].PArea.PortraitPosition.position, 1f).SetEase(Ease.InQuad));
-        s.Insert(0f, Player.Players[1].PArea.Portrait.transform.DOMove(Player.Players[1].PArea.PortraitPosition.position, 1f).SetEase(Ease.InQuad));
+        s.Append(Players.Instance.GetPlayers()[0].PArea.Portrait.transform.DOMove(Players.Instance.GetPlayers()[0].PArea.PortraitPosition.position, 1f).SetEase(Ease.InQuad));
+        s.Insert(0f, Players.Instance.GetPlayers()[1].PArea.Portrait.transform.DOMove(Players.Instance.GetPlayers()[1].PArea.PortraitPosition.position, 1f).SetEase(Ease.InQuad));
         s.PrependInterval(3f);
         s.OnComplete(() =>
             {
@@ -78,7 +72,7 @@ public class TurnManager : MonoBehaviour {
                 //int rnd = Random.Range(0,2);  // 2 is exclusive boundary
                 int rnd = 1;
                 // Debug.Log(Player.Players.Length);
-                Player whoGoesFirst = Player.Players[rnd];
+                Player whoGoesFirst = Players.Instance.GetPlayers()[rnd];
                 // Debug.Log(whoGoesFirst);
                 Player whoGoesSecond = whoGoesFirst.otherPlayer;
                 // Debug.Log(whoGoesSecond);
@@ -138,10 +132,10 @@ public class TurnManager : MonoBehaviour {
         tm.OnTurnStart();
         if (tm is PlayerTurnMaker)
         {
-            whoseTurn.HighlightPlayableCards();
+            whoseTurn.MostrarCartasJugables();
         }
         // remove highlights for opponent.
-        whoseTurn.otherPlayer.HighlightPlayableCards(true);
+        whoseTurn.otherPlayer.MostrarCartasJugables(true);
     }
 
 }

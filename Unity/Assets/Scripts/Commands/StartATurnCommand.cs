@@ -12,8 +12,8 @@ public class StartATurnCommand : Comanda {
 
     public override void EmpezarEjecucionComanda()
     {
-        TurnManager.Instance.whoseTurn = p;
-        TurnManager.Instance.ActualizarValoresJugador();
+        ControladorTurno.Instance.whoseTurn = p;
+        ControladorTurno.Instance.ActualizarValoresJugador();
         // this command is completed instantly
         comandas.CompletarEjecucionComanda();
     }

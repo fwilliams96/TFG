@@ -4,7 +4,7 @@ using System.Collections;
 public class Player : MonoBehaviour, ICharacter
 {
 
-
+    #region Atributos
     // PUBLIC FIELDS
     // int ID that we get from ID factory
     public int PlayerID;
@@ -26,10 +26,8 @@ public class Player : MonoBehaviour, ICharacter
     public Table table;
 
     // a static array that will store both players, should always have 2 players
-    public static Player[] Players;
-
-
-
+    public Players players;
+    #endregion Atributos
 
     // PROPERTIES 
     // this property is a part of interface ICharacter
@@ -43,10 +41,10 @@ public class Player : MonoBehaviour, ICharacter
     {
         get
         {
-            if (Players[0] == this)
-                return Players[1];
+            if (players[0] == this)
+                return players[1];
             else
-                return Players[0];
+                return players[0];
         }
     }
 
@@ -75,8 +73,8 @@ public class Player : MonoBehaviour, ICharacter
             //PArea.ManaBar.AvailableCrystals = manaLeft;
             new UpdateManaCrystalsCommand(this, ManaThisTurn, manaLeft).AñadirAlaCola();
             //Debug.Log(ManaLeft);
-            if (TurnManager.Instance.whoseTurn == this)
-                HighlightPlayableCards();
+            if (ControladorTurno.Instance.whoseTurn == this)
+                MostrarCartasJugables();
         }
     }
 
@@ -106,7 +104,8 @@ public class Player : MonoBehaviour, ICharacter
     {
         // find all scripts of type Player and store them in Players array
         // (we should have only 2 players in the scene)
-        Players = GameObject.FindObjectsOfType<Player>();
+        players = Players.Instance;
+        players.Add(this);
         // obtain unique id from IDFactory
         PlayerID = IDFactory.GetUniqueID();
     }
@@ -250,7 +249,7 @@ public class Player : MonoBehaviour, ICharacter
             newCreature.effect.WhenACreatureIsPlayed();
         // remove this card from hand
         hand.CardsInHand.Remove(playedCard);
-        HighlightPlayableCards();
+        MostrarCartasJugables();
     }
 
     public void Die()
@@ -259,12 +258,12 @@ public class Player : MonoBehaviour, ICharacter
         // block both players from taking new moves 
         PArea.ControlsON = false;
         otherPlayer.PArea.ControlsON = false;
-        TurnManager.Instance.StopTheTimer();
+        ControladorTurno.Instance.StopTheTimer();
         new GameOverCommand(this).AñadirAlaCola();
     }
 
     // METHOD TO SHOW GLOW HIGHLIGHTS
-    public void HighlightPlayableCards(bool removeAllHighlights = false)
+    public void MostrarCartasJugables(bool removeAllHighlights = false)
     {
         //Debug.Log("HighlightPlayable remove: "+ removeAllHighlights);
         foreach (CardLogic cl in hand.CardsInHand)
@@ -329,6 +328,17 @@ public class Player : MonoBehaviour, ICharacter
     {
         if (Input.GetKeyDown(KeyCode.D))
             DrawACard();
+    }
+
+    public void InicializarValores()
+    {
+        ManaThisTurn = 0;
+        ManaLeft = 0;
+        LoadCharacterInfoFromAsset();
+        TransmitInfoAboutPlayerToVisual();
+        PArea.PDeck.CardsInDeck = deck.cards.Count;
+        // move both portraits to the center
+        PArea.Portrait.transform.position = PArea.InitialPortraitPosition.position;
     }
         
 }
