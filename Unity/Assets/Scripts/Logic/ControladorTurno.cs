@@ -7,13 +7,13 @@ using System;
 using System.Reflection;
 
 // this class will take care of switching turns and counting down time until the turn expires
-public class TurnManager : MonoBehaviour {
+public class ControladorTurno : MonoBehaviour {
 
     // PUBLIC FIELDS
     public CardAsset CoinCard;
 
     // for Singleton Pattern
-    public static TurnManager Instance;
+    public static ControladorTurno Instance;
 
     // PRIVATE FIELDS
     // reference to a timer to measure 
@@ -59,13 +59,7 @@ public class TurnManager : MonoBehaviour {
 
         foreach (Player p in Players.Instance.GetPlayers())
         {
-            p.ManaThisTurn = 0;
-            p.ManaLeft = 0;
-            p.LoadCharacterInfoFromAsset();
-            p.TransmitInfoAboutPlayerToVisual();
-            p.PArea.PDeck.CardsInDeck = p.deck.cards.Count;
-            // move both portraits to the center
-            p.PArea.Portrait.transform.position = p.PArea.InitialPortraitPosition.position;
+            p.InicializarValores();
         }
 
         Sequence s = DOTween.Sequence();
@@ -138,10 +132,10 @@ public class TurnManager : MonoBehaviour {
         tm.OnTurnStart();
         if (tm is PlayerTurnMaker)
         {
-            whoseTurn.HighlightPlayableCards();
+            whoseTurn.MostrarCartasJugables();
         }
         // remove highlights for opponent.
-        whoseTurn.otherPlayer.HighlightPlayableCards(true);
+        whoseTurn.otherPlayer.MostrarCartasJugables(true);
     }
 
 }

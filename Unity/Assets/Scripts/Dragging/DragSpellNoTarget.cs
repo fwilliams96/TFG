@@ -50,7 +50,7 @@ public class DragSpellNoTarget: DraggingActions{
             whereIsCard.Slot = savedHandSlot;
             whereIsCard.VisualState = VisualStates.LowHand;
             // Move this card back to its slot position
-            HandVisual PlayerHand = TurnManager.Instance.whoseTurn.PArea.handVisual;
+            HandVisual PlayerHand = ControladorTurno.Instance.whoseTurn.PArea.handVisual;
             Vector3 oldCardPos = PlayerHand.slots.Children[savedHandSlot].transform.localPosition;
             transform.DOLocalMove(oldCardPos, 1f);
         } 

@@ -49,7 +49,7 @@ public class CreatureLogic: ICharacter
     {
         get
         {
-            bool ownersTurn = (TurnManager.Instance.whoseTurn == owner);
+            bool ownersTurn = (ControladorTurno.Instance.whoseTurn == owner);
             return (ownersTurn && (AttacksLeftThisTurn > 0) && !Frozen);
         }
     }

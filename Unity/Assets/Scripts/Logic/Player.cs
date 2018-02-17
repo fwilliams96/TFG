@@ -73,8 +73,8 @@ public class Player : MonoBehaviour, ICharacter
             //PArea.ManaBar.AvailableCrystals = manaLeft;
             new UpdateManaCrystalsCommand(this, ManaThisTurn, manaLeft).AñadirAlaCola();
             //Debug.Log(ManaLeft);
-            if (TurnManager.Instance.whoseTurn == this)
-                HighlightPlayableCards();
+            if (ControladorTurno.Instance.whoseTurn == this)
+                MostrarCartasJugables();
         }
     }
 
@@ -249,7 +249,7 @@ public class Player : MonoBehaviour, ICharacter
             newCreature.effect.WhenACreatureIsPlayed();
         // remove this card from hand
         hand.CardsInHand.Remove(playedCard);
-        HighlightPlayableCards();
+        MostrarCartasJugables();
     }
 
     public void Die()
@@ -258,12 +258,12 @@ public class Player : MonoBehaviour, ICharacter
         // block both players from taking new moves 
         PArea.ControlsON = false;
         otherPlayer.PArea.ControlsON = false;
-        TurnManager.Instance.StopTheTimer();
+        ControladorTurno.Instance.StopTheTimer();
         new GameOverCommand(this).AñadirAlaCola();
     }
 
     // METHOD TO SHOW GLOW HIGHLIGHTS
-    public void HighlightPlayableCards(bool removeAllHighlights = false)
+    public void MostrarCartasJugables(bool removeAllHighlights = false)
     {
         //Debug.Log("HighlightPlayable remove: "+ removeAllHighlights);
         foreach (CardLogic cl in hand.CardsInHand)
@@ -328,6 +328,17 @@ public class Player : MonoBehaviour, ICharacter
     {
         if (Input.GetKeyDown(KeyCode.D))
             DrawACard();
+    }
+
+    public void InicializarValores()
+    {
+        ManaThisTurn = 0;
+        ManaLeft = 0;
+        LoadCharacterInfoFromAsset();
+        TransmitInfoAboutPlayerToVisual();
+        PArea.PDeck.CardsInDeck = deck.cards.Count;
+        // move both portraits to the center
+        PArea.Portrait.transform.position = PArea.InitialPortraitPosition.position;
     }
         
 }
