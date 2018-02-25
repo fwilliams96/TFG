@@ -3,9 +3,9 @@ using System.Collections;
 
 public interface ICharacter: IIdentifiable
 {	
-    int Health { get;    set;}
+    int Vida { get;    set;}
 
-    void Die();
+    void Morir();
 }
 
 public interface IIdentifiable

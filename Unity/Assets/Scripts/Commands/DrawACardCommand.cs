@@ -3,12 +3,12 @@ using System.Collections;
 
 public class DrawACardCommand : Comanda {
 
-    private Player p;
-    private CardLogic cl;
+    private Jugador p;
+    private Carta cl;
     private bool fast;
     private bool fromDeck;
 
-    public DrawACardCommand(CardLogic cl, Player p, bool fast, bool fromDeck)
+    public DrawACardCommand(Carta cl, Jugador p, bool fast, bool fromDeck)
     {        
         this.cl = cl;
         this.p = p;
@@ -18,7 +18,7 @@ public class DrawACardCommand : Comanda {
 
     public override void EmpezarEjecucionComanda()
     {
-        p.PArea.PDeck.CardsInDeck--;
-        p.PArea.handVisual.GivePlayerACard(cl.ca, cl.UniqueCardID, fast, fromDeck);
+        p.PArea.mazoVisual.CartasEnMazo--;
+        p.PArea.manoVisual.DarCartaJugador(cl.assetCarta, cl.idCarta, fast, fromDeck);
     }
 }

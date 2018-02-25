@@ -30,7 +30,7 @@ public class HandVisual : MonoBehaviour
     public void PlayASpellFromHand(GameObject CardVisual)
     {
         Comandas.Instance.CompletarEjecucionComanda();
-        CardVisual.GetComponent<WhereIsTheCardOrCreature>().VisualState = VisualStates.Transition;
+        CardVisual.GetComponent<WhereIsTheCardOrCreature>().EstadoVisual = VisualStates.Transicion;
         RemoveCard(CardVisual);
 
         CardVisual.transform.SetParent(null);
@@ -97,12 +97,12 @@ public class HandVisual : MonoBehaviour
             // apply correct sorting order and HandSlot value for later 
             WhereIsTheCardOrCreature w = g.GetComponent<WhereIsTheCardOrCreature>();
             w.Slot = CardsInHand.IndexOf(g);
-            w.SetHandSortingOrder();
+            w.SetearOrdenCarta();
         }
     }
 
     // CARD DRAW METHODS
-    public void GivePlayerACard(CardAsset c, int UniqueID, bool fast = false, bool fromDeck = true)
+    public void DarCartaJugador(CardAsset c, int UniqueID, bool fast = false, bool fromDeck = true)
     {
         GameObject card;
         if (fromDeck)
@@ -124,10 +124,10 @@ public class HandVisual : MonoBehaviour
         AddCard(card);
         // let the card know about its place in hand.
         WhereIsTheCardOrCreature w = card.GetComponent<WhereIsTheCardOrCreature>();
-        w.BringToFront();
+        w.TraerAlFrente();
 
         w.Slot = 0;
-        w.VisualState = VisualStates.Transition;
+        w.EstadoVisual = VisualStates.Transicion;
         // pass a unique ID to this card.
         IDHolder id = card.AddComponent<IDHolder>();
         id.UniqueID = UniqueID;
@@ -140,21 +140,21 @@ public class HandVisual : MonoBehaviour
         if (!fast)
         {
             Debug.Log ("Not fast!!!");
-            s.Append(card.transform.DOMove(DrawPreviewSpot.position, GlobalSettings.Instance.CardTransitionTime));
+            s.Append(card.transform.DOMove(DrawPreviewSpot.position, DatosGenerales.Instance.CardTransitionTime));
             if (TakeCardsOpenly)
-                s.Insert(0f, card.transform.DORotate(Vector3.zero, GlobalSettings.Instance.CardTransitionTime)); 
+                s.Insert(0f, card.transform.DORotate(Vector3.zero, DatosGenerales.Instance.CardTransitionTime)); 
             else 
-                s.Insert(0f, card.transform.DORotate(new Vector3(0f, 179f, 0f), GlobalSettings.Instance.CardTransitionTime)); 
-            s.AppendInterval(GlobalSettings.Instance.CardPreviewTime);
+                s.Insert(0f, card.transform.DORotate(new Vector3(0f, 179f, 0f), DatosGenerales.Instance.CardTransitionTime)); 
+            s.AppendInterval(DatosGenerales.Instance.CardPreviewTime);
             // displace the card so that we can select it in the scene easier.
-            s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, GlobalSettings.Instance.CardTransitionTime));
+            s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, DatosGenerales.Instance.CardTransitionTime));
         }
         else
         {
             // displace the card so that we can select it in the scene easier.
-            s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, GlobalSettings.Instance.CardTransitionTimeFast));
+            s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, DatosGenerales.Instance.CardTransitionTimeFast));
             if (TakeCardsOpenly)    
-                s.Insert(0f,card.transform.DORotate(Vector3.zero, GlobalSettings.Instance.CardTransitionTimeFast)); 
+                s.Insert(0f,card.transform.DORotate(Vector3.zero, DatosGenerales.Instance.CardTransitionTimeFast)); 
         }
 
         s.OnComplete(()=>ChangeLastCardStatusToInHand(card, w));
@@ -164,11 +164,11 @@ public class HandVisual : MonoBehaviour
     {
         //Debug.Log("Changing state to Hand for card: " + card.gameObject.name);
         if (owner == AreaPosition.Low)
-            w.VisualState = VisualStates.LowHand;
+            w.EstadoVisual = VisualStates.ManoJugadorAbajo;
         else
-            w.VisualState = VisualStates.TopHand;
+            w.EstadoVisual = VisualStates.ManoJugadorArriba;
 
-        w.SetHandSortingOrder();
+        w.SetearOrdenCarta();
         Comandas.Instance.CompletarEjecucionComanda();
     }
 
@@ -179,16 +179,16 @@ public class HandVisual : MonoBehaviour
         if (c.Defensa > 0)
         {
             // this card is a creature card
-            card = GameObject.Instantiate(GlobalSettings.Instance.CreatureCardPrefab, position, Quaternion.Euler(eulerAngles)) as GameObject;
+            card = GameObject.Instantiate(DatosGenerales.Instance.CreatureCardPrefab, position, Quaternion.Euler(eulerAngles)) as GameObject;
         }
         else
         {
             // this is a spell: checking for targeted or non-targeted spell
             if (c.Targets == TargetingOptions.NoTarget)
-                card = GameObject.Instantiate(GlobalSettings.Instance.NoTargetSpellCardPrefab, position, Quaternion.Euler(eulerAngles)) as GameObject;
+                card = GameObject.Instantiate(DatosGenerales.Instance.NoTargetSpellCardPrefab, position, Quaternion.Euler(eulerAngles)) as GameObject;
             else
             {
-                card = GameObject.Instantiate(GlobalSettings.Instance.TargetedSpellCardPrefab, position, Quaternion.Euler(eulerAngles)) as GameObject;
+                card = GameObject.Instantiate(DatosGenerales.Instance.TargetedSpellCardPrefab, position, Quaternion.Euler(eulerAngles)) as GameObject;
                 // pass targeting options to DraggingActions
                 DragSpellOnTarget dragSpell = card.GetComponentInChildren<DragSpellOnTarget>();
                 dragSpell.Targets = c.Targets;
@@ -199,7 +199,7 @@ public class HandVisual : MonoBehaviour
         // apply the look of the card based on the info from CardAsset
         OneCardManager manager = card.GetComponent<OneCardManager>();
         manager.cardAsset = c;
-        manager.ReadCardFromAsset();
+        manager.LeerDatosAsset();
 
         return card;
     }

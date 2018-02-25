@@ -5,19 +5,18 @@ public enum AreaPosition{Top, Low}
 
 public class PlayerArea : MonoBehaviour 
 {
-    public AreaPosition owner;
-    public bool ControlsON = true;
-    public PlayerDeckVisual PDeck;
+    public AreaPosition areaPosicionJugador;
+    public bool ControlActivado = true;
+    public PlayerDeckVisual mazoVisual;
     public ManaPoolVisual ManaBar;
-    public HandVisual handVisual;
-    public PlayerPortraitVisual Portrait;
-    public HeroPowerButton HeroPower;
+    public HandVisual manoVisual;
+    public PlayerPortraitVisual Personaje;
     //public EndTurnButton EndTurnButton;
     public TableVisual tableVisual;
-    public Transform PortraitPosition;
-    public Transform InitialPortraitPosition;
+    public Transform PosicionPersonaje;
+    public Transform PosicionInicialPersonaje;
 
-    public bool AllowedToControlThisPlayer
+    public bool PermitirControlJugador
     {
         get;
         set;

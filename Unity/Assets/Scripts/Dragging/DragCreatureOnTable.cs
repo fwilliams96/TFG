@@ -11,14 +11,13 @@ public class DragCreatureOnTable : DraggingActions {
     private VisualStates tempState;
     private OneCardManager manager;
 
-    public override bool CanDrag
+    public override bool PuedeSerLanzada
     {
         get
         {
-            // TODO : include full field check
             //return true;
             //manage es si está con glow
-            return base.CanDrag && manager.CanBePlayedNow;
+            return base.PuedeSerLanzada && manager.PuedeSerJugada;
         }
     }
 
@@ -31,9 +30,9 @@ public class DragCreatureOnTable : DraggingActions {
     public override void OnStartDrag()
     {
         savedHandSlot = whereIsCard.Slot;
-        tempState = whereIsCard.VisualState;
-        whereIsCard.VisualState = VisualStates.Dragging;
-        whereIsCard.BringToFront();
+        tempState = whereIsCard.EstadoVisual;
+        whereIsCard.EstadoVisual = VisualStates.Arrastrando;
+        whereIsCard.TraerAlFrente();
 
     }
 
@@ -78,11 +77,11 @@ public class DragCreatureOnTable : DraggingActions {
                 ataque = PosicionCriatura.Instance.Ataque;
             Debug.Log("ColocarCartaTablero ataque " + ataque);
             // determine table position
-            int tablePos = playerOwner.PArea.tableVisual.TablePosForNewCreature(Camera.main.ScreenToWorldPoint(
+            int tablePos = playerOwner.PArea.tableVisual.PosicionSlotNuevaCriatura(Camera.main.ScreenToWorldPoint(
                     new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z - Camera.main.transform.position.z)).x);
             // Debug.Log("Table Pos for new Creature: " + tablePos.ToString());
             // play this card
-            playerOwner.PlayACreatureFromHand(GetComponent<IDHolder>().UniqueID, tablePos, ataque);
+            Controlador.Instance.JugarCartaMano(GetComponent<IDHolder>().UniqueID, tablePos, ataque);
         }
         //Se ha cancelado el popup
         else
@@ -95,18 +94,18 @@ public class DragCreatureOnTable : DraggingActions {
 
     protected override bool DragSuccessful()
     {
-        bool TableNotFull = (playerOwner.table.CreaturesOnTable.Count < 8);
+        bool TableNotFull = (playerOwner.NumCriaturasEnLaMesa() < 8);
 
-        return TableVisual.CursorOverSomeTable && TableNotFull;
+        return TableVisual.CursorSobreAlgunaMesa && TableNotFull;
     }
 
     private void VolverALaMano()
     {
         // Set old sorting order 
-        whereIsCard.SetHandSortingOrder();
-        whereIsCard.VisualState = tempState;
+        whereIsCard.SetearOrdenCarta();
+        whereIsCard.EstadoVisual = tempState;
         // Move this card back to its slot position
-        HandVisual PlayerHand = playerOwner.PArea.handVisual;
+        HandVisual PlayerHand = playerOwner.PArea.manoVisual;
         Vector3 oldCardPos = PlayerHand.slots.Children[savedHandSlot].transform.localPosition;
         transform.DOLocalMove(oldCardPos, 1f);
     }

@@ -8,39 +8,6 @@ using UnityEngine;
 
 public class Util {
 
-    public static GameObject CargarCarta(string tipoCarta)
-    {
-        GameObject card = null;
-        switch (tipoCarta)
-        {
-            case Global.CARTAS.TIPO_CARTA.AGUA:
-                card = Resources.Load("Cartas/Agua") as GameObject;
-                break;
-            case Global.CARTAS.TIPO_CARTA.FUEGO:
-                card = Resources.Load("Cartas/Fuego") as GameObject;
-                break;
-            case Global.CARTAS.TIPO_CARTA.ELECTRICIDAD:
-                card = Resources.Load("Cartas/Electricidad") as GameObject;
-                break;
-            case Global.CARTAS.TIPO_CARTA.TIERRA:
-                card = Resources.Load("Cartas/Tierra") as GameObject;
-                break;
-            case Global.CARTAS.TIPO_CARTA.FUSION:
-                card = Resources.Load("Cartas/Fusion") as GameObject;
-                break;
-            case Global.CARTAS.TIPO_CARTA.MAGICA:
-                card = Resources.Load("Cartas/Magica") as GameObject;
-                break;
-            case Global.CARTAS.TIPO_CARTA.ANCESTRAL:
-                card = Resources.Load("Cartas/Ancestral") as GameObject;
-                break;
-            default:
-                card = null;
-                break;
-        }
-        return card;
-    }
-
     public static void XmlToJSONnode(StringBuilder sbJSON, XmlElement node,
                                            bool showNodeName)
     {
@@ -202,22 +169,4 @@ public class Util {
         sbJSON.Append("}");
         return JSON.Parse(sbJSON.ToString());
     }
-
-
-    /*private static int contador;
-
-    public static IEnumerable<string> GetFamily()
-    {
-        foreach (string familia in Global.CARTAS.FAMILIAS)
-        {
-            contador += 1;
-            yield return familia;
-
-        }
-    }
-
-    public static bool HasNext()
-    {
-        return contador < NUM_FAMILIAS;
-    }*/
 }

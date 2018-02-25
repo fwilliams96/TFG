@@ -39,11 +39,11 @@ public class Draggable : MonoBehaviour {
 
     void OnMouseDown()
     {
-        if (da!=null && da.CanDrag)
+        if (da!=null && da.PuedeSerLanzada)
         {
             dragging = true;
             // when we are dragging something, all previews should be off
-            HoverPreview.PreviewsAllowed = false;
+            HoverPreview.PrevisualizacionesPermitidas = false;
             _draggingThis = this;
             da.OnStartDrag();
             zDisplacement = -Camera.main.transform.position.z + transform.position.z;
@@ -69,7 +69,7 @@ public class Draggable : MonoBehaviour {
         {
             dragging = false;
             // turn all previews back on
-            HoverPreview.PreviewsAllowed = true;
+            HoverPreview.PrevisualizacionesPermitidas = true;
             _draggingThis = null;
             da.OnEndDrag();
         }

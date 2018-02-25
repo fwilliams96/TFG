@@ -50,7 +50,7 @@ public class HeroPowerButton : MonoBehaviour {
     {
         if (!WasUsedThisTurn && Highlighted)
         {
-            GlobalSettings.Instance.Players[owner].UseHeroPower();
+            //GlobalSettings.Instance.Players[owner].UseHeroPower();
             WasUsedThisTurn= !WasUsedThisTurn;
         }
     }

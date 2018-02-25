@@ -3,10 +3,10 @@ using System.Collections;
 
 public class CreatureDieCommand : Comanda 
 {
-    private Player p;
+    private Jugador p;
     private int DeadCreatureID;
 
-    public CreatureDieCommand(int CreatureID, Player p)
+    public CreatureDieCommand(int CreatureID, Jugador p)
     {
         this.p = p;
         this.DeadCreatureID = CreatureID;
@@ -14,6 +14,6 @@ public class CreatureDieCommand : Comanda
 
     public override void EmpezarEjecucionComanda()
     {
-        p.PArea.tableVisual.RemoveCreatureWithID(DeadCreatureID);
+        p.PArea.tableVisual.EliminarCriaturaID(DeadCreatureID);
     }
 }

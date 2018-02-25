@@ -9,21 +9,22 @@ public class PlayerDeckVisual : MonoBehaviour {
     public AreaPosition owner;
     public float HeightOfOneCard = 0.012f;
 
-    void Start()
+    private int cartasEnMazo = 0;
+    public int CartasEnMazo
     {
-        CardsInDeck = GlobalSettings.Instance.Players[owner].deck.cards.Count;
-    }
-
-    private int cardsInDeck = 0;
-    public int CardsInDeck
-    {
-        get{ return cardsInDeck; }
+        get { return cartasEnMazo; }
 
         set
         {
-            cardsInDeck = value;
-            transform.position = new Vector3(transform.position.x, transform.position.y, - HeightOfOneCard * value);
+            cartasEnMazo = value;
+            transform.position = new Vector3(transform.position.x, transform.position.y, -HeightOfOneCard * value);
         }
     }
+
+    void Start()
+    {
+    }
+
+    
    
 }

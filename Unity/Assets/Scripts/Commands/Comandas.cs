@@ -53,8 +53,8 @@ public class Comandas
             EjecutarPrimeraComanda();
         else
             playingQueue = false;
-        if (ControladorTurno.Instance.whoseTurn != null)
-            ControladorTurno.Instance.whoseTurn.MostrarCartasJugables();
+        if (Controlador.Instance.jugadorActual != null)
+            Controlador.Instance.MostrarCartasJugablesJugadorActual();
     }
 
     public bool ComandasDeDibujoCartaPendientes()

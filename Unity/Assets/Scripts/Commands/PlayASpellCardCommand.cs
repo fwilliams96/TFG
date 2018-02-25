@@ -3,11 +3,11 @@ using System.Collections;
 
 public class PlayASpellCardCommand: Comanda
 {
-    private CardLogic card;
-    private Player p;
+    private Carta card;
+    private Jugador p;
     //private ICharacter target;
 
-    public PlayASpellCardCommand(Player p, CardLogic card)
+    public PlayASpellCardCommand(Jugador p, Carta card)
     {
         this.card = card;
         this.p = p;
@@ -16,7 +16,7 @@ public class PlayASpellCardCommand: Comanda
     public override void EmpezarEjecucionComanda()
     {
         // move this card to the spot
-        p.PArea.handVisual.PlayASpellFromHand(card.UniqueCardID);
+        p.PArea.manoVisual.PlayASpellFromHand(card.idCarta);
         // do all the visual stuff (for each spell separately????)
     }
 }
