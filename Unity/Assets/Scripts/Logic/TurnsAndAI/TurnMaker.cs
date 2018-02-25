@@ -3,16 +3,17 @@ using System.Collections;
 
 public abstract class TurnMaker : MonoBehaviour {
 
-    protected Player p;
+    protected Jugador p;
 
     void Awake()
     {
-        p = GetComponent<Player>();
+        p = GetComponent<Jugador>();
     }
 
     public virtual void OnTurnStart()
     {
         // add one mana crystal to the pool;
+        //TODO cambiar
         p.OnTurnStart();
     }
 

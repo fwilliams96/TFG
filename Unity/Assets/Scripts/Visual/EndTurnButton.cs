@@ -5,7 +5,7 @@ public class EndTurnButton : MonoBehaviour {
 
     public void OnClick()
     {
-            ControladorTurno.Instance.EndTurn();
+            Controlador.Instance.EndTurn();
     }
 
 }

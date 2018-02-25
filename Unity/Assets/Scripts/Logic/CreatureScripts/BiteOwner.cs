@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BiteOwner : CreatureEffect
 {  
-    public BiteOwner(Player owner, CreatureLogic creature, int specialAmount): base(owner, creature, specialAmount)
+    public BiteOwner(Jugador owner, Criatura creature, int specialAmount): base(owner, creature, specialAmount)
     {}
 
     public override void RegisterEventEffect()

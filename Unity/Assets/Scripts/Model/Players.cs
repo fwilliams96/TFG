@@ -4,14 +4,14 @@ using System.Collections;
 public class Players
 {
     #region Atributos
-    private Player[] players;
+    private Jugador[] players;
     private int numPlayers;
     private static Players instance = null;
     #endregion Atributos
 
     private Players()
     {
-        players = new Player[2];
+        players = new Jugador[2];
         numPlayers = 0;
     }
 
@@ -25,7 +25,7 @@ public class Players
         }
     }
 
-    public Player this[int i]
+    public Jugador this[int i]
     {
         get
         {
@@ -37,7 +37,7 @@ public class Players
         }
     }
 
-    public void Add(Player player)
+    public void Add(Jugador player)
     {
         players[numPlayers] = player;
         numPlayers += 1;
@@ -51,7 +51,7 @@ public class Players
         }
     }
 
-    public Player [] GetPlayers()
+    public Jugador [] GetPlayers()
     {
         return players;
     }

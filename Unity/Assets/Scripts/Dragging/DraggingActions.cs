@@ -13,11 +13,11 @@ public abstract class DraggingActions : MonoBehaviour {
     {
         get
         {            
-            return ControladorTurno.Instance.SePermiteControlarElJugador(playerOwner);
+            return Controlador.Instance.SePermiteControlarElJugador(playerOwner);
         }
     }
 
-    protected virtual Player playerOwner
+    protected virtual Jugador playerOwner
     {
         get{
             

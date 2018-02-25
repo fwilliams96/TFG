@@ -9,5 +9,6 @@ public class DealDamageToTarget : SpellEffect
     {
         new DealDamageCommand(target.ID, specialAmount, healthAfter: target.Vida - specialAmount).AñadirAlaCola();
         target.Vida -= specialAmount;
+        //TODO comprobar si target muere
     }
 }

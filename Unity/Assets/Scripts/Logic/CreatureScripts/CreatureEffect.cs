@@ -3,14 +3,14 @@ using System.Collections;
 
 public abstract class CreatureEffect 
 {
-    protected Player owner;
-    protected CreatureLogic creature;
+    protected Criatura creature;
+    protected Jugador owner;
     protected int specialAmount;
 
-    public CreatureEffect(Player owner, CreatureLogic creature, int specialAmount)
+    public CreatureEffect(Jugador owner,Criatura creature, int specialAmount)
     {
-        this.creature = creature;
         this.owner = owner;
+        this.creature = creature;
         this.specialAmount = specialAmount;
     }
 

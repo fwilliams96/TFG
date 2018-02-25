@@ -3,11 +3,11 @@ using System.Collections;
 
 public class PlayASpellCardCommand: Comanda
 {
-    private CardLogic card;
-    private Player p;
+    private Carta card;
+    private Jugador p;
     //private ICharacter target;
 
-    public PlayASpellCardCommand(Player p, CardLogic card)
+    public PlayASpellCardCommand(Jugador p, Carta card)
     {
         this.card = card;
         this.p = p;

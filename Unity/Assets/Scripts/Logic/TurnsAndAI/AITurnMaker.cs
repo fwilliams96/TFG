@@ -5,7 +5,7 @@ using System.Collections;
 
 public class AITurnMaker: TurnMaker {
 
-    public override void OnTurnStart()
+    /*public override void OnTurnStart()
     {
         base.OnTurnStart();
         // dispay a message that it is enemy`s turn
@@ -28,7 +28,7 @@ public class AITurnMaker: TurnMaker {
 
         InsertarRetraso(1f);
 
-        ControladorTurno.Instance.EndTurn();
+        Controlador.Instance.EndTurn();
     }
 
     bool MakeOneAIMove(bool attackFirst)
@@ -100,6 +100,6 @@ public class AITurnMaker: TurnMaker {
     void InsertarRetraso(float delay)
     {
         new DelayCommand(delay).AñadirAlaCola();
-    }
+    }*/
 
 }

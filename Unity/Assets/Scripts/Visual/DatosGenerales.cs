@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class DatosGenerales: MonoBehaviour 
 {
     [Header("Players")]
-    public Player TopPlayer;
-    public Player LowPlayer;
+    public Jugador TopPlayer;
+    public Jugador LowPlayer;
     [Header("Colors")]
     public Color32 CardBodyStandardColor;
     public Color32 CardRibbonsStandardColor;

@@ -15,7 +15,6 @@ public class DragCreatureOnTable : DraggingActions {
     {
         get
         {
-            // TODO : include full field check
             //return true;
             //manage es si está con glow
             return base.PuedeSerLanzada && manager.PuedeSerJugada;
@@ -82,7 +81,7 @@ public class DragCreatureOnTable : DraggingActions {
                     new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z - Camera.main.transform.position.z)).x);
             // Debug.Log("Table Pos for new Creature: " + tablePos.ToString());
             // play this card
-            playerOwner.JugarCartaMano(GetComponent<IDHolder>().UniqueID, tablePos, ataque);
+            Controlador.Instance.JugarCartaMano(GetComponent<IDHolder>().UniqueID, tablePos, ataque);
         }
         //Se ha cancelado el popup
         else

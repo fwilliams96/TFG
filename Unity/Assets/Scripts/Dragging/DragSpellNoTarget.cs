@@ -42,7 +42,7 @@ public class DragSpellNoTarget: DraggingActions{
         if (DragSuccessful())
         {
             // play this card
-            playerOwner.JugarSpellMano(GetComponent<IDHolder>().UniqueID, -1);
+            Controlador.Instance.JugarSpellMano(GetComponent<IDHolder>().UniqueID, -1);
         }
         else
         {
@@ -50,7 +50,7 @@ public class DragSpellNoTarget: DraggingActions{
             whereIsCard.Slot = savedHandSlot;
             whereIsCard.EstadoVisual = VisualStates.ManoJugadorAbajo;
             // Move this card back to its slot position
-            HandVisual PlayerHand = ControladorTurno.Instance.jugadorActual.PArea.manoVisual;
+            HandVisual PlayerHand = Controlador.Instance.jugadorActual.PArea.manoVisual;
             Vector3 oldCardPos = PlayerHand.slots.Children[savedHandSlot].transform.localPosition;
             transform.DOLocalMove(oldCardPos, 1f);
         } 

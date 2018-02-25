@@ -7,11 +7,17 @@ public class Recursos  {
 
     private static Dictionary<string, Dictionary<string, SimpleJSON.JSONNode>> cartas;
 
-    public static Dictionary<int, CardLogic> CartasCreadasEnElJuego = new Dictionary<int, CardLogic>();
+    public static Dictionary<int, Carta> CartasCreadasEnElJuego = new Dictionary<int, Carta>();
 
-    public static Dictionary<int, CreatureLogic> CriaturasCreadasEnElJuego = new Dictionary<int, CreatureLogic>();
+    public static Dictionary<int, Criatura> CriaturasCreadasEnElJuego = new Dictionary<int, Criatura>();
 
     public static List<CartaAsset> AssetsCreadosCartas = new List<CartaAsset>();
+
+    public static void InicializarJugadores()
+    {
+        Players.Instance.Add(DatosGenerales.Instance.TopPlayer);
+        Players.Instance.Add(DatosGenerales.Instance.LowPlayer);
+    }
 
     public static void InicializarCartas()
     {

@@ -97,25 +97,19 @@ public class DragSpellOnTarget : DraggingActions {
 
         if (Target != null)
         {
-            // determine an owner of this card
-            Player owner = null; 
-            if (tag.Contains("Low"))
-                owner = DatosGenerales.Instance.LowPlayer;
-            else
-                owner = DatosGenerales.Instance.TopPlayer;
 
             // check of we should play this spell depending on targeting options
             int targetID = Target.GetComponent<IDHolder>().UniqueID;
             switch (Targets)
             {
                 case TargetingOptions.AllCharacters: 
-                    owner.JugarSpellMano(GetComponentInParent<IDHolder>().UniqueID, targetID);
+                    Controlador.Instance.JugarSpellMano(GetComponentInParent<IDHolder>().UniqueID, targetID);
                     targetValid = true;
                     break;
                 case TargetingOptions.AllCreatures:
                     if (Target.tag.Contains("Creature"))
                     {
-                        owner.JugarSpellMano(GetComponentInParent<IDHolder>().UniqueID, targetID);
+                        Controlador.Instance.JugarSpellMano(GetComponentInParent<IDHolder>().UniqueID, targetID);
                         targetValid = true;
                     }
                     break;
@@ -126,7 +120,7 @@ public class DragSpellOnTarget : DraggingActions {
                         if ((tag.Contains("Low") && Target.tag.Contains("Top"))
                            || (tag.Contains("Top") && Target.tag.Contains("Low")))
                         {
-                            owner.JugarSpellMano(GetComponentInParent<IDHolder>().UniqueID, targetID);
+                            Controlador.Instance.JugarSpellMano(GetComponentInParent<IDHolder>().UniqueID, targetID);
                             targetValid = true;
                         }
                     }
@@ -138,7 +132,7 @@ public class DragSpellOnTarget : DraggingActions {
                         if ((tag.Contains("Low") && Target.tag.Contains("Top"))
                             || (tag.Contains("Top") && Target.tag.Contains("Low")))
                         {
-                            owner.JugarSpellMano(GetComponentInParent<IDHolder>().UniqueID, targetID);
+                            Controlador.Instance.JugarSpellMano(GetComponentInParent<IDHolder>().UniqueID, targetID);
                             targetValid = true;
                         }
                     }
@@ -150,7 +144,7 @@ public class DragSpellOnTarget : DraggingActions {
                         if ((tag.Contains("Low") && Target.tag.Contains("Low"))
                             || (tag.Contains("Top") && Target.tag.Contains("Top")))
                         {
-                            owner.JugarSpellMano(GetComponentInParent<IDHolder>().UniqueID, targetID);
+                            Controlador.Instance.JugarSpellMano(GetComponentInParent<IDHolder>().UniqueID, targetID);
                             targetValid = true;
                         }
                     }
@@ -162,7 +156,7 @@ public class DragSpellOnTarget : DraggingActions {
                         if ((tag.Contains("Low") && Target.tag.Contains("Low"))
                             || (tag.Contains("Top") && Target.tag.Contains("Top")))
                         {
-                            owner.JugarSpellMano(GetComponentInParent<IDHolder>().UniqueID, targetID);
+                            Controlador.Instance.JugarSpellMano(GetComponentInParent<IDHolder>().UniqueID, targetID);
                             targetValid = true;
                         }
                     }

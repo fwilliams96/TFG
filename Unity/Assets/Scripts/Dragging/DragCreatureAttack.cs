@@ -113,19 +113,11 @@ public class DragCreatureAttack : DraggingActions {
         {
             int targetID = Target.GetComponent<IDHolder>().UniqueID;
             Debug.Log("Target ID: " + targetID);
-            if (targetID == DatosGenerales.Instance.LowPlayer.PlayerID || targetID == DatosGenerales.Instance.TopPlayer.PlayerID)
-            {
-                // attack character
-                Debug.Log("Attacking "+Target);
-                Debug.Log("TargetID: " + targetID);
-                Recursos.CriaturasCreadasEnElJuego[GetComponentInParent<IDHolder>().UniqueID].GoFace();
-                targetValid = true;
-            }
-            else if (Recursos.CriaturasCreadasEnElJuego[targetID] != null)
+            if (Recursos.CriaturasCreadasEnElJuego[targetID] != null)
             {
                 // if targeted creature is still alive, attack creature
                 targetValid = true;
-                Recursos.CriaturasCreadasEnElJuego[GetComponentInParent<IDHolder>().UniqueID].AtacarCriaturaPorID(targetID);
+                Controlador.Instance.AtacarCriatura(GetComponentInParent<IDHolder>().UniqueID, targetID);
                 Debug.Log("Attacking "+Target);
             }
                 

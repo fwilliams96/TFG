@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using System;
 
 [System.Serializable]
-public class CardLogic: IIdentifiable
+public class Carta: IIdentifiable
 {
-    // reference to a player who holds this card in his hand
-    public Player jugador;
     // an ID of this card
     public int idCarta; 
     // a reference to the card asset that stores all the info about this card
@@ -23,24 +21,8 @@ public class CardLogic: IIdentifiable
 
     public int CosteManaActual{ get; set; }
 
-    public bool PuedeSerJugada
-    {
-        get
-        {
-            bool nuestroTurno = (ControladorTurno.Instance.jugadorActual == jugador);
-            // for spells the amount of characters on the field does not matter
-            bool fieldNotFull = true;
-            // but if this is a creature, we have to check if there is room on board (table)
-            //TODO Esto de momento sobrará porque todas las cartas ocuparan sitio en la mesa
-            if (assetCarta.Defensa > 0)
-                fieldNotFull = (jugador.NumCriaturasEnLaMesa() < DatosGenerales.Instance.NumMaximoCriaturasMesa);
-            //Debug.Log("Card: " + ca.name + " has params: ownersTurn=" + ownersTurn + "fieldNotFull=" + fieldNotFull + " hasMana=" + (CurrentManaCost <= owner.ManaLeft));
-            return nuestroTurno && fieldNotFull && (CosteManaActual <= jugador.ManaRestante);
-        }
-    }
-
     // CONSTRUCTOR
-    public CardLogic(CardAsset ca)
+    public Carta(CardAsset ca)
     {
         // set the CardAsset reference
         this.assetCarta = ca;

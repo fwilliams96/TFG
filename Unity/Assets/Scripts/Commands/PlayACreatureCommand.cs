@@ -3,13 +3,13 @@ using System.Collections;
 
 public class PlayACreatureCommand : Comanda
 {
-    private CardLogic cl;
+    private Carta cl;
     private int tablePos;
-    private Player p;
+    private Jugador p;
     private int creatureID;
     private bool posicionAtaque;
 
-    public PlayACreatureCommand(CardLogic cl, Player p, int tablePos, bool posicionAtaque, int creatureID)
+    public PlayACreatureCommand(Carta cl, Jugador p, int tablePos, bool posicionAtaque, int creatureID)
     {
         this.p = p;
         this.cl = cl;

@@ -11,6 +11,6 @@ public class PlayerTurnMaker : TurnMaker
             new ShowMessageCommand("Enemy Turn!", 2.0f).AñadirAlaCola();
         else
             new ShowMessageCommand("Your Turn!", 2.0f).AñadirAlaCola();
-        p.DibujarCartaMazo();
+        Controlador.Instance.DibujarCartaMazo(p);
     }
 }
