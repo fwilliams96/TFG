@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PosicionCriatura : MonoBehaviour {
+public class PosicionCriaturaPopUp : MonoBehaviour {
 
-    public static PosicionCriatura Instance;
+    public static PosicionCriaturaPopUp Instance;
     public GameObject PosicionCriaturaPanel;
     private bool ataque;
-    private DragCreatureOnTable creature;
+    private DragEntityOnTable creature;
     public delegate void RegistrarFuncion(bool resultOK);
     public event RegistrarFuncion metodo;
 

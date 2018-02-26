@@ -3,7 +3,8 @@ using System.Collections;
 using DG.Tweening;
 using UnityEngine.UI;
 
-public class DragCreatureOnTable : DraggingActions {
+public class DragEntityOnTable : DraggingActions
+{
 
     private int savedHandSlot;
     private WhereIsTheCardOrCreature whereIsCard;
@@ -43,7 +44,7 @@ public class DragCreatureOnTable : DraggingActions {
 
     public override void OnEndDrag()
     {
-        
+
         // 1) Check if we are holding a card over the table
         if (DragSuccessful())
         {
@@ -51,8 +52,8 @@ public class DragCreatureOnTable : DraggingActions {
             if (!manager.TypeText.text.Equals("Magica"))
             {
                 this.gameObject.SetActive(false);
-                PosicionCriatura.Instance.MostrarPopupEleccionPosicion();
-                PosicionCriatura.Instance.RegistrarCallBack(ColocarCartaTablero);
+                PosicionCriaturaPopUp.Instance.MostrarPopupEleccionPosicion();
+                PosicionCriaturaPopUp.Instance.RegistrarCallBack(ColocarCartaTablero);
             }
             //En caso de una carta magica, no existe posicion de defensa, la colocamos directamente
             else
@@ -64,7 +65,7 @@ public class DragCreatureOnTable : DraggingActions {
         else
         {
             VolverALaMano();
-        } 
+        }
     }
 
     public void ColocarCartaTablero(bool resultOK)
@@ -72,16 +73,24 @@ public class DragCreatureOnTable : DraggingActions {
         //Se ha seleccionado ataque o defensa en el popup
         if (resultOK)
         {
-            bool ataque = true;
-            if(!manager.TypeText.text.Equals("Magica"))
-                ataque = PosicionCriatura.Instance.Ataque;
-            Debug.Log("ColocarCartaTablero ataque " + ataque);
+            bool magica = manager.TypeText.text.Equals("Magica");
+
             // determine table position
             int tablePos = playerOwner.PArea.tableVisual.PosicionSlotNuevaCriatura(Camera.main.ScreenToWorldPoint(
                     new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z - Camera.main.transform.position.z)).x);
             // Debug.Log("Table Pos for new Creature: " + tablePos.ToString());
             // play this card
-            Controlador.Instance.JugarCartaMano(GetComponent<IDHolder>().UniqueID, tablePos, ataque);
+            if (magica)
+            {
+                Controlador.Instance.JugarMagicaMano(GetComponent<IDHolder>().UniqueID, tablePos);
+            }
+            else
+            {
+                bool ataque = PosicionCriaturaPopUp.Instance.Ataque;
+                Debug.Log("ColocarCartaTablero ataque " + ataque);
+                Controlador.Instance.JugarCartaMano(GetComponent<IDHolder>().UniqueID, tablePos, ataque);
+            }
+
         }
         //Se ha cancelado el popup
         else
@@ -89,7 +98,7 @@ public class DragCreatureOnTable : DraggingActions {
             this.gameObject.SetActive(true);
             VolverALaMano();
         }
-        
+
     }
 
     protected override bool DragSuccessful()

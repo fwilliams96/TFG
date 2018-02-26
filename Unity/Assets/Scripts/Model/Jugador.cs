@@ -26,14 +26,14 @@ public class Jugador : MonoBehaviour, ICharacter
     // this property is a part of interface ICharacter
     public int ID
     {
-        get{ return PlayerID; }
+        get { return PlayerID; }
     }
 
     // total mana crystals that this player has this turn
     private int manaEnEsteTurno;
     public int ManaEnEsteTurno
     {
-        get{ return manaEnEsteTurno;}
+        get { return manaEnEsteTurno; }
         set
         {
             manaEnEsteTurno = value;
@@ -45,7 +45,7 @@ public class Jugador : MonoBehaviour, ICharacter
     public int ManaRestante
     {
         get
-        { return manaRestante;}
+        { return manaRestante; }
         set
         {
             manaRestante = value;
@@ -55,7 +55,7 @@ public class Jugador : MonoBehaviour, ICharacter
     private int health;
     public int Vida
     {
-        get { return health;}
+        get { return health; }
         set
         {
             health = value;
@@ -99,7 +99,7 @@ public class Jugador : MonoBehaviour, ICharacter
     //TODO ver si esta funcion seguira aqui
     public void TransmitirInformacionAcercaJugadorVisual()
     {
-       
+
         PArea.Personaje.gameObject.AddComponent<IDHolder>().UniqueID = PlayerID;
         if (GetComponent<TurnMaker>() is AITurnMaker)
         {
@@ -116,7 +116,7 @@ public class Jugador : MonoBehaviour, ICharacter
     void Update()
     {
         //if (Input.GetKeyDown(KeyCode.D))
-           // DibujarCartaMazo();
+        // DibujarCartaMazo();
     }
 
     public void InicializarValores()
@@ -130,16 +130,16 @@ public class Jugador : MonoBehaviour, ICharacter
         PArea.Personaje.transform.position = PArea.PosicionInicialPersonaje.position;
     }
 
-    public void Morir(){}
+    public void Morir() { }
 
-    public void AñadirCriaturaMesa(int posicionMesa, Criatura criatura)
+    public void AñadirEnteMesa(int posicionMesa, Ente ente)
     {
-        mesa.CriaturasEnTablero.Insert(posicionMesa, criatura);
+        mesa.EntesEnTablero.Insert(posicionMesa, ente);
     }
 
     public void AñadirCartaMano(int posicionMano, Carta carta)
     {
-        mano.CartasEnMano.Insert(posicionMano,carta);
+        mano.CartasEnMano.Insert(posicionMano, carta);
     }
 
     public void AñadirCartaMazo(int posicionMazo, CardAsset carta)
@@ -147,9 +147,9 @@ public class Jugador : MonoBehaviour, ICharacter
         mazo.CartasEnMazo.Insert(posicionMazo, carta);
     }
 
-    public void EliminarCriaturaMesa(Criatura criatura)
+    public void EliminarCriaturaMesa(Ente ente)
     {
-        mesa.CriaturasEnTablero.Remove(criatura);
+        mesa.EntesEnTablero.Remove(ente);
     }
 
     public void EliminarCartaMano(Carta carta)
@@ -162,9 +162,9 @@ public class Jugador : MonoBehaviour, ICharacter
         mazo.CartasEnMazo.RemoveAt(pos);
     }
 
-    public Criatura[] CriaturasEnLaMesa()
+    public Ente[] CriaturasEnLaMesa()
     {
-        return mesa.CriaturasEnTablero.ToArray();
+        return mesa.EntesEnTablero.ToArray();
     }
 
     public Carta[] CartasEnLaMano()
@@ -179,7 +179,7 @@ public class Jugador : MonoBehaviour, ICharacter
 
     public int NumCriaturasEnLaMesa()
     {
-        return mesa.CriaturasEnTablero.Count;
+        return mesa.EntesEnTablero.Count;
     }
 
     public int NumCartasMano()
@@ -199,7 +199,7 @@ public class Jugador : MonoBehaviour, ICharacter
         Debug.Log("In ONTURNSTART for " + gameObject.name);
         ManaEnEsteTurno++;
         ManaRestante = ManaEnEsteTurno;
-        foreach (Criatura cl in mesa.CriaturasEnTablero)
+        foreach (Ente cl in mesa.EntesEnTablero)
             cl.OnTurnStart();
     }
     //TODO

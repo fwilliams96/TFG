@@ -3,90 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class Criatura: ICharacter 
+public class Criatura : Ente, ICharacter
 {
-    // PUBLIC FIELDS
-    public CardAsset assetCarta;
-    public CreatureEffect efecto;
-    public int idCriatura;
-    public bool Frozen = false;
-
-    // PROPERTIES
-    // property from ICharacter interface
-    public int ID
+    #region Atributos
+    private PosicionCriatura posicionCriatura;
+    public PosicionCriatura PosicionCriatura
     {
-        get{ return idCriatura; }
-    }
-        
-    // the basic health that we have in CardAsset
-    private int vidaBase;
-    // health with all the current buffs taken into account
-    public int VidaMaxima
-    {
-        get{ return vidaBase;}
-    }
-
-    // current health of this creature
-    private int vida;
-    public int Vida
-    {
-        get{ return vida; }
-
+        get
+        {
+            return posicionCriatura;
+        }
         set
         {
-            //TODO mirar donde se hace el set para no hacer las siguientes lineas
-            if (value > VidaMaxima)
-                vida = VidaMaxima;
-            else
-                vida = value;
+            posicionCriatura = value;
         }
     }
-
-    // property for Attack
-    private int ataqueBasico;
-    public int Ataque
-    {
-        get{ return ataqueBasico; }
-    }
-     
-    // number of attacks for one turn if (attacksForOneTurn==2) => Windfury
-    private int attacksForOneTurn = 1;
-    public int AtaquesRestantesEnTurno
-    {
-        get;
-        set;
-    }
+    #endregion
 
     // CONSTRUCTOR
-    public Criatura(CardAsset ca)
+    public Criatura(CardAsset ca, PosicionCriatura posicionCriatura) : base(ca)
     {
-        this.assetCarta = ca;
-        vidaBase = ca.Defensa;
-        Vida = ca.Defensa;
-        ataqueBasico = ca.Ataque;
-        attacksForOneTurn = ca.AtaquesPorTurno;
-        // AttacksLeftThisTurn is now equal to 0
-        if (ca.Charge)
-            AtaquesRestantesEnTurno = attacksForOneTurn;
-        idCriatura = IDFactory.GetUniqueID();
-        if (ca.CreatureScriptName!= null && ca.CreatureScriptName!= "")
-        {
-            //TODO le estamos pasando null de momento, este null referencia al jugador dueño de la criatura
-            efecto = System.Activator.CreateInstance(System.Type.GetType(ca.CreatureScriptName), new System.Object[]{null,this, ca.specialCreatureAmount}) as CreatureEffect;
-            efecto.RegisterEventEffect();
-        }
-        Recursos.CriaturasCreadasEnElJuego.Add(idCriatura, this);
-    }
-
-    public void Morir()
-    {
-        if (efecto != null)
-            efecto.WhenACreatureDies();
-    }
-
-    public void OnTurnStart()
-    {
-        AtaquesRestantesEnTurno = attacksForOneTurn;
+        this.posicionCriatura = posicionCriatura;
     }
 
 }

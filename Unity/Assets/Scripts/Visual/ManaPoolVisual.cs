@@ -17,14 +17,14 @@ public class ManaPoolVisual : MonoBehaviour {
         set
         {
             //Debug.Log("Changed total mana to: " + value);
-
+            
             if (value > Crystals.Length)
                 totalCrystals = Crystals.Length;
             else if (value < 0)
                 totalCrystals = 0;
             else
                 totalCrystals = value;
-
+            //TODO no hacer operaciones en este set
             for (int i = 0; i < Crystals.Length; i++)
             {
                 if (i < totalCrystals)
@@ -56,7 +56,7 @@ public class ManaPoolVisual : MonoBehaviour {
                 availableCrystals = 0;
             else
                 availableCrystals = value;
-
+            //TODO no hacer operaciones en este set
             for (int i = 0; i < totalCrystals; i++)
             {
                 if (i < availableCrystals)
