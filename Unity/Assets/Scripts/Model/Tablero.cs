@@ -2,13 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Tablero : MonoBehaviour 
+public class Tablero : MonoBehaviour
 {
-    public List<Criatura> CriaturasEnTablero = new List<Criatura>();
+    public List<Ente> EntesEnTablero = new List<Ente>();
 
-    public void PlaceCreatureAt(int index, Criatura creature)
+    public void PlaceCreatureAt(int index, Ente ente)
     {
-        CriaturasEnTablero.Insert(index, creature);
+        EntesEnTablero.Insert(index, ente);
     }
-        
+
 }

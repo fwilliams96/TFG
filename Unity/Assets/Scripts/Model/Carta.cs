@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System;
 
 [System.Serializable]
-public class Carta: IIdentifiable
+public class Carta : IIdentifiable
 {
     // an ID of this card
-    public int idCarta; 
+    private int idCarta;
     // a reference to the card asset that stores all the info about this card
     public CardAsset assetCarta;
     // a script of type spell effect that will be attached to this card when it`s created
@@ -16,10 +16,10 @@ public class Carta: IIdentifiable
     // PROPERTIES
     public int ID
     {
-        get{ return idCarta; }
+        get { return idCarta; }
     }
 
-    public int CosteManaActual{ get; set; }
+    public int CosteManaActual { get; set; }
 
     // CONSTRUCTOR
     public Carta(CardAsset ca)
@@ -32,7 +32,7 @@ public class Carta: IIdentifiable
         ResetCosteMana();
         // create an instance of SpellEffect with a name from our CardAsset
         // and attach it to 
-        if (ca.SpellScriptName!= null && ca.SpellScriptName!= "")
+        if (ca.SpellScriptName != null && ca.SpellScriptName != "")
         {
             efecto = System.Activator.CreateInstance(System.Type.GetType(ca.SpellScriptName)) as SpellEffect;
         }

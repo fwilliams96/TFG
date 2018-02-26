@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BiteOwner : CreatureEffect
+public class BiteOwner : EfectoEnte
 {  
     public BiteOwner(Jugador owner, Criatura creature, int specialAmount): base(owner, creature, specialAmount)
     {}

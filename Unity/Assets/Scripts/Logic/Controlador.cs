@@ -5,10 +5,13 @@ using DG.Tweening;
 using UnityEditor;
 using System;
 using System.Reflection;
+public enum PosicionCriatura { ATAQUE, DEFENSA };
 
 // this class will take care of switching turns and counting down time until the turn expires
-public class Controlador : MonoBehaviour {
+public class Controlador : MonoBehaviour
+{
 
+    #region Atributos
     // PUBLIC FIELDS
     public CardAsset CoinCard;
 
@@ -31,10 +34,10 @@ public class Controlador : MonoBehaviour {
 
         set
         {
-            _jugadorActual = value;   
+            _jugadorActual = value;
         }
     }
-
+    #endregion
 
     // METHODS
     void Awake()
@@ -45,17 +48,17 @@ public class Controlador : MonoBehaviour {
 
     void Start()
     {
-        OnGameStart();
+        InicializacionJuego();
         //Recursos.InicializarCartas();
-       
+
     }
 
-    public void OnGameStart()
+    public void InicializacionJuego()
     {
         //Debug.Log("In TurnManager.OnGameStart()");
 
         Recursos.CartasCreadasEnElJuego.Clear();
-        Recursos.CriaturasCreadasEnElJuego.Clear();
+        Recursos.EntesCreadosEnElJuego.Clear();
         Recursos.InicializarJugadores();
 
         foreach (Jugador p in Players.Instance.GetPlayers())
@@ -71,32 +74,32 @@ public class Controlador : MonoBehaviour {
         //espera 3 segundos antes de ejecutar el onComplete
         s.PrependInterval(3f);
         s.OnComplete(() =>
-            {
-                // determine who starts the game.
-                //int rnd = Random.Range(0,2);  // 2 is exclusive boundary
-                int rnd = 1;
-                // Debug.Log(Player.Players.Length);
-                Jugador whoGoesFirst = Players.Instance.GetPlayers()[rnd];
-                // Debug.Log(whoGoesFirst);
-                Jugador whoGoesSecond = OtroJugador(whoGoesFirst);
-                // Debug.Log(whoGoesSecond);
-                // draw 4 cards for first player and 5 for second player
-                // first player draws a card
-                DibujarCartasMazo(whoGoesFirst,4, true);
-                // second player draws a card
-                DibujarCartasMazo(whoGoesSecond, 4, true);
-                // add one more card to second player`s hand
-               // whoGoesSecond.DibujarCartaMazo(true);
-                //new GivePlayerACoinCommand(null, whoGoesSecond).AddToQueue();
-               // whoGoesSecond.DibujarCartaFueraMazo(CoinCard);
-                new StartATurnCommand(whoGoesFirst).AñadirAlaCola();
-            });
+        {
+            // determine who starts the game.
+            //int rnd = Random.Range(0,2);  // 2 is exclusive boundary
+            int rnd = 1;
+            // Debug.Log(Player.Players.Length);
+            Jugador whoGoesFirst = Players.Instance.GetPlayers()[rnd];
+            // Debug.Log(whoGoesFirst);
+            Jugador whoGoesSecond = OtroJugador(whoGoesFirst);
+            // Debug.Log(whoGoesSecond);
+            // draw 4 cards for first player and 5 for second player
+            // first player draws a card
+            DibujarCartasMazo(whoGoesFirst, 4, true);
+            // second player draws a card
+            DibujarCartasMazo(whoGoesSecond, 4, true);
+            // add one more card to second player`s hand
+            // whoGoesSecond.DibujarCartaMazo(true);
+            //new GivePlayerACoinCommand(null, whoGoesSecond).AddToQueue();
+            // whoGoesSecond.DibujarCartaFueraMazo(CoinCard);
+            new StartATurnCommand(whoGoesFirst).AñadirAlaCola();
+        });
     }
 
     void Update()
     {
         //if (Input.GetKeyDown(KeyCode.Space))
-            //EndTurn();
+        //EndTurn();
     }
 
     public void EndTurnTest()
@@ -131,10 +134,8 @@ public class Controlador : MonoBehaviour {
         tm.OnTurnStart();
         if (tm is PlayerTurnMaker)
         {
-            //TODO creo que debo llamar tambien a actualizar mana
             ActualizarManaJugador(jugadorActual);
         }
-        // remove highlights for opponent.
         OcultarCartasJugablesJugadorContrario();
     }
     //TODO creo que falta añadir en que area se esta mirando
@@ -156,17 +157,27 @@ public class Controlador : MonoBehaviour {
 
     /***************************************** PLAYER ****************************************************/
 
+    /// <summary>
+    /// Quita numCartas del mazo y las inserta en la mano
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="numCartas"></param>
+    /// <param name="fast"></param>
     public void DibujarCartasMazo(Jugador player, int numCartas, bool fast = false)
     {
         for (int i = 0; i < numCartas; i++)
         {
-            DibujarCartaMazo(player,fast);
+            DibujarCartaMazo(player, fast);
         }
     }
 
 
-    // draw a single card from the deck
-    public void DibujarCartaMazo(Jugador jugador,bool fast = false)
+    /// <summary>
+    /// Quita una carta del mazo y la muestra en la mano
+    /// </summary>
+    /// <param name="jugador"></param>
+    /// <param name="fast"></param>
+    public void DibujarCartaMazo(Jugador jugador, bool fast = false)
     {
         if (jugador.NumCartasMazo() > 0)
         {
@@ -189,8 +200,11 @@ public class Controlador : MonoBehaviour {
 
     }
 
-    // get card NOT from deck (a token or a coin)
-    //TODO eliminar porque no tenemos cartas que provengan fuera del mazo (coincard)
+    /// <summary>
+    /// Jugar una carta fuera de la mano en el tablero
+    /// </summary>
+    /// <param name="jugador"></param>
+    /// <param name="assetCarta"></param>
     public void DibujarCartaFueraMazo(Jugador jugador, CardAsset assetCarta)
     {
         if (jugador.NumCartasMano() < jugador.PArea.manoVisual.slots.Children.Length)
@@ -204,64 +218,63 @@ public class Controlador : MonoBehaviour {
         // no removal from deck because the card was not in the deck
     }
 
-    // 2 METHODS FOR PLAYING SPELLS
-    // 1st overload - takes ids as arguments
-    // it is cnvenient to call this method from visual part
-    public void JugarSpellMano(int idCartaSpell, int idObjetivo)
+    /// <summary>
+    /// Jugar una carta de la mano en el tablero mágica por su id
+    /// </summary>
+    /// <param name="UniqueID"></param>
+    /// <param name="tablePos"></param>
+    public void JugarMagicaMano(int UniqueID, int tablePos)
     {
-        // TODO: !!!
-        // if TargetUnique ID < 0 , for example = -1, there is no target.
-        if (idObjetivo < 0)
-            JugarSpellMano(Recursos.CartasCreadasEnElJuego[idCartaSpell], null);
-        //TODO estas dos siguientes condiciones sobraran puesto que no se podrá ir de cara al personaje
-        else
-        {
-            // target is a creature
-            JugarSpellMano(Recursos.CartasCreadasEnElJuego[idCartaSpell], Recursos.CriaturasCreadasEnElJuego[idObjetivo]);
-        }
-
+        JugarMagicaMano(Recursos.CartasCreadasEnElJuego[UniqueID], tablePos);
     }
 
-    // 2nd overload - takes CardLogic and ICharacter interface - 
-    // this method is called from Logic, for example by AI
-    public void JugarSpellMano(Carta playedCard, ICharacter target)
+    /// <summary>
+    /// Jugar una carta de la mano en el tablero mágica
+    /// </summary>
+    /// <param name="magicaJugada"></param>
+    /// <param name="tablePos"></param>
+    public void JugarMagicaMano(Carta magicaJugada, int tablePos)
     {
-        jugadorActual.ManaRestante -= playedCard.CosteManaActual;
-        ActualizarManaJugador(jugadorActual);
-        // cause effect instantly:
-        if (playedCard.efecto != null)
-            playedCard.efecto.ActivateEffect(playedCard.assetCarta.specialSpellAmount, target);
-        else
-        {
-            Debug.LogWarning("No effect found on card " + playedCard.assetCarta.name);
-        }
-        // no matter what happens, move this card to PlayACardSpot
-        new PlayASpellCardCommand(jugadorActual, playedCard).AñadirAlaCola();
-        // remove this card from hand
-        jugadorActual.EliminarCartaMano(playedCard);
-        // check if this is a creature or a spell
+        RestarManaCarta(jugadorActual, magicaJugada);
+
+        Magica nuevaMagica = new Magica(magicaJugada.assetCarta);
+        jugadorActual.AñadirEnteMesa(tablePos, nuevaMagica);
+        new PlayAEntityCommand(magicaJugada, jugadorActual, tablePos, nuevaMagica).AñadirAlaCola();
+        //causa battlecry effect
+        if (nuevaMagica.efecto != null)
+            nuevaMagica.efecto.WhenAMagicIsPlayed();
+        jugadorActual.EliminarCartaMano(magicaJugada);
+        MostrarCartasJugablesJugadorActual();
     }
 
-    // METHODS TO PLAY CREATURES 
-    // 1st overload - by ID
+    /// <summary>
+    /// Jugar una carta de la mano en el tablero no mágica por su id
+    /// </summary>
+    /// <param name="UniqueID"></param>
+    /// <param name="tablePos"></param>
+    /// <param name="posicionAtaque"></param>
     public void JugarCartaMano(int UniqueID, int tablePos, bool posicionAtaque)
     {
         JugarCartaMano(Recursos.CartasCreadasEnElJuego[UniqueID], tablePos, posicionAtaque);
     }
 
-    // 2nd overload - by logic units
+    /// <summary>
+    /// Jugar una carta de la mano en el tablero no mágica
+    /// </summary>
+    /// <param name="cartaJugada"></param>
+    /// <param name="tablePos"></param>
+    /// <param name="posicionAtaque"></param>
     public void JugarCartaMano(Carta cartaJugada, int tablePos, bool posicionAtaque)
     {
         // Debug.Log(ManaLeft);
         // Debug.Log(playedCard.CurrentManaCost);
-        jugadorActual.ManaRestante -= cartaJugada.CosteManaActual;
-        ActualizarManaJugador(jugadorActual);
+        RestarManaCarta(jugadorActual, cartaJugada);
         // Debug.Log("Mana Left after played a creature: " + ManaLeft);
         // create a new creature object and add it to Table
-        Criatura newCreature = new Criatura(cartaJugada.assetCarta);
-        jugadorActual.AñadirCriaturaMesa(tablePos, newCreature);
+        Criatura newCreature = new Criatura(cartaJugada.assetCarta, posicionAtaque == true ? PosicionCriatura.ATAQUE : PosicionCriatura.DEFENSA);
+        jugadorActual.AñadirEnteMesa(tablePos, newCreature);
         // no matter what happens, move this card to PlayACardSpot
-        new PlayACreatureCommand(cartaJugada, jugadorActual, tablePos, posicionAtaque, newCreature.idCriatura).AñadirAlaCola();
+        new PlayAEntityCommand(cartaJugada, jugadorActual, tablePos, newCreature).AñadirAlaCola();
         //causa battlecry effect
         if (newCreature.efecto != null)
             newCreature.efecto.WhenACreatureIsPlayed();
@@ -270,10 +283,22 @@ public class Controlador : MonoBehaviour {
         MostrarCartasJugablesJugadorActual();
     }
 
+    /// <summary>
+    /// Resta mana al jugador según la carta lanzada al tablero
+    /// </summary>
+    /// <param name="jugador"></param>
+    /// <param name="carta"></param>
+    private void RestarManaCarta(Jugador jugador, Carta carta)
+    {
+        jugador.ManaRestante -= carta.CosteManaActual;
+        ActualizarManaJugador(jugador);
+    }
+
+    /// <summary>
+    /// Funcion que para el movimiento de los jugadores, el temporizador de turno y lanza el mensaje de fin de batalla
+    /// </summary>
     public void Morir()
     {
-        // game over
-        // block both players from taking new moves
         PararControlJugadores();
         Controlador.Instance.StopTheTimer();
         new GameOverCommand(jugadorActual).AñadirAlaCola();
@@ -281,13 +306,13 @@ public class Controlador : MonoBehaviour {
 
     public void PararControlJugadores()
     {
-        foreach(Jugador player in Players.Instance.GetPlayers())
+        foreach (Jugador player in Players.Instance.GetPlayers())
         {
             player.PArea.ControlActivado = false;
         }
     }
 
-    // METHOD TO SHOW GLOW HIGHLIGHTS
+    // Muestra cartas jugables de la mano del jugador
     public void MostrarCartasJugablesJugadorActual()
     {
         MostrarUOcultarCartas(jugadorActual, false);
@@ -303,14 +328,14 @@ public class Controlador : MonoBehaviour {
         //Debug.Log("HighlightPlayable remove: "+ removeAllHighlights);
         foreach (Carta cl in jugador.CartasEnLaMano())
         {
-            GameObject g = IDHolder.GetGameObjectWithID(cl.idCarta);
+            GameObject g = IDHolder.GetGameObjectWithID(cl.ID);
             if (g != null)
                 g.GetComponent<OneCardManager>().PuedeSerJugada = (cl.CosteManaActual <= jugadorActual.ManaRestante) && !quitarTodasRemarcadas;
         }
 
         foreach (Criatura crl in jugador.CriaturasEnLaMesa())
         {
-            GameObject g = IDHolder.GetGameObjectWithID(crl.idCriatura);
+            GameObject g = IDHolder.GetGameObjectWithID(crl.ID);
             if (g != null)
                 g.GetComponent<OneCreatureManager>().PuedeAtacar = (crl.AtaquesRestantesEnTurno > 0) && !quitarTodasRemarcadas;
         }
@@ -357,7 +382,7 @@ public class Controlador : MonoBehaviour {
     public void MuerteCriatura(int idCriatura)
     {
         //TODO mejorar estas lineas que vuelven a coger la criatura a partir de su id
-        Criatura criatura = Recursos.CriaturasCreadasEnElJuego[idCriatura];
+        Criatura criatura = (Criatura)Recursos.EntesCreadosEnElJuego[idCriatura];
         jugadorActual.EliminarCriaturaMesa(criatura);
         criatura.Morir();
         new CreatureDieCommand(idCriatura, jugadorActual).AñadirAlaCola();
@@ -365,20 +390,21 @@ public class Controlador : MonoBehaviour {
 
     public void AtacarCriatura(int idAtacante, int idObjetivo)
     {
-        Criatura atacante = Recursos.CriaturasCreadasEnElJuego[idAtacante];
-        Criatura objetivo = Recursos.CriaturasCreadasEnElJuego[idObjetivo];
+        //TODO ver quien ataca, si magica o criatura
+        Criatura atacante = (Criatura)Recursos.EntesCreadosEnElJuego[idAtacante];
+        Criatura objetivo = (Criatura)Recursos.EntesCreadosEnElJuego[idObjetivo];
         atacante.AtaquesRestantesEnTurno--;
         // calculate the values so that the creature does not fire the DIE command before the Attack command is sent
         int targetHealthAfter = objetivo.Vida - atacante.Ataque;
         int attackerHealthAfter = atacante.Vida - objetivo.Ataque;
-        new CreatureAttackCommand(objetivo.idCriatura, atacante.idCriatura, objetivo.Ataque, atacante.Ataque, attackerHealthAfter, targetHealthAfter).AñadirAlaCola();
+        new CreatureAttackCommand(objetivo.ID, atacante.ID, objetivo.Ataque, atacante.Ataque, attackerHealthAfter, targetHealthAfter).AñadirAlaCola();
 
         objetivo.Vida -= atacante.Ataque;
         if (objetivo.Vida <= 0)
             MuerteCriatura(idObjetivo);
         //TODO esta linea sobraria, es la que hace que la propia criatura se quite vida
         atacante.Vida -= objetivo.Ataque;
-        if(atacante.Vida <= 0)
+        if (atacante.Vida <= 0)
             MuerteCriatura(idAtacante);
 
     }

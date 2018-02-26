@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 
-public class TableVisual : MonoBehaviour 
+public class TableVisual : MonoBehaviour
 {
-    // PUBLIC FIELDS
+    #region Atributos
 
     // an enum that mark to whish caracter this table belongs. The alues are - Top or Low
     public AreaPosition owner;
@@ -24,7 +24,7 @@ public class TableVisual : MonoBehaviour
     // A 3D collider attached to this game object
     private BoxCollider col;
 
-    // PROPERTIES
+    #endregion
 
     // returns true if we are hovering over any player`s table collider
     public static bool CursorSobreAlgunaMesa
@@ -39,7 +39,7 @@ public class TableVisual : MonoBehaviour
     // returns true only if we are hovering over this table`s collider
     public bool CursorSobreEstaMesa
     {
-        get{ return cursorSobreEstaMesa; }
+        get { return cursorSobreEstaMesa; }
     }
 
     // MONOBEHAVIOUR SCRIPTS (mouse over collider detection)
@@ -62,64 +62,64 @@ public class TableVisual : MonoBehaviour
         }
         cursorSobreEstaMesa = haPasadoPorColider;
     }
-   
-    //TODO mejorar codigo
-    public void AñadirCriatura(CardAsset ca, int idUnico ,int indiceSlot, bool posicionAtaque)
+    public void AñadirMagica(CardAsset ca, int idUnico, int indiceSlot)
     {
-        Debug.Log("AddCreatureAtIndex ataque " + posicionAtaque);
-        bool magica = ca.TipoDeCarta.Equals(TipoCarta.Magica);
-        GameObject creature;
-        if (!magica)
-        {
-            // create a new creature from prefab
-            creature = GameObject.Instantiate(DatosGenerales.Instance.CreaturePrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
-
-        }
-        else
-        {
-            creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
-        }
-        
+        Debug.Log("Añadir ente magica");
+        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
+        float x = creature.transform.eulerAngles.x;
+        float y = creature.transform.eulerAngles.y + 180;
+        float z = creature.transform.eulerAngles.z;
+        creature.transform.DORotate(new Vector3(x, y, z), 1);
+        ConfigurarEnte(creature, ca, idUnico, indiceSlot);
+    }
+    //TODO mejorar codigo
+    public void AñadirCriaturaDefensa(CardAsset ca, int idUnico, int indiceSlot)
+    {
+        Debug.Log("Añadir ente criatura como defensa");
+        //TODO cuando sea una carta magica no entrara en esta funcion
+        // create a new creature from prefab
+        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CreaturePrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
         // apply the look from CardAsset
-        OneCreatureManager manager = creature.GetComponent<OneCreatureManager>();
-        
-        if (magica)
-        {
-            float x = creature.transform.eulerAngles.x;
-            float y = creature.transform.eulerAngles.y+180;
-            float z = creature.transform.eulerAngles.z;
-            creature.transform.DORotate(new Vector3(x, y, z), 1);
-        }
-        else
-        {
-            if (!posicionAtaque)
-            {
-                /*float x = creature.transform.localEulerAngles.x;
-                float y = creature.transform.localEulerAngles.y;
-                float z = creature.transform.localEulerAngles.z + 90;
-                creature.transform.DOLocalRotate(new Vector3(x, y, z), 1);*/
-                float x = creature.transform.eulerAngles.x;
-                float y = creature.transform.eulerAngles.y;
-                float z = creature.transform.eulerAngles.z + 90;
-                creature.transform.DORotate(new Vector3(x, y, z), 1);
-            }
-        }
+
+        /*float x = creature.transform.localEulerAngles.x;
+        float y = creature.transform.localEulerAngles.y;
+        float z = creature.transform.localEulerAngles.z + 90;
+        creature.transform.DOLocalRotate(new Vector3(x, y, z), 1);*/
+        float x = creature.transform.eulerAngles.x;
+        float y = creature.transform.eulerAngles.y;
+        float z = creature.transform.eulerAngles.z + 90;
+        creature.transform.DORotate(new Vector3(x, y, z), 1);
+        ConfigurarEnte(creature,ca, idUnico,indiceSlot);
+    }
+
+    public void AñadirCriaturaAtaque(CardAsset ca, int idUnico, int indiceSlot)
+    {
+        Debug.Log("Añadir ente criatura como ataque");
+        // create a new creature from prefab
+        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CreaturePrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
+        // apply the look from CardAsset
+        ConfigurarEnte(creature, ca, idUnico, indiceSlot);
+    }
+
+    private void ConfigurarEnte(GameObject criaturaOMagica, CardAsset ca, int idUnico,int indiceSlot)
+    {
+        OneCreatureManager manager = criaturaOMagica.GetComponent<OneCreatureManager>();
         manager.cardAsset = ca;
         manager.LeerDatosAsset();
         // add tag according to owner
-        foreach (Transform t in creature.GetComponentsInChildren<Transform>())
-            t.tag = owner.ToString()+"Creature";
+        foreach (Transform t in criaturaOMagica.GetComponentsInChildren<Transform>())
+            t.tag = owner.ToString() + "Creature";
         // parent a new creature gameObject to table slots
-        creature.transform.SetParent(slots.transform);
+        criaturaOMagica.transform.SetParent(slots.transform);
         // add a new creature to the list
         // Debug.Log ("insert index: " + index.ToString());
-        CreaturesOnTable.Insert(indiceSlot, creature);
+        CreaturesOnTable.Insert(indiceSlot, criaturaOMagica);
         // let this creature know about its position
-        WhereIsTheCardOrCreature w = creature.GetComponent<WhereIsTheCardOrCreature>();
+        WhereIsTheCardOrCreature w = criaturaOMagica.GetComponent<WhereIsTheCardOrCreature>();
         w.Slot = indiceSlot;
         w.EstadoVisual = VisualStates.MesaJugadorAbajo;
         // add our unique ID to this creature
-        IDHolder id = creature.AddComponent<IDHolder>();
+        IDHolder id = criaturaOMagica.AddComponent<IDHolder>();
         id.UniqueID = idUnico;
 
         ShiftSlotsGameObjectAccordingToNumberOfCreatures();
@@ -154,7 +154,7 @@ public class TableVisual : MonoBehaviour
         //s.AppendInterval(1f);
         //s.OnComplete(() =>
         //   {
-                
+
         //    });
         GameObject creatureToRemove = IDHolder.GetGameObjectWithID(IDToRemove);
         CreaturesOnTable.Remove(creatureToRemove);
@@ -176,7 +176,7 @@ public class TableVisual : MonoBehaviour
         else
             posX = 0f;
 
-        slots.gameObject.transform.DOLocalMoveX(posX, 0.3f);  
+        slots.gameObject.transform.DOLocalMoveX(posX, 0.3f);
     }
 
     /// <summary>

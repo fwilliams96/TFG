@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class DamageOpponentBattleCry : CreatureEffect
+public abstract class DamageOpponentBattleCry : EfectoEnte
 {
 
     public DamageOpponentBattleCry(Jugador owner, Criatura creature, int specialAmount) : base(owner, creature, specialAmount)

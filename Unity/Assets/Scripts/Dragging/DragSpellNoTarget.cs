@@ -42,7 +42,7 @@ public class DragSpellNoTarget: DraggingActions{
         if (DragSuccessful())
         {
             // play this card
-            Controlador.Instance.JugarSpellMano(GetComponent<IDHolder>().UniqueID, -1);
+            Controlador.Instance.JugarMagicaMano(GetComponent<IDHolder>().UniqueID, -1);
         }
         else
         {

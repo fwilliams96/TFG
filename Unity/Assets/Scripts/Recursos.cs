@@ -9,7 +9,7 @@ public class Recursos  {
 
     public static Dictionary<int, Carta> CartasCreadasEnElJuego = new Dictionary<int, Carta>();
 
-    public static Dictionary<int, Criatura> CriaturasCreadasEnElJuego = new Dictionary<int, Criatura>();
+    public static Dictionary<int, Ente> EntesCreadosEnElJuego = new Dictionary<int, Ente>();
 
     public static List<CartaAsset> AssetsCreadosCartas = new List<CartaAsset>();
 

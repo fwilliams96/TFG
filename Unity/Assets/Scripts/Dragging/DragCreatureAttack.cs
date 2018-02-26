@@ -113,7 +113,7 @@ public class DragCreatureAttack : DraggingActions {
         {
             int targetID = Target.GetComponent<IDHolder>().UniqueID;
             Debug.Log("Target ID: " + targetID);
-            if (Recursos.CriaturasCreadasEnElJuego[targetID] != null)
+            if (Recursos.EntesCreadosEnElJuego[targetID] != null)
             {
                 // if targeted creature is still alive, attack creature
                 targetValid = true;
