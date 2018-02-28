@@ -88,7 +88,7 @@ public class TableVisual : MonoBehaviour
         float x = creature.transform.eulerAngles.x;
         float y = creature.transform.eulerAngles.y;
         float z = creature.transform.eulerAngles.z + 90;
-        creature.transform.DORotate(new Vector3(x, y, z), 1);
+        creature.transform.DORotate(new Vector3(x, y, z), 0.1f);
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 
@@ -108,7 +108,7 @@ public class TableVisual : MonoBehaviour
         manager.LeerDatosAsset();
         // add tag according to owner
         foreach (Transform t in criaturaOMagica.GetComponentsInChildren<Transform>())
-            t.tag = owner.ToString() + "Creature";
+            t.tag = owner.ToString() + "Ente";
         // parent a new creature gameObject to table slots
         criaturaOMagica.transform.SetParent(slots.transform);
         // add a new creature to the list

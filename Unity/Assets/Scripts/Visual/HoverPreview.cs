@@ -57,7 +57,9 @@ public class HoverPreview : MonoBehaviour
     void OnMouseEnter()
     {
         OverCollider = true;
-        if (PrevisualizacionesPermitidas && PrevisualizacionActivada)
+        //if (Controlador.JugadorTieneTurno() && PrevisualizacionesPermitidas && PrevisualizacionActivada)
+        
+        if (Controlador.CartaOCriaturaDelJugador(gameObject.tag) && PrevisualizacionesPermitidas && PrevisualizacionActivada)
             PrevisualizarObjeto();
     }
 
@@ -65,7 +67,7 @@ public class HoverPreview : MonoBehaviour
     {
         OverCollider = false;
 
-        if (!PreviewingSomeCard())
+        if (!PrevisualizandoAlgunaCarta())
             PararTodasPrevisualizaciones();
     }
 
@@ -113,7 +115,7 @@ public class HoverPreview : MonoBehaviour
 
     }
 
-    private static bool PreviewingSomeCard()
+    private static bool PrevisualizandoAlgunaCarta()
     {
         if (!PrevisualizacionesPermitidas)
             return false;

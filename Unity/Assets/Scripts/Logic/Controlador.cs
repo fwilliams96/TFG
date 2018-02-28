@@ -13,8 +13,6 @@ public class Controlador : MonoBehaviour
 
     #region Atributos
     // PUBLIC FIELDS
-    public CardAsset CoinCard;
-
     // for Singleton Pattern
     public static Controlador Instance;
 
@@ -241,15 +239,8 @@ public class Controlador : MonoBehaviour
     public void JugarMagicaMano(Carta magicaJugada, int tablePos)
     {
         RestarManaCarta(jugadorActual, magicaJugada);
-
         Magica nuevaMagica = new Magica(magicaJugada.assetCarta);
-        jugadorActual.AñadirEnteMesa(tablePos, nuevaMagica);
-        new PlayAEntityCommand(magicaJugada, jugadorActual, tablePos, nuevaMagica).AñadirAlaCola();
-        //causa battlecry effect
-        if (nuevaMagica.efecto != null)
-            nuevaMagica.efecto.WhenAMagicIsPlayed();
-        jugadorActual.EliminarCartaMano(magicaJugada);
-        MostrarCartasJugablesJugadorActual();
+        JugarCarta(magicaJugada, nuevaMagica, tablePos);
     }
 
     /// <summary>
@@ -271,18 +262,26 @@ public class Controlador : MonoBehaviour
     /// <param name="posicionAtaque"></param>
     public void JugarCartaMano(Carta cartaJugada, int tablePos, bool posicionAtaque)
     {
-        // Debug.Log(ManaLeft);
-        // Debug.Log(playedCard.CurrentManaCost);
         RestarManaCarta(jugadorActual, cartaJugada);
-        // Debug.Log("Mana Left after played a creature: " + ManaLeft);
-        // create a new creature object and add it to Table
         Criatura newCreature = new Criatura(cartaJugada.assetCarta, posicionAtaque == true ? PosicionCriatura.ATAQUE : PosicionCriatura.DEFENSA);
-        jugadorActual.AñadirEnteMesa(tablePos, newCreature);
+        JugarCarta(cartaJugada,newCreature, tablePos);
+        
+    }
+
+    /// <summary>
+    /// Jugar carta 
+    /// </summary>
+    /// <param name="cartaJugada"></param>
+    /// <param name="ente"></param>
+    /// <param name="tablePos"></param>
+    private void JugarCarta(Carta cartaJugada,Ente ente, int tablePos)
+    {
+        jugadorActual.AñadirEnteMesa(tablePos, ente);
         // no matter what happens, move this card to PlayACardSpot
-        new PlayAEntityCommand(cartaJugada, jugadorActual, tablePos, newCreature).AñadirAlaCola();
+        new PlayAEntityCommand(cartaJugada, jugadorActual, tablePos, ente).AñadirAlaCola();
         //causa battlecry effect
-        if (newCreature.efecto != null)
-            newCreature.efecto.WhenACreatureIsPlayed();
+        if (ente.efecto != null)
+            ente.efecto.WhenACreatureIsPlayed();
         // remove this card from hand
         jugadorActual.EliminarCartaMano(cartaJugada);
         MostrarCartasJugablesJugadorActual();
@@ -452,6 +451,17 @@ public class Controlador : MonoBehaviour
     public Jugador OtroJugador(Jugador jugador)
     {
         return Players.Instance.GetPlayers()[0] == jugador ? Players.Instance.GetPlayers()[1] : Players.Instance.GetPlayers()[0];
+    }
+
+    public bool CartaOCriaturaDelJugador(String tagCartaOCriatura)
+    {
+        //Se trata de una carta
+        /*if (tagCartaOCriatura.Equals("TopCard"))
+        //Se trata de un ente
+        else if (tagCartaOCriatura.Equals("TopEnte"))*/
+        //Acceder al controlador del jugador y comprobar si la posicion del jugador actual coincide con la de la carta o ente.
+        //return controladorJugador.CartaOCriaturaDelJugador(tag.Substring(0, 3));
+        return true;
     }
 
 }
