@@ -8,6 +8,7 @@ using System.Reflection;
 public enum PosicionCriatura { ATAQUE, DEFENSA };
 
 // this class will take care of switching turns and counting down time until the turn expires
+//
 public class Controlador : MonoBehaviour
 {
 
