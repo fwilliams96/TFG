@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DragCreatureAttack : DraggingActions {
+public class DragEntityAttack : DraggingActions {
 
+    #region Atributos
     // reference to the sprite with a round "Target" graphic
     private SpriteRenderer sr;
     // LineRenderer that is attached to a child game object to draw the arrow
     private LineRenderer lr;
     // reference to WhereIsTheCardOrCreature to track this object`s state in the game
-    private WhereIsTheCardOrCreature dondeEstaCartaOCriatura;
+    private WhereIsTheCardOrEntity dondeEstaCartaOCriatura;
     // the pointy end of the arrow, should be called "Triangle" in the Hierarchy
     private Transform triangle;
     // SpriteRenderer of triangle. We need this to disable the pointy end if the target is too close.
@@ -17,7 +18,7 @@ public class DragCreatureAttack : DraggingActions {
     private GameObject Target;
     // Reference to creature manager, attached to the parent game object
     private OneCreatureManager manager;
-
+    #endregion
     void Awake()
     {
         // establish all the connections
@@ -28,7 +29,7 @@ public class DragCreatureAttack : DraggingActions {
         triangleSR = triangle.GetComponent<SpriteRenderer>();
 
         manager = GetComponentInParent<OneCreatureManager>();
-        dondeEstaCartaOCriatura = GetComponentInParent<WhereIsTheCardOrCreature>();
+        dondeEstaCartaOCriatura = GetComponentInParent<WhereIsTheCardOrEntity>();
     }
 
     public override bool PuedeSerLanzada

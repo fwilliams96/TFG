@@ -3,15 +3,15 @@ using System.Collections;
 using DG.Tweening;
 using UnityEngine.UI;
 
-public class DragEntityOnTable : DraggingActions
+public class DragCardOnTable : DraggingActions
 {
-
+    #region Atributos
     private int savedHandSlot;
-    private WhereIsTheCardOrCreature whereIsCard;
+    private WhereIsTheCardOrEntity whereIsCard;
     private IDHolder idScript;
     private VisualStates tempState;
     private OneCardManager manager;
-
+    #endregion
     public override bool PuedeSerLanzada
     {
         get
@@ -24,7 +24,7 @@ public class DragEntityOnTable : DraggingActions
 
     void Awake()
     {
-        whereIsCard = GetComponent<WhereIsTheCardOrCreature>();
+        whereIsCard = GetComponent<WhereIsTheCardOrEntity>();
         manager = GetComponent<OneCardManager>();
     }
 
@@ -103,7 +103,7 @@ public class DragEntityOnTable : DraggingActions
 
     protected override bool DragSuccessful()
     {
-        bool TableNotFull = (playerOwner.NumCriaturasEnLaMesa() < 8);
+        bool TableNotFull = (playerOwner.NumEntesEnLaMesa() < 8);
 
         return TableVisual.CursorSobreAlgunaMesa && TableNotFull;
     }

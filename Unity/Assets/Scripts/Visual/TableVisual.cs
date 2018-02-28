@@ -89,7 +89,7 @@ public class TableVisual : MonoBehaviour
         float y = creature.transform.eulerAngles.y;
         float z = creature.transform.eulerAngles.z + 90;
         creature.transform.DORotate(new Vector3(x, y, z), 1);
-        ConfigurarEnte(creature,ca, idUnico,indiceSlot);
+        ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 
     public void AñadirCriaturaAtaque(CardAsset ca, int idUnico, int indiceSlot)
@@ -101,7 +101,7 @@ public class TableVisual : MonoBehaviour
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 
-    private void ConfigurarEnte(GameObject criaturaOMagica, CardAsset ca, int idUnico,int indiceSlot)
+    private void ConfigurarEnte(GameObject criaturaOMagica, CardAsset ca, int idUnico, int indiceSlot)
     {
         OneCreatureManager manager = criaturaOMagica.GetComponent<OneCreatureManager>();
         manager.cardAsset = ca;
@@ -115,7 +115,7 @@ public class TableVisual : MonoBehaviour
         // Debug.Log ("insert index: " + index.ToString());
         CreaturesOnTable.Insert(indiceSlot, criaturaOMagica);
         // let this creature know about its position
-        WhereIsTheCardOrCreature w = criaturaOMagica.GetComponent<WhereIsTheCardOrCreature>();
+        WhereIsTheCardOrEntity w = criaturaOMagica.GetComponent<WhereIsTheCardOrEntity>();
         w.Slot = indiceSlot;
         w.EstadoVisual = VisualStates.MesaJugadorAbajo;
         // add our unique ID to this creature

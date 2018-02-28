@@ -51,7 +51,7 @@ public class Players
         }
     }
 
-    public Jugador [] GetPlayers()
+    public Jugador[] GetPlayers()
     {
         return players;
     }

@@ -6,15 +6,17 @@ using System.Collections.Generic;
 public enum VisualStates
 {
     Transicion,
-    ManoJugadorAbajo, 
+    ManoJugadorAbajo,
     ManoJugadorArriba,
     MesaJugadorAbajo,
     MesaJugadorArriba,
     Arrastrando
 }
 
-public class WhereIsTheCardOrCreature : MonoBehaviour {
+public class WhereIsTheCardOrEntity : MonoBehaviour
+{
 
+    #region Atributos
     // reference to a HoverPreview Component
     private HoverPreview hover;
 
@@ -26,9 +28,12 @@ public class WhereIsTheCardOrCreature : MonoBehaviour {
 
     // PROPERTIES
     private int slot = -1;
+    private VisualStates estadoVisual;
+    #endregion
+    #region Getters/Setters
     public int Slot
     {
-        get{ return slot;}
+        get { return slot; }
 
         set
         {
@@ -40,10 +45,10 @@ public class WhereIsTheCardOrCreature : MonoBehaviour {
         }
     }
 
-    private VisualStates estadoVisual;
+
     public VisualStates EstadoVisual
     {
-        get{ return estadoVisual; }  
+        get { return estadoVisual; }
 
         set
         {
@@ -71,6 +76,7 @@ public class WhereIsTheCardOrCreature : MonoBehaviour {
             }
         }
     }
+    #endregion
 
     void Awake()
     {
@@ -104,7 +110,7 @@ public class WhereIsTheCardOrCreature : MonoBehaviour {
 
     private int HandSortingOrder(int placeInHand)
     {
-        return (-(placeInHand + 1) * 10); 
+        return (-(placeInHand + 1) * 10);
     }
 
 

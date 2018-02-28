@@ -21,7 +21,7 @@ public class Jugador : MonoBehaviour, ICharacter
     private Tablero mesa;
 
     #endregion Atributos
-
+    #region Getters/Setters
     // PROPERTIES 
     // this property is a part of interface ICharacter
     public int ID
@@ -53,7 +53,7 @@ public class Jugador : MonoBehaviour, ICharacter
     }
 
     private int health;
-    public int Vida
+    public int Defensa
     {
         get { return health; }
         set
@@ -61,6 +61,7 @@ public class Jugador : MonoBehaviour, ICharacter
             health = value;
         }
     }
+    #endregion
 
     // CODE FOR EVENTS TO LET CREATURES KNOW WHEN TO CAUSE EFFECTS
     public delegate void VoidWithNoArguments();
@@ -90,7 +91,7 @@ public class Jugador : MonoBehaviour, ICharacter
     //TODO ver si esta funcion seguira existiendo
     public void LeerInformacionPersonajeAsset()
     {
-        Vida = charAsset.MaxHealth;
+        Defensa = charAsset.MaxHealth;
         // change the visuals for portrait, hero power, etc...
         PArea.Personaje.charAsset = charAsset;
         PArea.Personaje.AplicarEstiloPersonajeAsset();
@@ -125,6 +126,7 @@ public class Jugador : MonoBehaviour, ICharacter
         ManaRestante = 0;
         LeerInformacionPersonajeAsset();
         TransmitirInformacionAcercaJugadorVisual();
+        //TO
         PArea.mazoVisual.CartasEnMazo = mazo.CartasEnMazo.Count;
         // move both portraits to the center
         PArea.Personaje.transform.position = PArea.PosicionInicialPersonaje.position;
@@ -147,7 +149,7 @@ public class Jugador : MonoBehaviour, ICharacter
         mazo.CartasEnMazo.Insert(posicionMazo, carta);
     }
 
-    public void EliminarCriaturaMesa(Ente ente)
+    public void EliminarEnteMesa(Ente ente)
     {
         mesa.EntesEnTablero.Remove(ente);
     }
@@ -162,7 +164,7 @@ public class Jugador : MonoBehaviour, ICharacter
         mazo.CartasEnMazo.RemoveAt(pos);
     }
 
-    public Ente[] CriaturasEnLaMesa()
+    public Ente[] EntesEnLaMesa()
     {
         return mesa.EntesEnTablero.ToArray();
     }
@@ -177,7 +179,7 @@ public class Jugador : MonoBehaviour, ICharacter
         return mazo.CartasEnMazo.ToArray();
     }
 
-    public int NumCriaturasEnLaMesa()
+    public int NumEntesEnLaMesa()
     {
         return mesa.EntesEnTablero.Count;
     }

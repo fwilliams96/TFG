@@ -3,7 +3,7 @@ using System.Collections;
 
 public interface ICharacter: IIdentifiable
 {	
-    int Vida { get;    set;}
+    int Defensa { get;    set;}
 
     void Morir();
 }

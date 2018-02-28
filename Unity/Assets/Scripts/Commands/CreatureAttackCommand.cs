@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CreatureAttackCommand : Comanda 
+public class CreatureAttackCommand : Comanda
 {
     // position of creature on enemy`s table that will be attacked
     // if enemyindex == -1 , attack an enemy character 

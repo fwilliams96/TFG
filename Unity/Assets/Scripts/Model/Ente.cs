@@ -3,42 +3,43 @@ using System.Collections;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class Ente: ICharacter 
+public class Ente : ICharacter
 {
+    #region Atributos
     // PUBLIC FIELDS
     public CardAsset assetCarta;
     public EfectoEnte efecto;
     private int idCriatura;
     public bool Frozen = false;
-
-    // PROPERTIES
+    #endregion
+    #region Getters/Setters
     // property from ICharacter interface
     public int ID
     {
-        get{ return idCriatura; }
+        get { return idCriatura; }
     }
-        
+
     // the basic health that we have in CardAsset
-    private int vidaBase;
+    private int defensaBase;
     // health with all the current buffs taken into account
-    public int VidaMaxima
+    public int DefensaMaxima
     {
-        get{ return vidaBase;}
+        get { return defensaBase; }
     }
 
     // current health of this creature
-    private int vida;
-    public int Vida
+    private int defensa;
+    public int Defensa
     {
-        get{ return vida; }
+        get { return defensa; }
 
         set
         {
             //TODO mirar donde se hace el set para no hacer las siguientes lineas
-            if (value > VidaMaxima)
-                vida = VidaMaxima;
+            if (value > DefensaMaxima)
+                defensa = DefensaMaxima;
             else
-                vida = value;
+                defensa = value;
         }
     }
 
@@ -46,9 +47,9 @@ public class Ente: ICharacter
     private int ataqueBasico;
     public int Ataque
     {
-        get{ return ataqueBasico; }
+        get { return ataqueBasico; }
     }
-     
+
     // number of attacks for one turn if (attacksForOneTurn==2) => Windfury
     private int attacksForOneTurn = 1;
     public int AtaquesRestantesEnTurno
@@ -57,22 +58,24 @@ public class Ente: ICharacter
         set;
     }
 
+    #endregion
+
     // CONSTRUCTOR
     public Ente(CardAsset ca)
     {
         this.assetCarta = ca;
-        vidaBase = ca.Defensa;
-        Vida = ca.Defensa;
+        defensaBase = ca.Defensa;
+        Defensa = ca.Defensa;
         ataqueBasico = ca.Ataque;
         attacksForOneTurn = ca.AtaquesPorTurno;
         // AttacksLeftThisTurn is now equal to 0
         if (ca.Charge)
             AtaquesRestantesEnTurno = attacksForOneTurn;
         idCriatura = IDFactory.GetUniqueID();
-        if (ca.CreatureScriptName!= null && ca.CreatureScriptName!= "")
+        if (ca.CreatureScriptName != null && ca.CreatureScriptName != "")
         {
             //TODO le estamos pasando null de momento, este null referencia al jugador dueño de la criatura
-            efecto = System.Activator.CreateInstance(System.Type.GetType(ca.CreatureScriptName), new System.Object[]{null,this, ca.specialCreatureAmount}) as EfectoEnte;
+            efecto = System.Activator.CreateInstance(System.Type.GetType(ca.CreatureScriptName), new System.Object[] { null, this, ca.specialCreatureAmount }) as EfectoEnte;
             efecto.RegisterEventEffect();
         }
         Recursos.EntesCreadosEnElJuego.Add(idCriatura, this);

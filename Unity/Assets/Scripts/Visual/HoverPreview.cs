@@ -2,8 +2,9 @@
 using System.Collections;
 using DG.Tweening;
 
-public class HoverPreview: MonoBehaviour
+public class HoverPreview : MonoBehaviour
 {
+    #region Atributos
     // PUBLIC FIELDS
     public GameObject TurnThisOffWhenPreviewing;  // if this is null, will not turn off anything 
     public Vector3 TargetPosition;
@@ -16,14 +17,16 @@ public class HoverPreview: MonoBehaviour
 
     // PROPERTIES WITH UNDERLYING PRIVATE FIELDS
     private static bool _PrevisualizacionesPermitidas = true;
+    #endregion
+    #region Getters/Setters
     public static bool PrevisualizacionesPermitidas
     {
-        get { return _PrevisualizacionesPermitidas;}
+        get { return _PrevisualizacionesPermitidas; }
 
-        set 
-        { 
+        set
+        {
             //Debug.Log("Hover Previews Allowed is now: " + value);
-            _PrevisualizacionesPermitidas= value;
+            _PrevisualizacionesPermitidas = value;
             if (!_PrevisualizacionesPermitidas)
                 PararTodasPrevisualizaciones();
         }
@@ -32,31 +35,32 @@ public class HoverPreview: MonoBehaviour
     private bool _previsualizacionActivada = false;
     public bool PrevisualizacionActivada
     {
-        get { return _previsualizacionActivada;}
+        get { return _previsualizacionActivada; }
 
-        set 
-        { 
+        set
+        {
             _previsualizacionActivada = value;
             if (!_previsualizacionActivada)
                 StopThisPreview();
         }
     }
 
-    public bool OverCollider { get; set;}
- 
+    public bool OverCollider { get; set; }
+    #endregion
+
     // MONOBEHVIOUR METHODS
     void Awake()
     {
         PrevisualizacionActivada = ActivateInAwake;
     }
-            
+
     void OnMouseEnter()
     {
         OverCollider = true;
         if (PrevisualizacionesPermitidas && PrevisualizacionActivada)
             PrevisualizarObjeto();
     }
-        
+
     void OnMouseExit()
     {
         OverCollider = false;
@@ -76,8 +80,8 @@ public class HoverPreview: MonoBehaviour
         // 3) enable Preview game object
         objetoPrevisualizado.SetActive(true);
         // 4) disable if we have what to disable
-        if (TurnThisOffWhenPreviewing!=null)
-            TurnThisOffWhenPreviewing.SetActive(false); 
+        if (TurnThisOffWhenPreviewing != null)
+            TurnThisOffWhenPreviewing.SetActive(false);
         // 5) tween to target position
         objetoPrevisualizado.transform.localPosition = Vector3.zero;
         objetoPrevisualizado.transform.localScale = Vector3.one;
@@ -91,8 +95,8 @@ public class HoverPreview: MonoBehaviour
         objetoPrevisualizado.SetActive(false);
         objetoPrevisualizado.transform.localScale = Vector3.one;
         objetoPrevisualizado.transform.localPosition = Vector3.zero;
-        if (TurnThisOffWhenPreviewing!=null)
-            TurnThisOffWhenPreviewing.SetActive(true); 
+        if (TurnThisOffWhenPreviewing != null)
+            TurnThisOffWhenPreviewing.SetActive(true);
     }
 
     // STATIC METHODS
@@ -103,10 +107,10 @@ public class HoverPreview: MonoBehaviour
             previsualizacionActual.objetoPrevisualizado.SetActive(false);
             previsualizacionActual.objetoPrevisualizado.transform.localScale = Vector3.one;
             previsualizacionActual.objetoPrevisualizado.transform.localPosition = Vector3.zero;
-            if (previsualizacionActual.TurnThisOffWhenPreviewing!=null)
-                previsualizacionActual.TurnThisOffWhenPreviewing.SetActive(true); 
+            if (previsualizacionActual.TurnThisOffWhenPreviewing != null)
+                previsualizacionActual.TurnThisOffWhenPreviewing.SetActive(true);
         }
-         
+
     }
 
     private static bool PreviewingSomeCard()
@@ -125,5 +129,5 @@ public class HoverPreview: MonoBehaviour
         return false;
     }
 
-   
+
 }

@@ -5,7 +5,7 @@ using DG.Tweening;
 public class DragSpellNoTarget: DraggingActions{
 
     private int savedHandSlot;
-    private WhereIsTheCardOrCreature whereIsCard;
+    private WhereIsTheCardOrEntity whereIsCard;
     private OneCardManager manager;
 
     public override bool PuedeSerLanzada
@@ -18,7 +18,7 @@ public class DragSpellNoTarget: DraggingActions{
 
     void Awake()
     {
-        whereIsCard = GetComponent<WhereIsTheCardOrCreature>();
+        whereIsCard = GetComponent<WhereIsTheCardOrEntity>();
         manager = GetComponent<OneCardManager>();
     }
 

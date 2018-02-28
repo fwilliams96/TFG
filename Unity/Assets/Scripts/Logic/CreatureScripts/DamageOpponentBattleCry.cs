@@ -11,8 +11,8 @@ public abstract class DamageOpponentBattleCry : EfectoEnte
     public override void WhenACreatureIsPlayed()
     {
         Jugador oponente = Controlador.Instance.OtroJugador(owner);
-        new DealDamageCommand(oponente.PlayerID, specialAmount, oponente.Vida - specialAmount).AñadirAlaCola();
+        new DealDamageCommand(oponente.PlayerID, specialAmount, oponente.Defensa - specialAmount).AñadirAlaCola();
         //TODO aqui se resta la vida del oponente, vigilar que hacer
-        oponente.Vida = oponente.Vida - specialAmount;
+        oponente.Defensa = oponente.Defensa - specialAmount;
     }
 }
