@@ -7,7 +7,7 @@ public class DragSpellOnTarget : DraggingActions {
     public TargetingOptions Targets = TargetingOptions.AllCharacters;
     private SpriteRenderer sr;
     private LineRenderer lr;
-    private WhereIsTheCardOrCreature whereIsThisCard;
+    private WhereIsTheCardOrEntity whereIsThisCard;
     private VisualStates tempVisualState;
     private Transform triangle;
     private SpriteRenderer triangleSR;
@@ -30,7 +30,7 @@ public class DragSpellOnTarget : DraggingActions {
         triangle = transform.Find("Triangle");
         triangleSR = triangle.GetComponent<SpriteRenderer>();
         manager = GetComponentInParent<OneCardManager>();
-        whereIsThisCard = GetComponentInParent<WhereIsTheCardOrCreature>();
+        whereIsThisCard = GetComponentInParent<WhereIsTheCardOrEntity>();
     }
 
     public override void OnStartDrag()

@@ -5,6 +5,7 @@ using DG.Tweening;
 
 public class HandVisual : MonoBehaviour
 {
+    #region Atributos
     // PUBLIC FIELDS
     public AreaPosition owner;
     public bool TakeCardsOpenly = true;
@@ -17,86 +18,64 @@ public class HandVisual : MonoBehaviour
     public Transform PlayPreviewSpot;
 
     // PRIVATE : a list of all card visual representations as GameObjects
-    private List<GameObject> CardsInHand = new List<GameObject>();
+    private List<GameObject> CartasEnMano = new List<GameObject>();
+    #endregion
+    #region Getters/Setters
+    public GameObject LastDealtCard { get; set; }
+    #endregion
 
-    public GameObject LastDealtCard{ get; set;}
-
-    public void PlayASpellFromHand(int CardID)
+    //TODO nombre funciones en español
+    public void AñadirCarta(GameObject card)
     {
-        GameObject card = IDHolder.GetGameObjectWithID(CardID);
-        PlayASpellFromHand(card);
-    }
-
-    public void PlayASpellFromHand(GameObject CardVisual)
-    {
-        Comandas.Instance.CompletarEjecucionComanda();
-        CardVisual.GetComponent<WhereIsTheCardOrCreature>().EstadoVisual = VisualStates.Transicion;
-        RemoveCard(CardVisual);
-
-        CardVisual.transform.SetParent(null);
-
-        Sequence s = DOTween.Sequence();
-        s.Append(CardVisual.transform.DOMove(PlayPreviewSpot.position, 1f));
-        s.Insert(0f, CardVisual.transform.DORotate(Vector3.zero, 1f));
-        s.AppendInterval(2f);
-        s.OnComplete(()=>
-            {
-                //Command.CommandExecutionComplete();
-                Destroy(CardVisual);
-            });
-    }
-
-    public void AddCard(GameObject card)
-    {
-        CardsInHand.Insert(0, card);
+        CartasEnMano.Insert(0, card);
         // set parent for this card
         card.transform.SetParent(slots.transform);
         // re-calculate the position of the hand
-        PlaceCardsOnNewSlots();
-        UpdatePlacementOfSlots();
+        MoverSlotCartas();
+        ActualizarSlots();
     }
 
-    public void RemoveCard(GameObject card)
+    public void EliminarCarta(GameObject card)
     {
-        CardsInHand.Remove(card);
+        CartasEnMano.Remove(card);
         // re-calculate the position of the hand
-        PlaceCardsOnNewSlots();
-        UpdatePlacementOfSlots();
+        MoverSlotCartas();
+        ActualizarSlots();
     }
 
-    public GameObject GetCardAtIndex(int index)
+    public GameObject CogerCartaPorIndice(int index)
     {
-        return CardsInHand[index];
+        return CartasEnMano[index];
     }
 
-    public void RemoveCardAtIndex(int index)
+    public void EliminarCartaEnIndice(int index)
     {
-        CardsInHand.RemoveAt(index);
+        CartasEnMano.RemoveAt(index);
         // re-calculate the position of the hand
-        PlaceCardsOnNewSlots();
-        UpdatePlacementOfSlots();
+        MoverSlotCartas();
+        ActualizarSlots();
     }
 
-    void UpdatePlacementOfSlots()
+    void ActualizarSlots()
     {
         float posX;
-        if (CardsInHand.Count > 0)
-            posX = (slots.Children[0].transform.localPosition.x - slots.Children[CardsInHand.Count - 1].transform.localPosition.x) / 2f;
+        if (CartasEnMano.Count > 0)
+            posX = (slots.Children[0].transform.localPosition.x - slots.Children[CartasEnMano.Count - 1].transform.localPosition.x) / 2f;
         else
             posX = 0f;
-            
-        slots.gameObject.transform.DOLocalMoveX(posX, 0.3f);  
+
+        slots.gameObject.transform.DOLocalMoveX(posX, 0.3f);
     }
 
 
-    void PlaceCardsOnNewSlots()
+    void MoverSlotCartas()
     {
-        foreach (GameObject g in CardsInHand)
+        foreach (GameObject g in CartasEnMano)
         {
-            g.transform.DOLocalMoveX(slots.Children[CardsInHand.IndexOf(g)].transform.localPosition.x, 0.3f);
+            g.transform.DOLocalMoveX(slots.Children[CartasEnMano.IndexOf(g)].transform.localPosition.x, 0.3f);
             // apply correct sorting order and HandSlot value for later 
-            WhereIsTheCardOrCreature w = g.GetComponent<WhereIsTheCardOrCreature>();
-            w.Slot = CardsInHand.IndexOf(g);
+            WhereIsTheCardOrEntity w = g.GetComponent<WhereIsTheCardOrEntity>();
+            w.Slot = CartasEnMano.IndexOf(g);
             w.SetearOrdenCarta();
         }
     }
@@ -106,9 +85,9 @@ public class HandVisual : MonoBehaviour
     {
         GameObject card;
         if (fromDeck)
-            card = CreateACardAtPosition(c, DeckTransform.position, new Vector3(0f, -179f, 0f));
+            card = CrearCartaPorPosicion(c, DeckTransform.position, new Vector3(0f, -179f, 0f));
         else
-            card = CreateACardAtPosition(c, OtherCardDrawSourceTransform.position, new Vector3(0f, -179f, 0f));
+            card = CrearCartaPorPosicion(c, OtherCardDrawSourceTransform.position, new Vector3(0f, -179f, 0f));
         // save this as visual representation in CardLogic
         // Player ownerPlayer = GlobalSettings.Instance.Players[owner];
         //Debug.Log(ownerPlayer);
@@ -119,11 +98,11 @@ public class HandVisual : MonoBehaviour
         //Debug.Log(ownerPlayer.hand);
         // Set a tag to reflect where this card is
         foreach (Transform t in card.GetComponentsInChildren<Transform>())
-            t.tag = owner.ToString()+"Card";
+            t.tag = owner.ToString() + "Card";
         // pass this card to HandVisual class
-        AddCard(card);
+        AñadirCarta(card);
         // let the card know about its place in hand.
-        WhereIsTheCardOrCreature w = card.GetComponent<WhereIsTheCardOrCreature>();
+        WhereIsTheCardOrEntity w = card.GetComponent<WhereIsTheCardOrEntity>();
         w.TraerAlFrente();
 
         w.Slot = 0;
@@ -139,12 +118,12 @@ public class HandVisual : MonoBehaviour
         Sequence s = DOTween.Sequence();
         if (!fast)
         {
-            Debug.Log ("Not fast!!!");
+            Debug.Log("Not fast!!!");
             s.Append(card.transform.DOMove(DrawPreviewSpot.position, DatosGenerales.Instance.CardTransitionTime));
             if (TakeCardsOpenly)
-                s.Insert(0f, card.transform.DORotate(Vector3.zero, DatosGenerales.Instance.CardTransitionTime)); 
-            else 
-                s.Insert(0f, card.transform.DORotate(new Vector3(0f, 179f, 0f), DatosGenerales.Instance.CardTransitionTime)); 
+                s.Insert(0f, card.transform.DORotate(Vector3.zero, DatosGenerales.Instance.CardTransitionTime));
+            else
+                s.Insert(0f, card.transform.DORotate(new Vector3(0f, 179f, 0f), DatosGenerales.Instance.CardTransitionTime));
             s.AppendInterval(DatosGenerales.Instance.CardPreviewTime);
             // displace the card so that we can select it in the scene easier.
             s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, DatosGenerales.Instance.CardTransitionTime));
@@ -153,14 +132,14 @@ public class HandVisual : MonoBehaviour
         {
             // displace the card so that we can select it in the scene easier.
             s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, DatosGenerales.Instance.CardTransitionTimeFast));
-            if (TakeCardsOpenly)    
-                s.Insert(0f,card.transform.DORotate(Vector3.zero, DatosGenerales.Instance.CardTransitionTimeFast)); 
+            if (TakeCardsOpenly)
+                s.Insert(0f, card.transform.DORotate(Vector3.zero, DatosGenerales.Instance.CardTransitionTimeFast));
         }
 
-        s.OnComplete(()=>ChangeLastCardStatusToInHand(card, w));
+        s.OnComplete(() => CambiarEstadoCartaAMano(card, w));
     }
 
-    void ChangeLastCardStatusToInHand(GameObject card, WhereIsTheCardOrCreature w)
+    void CambiarEstadoCartaAMano(GameObject card, WhereIsTheCardOrEntity w)
     {
         //Debug.Log("Changing state to Hand for card: " + card.gameObject.name);
         if (owner == AreaPosition.Low)
@@ -172,7 +151,7 @@ public class HandVisual : MonoBehaviour
         Comandas.Instance.CompletarEjecucionComanda();
     }
 
-    GameObject CreateACardAtPosition(CardAsset c, Vector3 position, Vector3 eulerAngles)
+    GameObject CrearCartaPorPosicion(CardAsset c, Vector3 position, Vector3 eulerAngles)
     {
         // Instantiate a card depending on its type
         GameObject card;
@@ -193,7 +172,7 @@ public class HandVisual : MonoBehaviour
                 DragSpellOnTarget dragSpell = card.GetComponentInChildren<DragSpellOnTarget>();
                 dragSpell.Targets = c.Targets;
             }
-                
+
         }
 
         // apply the look of the card based on the info from CardAsset

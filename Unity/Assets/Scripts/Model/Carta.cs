@@ -6,13 +6,15 @@ using System;
 [System.Serializable]
 public class Carta : IIdentifiable
 {
+    #region Atributos
     // an ID of this card
     private int idCarta;
     // a reference to the card asset that stores all the info about this card
     public CardAsset assetCarta;
     // a script of type spell effect that will be attached to this card when it`s created
     public SpellEffect efecto;
-
+    #endregion
+    #region Getters/Setters
     // PROPERTIES
     public int ID
     {
@@ -20,6 +22,8 @@ public class Carta : IIdentifiable
     }
 
     public int CosteManaActual { get; set; }
+
+    #endregion
 
     // CONSTRUCTOR
     public Carta(CardAsset ca)

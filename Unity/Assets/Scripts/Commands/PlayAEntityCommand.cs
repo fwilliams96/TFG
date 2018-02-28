@@ -22,7 +22,7 @@ public class PlayAEntityCommand : Comanda
         HandVisual PlayerHand = p.PArea.manoVisual;
         //TODO se podria hacer que el id de la carta pase a ser el id de la criatura 
         GameObject card = IDHolder.GetGameObjectWithID(cl.ID);
-        PlayerHand.RemoveCard(card);
+        PlayerHand.EliminarCarta(card);
         GameObject.Destroy(card);
         //Permite la previsualizacion de cartas
         HoverPreview.PrevisualizacionesPermitidas = true;

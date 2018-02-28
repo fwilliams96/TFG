@@ -7,6 +7,8 @@ public class Criatura : Ente, ICharacter
 {
     #region Atributos
     private PosicionCriatura posicionCriatura;
+    #endregion
+    #region Getters/Setters
     public PosicionCriatura PosicionCriatura
     {
         get

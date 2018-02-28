@@ -8,7 +8,7 @@ public class PosicionCriaturaPopUp : MonoBehaviour {
     public static PosicionCriaturaPopUp Instance;
     public GameObject PosicionCriaturaPanel;
     private bool ataque;
-    private DragEntityOnTable creature;
+    private DragCardOnTable creature;
     public delegate void RegistrarFuncion(bool resultOK);
     public event RegistrarFuncion metodo;
 

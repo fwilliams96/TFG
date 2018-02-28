@@ -88,8 +88,8 @@ public class TableVisual : MonoBehaviour
         float x = creature.transform.eulerAngles.x;
         float y = creature.transform.eulerAngles.y;
         float z = creature.transform.eulerAngles.z + 90;
-        creature.transform.DORotate(new Vector3(x, y, z), 1);
-        ConfigurarEnte(creature,ca, idUnico,indiceSlot);
+        creature.transform.DORotate(new Vector3(x, y, z), 0.1f);
+        ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 
     public void AñadirCriaturaAtaque(CardAsset ca, int idUnico, int indiceSlot)
@@ -101,21 +101,21 @@ public class TableVisual : MonoBehaviour
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 
-    private void ConfigurarEnte(GameObject criaturaOMagica, CardAsset ca, int idUnico,int indiceSlot)
+    private void ConfigurarEnte(GameObject criaturaOMagica, CardAsset ca, int idUnico, int indiceSlot)
     {
         OneCreatureManager manager = criaturaOMagica.GetComponent<OneCreatureManager>();
         manager.cardAsset = ca;
         manager.LeerDatosAsset();
         // add tag according to owner
         foreach (Transform t in criaturaOMagica.GetComponentsInChildren<Transform>())
-            t.tag = owner.ToString() + "Creature";
+            t.tag = owner.ToString() + "Ente";
         // parent a new creature gameObject to table slots
         criaturaOMagica.transform.SetParent(slots.transform);
         // add a new creature to the list
         // Debug.Log ("insert index: " + index.ToString());
         CreaturesOnTable.Insert(indiceSlot, criaturaOMagica);
         // let this creature know about its position
-        WhereIsTheCardOrCreature w = criaturaOMagica.GetComponent<WhereIsTheCardOrCreature>();
+        WhereIsTheCardOrEntity w = criaturaOMagica.GetComponent<WhereIsTheCardOrEntity>();
         w.Slot = indiceSlot;
         w.EstadoVisual = VisualStates.MesaJugadorAbajo;
         // add our unique ID to this creature
