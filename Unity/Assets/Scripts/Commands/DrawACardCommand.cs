@@ -18,7 +18,8 @@ public class DrawACardCommand : Comanda {
 
     public override void EmpezarEjecucionComanda()
     {
-        p.PArea.mazoVisual.CartasEnMazo--;
-        p.PArea.manoVisual.DarCartaJugador(cl.assetCarta, cl.ID, fast, fromDeck);
+        PlayerArea areaJugador = Controlador.Instance.AreaJugador(p);
+        areaJugador.mazoVisual.CartasEnMazo--;
+        areaJugador.manoVisual.DarCartaJugador(cl.assetCarta, cl.ID, fast, fromDeck);
     }
 }

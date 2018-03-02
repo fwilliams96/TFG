@@ -8,6 +8,7 @@ using System.Reflection;
 public enum PosicionCriatura { ATAQUE, DEFENSA };
 
 // this class will take care of switching turns and counting down time until the turn expires
+//
 public class Controlador : MonoBehaviour
 {
 
@@ -15,24 +16,27 @@ public class Controlador : MonoBehaviour
     // PUBLIC FIELDS
     // for Singleton Pattern
     public static Controlador Instance;
+    private ControladorJugador controladorJugador;
+    private ControladorEnte controladorEnte;
 
+    private Jugador _jugadorActual;
     // PRIVATE FIELDS
     // reference to a timer to measure 
     private RopeTimer timer;
     #endregion
     #region Getters/Setters
     // PROPERTIES
-    private Jugador _jugadorActual;
+   
     public Jugador jugadorActual
     {
         get
         {
-            return _jugadorActual;
+            return controladorJugador.jugadorActual;
         }
 
         set
         {
-            _jugadorActual = value;
+            controladorJugador.jugadorActual = value;
         }
     }
     #endregion
@@ -42,38 +46,34 @@ public class Controlador : MonoBehaviour
     {
         Instance = this;
         timer = GetComponent<RopeTimer>();
-        //Recursos.InicializarCartas();
-        //Recursos.CartasCreadasEnElJuego.Clear();
-        //Recursos.EntesCreadosEnElJuego.Clear();
-        //Recursos.InicializarJugadores();
+        controladorJugador = ControladorJugador.Instance;
+        controladorEnte = ControladorEnte.Instance;
+        Recursos.CartasCreadasEnElJuego.Clear();
+        
         //INICIALIZAR CONTROLS PLAYER,ENTE
     }
 
     void Start()
     {
         InicializacionJuego();
-        
-
     }
 
     public void InicializacionJuego()
     {
         //Debug.Log("In TurnManager.OnGameStart()");
 
-        Recursos.CartasCreadasEnElJuego.Clear();
-        Recursos.EntesCreadosEnElJuego.Clear();
-        Recursos.InicializarJugadores();
-
         foreach (Jugador p in Players.Instance.GetPlayers())
         {
-            p.InicializarValores();
-            ActualizarManaJugador(p);
+            controladorJugador.InicializarValoresJugador(p);
+            controladorJugador.ActualizarManaJugador(p);
         }
 
         Sequence s = DOTween.Sequence();
         //mueve los jugadores del centro a su posición
-        s.Append(Players.Instance.GetPlayers()[0].PArea.Personaje.transform.DOMove(Players.Instance.GetPlayers()[0].PArea.PosicionPersonaje.position, 1f).SetEase(Ease.InQuad));
-        s.Insert(0f, Players.Instance.GetPlayers()[1].PArea.Personaje.transform.DOMove(Players.Instance.GetPlayers()[1].PArea.PosicionPersonaje.position, 1f).SetEase(Ease.InQuad));
+        PlayerArea areaJugador = controladorJugador.AreaJugador(Players.Instance.GetPlayers()[0]);
+        PlayerArea areaJugador2 = controladorJugador.AreaJugador(Players.Instance.GetPlayers()[1]);
+        s.Append(areaJugador.Personaje.transform.DOMove(areaJugador.PosicionPersonaje.position, 1f).SetEase(Ease.InQuad));
+        s.Insert(0f, areaJugador2.Personaje.transform.DOMove(areaJugador2.PosicionPersonaje.position, 1f).SetEase(Ease.InQuad));
         //espera 3 segundos antes de ejecutar el onComplete
         s.PrependInterval(3f);
         s.OnComplete(() =>
@@ -132,21 +132,12 @@ public class Controlador : MonoBehaviour
 
         ActivarBotonFinDeTurno(_jugadorActual);
 
-        TurnMaker tm = jugadorActual.GetComponent<TurnMaker>();
-        // player`s method OnTurnStart() will be called in tm.OnTurnStart();
-        tm.OnTurnStart();
-        if (tm is PlayerTurnMaker)
-        {
-            ActualizarManaJugador(jugadorActual);
-        }
-        OcultarCartasJugablesJugadorContrario();
+        controladorJugador.ActualizarValoresJugador();
     }
     //TODO creo que falta añadir en que area se esta mirando
     public bool SePermiteControlarElJugador(Jugador ownerPlayer)
     {
-        bool TurnoDelJugador = (Controlador.Instance.jugadorActual == ownerPlayer);
-        bool NoCartasPendientesPorMostrar = !Comandas.Instance.ComandasDeDibujoCartaPendientes();
-        return ownerPlayer.PArea.PermitirControlJugador && ownerPlayer.PArea.ControlActivado && TurnoDelJugador && NoCartasPendientesPorMostrar;
+        return controladorJugador.SePermiteControlarElJugador(ownerPlayer);
     }
 
     public void ActivarBotonFinDeTurno(Jugador P)
@@ -184,7 +175,7 @@ public class Controlador : MonoBehaviour
     {
         if (jugador.NumCartasMazo() > 0)
         {
-            if (jugador.NumCartasMano() < jugador.PArea.manoVisual.slots.Children.Length)
+            if (jugador.NumCartasMano() < controladorJugador.AreaJugador(jugador).manoVisual.slots.Children.Length)
             {
                 // 1) logic: add card to hand
                 Carta newCard = new Carta(jugador.CartasEnElMazo()[0]);
@@ -210,7 +201,7 @@ public class Controlador : MonoBehaviour
     /// <param name="assetCarta"></param>
     public void DibujarCartaFueraMazo(Jugador jugador, CardAsset assetCarta)
     {
-        if (jugador.NumCartasMano() < jugador.PArea.manoVisual.slots.Children.Length)
+        if (jugador.NumCartasMano() < controladorJugador.AreaJugador(jugador).manoVisual.slots.Children.Length)
         {
             // 1) logic: add card to hand
             Carta newCard = new Carta(assetCarta);
@@ -287,69 +278,30 @@ public class Controlador : MonoBehaviour
         MostrarCartasJugablesJugadorActual();
     }
 
-    /// <summary>
-    /// Resta mana al jugador según la carta lanzada al tablero
-    /// </summary>
-    /// <param name="jugador"></param>
-    /// <param name="carta"></param>
     private void RestarManaCarta(Jugador jugador, Carta carta)
     {
-        jugador.ManaRestante -= carta.CosteManaActual;
-        ActualizarManaJugador(jugador);
-    }
-
-    /// <summary>
-    /// Funcion que para el movimiento de los jugadores, el temporizador de turno y lanza el mensaje de fin de batalla
-    /// </summary>
-    public void MuerteJugador(Jugador jugador)
-    {
-        PararControlJugadores();
-        Controlador.Instance.StopTheTimer();
-        new GameOverCommand(jugador).AñadirAlaCola();
-    }
-
-    public void PararControlJugadores()
-    {
-        foreach (Jugador player in Players.Instance.GetPlayers())
-        {
-            player.PArea.ControlActivado = false;
-        }
+        controladorJugador.RestarManaCarta(jugador, carta);
     }
 
     // Muestra cartas jugables de la mano del jugador
     public void MostrarCartasJugablesJugadorActual()
     {
-        MostrarUOcultarCartas(jugadorActual, false);
+        controladorJugador.MostrarCartasJugablesJugadorActual();
     }
 
-    public void OcultarCartasJugablesJugadorContrario()
+    public PlayerArea AreaJugador(Jugador jugador = null)
     {
-        MostrarUOcultarCartas(OtroJugador(jugadorActual), true);
+        return controladorJugador.AreaJugador(jugador);
     }
 
-    public void MostrarUOcultarCartas(Jugador jugador, bool quitarTodasRemarcadas = false)
+    public Jugador OtroJugador(Jugador jugador)
     {
-        //Debug.Log("HighlightPlayable remove: "+ removeAllHighlights);
-        foreach (Carta cl in jugador.CartasEnLaMano())
-        {
-            GameObject g = IDHolder.GetGameObjectWithID(cl.ID);
-            if (g != null)
-                g.GetComponent<OneCardManager>().PuedeSerJugada = (cl.CosteManaActual <= jugadorActual.ManaRestante) && !quitarTodasRemarcadas;
-        }
-
-        foreach (Ente crl in jugador.EntesEnLaMesa())
-        {
-            GameObject g = IDHolder.GetGameObjectWithID(crl.ID);
-            if (g != null)
-                g.GetComponent<OneCreatureManager>().PuedeAtacar = (crl.AtaquesRestantesEnTurno > 0) && !quitarTodasRemarcadas;
-        }
+        return controladorJugador.OtroJugador(jugador);
     }
 
-    public void ActualizarManaJugador(Jugador jugador)
+    public bool CartaOCriaturaDelJugador(string tagCartaOCriatura)
     {
-        new UpdateManaCrystalsCommand(jugador, jugador.ManaEnEsteTurno, jugador.ManaRestante).AñadirAlaCola();
-        if (jugador == jugadorActual)
-            MostrarCartasJugablesJugadorActual();
+        return controladorJugador.CartaOCriaturaDelJugador(tagCartaOCriatura);
     }
 
     /***************************************** CARTA ****************************************************/
@@ -383,86 +335,20 @@ public class Controlador : MonoBehaviour
         }
     }*/
 
-    public void MuerteCriatura(int idCriatura)
-    {
-        //TODO mejorar estas lineas que vuelven a coger la criatura a partir de su id
-        Criatura criatura = (Criatura)Recursos.EntesCreadosEnElJuego[idCriatura];
-        jugadorActual.EliminarEnteMesa(criatura);
-        criatura.Morir();
-        new CreatureDieCommand(idCriatura, jugadorActual).AñadirAlaCola();
-    }
-
-    /*public void AtacarCriatura(int idAtacante, int idObjetivo)
-    {
-        //TODO ver quien ataca, si magica o criatura
-        Criatura atacante = (Criatura)Recursos.EntesCreadosEnElJuego[idAtacante];
-        Ente objetivo = Recursos.EntesCreadosEnElJuego[idObjetivo];
-        atacante.AtaquesRestantesEnTurno--;
-        if (atacante.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
-        {
-            //TODO se deberia mirar si el valor atacante.Ataque es menor que objetivo.Ataque, en ese caso no le hariamos daño a la carta (?)
-            //Podriamos incluso hacer objetivo.Defensa -= atacante.Ataque, restar directamente sin pasar por el ataque del objetivo
-            objetivo.Defensa = atacante.Ataque - objetivo.Ataque;
-            
-        }
-        else
-        {
-            //TODO se deberia mirar si el valor atacante.Ataque es menor que objetivo.Defensa, en ese caso no le hariamos daño a la carta (?)
-            objetivo.Defensa = atacante.Ataque - objetivo.Defensa;
-        }
-        //TODO el parametro objetivo.Ataque sobraria puesto que al atacar el objetivo no me quitaria vida
-        new CreatureAttackCommand(objetivo.ID, atacante.ID, objetivo.Ataque, atacante.Ataque, atacante.Defensa, objetivo.Defensa).AñadirAlaCola();
-        if (objetivo.Defensa <= 0)
-            MuerteCriatura(idObjetivo);
-        //TODO esta linea sobraria, es la que hace que la propia criatura se quite vida
-        if (atacante.Defensa <= 0)
-            MuerteCriatura(idAtacante);
-        //TODO quitar vida al jugador, se haria jugadorObjetivo.Defensa -= objetivo.Defensa
-        new QuitarVidaJugadorComanda(jugadorObjetivo,objetivo.Defensa);
-        if(jugadorObjetivo.Defensa <= 0)
-            MuerteJugador(jugadorObjetivo);
-
-    }*/
-    /// <summary>
-    /// Permite atacar un ente a partir de otro ente
-    /// </summary>
-    /// <param name="idAtacante"></param>
-    /// <param name="idObjetivo"></param>
     public void AtacarCriatura(int idAtacante, int idObjetivo)
     {
         //TODO ver quien ataca, si magica o criatura
-        Criatura atacante = (Criatura)Recursos.EntesCreadosEnElJuego[idAtacante];
+        Ente atacante = Recursos.EntesCreadosEnElJuego[idAtacante];
         Criatura objetivo = (Criatura)Recursos.EntesCreadosEnElJuego[idObjetivo];
-        atacante.AtaquesRestantesEnTurno--;
-        // calculate the values so that the creature does not fire the DIE command before the Attack command is sent
-        int targetHealthAfter = objetivo.Defensa - atacante.Ataque;
-        int attackerHealthAfter = atacante.Defensa - objetivo.Ataque;
-        new CreatureAttackCommand(objetivo.ID, atacante.ID, objetivo.Ataque, atacante.Ataque, attackerHealthAfter, targetHealthAfter).AñadirAlaCola();
 
-        objetivo.Defensa -= atacante.Ataque;
-        if (objetivo.Defensa <= 0)
-            MuerteCriatura(idObjetivo);
-        //TODO esta linea sobraria, es la que hace que la propia criatura se quite vida
-        atacante.Defensa -= objetivo.Ataque;
-        if (atacante.Defensa <= 0)
-            MuerteCriatura(idAtacante);
-
+        controladorEnte.QuitarVidaEnte(atacante, objetivo);
+        if(controladorEnte.EnteMuerto(objetivo))
+            controladorJugador.QuitarVidaJugador(atacante.Ataque);
+        else
+            controladorJugador.QuitarVidaJugador(objetivo.Defensa);
     }
-    public Jugador OtroJugador(Jugador jugador)
-    {
-        return Players.Instance.GetPlayers()[0] == jugador ? Players.Instance.GetPlayers()[1] : Players.Instance.GetPlayers()[0];
-    }
-
-    public bool CartaOCriaturaDelJugador(String tagCartaOCriatura)
-    {
-        //Se trata de una carta
-        /*if (tagCartaOCriatura.Equals("TopCard"))
-        //Se trata de un ente
-        else if (tagCartaOCriatura.Equals("TopEnte"))*/
-        //Acceder al controlador del jugador y comprobar si la posicion del jugador actual coincide con la de la carta o ente.
-        //return controladorJugador.CartaOCriaturaDelJugador(tag.Substring(0, 3));
-        return true;
-    }
+    
+    
 
 }
 

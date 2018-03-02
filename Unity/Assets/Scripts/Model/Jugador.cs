@@ -10,10 +10,6 @@ public class Jugador : MonoBehaviour, ICharacter
     public int PlayerID;
     // a Character Asset that contains data about this Hero
     public CharacterAsset charAsset;
-    // a script with references to all the visual game objects for this player
-    public PlayerArea PArea;
-    // this value used exclusively for our coin spell
-    private int bonusManaThisTurn = 0;
 
     // REFERENCES TO LOGICAL STUFF THAT BELONGS TO THIS PLAYER
     private Mazo mazo;
@@ -83,53 +79,14 @@ public class Jugador : MonoBehaviour, ICharacter
     //TODO get mana from coin or other spells 
     public void ConseguirManaExtra(int amount)
     {
-        bonusManaThisTurn += amount;
         ManaEnEsteTurno += amount;
         ManaRestante += amount;
-    }
-
-    //TODO ver si esta funcion seguira existiendo
-    public void LeerInformacionPersonajeAsset()
-    {
-        Defensa = charAsset.MaxHealth;
-        // change the visuals for portrait, hero power, etc...
-        PArea.Personaje.charAsset = charAsset;
-        PArea.Personaje.AplicarEstiloPersonajeAsset();
-    }
-
-    //TODO ver si esta funcion seguira aqui
-    public void TransmitirInformacionAcercaJugadorVisual()
-    {
-
-        PArea.Personaje.gameObject.AddComponent<IDHolder>().UniqueID = PlayerID;
-        if (GetComponent<TurnMaker>() is AITurnMaker)
-        {
-            // turn off turn making for this character
-            PArea.PermitirControlJugador = false;
-        }
-        else
-        {
-            // allow turn making for this character
-            PArea.PermitirControlJugador = true;
-        }
     }
 
     void Update()
     {
         //if (Input.GetKeyDown(KeyCode.D))
         // DibujarCartaMazo();
-    }
-
-    public void InicializarValores()
-    {
-        ManaEnEsteTurno = 0;
-        ManaRestante = 0;
-        LeerInformacionPersonajeAsset();
-        TransmitirInformacionAcercaJugadorVisual();
-        //TO
-        PArea.mazoVisual.CartasEnMazo = mazo.CartasEnMazo.Count;
-        // move both portraits to the center
-        PArea.Personaje.transform.position = PArea.PosicionInicialPersonaje.position;
     }
 
     public void Morir() { }
