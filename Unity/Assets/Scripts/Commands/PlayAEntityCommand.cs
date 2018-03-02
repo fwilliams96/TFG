@@ -19,7 +19,7 @@ public class PlayAEntityCommand : Comanda
     public override void EmpezarEjecucionComanda()
     {
         //Eliminar la carta de la mano del jugador y elimina el gameobject
-        HandVisual PlayerHand = p.PArea.manoVisual;
+        HandVisual PlayerHand = Controlador.Instance.AreaJugador(p).manoVisual;
         //TODO se podria hacer que el id de la carta pase a ser el id de la criatura 
         GameObject card = IDHolder.GetGameObjectWithID(cl.ID);
         PlayerHand.EliminarCarta(card);
@@ -27,14 +27,15 @@ public class PlayAEntityCommand : Comanda
         //Permite la previsualizacion de cartas
         HoverPreview.PrevisualizacionesPermitidas = true;
         // Añade la carta en el tablero
+        PlayerArea areaJugador = Controlador.Instance.AreaJugador(p);
         if (ente.GetType() == typeof(Magica))
-            p.PArea.tableVisual.AñadirMagica(cl.assetCarta, ente.ID, tablePos);
+            areaJugador.tableVisual.AñadirMagica(cl.assetCarta, ente.ID, tablePos);
         else
         {
             if(((Criatura)ente).PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
-                p.PArea.tableVisual.AñadirCriaturaAtaque(cl.assetCarta, ente.ID, tablePos);
+                areaJugador.tableVisual.AñadirCriaturaAtaque(cl.assetCarta, ente.ID, tablePos);
             else
-                p.PArea.tableVisual.AñadirCriaturaDefensa(cl.assetCarta, ente.ID, tablePos);
+                areaJugador.tableVisual.AñadirCriaturaDefensa(cl.assetCarta, ente.ID, tablePos);
         }
             
     }

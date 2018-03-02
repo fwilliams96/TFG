@@ -76,7 +76,7 @@ public class DragCardOnTable : DraggingActions
             bool magica = manager.TypeText.text.Equals("Magica");
 
             // determine table position
-            int tablePos = playerOwner.PArea.tableVisual.PosicionSlotNuevaCriatura(Camera.main.ScreenToWorldPoint(
+            int tablePos = Controlador.Instance.AreaJugador(playerOwner).tableVisual.PosicionSlotNuevaCriatura(Camera.main.ScreenToWorldPoint(
                     new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z - Camera.main.transform.position.z)).x);
             // Debug.Log("Table Pos for new Creature: " + tablePos.ToString());
             // play this card
@@ -114,7 +114,7 @@ public class DragCardOnTable : DraggingActions
         whereIsCard.SetearOrdenCarta();
         whereIsCard.EstadoVisual = tempState;
         // Move this card back to its slot position
-        HandVisual PlayerHand = playerOwner.PArea.manoVisual;
+        HandVisual PlayerHand = Controlador.Instance.AreaJugador(playerOwner).manoVisual;
         Vector3 oldCardPos = PlayerHand.slots.Children[savedHandSlot].transform.localPosition;
         transform.DOLocalMove(oldCardPos, 1f);
     }

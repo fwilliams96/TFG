@@ -12,6 +12,6 @@ public class GameOverCommand : Comanda{
 
     public override void EmpezarEjecucionComanda()
     {
-        looser.PArea.Personaje.Explotar();
+        Controlador.Instance.AreaJugador(looser).Personaje.Explotar();
     }
 }

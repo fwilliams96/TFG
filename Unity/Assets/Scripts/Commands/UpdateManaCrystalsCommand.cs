@@ -16,8 +16,9 @@ public class UpdateManaCrystalsCommand : Comanda {
 
     public override void EmpezarEjecucionComanda()
     {
-        p.PArea.ManaBar.TotalCrystals = TotalMana;
-        p.PArea.ManaBar.AvailableCrystals = AvailableMana;
+        PlayerArea areaJugador = Controlador.Instance.AreaJugador(p);
+        areaJugador.ManaBar.TotalCrystals = TotalMana;
+        areaJugador.ManaBar.AvailableCrystals = AvailableMana;
         comandas.CompletarEjecucionComanda();
     }
 }

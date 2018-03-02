@@ -10,6 +10,8 @@ TagManager:
   - TopCard
   - LowPlayer
   - TopPlayer
+  - AreaAlta
+  - AreaBaja
   layers:
   - Default
   - TransparentFX

@@ -59,7 +59,7 @@ public class HoverPreview : MonoBehaviour
         OverCollider = true;
         //if (Controlador.JugadorTieneTurno() && PrevisualizacionesPermitidas && PrevisualizacionActivada)
         
-        if (Controlador.CartaOCriaturaDelJugador(gameObject.tag) && PrevisualizacionesPermitidas && PrevisualizacionActivada)
+        if (Controlador.Instance.CartaOCriaturaDelJugador(gameObject.tag) && PrevisualizacionesPermitidas && PrevisualizacionActivada)
             PrevisualizarObjeto();
     }
 
