@@ -275,7 +275,7 @@ public class Controlador : MonoBehaviour
             ente.efecto.WhenACreatureIsPlayed();
         // remove this card from hand
         jugadorActual.EliminarCartaMano(cartaJugada);
-        controladorJugador.MostrarCartasJugablesJugadorActual();
+        MostrarCartasJugablesJugadorActual();
     }
 
     private void RestarManaCarta(Jugador jugador, Carta carta)

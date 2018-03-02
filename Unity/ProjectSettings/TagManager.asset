@@ -4,14 +4,14 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - LowCreature
-  - TopCreature
   - LowCard
   - TopCard
   - LowPlayer
   - TopPlayer
   - AreaAlta
   - AreaBaja
+  - LowEnte
+  - TopEnte
   layers:
   - Default
   - TransparentFX
