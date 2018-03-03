@@ -26,19 +26,8 @@ public class CreatureAttackVisual : MonoBehaviour
 
         transform.DOMove(target.transform.position, 0.5f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.InCubic).OnComplete(() =>
         {
-            if (damageTakenByTarget > 0)
-                DamageEffect.CreateDamageEffect(target.transform.position, damageTakenByTarget);
-            if (damageTakenByAttacker > 0)
-                DamageEffect.CreateDamageEffect(transform.position, damageTakenByAttacker);
-
-            if (targetUniqueID == DatosGenerales.Instance.LowPlayer.PlayerID || targetUniqueID == DatosGenerales.Instance.TopPlayer.PlayerID)
-            {
-                // target is a player
-                //TODO esto sobraria
-                target.GetComponent<PlayerPortraitVisual>().HealthText.text = targetHealthAfter.ToString();
-            }
-            else
-                target.GetComponent<OneCreatureManager>().HealthText.text = targetHealthAfter.ToString();
+            //Solo se atacan entes no jugadores
+            target.GetComponent<OneCreatureManager>().HacerDaño(damageTakenByTarget, targetHealthAfter);
 
             w.SetearOrdenCriatura();
             w.EstadoVisual = tempState;

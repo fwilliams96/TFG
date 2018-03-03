@@ -19,7 +19,6 @@ public class Controlador : MonoBehaviour
     private ControladorJugador controladorJugador;
     private ControladorEnte controladorEnte;
 
-    private Jugador _jugadorActual;
     // PRIVATE FIELDS
     // reference to a timer to measure 
     private RopeTimer timer;
@@ -130,7 +129,7 @@ public class Controlador : MonoBehaviour
     {
         timer.StartTimer();
 
-        ActivarBotonFinDeTurno(_jugadorActual);
+        ActivarBotonFinDeTurno(jugadorActual);
 
         controladorJugador.ActualizarValoresJugador();
     }
@@ -342,10 +341,10 @@ public class Controlador : MonoBehaviour
         Criatura objetivo = (Criatura)Recursos.EntesCreadosEnElJuego[idObjetivo];
 
         controladorEnte.QuitarVidaEnte(atacante, objetivo);
-        if(controladorEnte.EnteMuerto(objetivo))
+        if (controladorEnte.EnteMuerto(objetivo))
             controladorJugador.QuitarVidaJugador(atacante.Ataque);
-        else
-            controladorJugador.QuitarVidaJugador(objetivo.Defensa);
+        //else
+           //controladorJugador.QuitarVidaJugador(objetivo.Defensa);
     }
     
     

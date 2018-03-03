@@ -92,23 +92,15 @@ public class DragEntityAttack : DraggingActions {
 
         foreach (RaycastHit h in hits)
         {
-            //TODO este hit no se debera tomar en cuenta puesto que se trata del personaje del jugador  y no una carta
-            if ((h.transform.tag == "TopPlayer" && this.tag == "LowCreature") ||
-                (h.transform.tag == "LowPlayer" && this.tag == "TopCreature"))
-            {
-                // go face
-                Target = h.transform.gameObject;
-            }
-            else if ((h.transform.tag == "TopCreature" && this.tag == "LowCreature") ||
-                    (h.transform.tag == "LowCreature" && this.tag == "TopCreature"))
+            //TODO El tag this.tag == "LowEnte" o "TopEnte" debe cambiar a "LowCreature/TopCreature" nuevamente porque una magica no atacara de esta manera
+            if ((h.transform.tag == "TopEnte" && this.tag == "LowEnte") ||
+                    (h.transform.tag == "LowEnte" && this.tag == "TopEnte"))
             {
                 // hit a creature, save parent transform
                 Target = h.transform.parent.gameObject;
             }
                
         }
-
-        bool targetValid = false;
 
         if (Target != null)
         {
@@ -117,22 +109,17 @@ public class DragEntityAttack : DraggingActions {
             if (Recursos.EntesCreadosEnElJuego[targetID] != null)
             {
                 // if targeted creature is still alive, attack creature
-                targetValid = true;
                 Controlador.Instance.AtacarCriatura(GetComponentInParent<IDHolder>().UniqueID, targetID);
                 Debug.Log("Attacking "+Target);
             }
                 
         }
-
-        if (!targetValid)
-        {
-            // not a valid target, return
-            if(tag.Contains("Low"))
-                dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorAbajo;
-            else
-                dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorArriba;
-            dondeEstaCartaOCriatura.SetearOrdenCriatura();
-        }
+        // not a valid target, return
+        if(tag.Contains("Low"))
+            dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorAbajo;
+        else
+            dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorArriba;
+        dondeEstaCartaOCriatura.SetearOrdenCriatura();
 
         // return target and arrow to original position
         transform.localPosition = Vector3.zero;

@@ -91,7 +91,7 @@ public class ControladorJugador
         {
             areaJugador = AreaJugador(jugador);
         }
-       
+        //TODO cuando el jugador muere esta dando un pete aqui por acceder a algo destruido
         areaJugador.Personaje.gameObject.AddComponent<IDHolder>().UniqueID = jugador.ID;
         if (jugador.GetComponent<TurnMaker>() is AITurnMaker)
         {
@@ -219,7 +219,7 @@ public class ControladorJugador
         //TODO quitar vida al jugador, se haria jugadorObjetivo.Defensa -= objetivo.Defensa
         Jugador jugadorObjetivo = OtroJugador(jugadorActual);
         jugadorObjetivo.Defensa -= valorAtaque;
-        //new QuitarVidaJugadorComanda(jugadorObjetivo, objetivo.Defensa);
+        new DealDamageCommand(jugadorObjetivo.ID, valorAtaque, jugadorObjetivo.Defensa).AñadirAlaCola();
         if (JugadorMuerto(jugadorObjetivo))
             MuerteJugador(jugadorObjetivo);
     }

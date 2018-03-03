@@ -19,16 +19,13 @@ public class DatosGenerales: MonoBehaviour
     public float CardTransitionTimeFast = 0.5f;
     public int NumMaximoCriaturasMesa = 7;
     [Header("Prefabs and Assets")]
-    public GameObject NoTargetSpellCardPrefab;
-    public GameObject TargetedSpellCardPrefab;
-    public GameObject CreatureCardPrefab;
-    public GameObject CreaturePrefab;
+    public GameObject CardPrefab;
     public GameObject CriaturaPrefab;
+    public GameObject MagicaPrefab;
     public GameObject DamageEffectPrefab;
     public GameObject ExplosionPrefab;
     [Header("Other")]
     public Button EndTurnButton;
-    public CardAsset CoinCard;
     public GameObject GameOverPanel;
     //public Sprite HeroPowerCrossMark;
     // SINGLETON

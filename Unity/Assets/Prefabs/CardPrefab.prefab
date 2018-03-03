@@ -228,7 +228,7 @@ GameObject:
   - component: {fileID: 114271584806617420}
   - component: {fileID: 114032084900989810}
   m_Layer: 0
-  m_Name: CreatureCard
+  m_Name: CardPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

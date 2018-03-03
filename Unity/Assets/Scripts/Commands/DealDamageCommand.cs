@@ -20,10 +20,10 @@ public class DealDamageCommand : Comanda {
 
         GameObject target = IDHolder.GetGameObjectWithID(targetID);
         //TODO esta comprobacion se quitara puesto que no se podrá ir de cara
-        if (targetID == DatosGenerales.Instance.LowPlayer.PlayerID || targetID == DatosGenerales.Instance.TopPlayer.PlayerID)
+        if (targetID == DatosGenerales.Instance.LowPlayer.ID || targetID == DatosGenerales.Instance.TopPlayer.ID)
         {
             // target is a hero
-            target.GetComponent<PlayerPortraitVisual>().TakeDamage(amount,healthAfter);
+            target.GetComponent<PlayerPortraitVisual>().HacerDaño(amount,healthAfter);
         }
         else
         {
