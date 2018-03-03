@@ -10,7 +10,7 @@ public class ControladorJugador
     #endregion
 
     #region Getters/Setters
-    public Jugador jugadorActual
+    public Jugador JugadorActual
     {
         get
         {
@@ -19,8 +19,8 @@ public class ControladorJugador
 
         set
         {
+            areaJugadorActual = AreaJugador(value);
             _jugadorActual = value;
-            areaJugadorActual = AreaJugador(_jugadorActual);
         }
     }
     #endregion
@@ -40,9 +40,9 @@ public class ControladorJugador
         }
     }
 
-    public PlayerArea AreaJugador(Jugador jugador = null)
+    public PlayerArea AreaJugador(Jugador jugador)
     {
-        if (jugador == null)
+        if (jugador == _jugadorActual)
             return areaJugadorActual;
         PlayerArea areaJugador;
         AreaPosition area = jugador.gameObject.tag == "TopPlayer" ? AreaPosition.Top : AreaPosition.Low;
@@ -61,36 +61,18 @@ public class ControladorJugador
         return areaJugador;
     }
 
-    public bool SePermiteControlarElJugador(Jugador jugador = null)
+    public bool SePermiteControlarElJugador(Jugador jugador)
     {
-        PlayerArea areaJugador;
-        if (jugador == null)
-        {
-            areaJugador = areaJugadorActual;
-            jugador = jugadorActual;
-        }
-        else
-        {
-            areaJugador = AreaJugador(jugador);
-        }
+        PlayerArea areaJugador = AreaJugador(jugador);
         bool TurnoDelJugador = (_jugadorActual == jugador);
         bool NoCartasPendientesPorMostrar = !Comandas.Instance.ComandasDeDibujoCartaPendientes();
         return areaJugador.PermitirControlJugador && areaJugador.ControlActivado && TurnoDelJugador && NoCartasPendientesPorMostrar;
     }
 
     //TODO ver si esta funcion seguira aqui
-    public void TransmitirInformacionVisualJugador(Jugador jugador = null)
+    public void TransmitirInformacionVisualJugador(Jugador jugador)
     {
-        PlayerArea areaJugador;
-        if (jugador == null)
-        {
-            areaJugador = areaJugadorActual;
-            jugador = jugadorActual;
-        }
-        else
-        {
-            areaJugador = AreaJugador(jugador);
-        }
+        PlayerArea areaJugador = AreaJugador(jugador);
         //TODO cuando el jugador muere esta dando un pete aqui por acceder a algo destruido
         areaJugador.Personaje.gameObject.AddComponent<IDHolder>().UniqueID = jugador.ID;
         if (jugador.GetComponent<TurnMaker>() is AITurnMaker)
@@ -105,18 +87,9 @@ public class ControladorJugador
         }
     }
 
-    public void InicializarValoresJugador(Jugador jugador = null)
+    public void InicializarValoresJugador(Jugador jugador)
     {
-        PlayerArea areaJugador;
-        if(jugador == null)
-        {
-            jugador = jugadorActual;
-            areaJugador = areaJugadorActual;
-        }
-        else
-        {
-            areaJugador = AreaJugador(jugador);
-        }
+        PlayerArea areaJugador = AreaJugador(jugador);
         jugador.ManaEnEsteTurno = 0;
         jugador.ManaRestante = 0;
         //LeerInformacionPersonajeAsset();
@@ -130,19 +103,19 @@ public class ControladorJugador
     public void ActualizarManaJugador(Jugador jugador)
     {
         new UpdateManaCrystalsCommand(jugador, jugador.ManaEnEsteTurno, jugador.ManaRestante).AñadirAlaCola();
-        if (jugador == jugadorActual)
+        if (jugador == JugadorActual)
             MostrarCartasJugablesJugadorActual();
     }
 
     // Muestra cartas jugables de la mano del jugador
     public void MostrarCartasJugablesJugadorActual()
     {
-        MostrarUOcultarCartas(jugadorActual, false);
+        MostrarUOcultarCartas(JugadorActual, false);
     }
 
     private void OcultarCartasJugablesJugadorContrario()
     {
-        MostrarUOcultarCartas(OtroJugador(jugadorActual), true);
+        MostrarUOcultarCartas(OtroJugador(JugadorActual), true);
     }
 
     private void MostrarUOcultarCartas(Jugador jugador, bool quitarTodasRemarcadas = false)
@@ -152,7 +125,7 @@ public class ControladorJugador
         {
             GameObject g = IDHolder.GetGameObjectWithID(cl.ID);
             if (g != null)
-                g.GetComponent<OneCardManager>().PuedeSerJugada = (cl.CosteManaActual <= jugadorActual.ManaRestante) && !quitarTodasRemarcadas;
+                g.GetComponent<OneCardManager>().PuedeSerJugada = (cl.CosteManaActual <= JugadorActual.ManaRestante) && !quitarTodasRemarcadas;
         }
 
         foreach (Ente crl in jugador.EntesEnLaMesa())
@@ -193,12 +166,12 @@ public class ControladorJugador
 
     public void ActualizarValoresJugador()
     {
-        TurnMaker tm = jugadorActual.GetComponent<TurnMaker>();
+        TurnMaker tm = JugadorActual.GetComponent<TurnMaker>();
         // player`s method OnTurnStart() will be called in tm.OnTurnStart();
         tm.OnTurnStart();
         if (tm is PlayerTurnMaker)
         {
-            ActualizarManaJugador(jugadorActual);
+            ActualizarManaJugador(JugadorActual);
         }
         OcultarCartasJugablesJugadorContrario();
     }
@@ -217,18 +190,28 @@ public class ControladorJugador
    public void QuitarVidaJugador(int valorAtaque)
     {
         //TODO quitar vida al jugador, se haria jugadorObjetivo.Defensa -= objetivo.Defensa
-        Jugador jugadorObjetivo = OtroJugador(jugadorActual);
+        Jugador jugadorObjetivo = OtroJugador(JugadorActual);
         jugadorObjetivo.Defensa -= valorAtaque;
         new DealDamageCommand(jugadorObjetivo.ID, valorAtaque, jugadorObjetivo.Defensa).AñadirAlaCola();
         if (JugadorMuerto(jugadorObjetivo))
             MuerteJugador(jugadorObjetivo);
     }
 
-    public bool JugadorMuerto(Jugador jugador = null)
+    public bool JugadorMuerto(Jugador jugador)
     {
-        if (jugador == null)
-            jugador = jugadorActual;
         return jugador.Defensa <= 0;
+    }
+
+    public void OcultarManoJugadorAnterior()
+    {
+        //Ocultamos la mano del jugador anterior 
+        AreaJugador(OtroJugador(JugadorActual)).manoVisual.OcultarMano();
+    }
+
+    public void MostrarManoJugadorActual()
+    {
+        //Mostramos la mano del nuevo jugador actual
+        AreaJugador(JugadorActual).manoVisual.MostrarMano();
     }
 
 }

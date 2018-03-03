@@ -132,8 +132,8 @@ public class HandVisual : MonoBehaviour
         {
             // displace the card so that we can select it in the scene easier.
             s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, DatosGenerales.Instance.CardTransitionTimeFast));
-            if (TakeCardsOpenly)
-                s.Insert(0f, card.transform.DORotate(Vector3.zero, DatosGenerales.Instance.CardTransitionTimeFast));
+            //if (TakeCardsOpenly)
+                //s.Insert(0f, card.transform.DORotate(Vector3.zero, DatosGenerales.Instance.CardTransitionTimeFast));
         }
 
         s.OnComplete(() => CambiarEstadoCartaAMano(card, w));
@@ -165,6 +165,26 @@ public class HandVisual : MonoBehaviour
         manager.LeerDatosAsset();
 
         return card;
+    }
+
+    public void OcultarMano()
+    {
+        GirarMano(180);
+    }
+
+    public void MostrarMano()
+    {
+        GirarMano(0);
+    }
+    private void GirarMano(int grado)
+    {
+        foreach (GameObject carta in CartasEnMano)
+        {
+            float x = carta.transform.eulerAngles.x;
+            float y = grado;
+            float z = carta.transform.eulerAngles.z;
+            carta.transform.DORotate(new Vector3(x, y, z), DatosGenerales.Instance.CardTransitionTime);
+        }
     }
 
 }

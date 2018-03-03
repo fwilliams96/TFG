@@ -53,7 +53,7 @@ public class Comandas
             EjecutarPrimeraComanda();
         else
             playingQueue = false;
-        if (Controlador.Instance.jugadorActual != null)
+        if (Controlador.Instance.JugadorActual != null)
             Controlador.Instance.MostrarCartasJugablesJugadorActual();
     }
 

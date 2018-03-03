@@ -55,7 +55,7 @@ public class ControladorEnte
     {
         //TODO mejorar estas lineas que vuelven a coger la criatura a partir de su id
         Ente ente = Recursos.EntesCreadosEnElJuego[idCriatura];
-        Jugador jugadorObjetivo = Controlador.Instance.OtroJugador(Controlador.Instance.jugadorActual);
+        Jugador jugadorObjetivo = Controlador.Instance.OtroJugador(Controlador.Instance.JugadorActual);
         jugadorObjetivo.EliminarEnteMesa(ente);
         ente.Morir();
         new CreatureDieCommand(idCriatura, jugadorObjetivo).AñadirAlaCola();
