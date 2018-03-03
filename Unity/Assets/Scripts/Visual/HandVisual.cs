@@ -132,8 +132,8 @@ public class HandVisual : MonoBehaviour
         {
             // displace the card so that we can select it in the scene easier.
             s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, DatosGenerales.Instance.CardTransitionTimeFast));
-            if (TakeCardsOpenly)
-                s.Insert(0f, card.transform.DORotate(Vector3.zero, DatosGenerales.Instance.CardTransitionTimeFast));
+            //if (TakeCardsOpenly)
+                //s.Insert(0f, card.transform.DORotate(Vector3.zero, DatosGenerales.Instance.CardTransitionTimeFast));
         }
 
         s.OnComplete(() => CambiarEstadoCartaAMano(card, w));
@@ -155,25 +155,9 @@ public class HandVisual : MonoBehaviour
     {
         // Instantiate a card depending on its type
         GameObject card;
-        if (c.Defensa > 0)
-        {
-            // this card is a creature card
-            card = GameObject.Instantiate(DatosGenerales.Instance.CreatureCardPrefab, position, Quaternion.Euler(eulerAngles)) as GameObject;
-        }
-        else
-        {
-            // this is a spell: checking for targeted or non-targeted spell
-            if (c.Targets == TargetingOptions.NoTarget)
-                card = GameObject.Instantiate(DatosGenerales.Instance.NoTargetSpellCardPrefab, position, Quaternion.Euler(eulerAngles)) as GameObject;
-            else
-            {
-                card = GameObject.Instantiate(DatosGenerales.Instance.TargetedSpellCardPrefab, position, Quaternion.Euler(eulerAngles)) as GameObject;
-                // pass targeting options to DraggingActions
-                DragSpellOnTarget dragSpell = card.GetComponentInChildren<DragSpellOnTarget>();
-                dragSpell.Targets = c.Targets;
-            }
+        // this card is a creature card
+        card = GameObject.Instantiate(DatosGenerales.Instance.CardPrefab, position, Quaternion.Euler(eulerAngles)) as GameObject;
 
-        }
 
         // apply the look of the card based on the info from CardAsset
         OneCardManager manager = card.GetComponent<OneCardManager>();
@@ -181,6 +165,26 @@ public class HandVisual : MonoBehaviour
         manager.LeerDatosAsset();
 
         return card;
+    }
+
+    public void OcultarMano()
+    {
+        GirarMano(180);
+    }
+
+    public void MostrarMano()
+    {
+        GirarMano(0);
+    }
+    private void GirarMano(int grado)
+    {
+        foreach (GameObject carta in CartasEnMano)
+        {
+            float x = carta.transform.eulerAngles.x;
+            float y = grado;
+            float z = carta.transform.eulerAngles.z;
+            carta.transform.DORotate(new Vector3(x, y, z), DatosGenerales.Instance.CardTransitionTime);
+        }
     }
 
 }

@@ -49,40 +49,11 @@ public class OneCardManager : MonoBehaviour {
     public void LeerDatosAsset()
     {
         // universal actions for any Card
-        // 1) apply tint
-        if (cardAsset.AssetPersonaje != null)
-        {
-            CardBodyImage.color = cardAsset.AssetPersonaje.ClassCardTint;
-            CardFaceFrameImage.color = cardAsset.AssetPersonaje.ClassCardTint;
-            CardTopRibbonImage.color = cardAsset.AssetPersonaje.ClassRibbonsTint;
-            CardLowRibbonImage.color = cardAsset.AssetPersonaje.ClassRibbonsTint;
-        }
-        else
-        {
-            //CardBodyImage.color = GlobalSettings.Instance.CardBodyStandardColor;
-            CardFaceFrameImage.color = Color.white;
-            //CardTopRibbonImage.color = GlobalSettings.Instance.CardRibbonsStandardColor;
-            //CardLowRibbonImage.color = GlobalSettings.Instance.CardRibbonsStandardColor;
-        }
-        // 2) add card name
-        NameText.text = cardAsset.name;
-        // 3) add mana cost
-        ManaCostText.text = cardAsset.CosteMana.ToString();
-        // 4) add description
-        DescriptionText.text = cardAsset.Descripcion;
-        // 5) add type
-        TypeText.text = cardAsset.TipoDeCarta.ToString();        
-        // 6) Change the card graphic sprite
-        CardGraphicImage.sprite = cardAsset.ImagenCarta;
+        LeerDatosCarta();
+        AplicarColor();
+        LeerSpritesItem();
 
-        if (cardAsset.TipoDeCarta != TipoCarta.Magica && cardAsset.TipoDeCarta != TipoCarta.Spell)
-        {
-            // this is a creature
-            AttackText.text = cardAsset.Ataque.ToString();
-            DefenseText.text = cardAsset.Defensa.ToString();
-            //EvolutionText.text = cardAsset.Evolucion;
-        }
-
+       
         if (PreviewManager != null)
         {
             // this is a card and not a preview
@@ -91,5 +62,39 @@ public class OneCardManager : MonoBehaviour {
             PreviewManager.cardAsset = cardAsset;
             PreviewManager.LeerDatosAsset();
         }
+    }
+
+    private void LeerDatosCarta()
+    {
+
+        if (cardAsset.TipoDeCarta != TipoCarta.Magica && cardAsset.TipoDeCarta != TipoCarta.Spell)
+        {
+            // this is a creature
+            AttackText.text = cardAsset.Ataque.ToString();
+            DefenseText.text = cardAsset.Defensa.ToString();
+            //EvolutionText.text = cardAsset.Evolucion;
+        }
+        // 2) add card name
+        NameText.text = cardAsset.name;
+        // 3) add mana cost
+        ManaCostText.text = cardAsset.CosteMana.ToString();
+        // 4) add description
+        DescriptionText.text = cardAsset.Descripcion;
+        // 5) add type
+        TypeText.text = cardAsset.TipoDeCarta.ToString();
+    }
+
+    private void AplicarColor()
+    {
+        CardFaceFrameImage.color = Color.white;
+    }
+
+    private void LeerSpritesItem()
+    {
+        // 6) Change the card graphic sprite
+        CardGraphicImage.sprite = cardAsset.ImagenCarta;
+        //TODO cuando use CartaAsset en vez de CardAsset
+        //if(cardAsset.Fondo != null)
+            //CardBodyImage.sprite = cardAsset.Fondo;
     }
 }

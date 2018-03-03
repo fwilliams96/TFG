@@ -65,11 +65,11 @@ public class TableVisual : MonoBehaviour
     public void AñadirMagica(CardAsset ca, int idUnico, int indiceSlot)
     {
         Debug.Log("Añadir ente magica");
-        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
-        float x = creature.transform.eulerAngles.x;
+        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.MagicaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
+        /*float x = creature.transform.eulerAngles.x;
         float y = creature.transform.eulerAngles.y + 180;
         float z = creature.transform.eulerAngles.z;
-        creature.transform.DORotate(new Vector3(x, y, z), 1);
+        creature.transform.DORotate(new Vector3(x, y, z), 1);*/
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
     //TODO mejorar codigo
@@ -78,17 +78,17 @@ public class TableVisual : MonoBehaviour
         Debug.Log("Añadir ente criatura como defensa");
         //TODO cuando sea una carta magica no entrara en esta funcion
         // create a new creature from prefab
-        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CreaturePrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
-        // apply the look from CardAsset
-
-        /*float x = creature.transform.localEulerAngles.x;
-        float y = creature.transform.localEulerAngles.y;
-        float z = creature.transform.localEulerAngles.z + 90;
-        creature.transform.DOLocalRotate(new Vector3(x, y, z), 1);*/
-        float x = creature.transform.eulerAngles.x;
+        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
+        GameObject canvas = creature.transform.Find("Canvas").gameObject;
+        float x = canvas.transform.eulerAngles.x;
+        float y = canvas.transform.eulerAngles.y;
+        float z = canvas.transform.eulerAngles.z + 90;
+        canvas.transform.DORotate(new Vector3(x, y, z), 0.1f);
+        /*float x = creature.transform.eulerAngles.x;
         float y = creature.transform.eulerAngles.y;
         float z = creature.transform.eulerAngles.z + 90;
-        creature.transform.DORotate(new Vector3(x, y, z), 0.1f);
+        creature.transform.DORotate(new Vector3(x, y, z), 0.1f);*/
+        // apply the look from CardAsset
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 
@@ -96,7 +96,7 @@ public class TableVisual : MonoBehaviour
     {
         Debug.Log("Añadir ente criatura como ataque");
         // create a new creature from prefab
-        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CreaturePrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
+        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
         // apply the look from CardAsset
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
@@ -117,7 +117,10 @@ public class TableVisual : MonoBehaviour
         // let this creature know about its position
         WhereIsTheCardOrEntity w = criaturaOMagica.GetComponent<WhereIsTheCardOrEntity>();
         w.Slot = indiceSlot;
-        w.EstadoVisual = VisualStates.MesaJugadorAbajo;
+        if (criaturaOMagica.tag.Contains("Low"))
+            w.EstadoVisual = VisualStates.MesaJugadorAbajo;
+        else
+            w.EstadoVisual = VisualStates.MesaJugadorArriba;
         // add our unique ID to this creature
         IDHolder id = criaturaOMagica.AddComponent<IDHolder>();
         id.UniqueID = idUnico;

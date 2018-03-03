@@ -12,8 +12,12 @@ public class StartATurnCommand : Comanda {
 
     public override void EmpezarEjecucionComanda()
     {
-        Controlador.Instance.jugadorActual = p;
+        //Cambiamos el jugador actual
+        Controlador.Instance.JugadorActual = p;
         Controlador.Instance.ActualizarValoresJugador();
+        //OPTIONAL la primera vez que inicia el juego esto podria sobrar
+        Controlador.Instance.OcultarManoJugadorAnterior();
+        Controlador.Instance.MostrarManoJugadorActual();
         // this command is completed instantly
         comandas.CompletarEjecucionComanda();
     }

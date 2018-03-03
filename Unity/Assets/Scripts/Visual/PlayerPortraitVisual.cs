@@ -34,7 +34,7 @@ public class PlayerPortraitVisual : MonoBehaviour {
 
     }
 
-    public void TakeDamage(int amount, int healthAfter)
+    public void HacerDaño(int amount, int healthAfter)
     {
         if (amount > 0)
         {

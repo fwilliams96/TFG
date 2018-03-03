@@ -48,7 +48,7 @@ public class Recursos  {
                 if (File.Exists(cardPath))
                 {
 
-                    var json = Util.XMLFileToJSON(cardPath);
+                    var json = XMLToJSONUtils.XMLFileToJSON(cardPath);
                     Debug.Log(">>>>>>>>>> FAMILIA: " + familia + " <<<<<<<<<<");
                     Debug.Log("CARTA: " + carta);
                     Debug.Log(json.ToString());

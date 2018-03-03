@@ -7,9 +7,7 @@ public class Jugador : MonoBehaviour, ICharacter
     #region Atributos
     // PUBLIC FIELDS
     // int ID that we get from ID factory
-    public int PlayerID;
-    // a Character Asset that contains data about this Hero
-    public CharacterAsset charAsset;
+    private int PlayerID;
 
     // REFERENCES TO LOGICAL STUFF THAT BELONGS TO THIS PLAYER
     private Mazo mazo;
@@ -48,13 +46,13 @@ public class Jugador : MonoBehaviour, ICharacter
         }
     }
 
-    private int health;
+    private int defensa;
     public int Defensa
     {
-        get { return health; }
+        get { return defensa; }
         set
         {
-            health = value;
+            defensa = value;
         }
     }
     #endregion
@@ -74,6 +72,8 @@ public class Jugador : MonoBehaviour, ICharacter
         mazo = GetComponentInChildren<Mazo>();
         mano = GetComponentInChildren<Mano>();
         mesa = GetComponentInChildren<Tablero>();
+        //TODO luego debería leerlo desde otro lado este 30
+        Defensa = 30;
     }
 
     //TODO get mana from coin or other spells 

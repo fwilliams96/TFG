@@ -19,7 +19,6 @@ public class Controlador : MonoBehaviour
     private ControladorJugador controladorJugador;
     private ControladorEnte controladorEnte;
 
-    private Jugador _jugadorActual;
     // PRIVATE FIELDS
     // reference to a timer to measure 
     private RopeTimer timer;
@@ -27,16 +26,16 @@ public class Controlador : MonoBehaviour
     #region Getters/Setters
     // PROPERTIES
    
-    public Jugador jugadorActual
+    public Jugador JugadorActual
     {
         get
         {
-            return controladorJugador.jugadorActual;
+            return controladorJugador.JugadorActual;
         }
 
         set
         {
-            controladorJugador.jugadorActual = value;
+            controladorJugador.JugadorActual = value;
         }
     }
     #endregion
@@ -116,9 +115,9 @@ public class Controlador : MonoBehaviour
         // stop timer
         timer.StopTimer();
         // send all commands in the end of current player`s turn
-        jugadorActual.OnTurnEnd();
+        JugadorActual.OnTurnEnd();
 
-        new StartATurnCommand(OtroJugador(jugadorActual)).AñadirAlaCola();
+        new StartATurnCommand(OtroJugador(JugadorActual)).AñadirAlaCola();
     }
 
     public void StopTheTimer()
@@ -130,7 +129,7 @@ public class Controlador : MonoBehaviour
     {
         timer.StartTimer();
 
-        ActivarBotonFinDeTurno(_jugadorActual);
+        ActivarBotonFinDeTurno(JugadorActual);
 
         controladorJugador.ActualizarValoresJugador();
     }
@@ -229,7 +228,7 @@ public class Controlador : MonoBehaviour
     /// <param name="tablePos"></param>
     public void JugarMagicaMano(Carta magicaJugada, int tablePos)
     {
-        RestarManaCarta(jugadorActual, magicaJugada);
+        RestarManaCarta(JugadorActual, magicaJugada);
         Magica nuevaMagica = new Magica(magicaJugada.assetCarta);
         JugarCarta(magicaJugada, nuevaMagica, tablePos);
     }
@@ -253,7 +252,7 @@ public class Controlador : MonoBehaviour
     /// <param name="posicionAtaque"></param>
     public void JugarCartaMano(Carta cartaJugada, int tablePos, bool posicionAtaque)
     {
-        RestarManaCarta(jugadorActual, cartaJugada);
+        RestarManaCarta(JugadorActual, cartaJugada);
         Criatura newCreature = new Criatura(cartaJugada.assetCarta, posicionAtaque == true ? PosicionCriatura.ATAQUE : PosicionCriatura.DEFENSA);
         JugarCarta(cartaJugada,newCreature, tablePos);
         
@@ -267,14 +266,14 @@ public class Controlador : MonoBehaviour
     /// <param name="tablePos"></param>
     private void JugarCarta(Carta cartaJugada,Ente ente, int tablePos)
     {
-        jugadorActual.AñadirEnteMesa(tablePos, ente);
+        JugadorActual.AñadirEnteMesa(tablePos, ente);
         // no matter what happens, move this card to PlayACardSpot
-        new PlayAEntityCommand(cartaJugada, jugadorActual, tablePos, ente).AñadirAlaCola();
+        new PlayAEntityCommand(cartaJugada, JugadorActual, tablePos, ente).AñadirAlaCola();
         //causa battlecry effect
         if (ente.efecto != null)
             ente.efecto.WhenACreatureIsPlayed();
         // remove this card from hand
-        jugadorActual.EliminarCartaMano(cartaJugada);
+        JugadorActual.EliminarCartaMano(cartaJugada);
         MostrarCartasJugablesJugadorActual();
     }
 
@@ -289,7 +288,7 @@ public class Controlador : MonoBehaviour
         controladorJugador.MostrarCartasJugablesJugadorActual();
     }
 
-    public PlayerArea AreaJugador(Jugador jugador = null)
+    public PlayerArea AreaJugador(Jugador jugador)
     {
         return controladorJugador.AreaJugador(jugador);
     }
@@ -302,6 +301,16 @@ public class Controlador : MonoBehaviour
     public bool CartaOCriaturaDelJugador(string tagCartaOCriatura)
     {
         return controladorJugador.CartaOCriaturaDelJugador(tagCartaOCriatura);
+    }
+
+    public void OcultarManoJugadorAnterior()
+    {
+        controladorJugador.OcultarManoJugadorAnterior();
+    }
+
+    public void MostrarManoJugadorActual()
+    {
+        controladorJugador.MostrarManoJugadorActual();
     }
 
     /***************************************** CARTA ****************************************************/
@@ -342,10 +351,10 @@ public class Controlador : MonoBehaviour
         Criatura objetivo = (Criatura)Recursos.EntesCreadosEnElJuego[idObjetivo];
 
         controladorEnte.QuitarVidaEnte(atacante, objetivo);
-        if(controladorEnte.EnteMuerto(objetivo))
+        if (controladorEnte.EnteMuerto(objetivo))
             controladorJugador.QuitarVidaJugador(atacante.Ataque);
-        else
-            controladorJugador.QuitarVidaJugador(objetivo.Defensa);
+        //else
+           //controladorJugador.QuitarVidaJugador(objetivo.Defensa);
     }
     
     

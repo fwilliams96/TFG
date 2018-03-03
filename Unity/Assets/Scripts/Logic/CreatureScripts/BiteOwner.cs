@@ -15,7 +15,7 @@ public class BiteOwner : EfectoEnte
     public override void CauseEventEffect()
     {
         Debug.Log("InCauseEffect: owner: "+ owner + " specialAmount: "+ specialAmount);
-        new DealDamageCommand(owner.PlayerID, specialAmount, owner.Defensa - specialAmount).AñadirAlaCola();
+        new DealDamageCommand(owner.ID, specialAmount, owner.Defensa - specialAmount).AñadirAlaCola();
         owner.Defensa -= specialAmount;
     }
 }
