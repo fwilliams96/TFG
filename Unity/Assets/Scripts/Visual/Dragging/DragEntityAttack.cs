@@ -32,15 +32,30 @@ public class DragEntityAttack : DraggingActions {
         dondeEstaCartaOCriatura = GetComponentInParent<WhereIsTheCardOrEntity>();
     }
 
-    public override bool PuedeSerLanzada
+    public override bool SePuedeArrastrar
     {
         get
         {
             // we can drag this card if 
             // a) we can control this our player (this is checked in base.canDrag)
             // b) creature "CanAttackNow" - this info comes from logic part of our code into each creature`s manager script
-            //return true;
-            return base.PuedeSerLanzada && manager.PuedeAtacar;
+            //return base.SePuedeArrastrar && manager.PuedeAtacar;
+            int idEnte = GetComponentInParent<IDHolder>().UniqueID;
+            try
+            {
+                return base.SePuedeArrastrar && !Controlador.Instance.EsMagica(idEnte) && Controlador.Instance.EstaEnPosicionAtaque(idEnte) && manager.PuedeAtacar;
+            }
+            /*catch(EnteException e)
+            {
+                Debug.Log(e.GetMessage());
+                return false;
+            }*/
+            catch (System.Exception e)
+            {
+                Debug.Log(e);
+                return false;
+            }
+           
         }
     }
 

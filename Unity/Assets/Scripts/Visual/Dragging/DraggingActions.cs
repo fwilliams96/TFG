@@ -9,7 +9,7 @@ public abstract class DraggingActions : MonoBehaviour {
 
     public abstract void OnDraggingInUpdate();
 
-    public virtual bool PuedeSerLanzada
+    public virtual bool SePuedeArrastrar
     {
         get
         {            

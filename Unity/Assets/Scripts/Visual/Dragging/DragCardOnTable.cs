@@ -12,13 +12,14 @@ public class DragCardOnTable : DraggingActions
     private VisualStates tempState;
     private OneCardManager manager;
     #endregion
-    public override bool PuedeSerLanzada
+
+    public override bool SePuedeArrastrar
     {
         get
         {
             //return true;
             //manage es si está con glow
-            return base.PuedeSerLanzada && manager.PuedeSerJugada;
+            return base.SePuedeArrastrar && manager.PuedeSerJugada;
         }
     }
 
