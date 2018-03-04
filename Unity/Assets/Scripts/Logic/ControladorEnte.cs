@@ -34,18 +34,7 @@ public class ControladorEnte
     public void QuitarVidaEnte(Ente atacante,  Criatura objetivo)
     {
         atacante.AtaquesRestantesEnTurno--;
-        if (objetivo.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
-        {
-            //TODO se deberia mirar si el valor atacante.Ataque es menor que objetivo.Ataque, en ese caso no le hariamos daño a la carta (?)
-            //Podriamos incluso hacer objetivo.Defensa -= atacante.Ataque, restar directamente sin pasar por el ataque del objetivo
-            objetivo.Defensa = atacante.Ataque - objetivo.Ataque;
-
-        }
-        else
-        {
-            //TODO se deberia mirar si el valor atacante.Ataque es menor que objetivo.Defensa, en ese caso no le hariamos daño a la carta (?)
-            objetivo.Defensa = atacante.Ataque - objetivo.Defensa;
-        }
+        objetivo.Defensa -= objetivo.Ataque;
         new CreatureAttackCommand(objetivo.ID, atacante.ID, objetivo.Ataque, atacante.Ataque, atacante.Defensa, objetivo.Defensa).AñadirAlaCola();
         if(EnteMuerto(objetivo))
             MuerteEnte(objetivo.ID);
@@ -64,6 +53,25 @@ public class ControladorEnte
     public bool EnteMuerto(Criatura objetivo)
     {
         return objetivo.Defensa <= 0;
+    }
+
+    public bool EstaEnPosicionAtaque(int idEnte)
+    {
+        //TODO crear excepcion si idEnte no existe en el diccionario
+        Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
+        if(ente.GetType() == typeof(Criatura))
+        {
+            return ((Criatura)ente).PosicionCriatura == PosicionCriatura.ATAQUE;
+        }
+        //throw new EnteException();
+        throw new System.Exception();
+    }
+
+    public bool EsMagica(int idEnte)
+    {
+        //TODO crear excepcion si idEnte no existe en el diccionario
+        Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
+        return ente.GetType() == typeof(Magica);
     }
 
 }

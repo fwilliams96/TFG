@@ -332,7 +332,7 @@ public class Controlador : MonoBehaviour
     }*/
 
 
-    /***************************************** CRIATURA ****************************************************/
+    /***************************************** ENTE ****************************************************/
 
     // returns true if we can attack with this creature now
     /*public bool PuedeAtacar
@@ -344,6 +344,16 @@ public class Controlador : MonoBehaviour
         }
     }*/
 
+    public bool EstaEnPosicionAtaque(int idEnte)
+    {
+        return controladorEnte.EstaEnPosicionAtaque(idEnte);
+    }
+
+    public bool EsMagica(int idEnte)
+    {
+        return controladorEnte.EsMagica(idEnte);
+    }
+
     public void AtacarCriatura(int idAtacante, int idObjetivo)
     {
         //TODO ver quien ataca, si magica o criatura
@@ -351,10 +361,13 @@ public class Controlador : MonoBehaviour
         Criatura objetivo = (Criatura)Recursos.EntesCreadosEnElJuego[idObjetivo];
 
         controladorEnte.QuitarVidaEnte(atacante, objetivo);
-        if (controladorEnte.EnteMuerto(objetivo))
+        if (objetivo.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
             controladorJugador.QuitarVidaJugador(atacante.Ataque);
+        else if (objetivo.PosicionCriatura.Equals(PosicionCriatura.DEFENSA) && controladorEnte.EnteMuerto(objetivo))
+            controladorJugador.QuitarVidaJugador(objetivo.Defensa);
+        
         //else
-           //controladorJugador.QuitarVidaJugador(objetivo.Defensa);
+        //controladorJugador.QuitarVidaJugador(objetivo.Defensa);
     }
     
     

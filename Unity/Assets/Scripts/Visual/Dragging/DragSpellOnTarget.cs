@@ -14,11 +14,11 @@ public class DragSpellOnTarget : DraggingActions {
     private GameObject Target;
     private OneCardManager manager;
 
-    public override bool PuedeSerLanzada
+    public override bool SePuedeArrastrar
     {
         get
         {
-            return base.PuedeSerLanzada && manager.PuedeSerJugada;
+            return base.SePuedeArrastrar && manager.PuedeSerJugada;
         }
     }
 

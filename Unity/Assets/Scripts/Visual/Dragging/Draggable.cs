@@ -10,6 +10,7 @@ using DG.Tweening;
 
 public class Draggable : MonoBehaviour {
 
+    #region Atributos
     // PRIVATE FIELDS
 
     // a flag to know if we are currently dragging this GameObject
@@ -26,6 +27,8 @@ public class Draggable : MonoBehaviour {
 
     // STATIC property that returns the instance of Draggable that is currently being dragged
     private static Draggable _draggingThis;
+    #endregion
+
     public static Draggable DraggingThis
     {
         get{ return _draggingThis;}
@@ -39,7 +42,7 @@ public class Draggable : MonoBehaviour {
 
     void OnMouseDown()
     {
-        if (da!=null && da.PuedeSerLanzada)
+        if (da!=null && da.SePuedeArrastrar)
         {
             dragging = true;
             // when we are dragging something, all previews should be off
