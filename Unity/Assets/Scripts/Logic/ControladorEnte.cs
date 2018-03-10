@@ -43,7 +43,7 @@ public class ControladorEnte
     public void ActivarEfecto(int idMagica)
     {
         //Magica magica = (Magica)Recursos.EntesCreadosEnElJuego[idMagica];
-        new ActivateEffectCommand(idMagica);
+        new ActivateEffectCommand(idMagica).AñadirAlaCola();
     }
 
     public void MuerteEnte(int idCriatura)

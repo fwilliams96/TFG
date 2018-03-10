@@ -37,6 +37,7 @@ public class PlayAEntityCommand : Comanda
             else
                 areaJugador.tableVisual.AñadirCriaturaDefensa(cl.assetCarta, ente.ID, tablePos);
         }
-            
+        Controlador.Instance.ActualizarManaJugador(p);
+
     }
 }

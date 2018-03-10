@@ -65,11 +65,18 @@ public class TableVisual : MonoBehaviour
     public void AñadirMagica(CardAsset ca, int idUnico, int indiceSlot)
     {
         Debug.Log("Añadir ente magica");
-        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.MagicaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
-        /*float x = creature.transform.eulerAngles.x;
-        float y = creature.transform.eulerAngles.y + 180;
-        float z = creature.transform.eulerAngles.z;
-        creature.transform.DORotate(new Vector3(x, y, z), 1);*/
+        //Quaternion.Euler(new Vector3(0f, -179f, 0f))
+        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.MagicaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.Euler(new Vector3(0f, -179f, 0f))) as GameObject;
+        /*GameObject canvas = creature.transform.Find("Canvas").gameObject;
+        float x = canvas.transform.eulerAngles.x;
+        float y = 180;
+        float z = canvas.transform.eulerAngles.z;
+        canvas.transform.DORotate(new Vector3(x, y, z), 0f);*/
+        GameObject canvas = creature.transform.Find("MagicCardPreview").gameObject;
+        float x = canvas.transform.eulerAngles.x;
+        float y = 0;
+        float z = canvas.transform.eulerAngles.z;
+        canvas.transform.DORotate(new Vector3(x, y, z), 0f);
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
     //TODO mejorar codigo

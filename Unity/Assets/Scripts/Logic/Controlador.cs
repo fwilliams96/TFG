@@ -252,6 +252,7 @@ public class Controlador : MonoBehaviour
     /// <param name="posicionAtaque"></param>
     public void JugarCartaMano(Carta cartaJugada, int tablePos, bool posicionAtaque)
     {
+        //ELIMINATE
         RestarManaCarta(JugadorActual, cartaJugada);
         Criatura newCreature = new Criatura(cartaJugada.assetCarta, posicionAtaque == true ? PosicionCriatura.ATAQUE : PosicionCriatura.DEFENSA);
         JugarCarta(cartaJugada,newCreature, tablePos);
@@ -274,7 +275,14 @@ public class Controlador : MonoBehaviour
             ente.efecto.WhenACreatureIsPlayed();
         // remove this card from hand
         JugadorActual.EliminarCartaMano(cartaJugada);
-        MostrarCartasJugablesJugadorActual();
+        //ELIMINATE o sobra esto
+        //controladorJugador.ActualizarManaJugador(JugadorActual);
+        //MostrarCartasJugablesJugadorActual();
+    }
+
+    public void ActualizarManaJugador(Jugador jugador)
+    {
+        controladorJugador.ActualizarManaJugador(jugador);
     }
 
     private void RestarManaCarta(Jugador jugador, Carta carta)
@@ -283,9 +291,9 @@ public class Controlador : MonoBehaviour
     }
 
     // Muestra cartas jugables de la mano del jugador
-    public void MostrarCartasJugablesJugadorActual()
+    public void MostrarCartasJugablesJugador(Jugador jugador)
     {
-        controladorJugador.MostrarCartasJugablesJugadorActual();
+        controladorJugador.MostrarCartasJugablesJugador(jugador);
     }
 
     public PlayerArea AreaJugador(Jugador jugador)
@@ -358,13 +366,23 @@ public class Controlador : MonoBehaviour
     {
         //TODO ver quien ataca, si magica o criatura
         Ente atacante = Recursos.EntesCreadosEnElJuego[idAtacante];
-        Criatura objetivo = (Criatura)Recursos.EntesCreadosEnElJuego[idObjetivo];
-
-        controladorEnte.QuitarVidaEnte(atacante, objetivo);
-        if (objetivo.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
-            controladorJugador.QuitarVidaJugador(atacante.Ataque);
-        else if (objetivo.PosicionCriatura.Equals(PosicionCriatura.DEFENSA) && controladorEnte.EnteMuerto(objetivo))
-            controladorJugador.QuitarVidaJugador(objetivo.Defensa);
+        Ente objetivo = Recursos.EntesCreadosEnElJuego[idObjetivo];
+        if(objetivo.GetType() == typeof(Criatura))
+        {
+            Criatura criaturaObjetivo = (Criatura)objetivo;
+            controladorEnte.QuitarVidaEnte(atacante, criaturaObjetivo);
+            if (criaturaObjetivo.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
+                controladorJugador.QuitarVidaJugador(atacante.Ataque);
+            else if (criaturaObjetivo.PosicionCriatura.Equals(PosicionCriatura.DEFENSA) && controladorEnte.EnteMuerto(criaturaObjetivo))
+                controladorJugador.QuitarVidaJugador(objetivo.Defensa);
+        }
+        //En caso de una magica, activamos su efecto al atacarla
+        else
+        {
+            //Criatura magicaObjetivo = (Magica)objetivo;
+            Controlador.Instance.ActivarEfecto(idObjetivo);
+        }
+        
         
         //else
         //controladorJugador.QuitarVidaJugador(objetivo.Defensa);
