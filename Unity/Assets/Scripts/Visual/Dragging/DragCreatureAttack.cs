@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DragEntityAttack : DraggingActions {
+public class DragCreatureAttack : DraggingActions {
 
     #region Atributos
     // reference to the sprite with a round "Target" graphic

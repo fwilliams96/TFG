@@ -369,8 +369,13 @@ public class Controlador : MonoBehaviour
         //else
         //controladorJugador.QuitarVidaJugador(objetivo.Defensa);
     }
-    
-    
+
+    public void ActivarEfecto(int idMagica)
+    {
+        controladorEnte.ActivarEfecto(idMagica);
+    }
+
+
 
 }
 

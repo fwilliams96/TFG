@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 4700103148927450}
   - component: {fileID: 114725525421678706}
   m_Layer: 0
-  m_Name: CreatureCardPreview
+  m_Name: MagicCardPreview
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -622,10 +622,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4027906106403632}
   - component: {fileID: 114578620714984754}
-  - component: {fileID: 114243582621587138}
   - component: {fileID: 114547302829056980}
   - component: {fileID: 114318134847711790}
   - component: {fileID: 65997480053778742}
+  - component: {fileID: 114602891233385948}
   m_Layer: 0
   m_Name: MagicaPrefab
   m_TagString: Untagged
@@ -741,11 +741,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4311840208170296}
-  - component: {fileID: 212586447306043260}
   - component: {fileID: 65413898570647656}
   - component: {fileID: 114121646997560586}
   - component: {fileID: 114618459735703272}
-  - component: {fileID: 114334330123042692}
+  - component: {fileID: 114305171101772452}
   m_Layer: 0
   m_Name: Target
   m_TagString: Untagged
@@ -989,9 +988,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 2, y: -2}
+  m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
-  m_circleCount: 6
+  m_circleCount: 2
   m_firstSample: 4
   m_sampleIncrement: 2
 --- !u!114 &114016917571770478
@@ -1006,9 +1005,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 2, y: -2}
+  m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
-  m_circleCount: 6
+  m_circleCount: 2
   m_firstSample: 4
   m_sampleIncrement: 2
 --- !u!114 &114027140775150766
@@ -1071,9 +1070,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 2, y: -2}
+  m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
-  m_circleCount: 6
+  m_circleCount: 2
   m_firstSample: 4
   m_sampleIncrement: 2
 --- !u!114 &114040918645862390
@@ -1330,17 +1329,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114243582621587138
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1726648349718542}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7c79c01eff5b4e47ac304b22d59c6f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114247384194591866
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1368,6 +1356,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114305171101772452
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1861138873011952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73ef9fe7a3da52b418af6ea74abe6833, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114310905037028258
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1437,17 +1436,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114334330123042692
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1861138873011952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 302b432878d29344c8111efb6dcaaa6b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114344354529154636
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1460,9 +1448,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 2, y: -2}
+  m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
-  m_circleCount: 6
+  m_circleCount: 2
   m_firstSample: 4
   m_sampleIncrement: 2
 --- !u!114 &114388009252319956
@@ -1637,12 +1625,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e358dd2a0481814cb38312c5e510d48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardAsset: {fileID: 11400000, guid: 9392ea7cd777d574ba7a7227f3b3b60a, type: 2}
+  cardAsset: {fileID: 0}
   PreviewManager: {fileID: 114725525421678706}
   HealthText: {fileID: 114465862425975274}
   AttackText: {fileID: 114623900677046236}
-  CreatureGraphicImage: {fileID: 114864448263822260}
+  CreatureGraphicImage: {fileID: 114310905037028258}
   CreatureGlowImage: {fileID: 114654913361136088}
+--- !u!114 &114602891233385948
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1726648349718542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8dcf1313ea29034ab8892f5a16a0e12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114618459735703272
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1970,9 +1969,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 2, y: -2}
+  m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
-  m_circleCount: 6
+  m_circleCount: 2
   m_firstSample: 4
   m_sampleIncrement: 2
 --- !u!114 &114809304863750666
@@ -2337,50 +2336,6 @@ SpriteRenderer:
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 2, y: 0.82}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
---- !u!212 &212586447306043260
-SpriteRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1861138873011952}
-  m_Enabled: 0
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1666281987
-  m_SortingLayer: 3
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0efb29dac46fdbb40928fc28911d481e, type: 3}
-  m_Color: {r: 0.875, g: 0.24448532, b: 0.24448532, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 2.56, y: 2.56}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
