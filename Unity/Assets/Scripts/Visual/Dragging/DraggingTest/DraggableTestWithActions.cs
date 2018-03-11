@@ -58,7 +58,7 @@ public class DraggableTestWithActions : MonoBehaviour {
             HoverPreview.PrevisualizacionesPermitidas = true;
             da.OnEndDrag();
         }
-    }   
+    }
 
     // returns mouse position in World coordinates for our GameObject to follow. 
     private Vector3 MouseInWorldCoords()

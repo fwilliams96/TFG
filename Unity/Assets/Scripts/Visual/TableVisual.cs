@@ -66,17 +66,8 @@ public class TableVisual : MonoBehaviour
     {
         Debug.Log("Añadir ente magica");
         //Quaternion.Euler(new Vector3(0f, -179f, 0f))
-        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.MagicaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.Euler(new Vector3(0f, -179f, 0f))) as GameObject;
-        /*GameObject canvas = creature.transform.Find("Canvas").gameObject;
-        float x = canvas.transform.eulerAngles.x;
-        float y = 180;
-        float z = canvas.transform.eulerAngles.z;
-        canvas.transform.DORotate(new Vector3(x, y, z), 0f);*/
-        GameObject canvas = creature.transform.Find("MagicCardPreview").gameObject;
-        float x = canvas.transform.eulerAngles.x;
-        float y = 0;
-        float z = canvas.transform.eulerAngles.z;
-        canvas.transform.DORotate(new Vector3(x, y, z), 0f);
+        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.MagicaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
+        RotarObjetoEjeY(creature.transform.Find("Cuerpo").gameObject, 180, 0f);
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
     //TODO mejorar codigo
@@ -86,11 +77,7 @@ public class TableVisual : MonoBehaviour
         //TODO cuando sea una carta magica no entrara en esta funcion
         // create a new creature from prefab
         GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
-        GameObject canvas = creature.transform.Find("Canvas").gameObject;
-        float x = canvas.transform.eulerAngles.x;
-        float y = canvas.transform.eulerAngles.y;
-        float z = canvas.transform.eulerAngles.z + 90;
-        canvas.transform.DORotate(new Vector3(x, y, z), 0.1f);
+        RotarObjetoEjeZ(creature.transform.Find("Canvas").gameObject, 90, DatosGenerales.Instance.CardTransitionTimeFast);
         /*float x = creature.transform.eulerAngles.x;
         float y = creature.transform.eulerAngles.y;
         float z = creature.transform.eulerAngles.z + 90;
@@ -202,6 +189,23 @@ public class TableVisual : MonoBehaviour
             // TODO: figure out if I need to do something here:
             // g.GetComponent<WhereIsTheCardOrCreature>().SetTableSortingOrder() = CreaturesOnTable.IndexOf(g);
         }
+    }
+
+    public void RotarObjetoEjeY(GameObject objeto, int grados, float tiempoTransicion)
+    {
+        float x = objeto.transform.eulerAngles.x;
+        float y = grados;
+        float z = objeto.transform.eulerAngles.z;
+        objeto.transform.DORotate(new Vector3(x, y, z), tiempoTransicion);
+    }
+
+    public void RotarObjetoEjeZ(GameObject objeto, int grados, float tiempoTransicion)
+    {
+        float x = objeto.transform.eulerAngles.x;
+        float y = objeto.transform.eulerAngles.y;
+        //TODO
+        float z = grados;
+        objeto.transform.DORotate(new Vector3(x, y, z), tiempoTransicion);
     }
 
 }

@@ -15,12 +15,12 @@ public class MagicEffectVisual : MonoBehaviour
 
     public void ActivateEffect()
     {
-        GameObject canvas = gameObject.transform.Find("Canvas").gameObject;
+        GameObject canvas = gameObject.transform.Find("Cuerpo").gameObject;
         float x = canvas.transform.eulerAngles.x;
         //float y = gameObject.transform.eulerAngles.y + 180;
-        float y = 180;
+        float y = 0;
         float z = canvas.transform.eulerAngles.z;
-        canvas.transform.DORotate(new Vector3(x, y, z), DatosGenerales.Instance.CardTransitionTime);
+        canvas.transform.DORotate(new Vector3(x, y, z), DatosGenerales.Instance.CardTransitionTime, RotateMode.WorldAxisAdd);
         Comandas.Instance.CompletarEjecucionComanda();
     }
 

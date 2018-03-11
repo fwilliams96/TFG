@@ -21,7 +21,7 @@ public class BetterCardRotation : MonoBehaviour {
     public Collider col;
 
     // if this is true, our players currently see the card Back
-    private bool showingBack = false;
+    public bool showingBack = false;
 
 	// Update is called once per frame
 	void Update () 

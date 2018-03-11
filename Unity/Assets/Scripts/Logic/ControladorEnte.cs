@@ -42,7 +42,8 @@ public class ControladorEnte
 
     public void ActivarEfecto(int idMagica)
     {
-        //Magica magica = (Magica)Recursos.EntesCreadosEnElJuego[idMagica];
+        Magica magica = (Magica)Recursos.EntesCreadosEnElJuego[idMagica];
+        magica.EfectoActivado = true;
         new ActivateEffectCommand(idMagica).AñadirAlaCola();
     }
 

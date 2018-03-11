@@ -57,24 +57,7 @@ public class DragMagicEffect : DraggingActions {
 
     public override void OnEndDrag()
     {
-        Target = null;
-        RaycastHit[] hits;
-        // TODO: raycast here anyway, store the results in 
-        hits = Physics.RaycastAll(origin: Camera.main.transform.position, 
-            direction: (-Camera.main.transform.position + this.transform.position).normalized, 
-            maxDistance: 30f) ;
-
-        foreach (RaycastHit h in hits)
-        {
-            //TODO El tag this.tag == "LowEnte" o "TopEnte" debe cambiar a "LowCreature/TopCreature" nuevamente porque una magica no atacara de esta manera
-            if ((h.transform.tag == "TopEnte" && this.tag == "LowEnte") ||
-                    (h.transform.tag == "LowEnte" && this.tag == "TopEnte"))
-            {
-                // hit a creature, save parent transform
-                Target = h.transform.parent.gameObject;
-            }
-               
-        }
+        Target = FindTarget();
         int magicID = GetComponentInParent<IDHolder>().UniqueID;
         if (Target != null)
         {
