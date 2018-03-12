@@ -76,7 +76,7 @@ public class TableVisual : MonoBehaviour
         Debug.Log("Añadir ente criatura como defensa");
         //TODO cuando sea una carta magica no entrara en esta funcion
         // create a new creature from prefab
-        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
+        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefabPC, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
         RotarObjetoEjeZ(creature.transform.Find("Canvas").gameObject, 90, DatosGenerales.Instance.CardTransitionTimeFast);
         /*float x = creature.transform.eulerAngles.x;
         float y = creature.transform.eulerAngles.y;
@@ -90,7 +90,7 @@ public class TableVisual : MonoBehaviour
     {
         Debug.Log("Añadir ente criatura como ataque");
         // create a new creature from prefab
-        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
+        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefabPC, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
         // apply the look from CardAsset
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
