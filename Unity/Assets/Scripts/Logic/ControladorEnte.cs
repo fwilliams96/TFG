@@ -40,6 +40,13 @@ public class ControladorEnte
             MuerteEnte(objetivo.ID);
     }
 
+    public void ActivarEfecto(int idMagica)
+    {
+        Magica magica = (Magica)Recursos.EntesCreadosEnElJuego[idMagica];
+        magica.EfectoActivado = true;
+        new ActivateEffectCommand(idMagica).AñadirAlaCola();
+    }
+
     public void MuerteEnte(int idCriatura)
     {
         //TODO mejorar estas lineas que vuelven a coger la criatura a partir de su id

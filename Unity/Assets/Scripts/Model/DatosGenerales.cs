@@ -20,7 +20,9 @@ public class DatosGenerales: MonoBehaviour
     public int NumMaximoCriaturasMesa = 7;
     [Header("Prefabs and Assets")]
     public GameObject CardPrefab;
+    public GameObject CardPrefabPC;
     public GameObject CriaturaPrefab;
+    public GameObject CriaturaPrefabPC;
     public GameObject MagicaPrefab;
     public GameObject DamageEffectPrefab;
     public GameObject ExplosionPrefab;

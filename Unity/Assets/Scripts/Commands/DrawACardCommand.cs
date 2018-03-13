@@ -21,5 +21,7 @@ public class DrawACardCommand : Comanda {
         PlayerArea areaJugador = Controlador.Instance.AreaJugador(p);
         areaJugador.mazoVisual.CartasEnMazo--;
         areaJugador.manoVisual.DarCartaJugador(cl.assetCarta, cl.ID, fast, fromDeck);
+        //TODO descomentar en caso de que MostrarCartasJugablesJugador de la funcion ActualizarValoresJugador falle
+        Controlador.Instance.MostrarCartasJugablesJugador(p);
     }
 }

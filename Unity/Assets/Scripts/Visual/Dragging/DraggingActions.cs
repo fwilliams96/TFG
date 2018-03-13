@@ -34,4 +34,28 @@ public abstract class DraggingActions : MonoBehaviour {
     }
 
     protected abstract bool DragSuccessful();
+
+    public virtual GameObject FindTarget()
+    {
+        GameObject Target = null;
+        RaycastHit[] hits;
+        // TODO: raycast here anyway, store the results in 
+        hits = Physics.RaycastAll(origin: Camera.main.transform.position,
+            direction: (-Camera.main.transform.position + this.transform.position).normalized,
+            maxDistance: 30f);
+
+        //OPTIONAL quitar el for y hacer una busqueda
+        foreach (RaycastHit h in hits)
+        {
+            //TODO El tag this.tag == "LowEnte" o "TopEnte" debe cambiar a "LowCreature/TopCreature" nuevamente porque una magica no atacara de esta manera
+            if ((h.transform.tag == "TopEnte" && this.tag == "LowEnte") ||
+                    (h.transform.tag == "LowEnte" && this.tag == "TopEnte"))
+            {
+                // hit a creature, save parent transform
+                Target = h.transform.parent.gameObject;
+            }
+
+        }
+        return Target;
+    }
 }

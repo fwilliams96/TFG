@@ -100,23 +100,39 @@ public class ControladorJugador
         areaJugador.Personaje.transform.position = areaJugador.PosicionInicialPersonaje.position;
     }
 
+    public void ActualizarValoresJugador()
+    {
+        TurnMaker tm = JugadorActual.GetComponent<TurnMaker>();
+        // player`s method OnTurnStart() will be called in tm.OnTurnStart();
+        //Aqui se crea la comanda para dar la carta al jugador
+        tm.OnTurnStart();
+        if (tm is PlayerTurnMaker)
+        {
+            ActualizarManaJugador(JugadorActual);
+            MostrarCartasJugablesJugador(JugadorActual);
+        }
+        OcultarCartasJugablesJugadorContrario(JugadorActual);
+    }
+
     public void ActualizarManaJugador(Jugador jugador)
     {
         new UpdateManaCrystalsCommand(jugador, jugador.ManaEnEsteTurno, jugador.ManaRestante).AñadirAlaCola();
-        if (jugador == JugadorActual)
-            MostrarCartasJugablesJugadorActual();
+        //MostrarCartasJugablesJugador(jugador);
     }
 
     // Muestra cartas jugables de la mano del jugador
-    public void MostrarCartasJugablesJugadorActual()
+    public void MostrarCartasJugablesJugador(Jugador jugador)
     {
-        MostrarUOcultarCartas(JugadorActual, false);
+        if (jugador == JugadorActual)
+            MostrarUOcultarCartas(jugador, false);
+
     }
 
-    private void OcultarCartasJugablesJugadorContrario()
+    private void OcultarCartasJugablesJugadorContrario(Jugador jugador)
     {
-        MostrarUOcultarCartas(OtroJugador(JugadorActual), true);
-    }
+        if (jugador == JugadorActual)
+            MostrarUOcultarCartas(OtroJugador(jugador), true);
+            }
 
     private void MostrarUOcultarCartas(Jugador jugador, bool quitarTodasRemarcadas = false)
     {
@@ -164,18 +180,6 @@ public class ControladorJugador
         return Players.Instance.GetPlayers()[0] == jugador ? Players.Instance.GetPlayers()[1] : Players.Instance.GetPlayers()[0];
     }
 
-    public void ActualizarValoresJugador()
-    {
-        TurnMaker tm = JugadorActual.GetComponent<TurnMaker>();
-        // player`s method OnTurnStart() will be called in tm.OnTurnStart();
-        tm.OnTurnStart();
-        if (tm is PlayerTurnMaker)
-        {
-            ActualizarManaJugador(JugadorActual);
-        }
-        OcultarCartasJugablesJugadorContrario();
-    }
-
     /// <summary>
     /// Resta mana al jugador según la carta lanzada al tablero
     /// </summary>
@@ -184,7 +188,7 @@ public class ControladorJugador
     public void RestarManaCarta(Jugador jugador, Carta carta)
     {
         jugador.ManaRestante -= carta.CosteManaActual;
-        ActualizarManaJugador(jugador);
+        //ActualizarManaJugador(jugador);
     }
 
    public void QuitarVidaJugador(int valorAtaque)

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DragEntityAttack : DraggingActions {
+public class DragCreatureAttack : DraggingActions {
 
     #region Atributos
     // reference to the sprite with a round "Target" graphic
@@ -40,10 +40,9 @@ public class DragEntityAttack : DraggingActions {
             // a) we can control this our player (this is checked in base.canDrag)
             // b) creature "CanAttackNow" - this info comes from logic part of our code into each creature`s manager script
             //return base.SePuedeArrastrar && manager.PuedeAtacar;
-            int idEnte = GetComponentInParent<IDHolder>().UniqueID;
             try
             {
-                return base.SePuedeArrastrar && !Controlador.Instance.EsMagica(idEnte) && Controlador.Instance.EstaEnPosicionAtaque(idEnte) && manager.PuedeAtacar;
+                return base.SePuedeArrastrar && manager.PuedeAtacar;
             }
             /*catch(EnteException e)
             {
@@ -70,18 +69,19 @@ public class DragEntityAttack : DraggingActions {
 
     public override void OnDraggingInUpdate()
     {
+       
         Vector3 notNormalized = transform.position - transform.parent.position;
         Vector3 direction = notNormalized.normalized;
-        float distanceToTarget = (direction*2.3f).magnitude;
+        float distanceToTarget = (direction * 2.3f).magnitude;
         if (notNormalized.magnitude > distanceToTarget)
         {
             // draw a line between the creature and the target
-            lr.SetPositions(new Vector3[]{ transform.parent.position, transform.position - direction*2.3f });
+            lr.SetPositions(new Vector3[] { transform.parent.position, transform.position - direction * 2.3f });
             lr.enabled = true;
 
             // position the end of the arrow between near the target.
             triangleSR.enabled = true;
-            triangleSR.transform.position = transform.position - 1.5f*direction;
+            triangleSR.transform.position = transform.position - 1.5f * direction;
 
             // proper rotarion of arrow end
             float rot_z = Mathf.Atan2(notNormalized.y, notNormalized.x) * Mathf.Rad2Deg;
@@ -98,24 +98,7 @@ public class DragEntityAttack : DraggingActions {
 
     public override void OnEndDrag()
     {
-        Target = null;
-        RaycastHit[] hits;
-        // TODO: raycast here anyway, store the results in 
-        hits = Physics.RaycastAll(origin: Camera.main.transform.position, 
-            direction: (-Camera.main.transform.position + this.transform.position).normalized, 
-            maxDistance: 30f) ;
-
-        foreach (RaycastHit h in hits)
-        {
-            //TODO El tag this.tag == "LowEnte" o "TopEnte" debe cambiar a "LowCreature/TopCreature" nuevamente porque una magica no atacara de esta manera
-            if ((h.transform.tag == "TopEnte" && this.tag == "LowEnte") ||
-                    (h.transform.tag == "LowEnte" && this.tag == "TopEnte"))
-            {
-                // hit a creature, save parent transform
-                Target = h.transform.parent.gameObject;
-            }
-               
-        }
+        Target = FindTarget();
 
         if (Target != null)
         {
@@ -125,12 +108,12 @@ public class DragEntityAttack : DraggingActions {
             {
                 // if targeted creature is still alive, attack creature
                 Controlador.Instance.AtacarCriatura(GetComponentInParent<IDHolder>().UniqueID, targetID);
-                Debug.Log("Attacking "+Target);
+                Debug.Log("Attacking " + Target);
             }
-                
+
         }
         // not a valid target, return
-        if(tag.Contains("Low"))
+        if (tag.Contains("Low"))
             dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorAbajo;
         else
             dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorArriba;
@@ -141,7 +124,7 @@ public class DragEntityAttack : DraggingActions {
         sr.enabled = false;
         lr.enabled = false;
         triangleSR.enabled = false;
-
+        
     }
 
     // NOT USED IN THIS SCRIPT
