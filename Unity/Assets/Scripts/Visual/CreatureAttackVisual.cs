@@ -46,6 +46,7 @@ public class CreatureAttackVisual : EnteVisual
         {
             ColocarCriaturaEnDefensa(DatosGenerales.Instance.CardTransitionTimeFast);
         }
+        Comandas.Instance.CompletarEjecucionComanda();
     }
 
     public void ColocarCriaturaEnAtaque(float tiempo)

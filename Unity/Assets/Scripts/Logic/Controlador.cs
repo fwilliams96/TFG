@@ -50,7 +50,7 @@ public class Controlador : MonoBehaviour
     void Start()
     {
         InicializacionJuego();
-        Screen.orientation = ScreenOrientation.LandscapeRight;
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
     }
 
     public void InicializacionJuego()

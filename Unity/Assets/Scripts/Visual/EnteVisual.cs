@@ -25,7 +25,6 @@ public class EnteVisual : MonoBehaviour
     {
         float x = objeto.transform.eulerAngles.x;
         float y = objeto.transform.eulerAngles.y;
-        //TODO
         float z = grados;
         objeto.transform.DORotate(new Vector3(x, y, z), tiempoTransicion);
     }

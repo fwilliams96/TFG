@@ -52,10 +52,12 @@ public class ControladorEnte
         Criatura criatura = (Criatura)Recursos.EntesCreadosEnElJuego[idCriatura];
         if (criatura.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
         {
+            criatura.PosicionCriatura = PosicionCriatura.DEFENSA;
             new ChangeCreaturePosition(idCriatura, PosicionCriatura.DEFENSA).AñadirAlaCola();
         }
         else
         {
+            criatura.PosicionCriatura = PosicionCriatura.ATAQUE;
             new ChangeCreaturePosition(idCriatura, PosicionCriatura.ATAQUE).AñadirAlaCola();
         }
     }
