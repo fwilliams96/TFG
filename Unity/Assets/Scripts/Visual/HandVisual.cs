@@ -156,7 +156,7 @@ public class HandVisual : MonoBehaviour
         // Instantiate a card depending on its type
         GameObject card;
         // this card is a creature card
-        card = GameObject.Instantiate(DatosGenerales.Instance.CardPrefabPC, position, Quaternion.Euler(eulerAngles)) as GameObject;
+        card = GameObject.Instantiate(DatosGenerales.Instance.CardPrefab, position, Quaternion.Euler(eulerAngles)) as GameObject;
 
 
         // apply the look of the card based on the info from CardAsset

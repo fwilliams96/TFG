@@ -67,6 +67,8 @@ public class DragCardOnTable : DraggingActions
         {
             VolverALaMano();
         }
+        //whereIsCard.SetearOrdenCarta();
+       // whereIsCard.EstadoVisual = VisualStates.ManoJugadorAbajo;
     }
 
     public void ColocarCartaTablero(bool resultOK)
@@ -117,6 +119,7 @@ public class DragCardOnTable : DraggingActions
         // Move this card back to its slot position
         HandVisual PlayerHand = Controlador.Instance.AreaJugador(playerOwner).manoVisual;
         Vector3 oldCardPos = PlayerHand.slots.Children[savedHandSlot].transform.localPosition;
+        //Se usa local move porque a veces puede estar este script en target y alli si pillamos transform.position pillariamos la dl padre
         transform.DOLocalMove(oldCardPos, 1f);
     }
 }

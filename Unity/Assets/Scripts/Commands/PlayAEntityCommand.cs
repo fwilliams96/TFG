@@ -25,7 +25,8 @@ public class PlayAEntityCommand : Comanda
         PlayerHand.EliminarCarta(card);
         GameObject.Destroy(card);
         //Permite la previsualizacion de cartas
-        HoverPreview.PrevisualizacionesPermitidas = true;
+        //HoverPreview.PrevisualizacionesPermitidas = true;
+        OpcionesObjeto.PrevisualizacionesPermitidas = true;
         // Añade la carta en el tablero
         PlayerArea areaJugador = Controlador.Instance.AreaJugador(p);
         if (ente.GetType() == typeof(Magica))

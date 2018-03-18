@@ -10,6 +10,10 @@ public class OpcionesCarta : OpcionesObjeto
     #endregion
     #region Getters/Setters
     #endregion
-    
+
+    public override void MostrarOpciones()
+    {
+        MostrarPrevisualizacion();
+    }
 
 }

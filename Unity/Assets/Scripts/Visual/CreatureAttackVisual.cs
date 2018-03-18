@@ -2,15 +2,11 @@
 using System.Collections;
 using DG.Tweening;
 
-public class CreatureAttackVisual : MonoBehaviour
+public class CreatureAttackVisual : EnteVisual
 {
-    private OneCreatureManager manager;
-    private WhereIsTheCardOrEntity w;
 
     void Awake()
     {
-        manager = GetComponent<OneCreatureManager>();
-        w = GetComponent<WhereIsTheCardOrEntity>();
     }
 
     public void AttackTarget(int targetUniqueID, int damageTakenByTarget, int damageTakenByAttacker, int attackerHealthAfter, int targetHealthAfter)
@@ -38,6 +34,28 @@ public class CreatureAttackVisual : MonoBehaviour
             s.OnComplete(Comandas.Instance.CompletarEjecucionComanda);
             //Command.CommandExecutionComplete();
         });
+    }
+
+    public void ChangePosition(PosicionCriatura pos) //OPTIONAL 0 para ataque, 1 para defensa
+    {
+        if(pos.Equals(PosicionCriatura.ATAQUE))
+        {
+            ColocarCriaturaEnAtaque(DatosGenerales.Instance.CardTransitionTimeFast);
+        }
+        else
+        {
+            ColocarCriaturaEnDefensa(DatosGenerales.Instance.CardTransitionTimeFast);
+        }
+    }
+
+    public void ColocarCriaturaEnAtaque(float tiempo)
+    {
+        RotarObjetoEjeZ(this.gameObject.transform.Find("Canvas").gameObject, 0, tiempo);
+    }
+
+    public void ColocarCriaturaEnDefensa(float tiempo)
+    {
+        RotarObjetoEjeZ(this.gameObject.transform.Find("Canvas").gameObject, 90, tiempo);
     }
 
 }

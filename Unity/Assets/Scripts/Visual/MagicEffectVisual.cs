@@ -2,15 +2,11 @@
 using System.Collections;
 using DG.Tweening;
 
-public class MagicEffectVisual : MonoBehaviour
+public class MagicEffectVisual : EnteVisual
 {
-    private OneCreatureManager manager;
-    private WhereIsTheCardOrEntity w;
 
     void Awake()
     {
-        manager = GetComponent<OneCreatureManager>();
-        w = GetComponent<WhereIsTheCardOrEntity>();
     }
 
     public void ActivateEffect()
@@ -22,6 +18,11 @@ public class MagicEffectVisual : MonoBehaviour
         float z = canvas.transform.eulerAngles.z;
         canvas.transform.DORotate(new Vector3(x, y, z), DatosGenerales.Instance.CardTransitionTime, RotateMode.WorldAxisAdd);
         Comandas.Instance.CompletarEjecucionComanda();
+    }
+
+    public void ColocarMagicaBocaAbajo(float tiempo)
+    {
+        RotarObjetoEjeY(this.gameObject.transform.Find("Cuerpo").gameObject, 180, tiempo);
     }
 
 }

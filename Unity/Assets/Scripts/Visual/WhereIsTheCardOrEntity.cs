@@ -18,7 +18,8 @@ public class WhereIsTheCardOrEntity : MonoBehaviour
 
     #region Atributos
     // reference to a HoverPreview Component
-    private HoverPreview hover;
+    //private HoverPreview hover;
+    private OpcionesObjeto hover;
 
     // reference to a canvas on this object to set sorting order
     private Canvas canvas;
@@ -80,10 +81,13 @@ public class WhereIsTheCardOrEntity : MonoBehaviour
 
     void Awake()
     {
-        hover = GetComponent<HoverPreview>();
+        //hover = GetComponent<HoverPreview>();
+        hover = GetComponent<OpcionesObjeto>();
+
         // for characters hover is attached to a child game object
+        //hover = GetComponentInChildren<HoverPreview>();
         if (hover == null)
-            hover = GetComponentInChildren<HoverPreview>();
+            hover = GetComponentInChildren<OpcionesObjeto>();
         canvas = GetComponentInChildren<Canvas>();
     }
 

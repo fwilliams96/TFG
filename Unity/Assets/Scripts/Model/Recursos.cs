@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class Recursos  {
 
@@ -108,10 +110,11 @@ public class Recursos  {
                     asset.Ataque = ataque;
                     if (evolucion != -1)
                         asset.Evolucion = evolucion;
-
-                    //AssetDatabase.CreateAsset(asset, "Assets/Game Assets/"+ obtenerCarpetaFamilia(familia) + nombre+".asset");
+                    #if UNITY_EDITOR
                     AssetDatabase.CreateAsset(asset, obtenerRutaAsset(familia, carpetaCarta, nombre + ".asset"));
+                    #endif
                     AssetsCreadosCartas.Add(asset);
+
                 }
             }
             

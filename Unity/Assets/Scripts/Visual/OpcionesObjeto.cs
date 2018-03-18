@@ -57,17 +57,22 @@ public class OpcionesObjeto : MonoBehaviour
     public virtual void MostrarOpciones()
     {
         MostrarPrevisualizacion();
+        MostrarAccion();
     }
 
-    public void MostrarPrevisualizacion()
+    public virtual void MostrarAccion()
+    {
+        //Se ha de mirar si es magica o criatura. En caso de criatura se debe mirar si esta en ataque o defensa
+        Controlador.Instance.MostrarAccion(GetComponentInParent<IDHolder>().UniqueID);
+    }
+
+    protected void MostrarPrevisualizacion()
     {
         if(PrevisualizandoAlgunaCarta())
             PararTodasPrevisualizaciones();
         OverCollider = true;
-        if (PrevisualizacionesPermitidas && PrevisualizacionActivada)
+        if (PrevisualizacionesPermitidas && PrevisualizacionActivada && Controlador.Instance.CartaOCriaturaDelJugador(gameObject.tag))
             PrevisualizarObjeto();
-        /*if (PrevisualizacionesPermitidas && PrevisualizacionActivada && Controlador.Instance.CartaOCriaturaDelJugador(gameObject.tag))
-            PrevisualizarObjeto();*/
     }
 
     void QuitarPrevisualizacion()
@@ -83,7 +88,7 @@ public class OpcionesObjeto : MonoBehaviour
     {
         // 1) clone this card 
         // first disable the previous preview if there is one already
-        PararTodasPrevisualizaciones();
+        //PararTodasPrevisualizaciones();
         // 2) save this HoverPreview as curent
         previsualizacionActual = this;
         // 3) enable Preview game object
@@ -113,6 +118,7 @@ public class OpcionesObjeto : MonoBehaviour
     {
         if (previsualizacionActual != null)
         {
+            AccionesPopUp.Instance.OcultarPopup();
             previsualizacionActual.objetoPrevisualizado.SetActive(false);
             previsualizacionActual.objetoPrevisualizado.transform.localScale = Vector3.one;
             previsualizacionActual.objetoPrevisualizado.transform.localPosition = Vector3.zero;

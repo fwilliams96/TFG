@@ -30,7 +30,7 @@ public class TouchManager : MonoBehaviour {
     {
         if(Input.touchCount > 0)
         {
-            Debug.Log("Toque");
+            //Debug.Log("Toque");
             //Miramos si esta en la fase de tocar la pantalla
             if(Input.GetTouch(0).phase == TouchPhase.Began)
             {
@@ -42,28 +42,33 @@ public class TouchManager : MonoBehaviour {
                 {
                     //Cogemos el objeto
                     gObj = hit.transform.gameObject;
-                    //Creamos un plano con la normal y la posicion del objeto intersectado
-                    objPlane = new Plane(Camera.main.transform.forward * -1, gObj.transform.position);
-
-                    //calc touch offset
-                    Ray mRay = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-                    float rayDistance;
-                    objPlane.Raycast(mRay, out rayDistance);
-                    m0 = gObj.transform.position - mRay.GetPoint(rayDistance);
+                    if(gObj.GetComponent<Eventos>() != null)
+                    {
+                        gObj.GetComponent<Eventos>().Click();
+                    }
+                    else
+                    {
+                       
+                        Debug.Log("Ningun gameobject con evento tocado "+gObj.name);
+                        gObj = null;
+                        //if (OpcionesObjeto.PrevisualizandoAlgunaCarta())
+                            //OpcionesObjeto.PararTodasPrevisualizaciones();
+                    }
+                    
 
                 }
             }
             else if(Input.GetTouch(0).phase == TouchPhase.Moved && gObj)
             {
-                Ray mRay = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-                float rayDistance;
-                if(objPlane.Raycast(mRay, out rayDistance))
+                /*if (gObj.GetComponent<Eventos>() != null)
                 {
-                    gObj.transform.position = mRay.GetPoint(rayDistance) + m0;
-                }
+                    gObj.GetComponent<Eventos>().Click();
+                }*/
+                gObj.GetComponent<Eventos>().Dragg();
             }
             else if(Input.GetTouch(0).phase == TouchPhase.Ended && gObj)
             {
+                gObj.GetComponent<Eventos>().End();
                 gObj = null;
             }
         }
