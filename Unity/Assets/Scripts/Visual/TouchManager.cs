@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+
 
 public class TouchManager : MonoBehaviour {
 
@@ -38,11 +40,13 @@ public class TouchManager : MonoBehaviour {
                 Ray mouseRay = GenerateMouseRay(Input.GetTouch(0).position);
                 RaycastHit hit;
                 //Miramos con que objeto ha chocado el rayo
-                if(Physics.Raycast(mouseRay.origin,mouseRay.direction,out hit))
+                
+                
+                if (Physics.Raycast(mouseRay.origin,mouseRay.direction,out hit))
                 {
                     //Cogemos el objeto
                     gObj = hit.transform.gameObject;
-                    if(gObj.GetComponent<Eventos>() != null)
+                    if (gObj.GetComponent<Eventos>() != null)
                     {
                         gObj.GetComponent<Eventos>().Click();
                     }
@@ -54,8 +58,8 @@ public class TouchManager : MonoBehaviour {
                         //if (OpcionesObjeto.PrevisualizandoAlgunaCarta())
                             //OpcionesObjeto.PararTodasPrevisualizaciones();
                     }
-                    
-
+                    if(null != EventSystem.current.currentSelectedGameObject)
+                        Debug.Log("Eveny system: "+ EventSystem.current.currentSelectedGameObject);
                 }
             }
             else if(Input.GetTouch(0).phase == TouchPhase.Moved && gObj)

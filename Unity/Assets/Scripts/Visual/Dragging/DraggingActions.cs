@@ -12,8 +12,16 @@ public abstract class DraggingActions : MonoBehaviour {
     public virtual bool SePuedeArrastrar
     {
         get
-        {            
-            return Controlador.Instance.SePermiteControlarElJugador(playerOwner);
+        {
+            if (tag.Contains("Card"))
+            {
+                return Controlador.Instance.SePermiteControlarElJugador(playerOwner);
+            }
+            else
+            {
+                return Controlador.Instance.SePermiteControlarElJugador(playerOwner) && !Controlador.Instance.EsMagica(GetComponent<IDHolder>().UniqueID);
+            }
+            
         }
     }
 

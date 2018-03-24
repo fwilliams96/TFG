@@ -7,7 +7,7 @@ public class EnteVisual : MonoBehaviour
     protected OneCreatureManager manager;
     protected WhereIsTheCardOrEntity w;
 
-    void Awake()
+    protected void Awake()
     {
         manager = GetComponent<OneCreatureManager>();
         w = GetComponent<WhereIsTheCardOrEntity>();

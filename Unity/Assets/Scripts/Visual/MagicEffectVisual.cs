@@ -5,18 +5,15 @@ using DG.Tweening;
 public class MagicEffectVisual : EnteVisual
 {
 
-    void Awake()
-    {
-    }
-
     public void ActivateEffect()
     {
-        GameObject canvas = gameObject.transform.Find("Cuerpo").gameObject;
+        RotarObjetoEjeY(gameObject.transform.Find("Cuerpo").gameObject, 0, DatosGenerales.Instance.CardTransitionTime);
+        /*GameObject canvas = gameObject.transform.Find("Cuerpo").gameObject;
         float x = canvas.transform.eulerAngles.x;
         //float y = gameObject.transform.eulerAngles.y + 180;
         float y = 0;
         float z = canvas.transform.eulerAngles.z;
-        canvas.transform.DORotate(new Vector3(x, y, z), DatosGenerales.Instance.CardTransitionTime, RotateMode.WorldAxisAdd);
+        canvas.transform.DORotate(new Vector3(x, y, z), DatosGenerales.Instance.CardTransitionTime, RotateMode.WorldAxisAdd);*/
         Comandas.Instance.CompletarEjecucionComanda();
     }
 

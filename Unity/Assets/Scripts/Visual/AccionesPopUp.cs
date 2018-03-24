@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AccionesPopUp : MonoBehaviour {
     public GameObject PanelAcciones;
-    public GameObject ataque;
-    public GameObject defensa;
-    public GameObject efecto;
+    public GameObject boton;
     public static AccionesPopUp Instance;
     public delegate void RegistrarFuncion(int idEnte);
     private int idEnte;
@@ -37,26 +36,19 @@ public class AccionesPopUp : MonoBehaviour {
     private void MostrarAccion(TipoAccion accion) 
     {
         MostrarPopup();
-        QuitarTodasAcciones();
+        //QuitarTodasAcciones();
         switch (accion)
         {
             case TipoAccion.ATAQUE:
-                ataque.SetActive(true);
+                boton.GetComponentInChildren<Text>().text = "Ataque";
                 break;
             case TipoAccion.DEFENSA:
-                defensa.SetActive(true);
+                boton.GetComponentInChildren<Text>().text = "Defensa";
                 break;
             case TipoAccion.EFECTO:
-                efecto.SetActive(true);
+                boton.GetComponentInChildren<Text>().text = "Activar";
                 break;
         }
-    }
-
-    private void QuitarTodasAcciones()
-    {
-        ataque.SetActive(false);
-        defensa.SetActive(false);
-        efecto.SetActive(false);
     }
 
     public void MostrarPopup()

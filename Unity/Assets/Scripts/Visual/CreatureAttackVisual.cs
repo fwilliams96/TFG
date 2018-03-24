@@ -5,9 +5,7 @@ using DG.Tweening;
 public class CreatureAttackVisual : EnteVisual
 {
 
-    void Awake()
-    {
-    }
+    //void Awake() { base.Awake(); }
 
     public void AttackTarget(int targetUniqueID, int damageTakenByTarget, int damageTakenByAttacker, int attackerHealthAfter, int targetHealthAfter)
     {
