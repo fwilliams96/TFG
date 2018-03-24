@@ -24,7 +24,6 @@ public class Recursos  {
 
     public static void InicializarCartas()
     {
-        //string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, "/JSON");
         LeerInformacionCartas();
         CrearAssetsCartas();
         //var asset = LeerCartaAssetApartirJSON("Asset2.json");
@@ -132,10 +131,10 @@ public class Recursos  {
         return obtenerRutaFamiliaImagen(familia) + carpetaCarta + "/" + nombreImagen;
     }
 
-    /*private static string obtenerRutaJSON(string familia, string carpetaCarta, string nombreJSON)
+    private static string obtenerRutaJSON(string familia, string carpetaCarta, string nombreJSON)
     {
         return "files/"+obtenerCarpetaFamilia(familia) + carpetaCarta + "/" + nombreJSON;
-    }*/
+    }
 
     private static string obtenerRutaJSON(string familia, string carpetaCarta)
     {
