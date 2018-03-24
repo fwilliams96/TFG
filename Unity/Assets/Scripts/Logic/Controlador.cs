@@ -49,8 +49,9 @@ public class Controlador : MonoBehaviour
 
     void Start()
     {
-        InicializacionJuego();
         Screen.orientation = ScreenOrientation.LandscapeLeft;
+        //InicializacionJuego();
+        Recursos.InicializarCartas();
     }
 
     public void InicializacionJuego()

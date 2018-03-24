@@ -64,6 +64,7 @@ public class Eventos : MonoBehaviour {
     {
         Debug.Log("End");
         if (!dragging) {
+            //OPTIONAL comprobar aqui si el jugador puede previsualizar y/o abrir menu en vez de dentro de opciones
             //Mostrar previsualizacion y menu
             GetComponent<OpcionesObjeto>().MostrarOpciones();
         }
