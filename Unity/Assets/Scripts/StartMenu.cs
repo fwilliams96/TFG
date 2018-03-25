@@ -7,16 +7,26 @@ public class StartMenu : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
-	}
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
+    }
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
 
-    public void Empezar()
+    public void Jugar()
     {
         SceneManager.LoadScene("BattleGalaxy");
+    }
+
+    public void Inventario()
+    {
+        SceneManager.LoadScene("Inventario");
+    }
+
+    public void Batalla()
+    {
+        SceneManager.LoadScene("Batalla");
     }
 }
