@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class StartMenu : MonoBehaviour {
+public class MenuBatalla : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
-    }
+		
+	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -18,15 +18,5 @@ public class StartMenu : MonoBehaviour {
     public void Jugar()
     {
         SceneManager.LoadScene("BattleGalaxy");
-    }
-
-    public void Inventario()
-    {
-        SceneManager.LoadScene("Inventario");
-    }
-
-    public void Batalla()
-    {
-        SceneManager.LoadScene("Batalla");
     }
 }
