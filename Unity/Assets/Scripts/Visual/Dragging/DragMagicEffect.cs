@@ -27,20 +27,7 @@ public class DragMagicEffect : DraggingActions {
             // a) we can control this our player (this is checked in base.canDrag)
             // b) creature "CanAttackNow" - this info comes from logic part of our code into each creature`s manager script
             //return base.SePuedeArrastrar && manager.PuedeAtacar;
-            try
-            {
-                return base.SePuedeArrastrar && manager.PuedeAtacar;
-            }
-            /*catch(EnteException e)
-            {
-                Debug.Log(e.GetMessage());
-                return false;
-            }*/
-            catch (System.Exception e)
-            {
-                Debug.Log(e);
-                return false;
-            }
+            return false;
            
         }
     }

@@ -13,14 +13,8 @@ public abstract class DraggingActions : MonoBehaviour {
     {
         get
         {
-            if (tag.Contains("Card"))
-            {
-                return Controlador.Instance.SePermiteControlarElJugador(playerOwner);
-            }
-            else
-            {
-                return Controlador.Instance.SePermiteControlarElJugador(playerOwner) && !Controlador.Instance.EsMagica(GetComponent<IDHolder>().UniqueID);
-            }
+
+            return Controlador.Instance.SePermiteControlarElJugador(playerOwner);
             
         }
     }

@@ -15,16 +15,16 @@ public class CreatureAttackVisual : EnteVisual
 
         // bring this creature to front sorting-wise.
         w.TraerAlFrente();
-        VisualStates tempState = w.EstadoVisual;
-        w.EstadoVisual = VisualStates.Transicion;
+        /*VisualStates tempState = w.EstadoVisual;
+        w.EstadoVisual = VisualStates.Transicion;*/
 
         transform.DOMove(target.transform.position, 0.5f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.InCubic).OnComplete(() =>
         {
             //Solo se atacan entes no jugadores
             target.GetComponent<OneCreatureManager>().HacerDaño(damageTakenByTarget, targetHealthAfter);
 
-            w.SetearOrdenCriatura();
-            w.EstadoVisual = tempState;
+            /*w.SetearOrdenCriatura();
+            w.EstadoVisual = tempState;*/
 
             manager.HealthText.text = attackerHealthAfter.ToString();
             Sequence s = DOTween.Sequence();
