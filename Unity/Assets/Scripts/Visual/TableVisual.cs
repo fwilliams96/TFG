@@ -120,8 +120,8 @@ public class TableVisual : MonoBehaviour
         IDHolder id = criaturaOMagica.AddComponent<IDHolder>();
         id.UniqueID = idUnico;
 
-        ShiftSlotsGameObjectAccordingToNumberOfCreatures();
-        PlaceCreaturesOnNewSlots();
+        ActualizarSlots();
+        MoverSlotCartas();
         // TODO: remove this
         Comandas.Instance.CompletarEjecucionComanda();
     }
@@ -158,15 +158,15 @@ public class TableVisual : MonoBehaviour
         CreaturesOnTable.Remove(creatureToRemove);
         Destroy(creatureToRemove);
 
-        ShiftSlotsGameObjectAccordingToNumberOfCreatures();
-        PlaceCreaturesOnNewSlots();
+        ActualizarSlots();
+        MoverSlotCartas();
         Comandas.Instance.CompletarEjecucionComanda();
     }
 
     /// <summary>
     /// Shifts the slots game object according to number of creatures.
     /// </summary>
-    void ShiftSlotsGameObjectAccordingToNumberOfCreatures()
+    void ActualizarSlots()
     {
         float posX;
         if (CreaturesOnTable.Count > 0)
@@ -181,7 +181,7 @@ public class TableVisual : MonoBehaviour
     /// After a new creature is added or an old creature dies, this method
     /// shifts all the creatures and places the creatures on new slots.
     /// </summary>
-    void PlaceCreaturesOnNewSlots()
+    void MoverSlotCartas()
     {
         foreach (GameObject g in CreaturesOnTable)
         {
