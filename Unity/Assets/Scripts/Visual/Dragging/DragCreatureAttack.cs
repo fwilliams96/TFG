@@ -42,13 +42,10 @@ public class DragCreatureAttack : DraggingActions {
             //return base.SePuedeArrastrar && manager.PuedeAtacar;
             try
             {
-                return base.SePuedeArrastrar && manager.PuedeAtacar;
+
+                return base.SePuedeArrastrar && manager.PuedeAtacar && Controlador.Instance.EstaEnPosicionAtaque(GetComponentInParent<IDHolder
+                    >().UniqueID);
             }
-            /*catch(EnteException e)
-            {
-                Debug.Log(e.GetMessage());
-                return false;
-            }*/
             catch (System.Exception e)
             {
                 Debug.Log(e);

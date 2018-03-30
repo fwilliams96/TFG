@@ -67,6 +67,8 @@ public class DragCardOnTable : DraggingActions
         {
             VolverALaMano();
         }
+        //whereIsCard.SetearOrdenCarta();
+       // whereIsCard.EstadoVisual = VisualStates.ManoJugadorAbajo;
     }
 
     public void ColocarCartaTablero(bool resultOK)
@@ -78,7 +80,8 @@ public class DragCardOnTable : DraggingActions
 
             // determine table position
             int tablePos = Controlador.Instance.AreaJugador(playerOwner).tableVisual.PosicionSlotNuevaCriatura(Camera.main.ScreenToWorldPoint(
-                    new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z - Camera.main.transform.position.z)).x);
+                    new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, transform.position.z - Camera.main.transform.position.z)).x);
+            //new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z - Camera.main.transform.position.z)).x);
             // Debug.Log("Table Pos for new Creature: " + tablePos.ToString());
             // play this card
             if (magica)
@@ -117,6 +120,7 @@ public class DragCardOnTable : DraggingActions
         // Move this card back to its slot position
         HandVisual PlayerHand = Controlador.Instance.AreaJugador(playerOwner).manoVisual;
         Vector3 oldCardPos = PlayerHand.slots.Children[savedHandSlot].transform.localPosition;
+        //Se usa local move porque a veces puede estar este script en target y alli si pillamos transform.position pillariamos la dl padre
         transform.DOLocalMove(oldCardPos, 1f);
     }
 }

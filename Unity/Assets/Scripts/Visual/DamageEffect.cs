@@ -64,5 +64,6 @@ public class DamageEffect : MonoBehaviour {
         de.AmountText.text = "-"+amount.ToString();
         // start a coroutine to fade away and delete this effect after a certain time
         de.StartCoroutine(de.ShowDamageEffect());
+        //Comandas.Instance.CompletarEjecucionComanda();
     }
 }

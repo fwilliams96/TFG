@@ -1,10 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
 using DG.Tweening;
-using UnityEditor;
-using System;
-using System.Reflection;
 public enum PosicionCriatura { ATAQUE, DEFENSA };
 
 // this class will take care of switching turns and counting down time until the turn expires
@@ -54,6 +49,7 @@ public class Controlador : MonoBehaviour
 
     void Start()
     {
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
         InicializacionJuego();
     }
 
@@ -380,7 +376,7 @@ public class Controlador : MonoBehaviour
         else
         {
             //Criatura magicaObjetivo = (Magica)objetivo;
-            Controlador.Instance.ActivarEfecto(idObjetivo);
+            Controlador.Instance.ActivarEfectoMagica(idObjetivo);
         }
         
         
@@ -388,9 +384,19 @@ public class Controlador : MonoBehaviour
         //controladorJugador.QuitarVidaJugador(objetivo.Defensa);
     }
 
-    public void ActivarEfecto(int idMagica)
+    public void ActivarEfectoMagica(int idMagica)
     {
-        controladorEnte.ActivarEfecto(idMagica);
+        controladorEnte.ActivarEfectoMagica(idMagica);
+    }
+
+    public void CambiarPosicionCriatura(int idCriatura)
+    {
+        controladorEnte.CambiarPosicionCriatura(idCriatura);
+    }
+
+    public void MostrarAccion(int idEnte)
+    {
+        controladorEnte.MostrarAccion(idEnte);
     }
 
 

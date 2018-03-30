@@ -67,7 +67,7 @@ public class TableVisual : MonoBehaviour
         Debug.Log("Añadir ente magica");
         //Quaternion.Euler(new Vector3(0f, -179f, 0f))
         GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.MagicaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
-        RotarObjetoEjeY(creature.transform.Find("Cuerpo").gameObject, 180, 0f);
+        creature.GetComponent<MagicEffectVisual>().ColocarMagicaBocaAbajo(0f);
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
     //TODO mejorar codigo
@@ -76,8 +76,8 @@ public class TableVisual : MonoBehaviour
         Debug.Log("Añadir ente criatura como defensa");
         //TODO cuando sea una carta magica no entrara en esta funcion
         // create a new creature from prefab
-        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefabPC, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
-        RotarObjetoEjeZ(creature.transform.Find("Canvas").gameObject, 90, DatosGenerales.Instance.CardTransitionTimeFast);
+        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
+        creature.GetComponent<CreatureAttackVisual>().ColocarCriaturaEnDefensa(DatosGenerales.Instance.CardTransitionTimeFast);
         /*float x = creature.transform.eulerAngles.x;
         float y = creature.transform.eulerAngles.y;
         float z = creature.transform.eulerAngles.z + 90;
@@ -90,7 +90,7 @@ public class TableVisual : MonoBehaviour
     {
         Debug.Log("Añadir ente criatura como ataque");
         // create a new creature from prefab
-        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefabPC, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
+        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
         // apply the look from CardAsset
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
@@ -112,6 +112,7 @@ public class TableVisual : MonoBehaviour
         WhereIsTheCardOrEntity w = criaturaOMagica.GetComponent<WhereIsTheCardOrEntity>();
         w.Slot = indiceSlot;
         if (criaturaOMagica.tag.Contains("Low"))
+            //PETA
             w.EstadoVisual = VisualStates.MesaJugadorAbajo;
         else
             w.EstadoVisual = VisualStates.MesaJugadorArriba;
@@ -119,8 +120,8 @@ public class TableVisual : MonoBehaviour
         IDHolder id = criaturaOMagica.AddComponent<IDHolder>();
         id.UniqueID = idUnico;
 
-        ShiftSlotsGameObjectAccordingToNumberOfCreatures();
-        PlaceCreaturesOnNewSlots();
+        ActualizarSlots();
+        MoverSlotCartas();
         // TODO: remove this
         Comandas.Instance.CompletarEjecucionComanda();
     }
@@ -157,15 +158,15 @@ public class TableVisual : MonoBehaviour
         CreaturesOnTable.Remove(creatureToRemove);
         Destroy(creatureToRemove);
 
-        ShiftSlotsGameObjectAccordingToNumberOfCreatures();
-        PlaceCreaturesOnNewSlots();
+        ActualizarSlots();
+        MoverSlotCartas();
         Comandas.Instance.CompletarEjecucionComanda();
     }
 
     /// <summary>
     /// Shifts the slots game object according to number of creatures.
     /// </summary>
-    void ShiftSlotsGameObjectAccordingToNumberOfCreatures()
+    void ActualizarSlots()
     {
         float posX;
         if (CreaturesOnTable.Count > 0)
@@ -180,7 +181,7 @@ public class TableVisual : MonoBehaviour
     /// After a new creature is added or an old creature dies, this method
     /// shifts all the creatures and places the creatures on new slots.
     /// </summary>
-    void PlaceCreaturesOnNewSlots()
+    void MoverSlotCartas()
     {
         foreach (GameObject g in CreaturesOnTable)
         {
@@ -190,22 +191,6 @@ public class TableVisual : MonoBehaviour
             // g.GetComponent<WhereIsTheCardOrCreature>().SetTableSortingOrder() = CreaturesOnTable.IndexOf(g);
         }
     }
-
-    public void RotarObjetoEjeY(GameObject objeto, int grados, float tiempoTransicion)
-    {
-        float x = objeto.transform.eulerAngles.x;
-        float y = grados;
-        float z = objeto.transform.eulerAngles.z;
-        objeto.transform.DORotate(new Vector3(x, y, z), tiempoTransicion);
-    }
-
-    public void RotarObjetoEjeZ(GameObject objeto, int grados, float tiempoTransicion)
-    {
-        float x = objeto.transform.eulerAngles.x;
-        float y = objeto.transform.eulerAngles.y;
-        //TODO
-        float z = grados;
-        objeto.transform.DORotate(new Vector3(x, y, z), tiempoTransicion);
-    }
+    
 
 }

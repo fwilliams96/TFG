@@ -27,20 +27,7 @@ public class DragMagicEffect : DraggingActions {
             // a) we can control this our player (this is checked in base.canDrag)
             // b) creature "CanAttackNow" - this info comes from logic part of our code into each creature`s manager script
             //return base.SePuedeArrastrar && manager.PuedeAtacar;
-            try
-            {
-                return base.SePuedeArrastrar && manager.PuedeAtacar;
-            }
-            /*catch(EnteException e)
-            {
-                Debug.Log(e.GetMessage());
-                return false;
-            }*/
-            catch (System.Exception e)
-            {
-                Debug.Log(e);
-                return false;
-            }
+            return false;
            
         }
     }
@@ -57,7 +44,7 @@ public class DragMagicEffect : DraggingActions {
 
     public override void OnEndDrag()
     {
-        Target = FindTarget();
+        /*Target = FindTarget();
         int magicID = GetComponentInParent<IDHolder>().UniqueID;
         if (Target != null)
         {
@@ -67,7 +54,7 @@ public class DragMagicEffect : DraggingActions {
             if (magicID != targetID && Recursos.EntesCreadosEnElJuego[targetID] != null)
             {
                 // if targeted creature is still alive, attack creature
-                Controlador.Instance.ActivarEfecto(magicID);
+                Controlador.Instance.ActivarEfectoMagica(magicID);
                 Debug.Log("Attacking "+Target);
             }
 
@@ -75,9 +62,9 @@ public class DragMagicEffect : DraggingActions {
         else
         {
             // if targeted creature is still alive, attack creature
-            Controlador.Instance.ActivarEfecto(magicID);
+            Controlador.Instance.ActivarEfectoMagica(magicID);
             Debug.Log("Attacking " + Target);
-        }
+        }*/
         // not a valid target, return
         if(tag.Contains("Low"))
             dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorAbajo;

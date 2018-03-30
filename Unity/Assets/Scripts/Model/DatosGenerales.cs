@@ -19,6 +19,7 @@ public class DatosGenerales: MonoBehaviour
     public float CardTransitionTimeFast = 0.5f;
     public int NumMaximoCriaturasMesa = 7;
     [Header("Prefabs and Assets")]
+    public GameObject CardInventario;
     public GameObject CardPrefab;
     public GameObject CardPrefabPC;
     public GameObject CriaturaPrefab;

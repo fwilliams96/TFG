@@ -12,8 +12,10 @@ public abstract class DraggingActions : MonoBehaviour {
     public virtual bool SePuedeArrastrar
     {
         get
-        {            
+        {
+
             return Controlador.Instance.SePermiteControlarElJugador(playerOwner);
+            
         }
     }
 

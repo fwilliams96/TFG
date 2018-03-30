@@ -40,11 +40,53 @@ public class ControladorEnte
             MuerteEnte(objetivo.ID);
     }
 
-    public void ActivarEfecto(int idMagica)
+    public void ActivarEfectoMagica(int idMagica)
     {
         Magica magica = (Magica)Recursos.EntesCreadosEnElJuego[idMagica];
         magica.EfectoActivado = true;
         new ActivateEffectCommand(idMagica).AñadirAlaCola();
+    }
+
+    public void CambiarPosicionCriatura(int idCriatura)
+    {
+        Criatura criatura = (Criatura)Recursos.EntesCreadosEnElJuego[idCriatura];
+        if (criatura.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
+        {
+            criatura.PosicionCriatura = PosicionCriatura.DEFENSA;
+            new ChangeCreaturePosition(idCriatura, PosicionCriatura.DEFENSA).AñadirAlaCola();
+        }
+        else
+        {
+            criatura.PosicionCriatura = PosicionCriatura.ATAQUE;
+            new ChangeCreaturePosition(idCriatura, PosicionCriatura.ATAQUE).AñadirAlaCola();
+        }
+    }
+
+    public void MostrarAccion(int idEnte)
+    {
+        Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
+        if (ente.GetType() == typeof(Magica))
+        {
+            //Solo mostraremos la opcion activar efecto si no lo ha activado aun
+            if (!((Magica)ente).EfectoActivado)
+            {
+                AccionesPopUp.Instance.MostrarAccionEfecto();
+                AccionesPopUp.Instance.RegistrarCallBack(ActivarEfectoMagica, idEnte);
+            }
+        }
+        else
+        {
+            Criatura criatura = (Criatura)ente;
+            if (criatura.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
+            {
+                AccionesPopUp.Instance.MostrarAccionDefensa();
+            }
+            else
+            {
+                AccionesPopUp.Instance.MostrarAccionAtaque();
+            }
+            AccionesPopUp.Instance.RegistrarCallBack(CambiarPosicionCriatura, idEnte);
+        }
     }
 
     public void MuerteEnte(int idCriatura)
@@ -68,7 +110,7 @@ public class ControladorEnte
         Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
         if(ente.GetType() == typeof(Criatura))
         {
-            return ((Criatura)ente).PosicionCriatura == PosicionCriatura.ATAQUE;
+            return ((Criatura)ente).PosicionCriatura.Equals(PosicionCriatura.ATAQUE);
         }
         //throw new EnteException();
         throw new System.Exception();

@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
+using System.Runtime.Serialization.Formatters.Binary;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class Recursos  {
 
@@ -21,9 +24,9 @@ public class Recursos  {
 
     public static void InicializarCartas()
     {
-        //string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, "/JSON");
         LeerInformacionCartas();
         CrearAssetsCartas();
+        //var asset = LeerCartaAssetApartirJSON("Asset2.json");
 
     }
 
@@ -108,10 +111,9 @@ public class Recursos  {
                     asset.Ataque = ataque;
                     if (evolucion != -1)
                         asset.Evolucion = evolucion;
-
-                    //AssetDatabase.CreateAsset(asset, "Assets/Game Assets/"+ obtenerCarpetaFamilia(familia) + nombre+".asset");
-                    AssetDatabase.CreateAsset(asset, obtenerRutaAsset(familia, carpetaCarta, nombre + ".asset"));
+                    GuardarJSONApartirCartaAsset(asset, obtenerRutaJSON(familia, carpetaCarta),nombre+".json");
                     AssetsCreadosCartas.Add(asset);
+
                 }
             }
             
@@ -129,19 +131,18 @@ public class Recursos  {
         return obtenerRutaFamiliaImagen(familia) + carpetaCarta + "/" + nombreImagen;
     }
 
-    private static string obtenerRutaAsset(string familia, string carpetaCarta, string nombreAsset)
+    private static string obtenerRutaJSON(string familia, string carpetaCarta, string nombreJSON)
     {
-        return obtenerRutaFamiliaAsset(familia) + carpetaCarta + "/" + nombreAsset;
+        return "files/"+obtenerCarpetaFamilia(familia) + carpetaCarta + "/" + nombreJSON;
     }
 
+    private static string obtenerRutaJSON(string familia, string carpetaCarta)
+    {
+        return "files/" + obtenerCarpetaFamilia(familia) + carpetaCarta+"/";
+    }
     private static string obtenerRutaFamiliaImagen(string familia)
     {
         return "Sprites/Cartas/" + obtenerCarpetaFamilia(familia);
-    }
-
-    private static string obtenerRutaFamiliaAsset(string familia)
-    {
-        return "Assets/Game Assets/" + obtenerCarpetaFamilia(familia);
     }
 
     private static string obtenerCarpetaFamilia(string familia)
@@ -208,5 +209,65 @@ public class Recursos  {
                 break;
         }
         return tipo;
+    }
+
+    /*public static void Save(CartaAsset asset)
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        string path = Application.persistentDataPath;// + "/Asset2.asset";
+        bool dirExists = System.IO.Directory.Exists(path);
+        if (!dirExists)
+            System.IO.Directory.CreateDirectory(path);
+        FileStream file = File.Create(path+"/Asset2.asset");
+
+        bf.Serialize(file, asset);
+        Debug.Log("Asset guardado con exito");
+        file.Close();
+    }
+
+    public static void Load()
+    {
+        if (File.Exists(Application.persistentDataPath + "/Asset2.asset"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "/Asset2.asset", FileMode.Open);
+            CartaAsset asset = (CartaAsset)bf.Deserialize(file);
+            Debug.Log("Asset cargado con exito");
+            file.Close();
+        }
+    }*/
+
+    public static CartaAsset LeerCartaAssetApartirJSON(string rutaArchivo)
+    {
+        string path = (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer ? Application.persistentDataPath : Application.dataPath);
+        string ruta = Path.Combine(path, rutaArchivo);
+        Debug.Log("Leer json");
+        Debug.Log("Ruta: " + ruta);
+        if (File.Exists(ruta))
+        {
+            var json = File.ReadAllText(ruta);
+            CartaAsset carta = ScriptableObject.CreateInstance<CartaAsset>();
+            JsonUtility.FromJsonOverwrite(json, carta);
+            Debug.Log("Asset cargado con exito");
+            return carta;
+        }
+        throw new System.Exception();
+        
+    }
+
+    public static void GuardarJSONApartirCartaAsset(CartaAsset asset, string rutaArchivo, string nombreArchivo)
+    {
+        //string path = Application.persistentDataPath;
+        string path = (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer ? Application.persistentDataPath : Application.dataPath);
+        string ruta = Path.Combine(path, rutaArchivo);
+        bool dirExists = Directory.Exists(ruta);
+        if (!dirExists)
+            Directory.CreateDirectory(ruta);
+        Debug.Log("Guardar json");
+        string json = JsonUtility.ToJson(asset);
+        ruta = Path.Combine(ruta, nombreArchivo);
+        Debug.Log("Ruta: " + ruta);
+        File.WriteAllText(ruta, json);
+        Debug.Log("Asset guardado con exito");
     }
 }

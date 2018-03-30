@@ -1,7 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using System;
+using UnityEngine;
 
 public enum Familia
 {
@@ -14,6 +12,7 @@ public enum Familia
     Ancestral
 }
 
+[Serializable]
 public class CartaAsset : ScriptableObject 
 {
     [Header("Información general")]
