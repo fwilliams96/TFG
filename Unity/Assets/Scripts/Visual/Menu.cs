@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using Firebase;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Firebase.Unity.Editor;
 
 public class Menu : MonoBehaviour {
 
@@ -8,9 +10,14 @@ public class Menu : MonoBehaviour {
     public GameObject batalla;
     public GameObject perfil;
 
-	// Use this for initialization
-	void Start () {
+    void Awake()
+    {
         Screen.orientation = ScreenOrientation.LandscapeLeft;
+    }
+
+    // Use this for initialization
+    void Start () {
+        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://battle-galaxy-cda70.firebaseio.com/");
     }
 	
 	// Update is called once per frame

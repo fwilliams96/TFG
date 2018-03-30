@@ -38,6 +38,7 @@ public class Controlador : MonoBehaviour
     // METHODS
     void Awake()
     {
+        Screen.orientation = ScreenOrientation.LandscapeLeft;
         Instance = this;
         timer = GetComponent<RopeTimer>();
         controladorJugador = ControladorJugador.Instance;
@@ -49,7 +50,6 @@ public class Controlador : MonoBehaviour
 
     void Start()
     {
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
         InicializacionJuego();
     }
 
