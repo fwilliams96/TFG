@@ -7,14 +7,12 @@ public class Inicio : MonoBehaviour {
 
     public GameObject menuLogin;
     public GameObject menuRegistrarse;
-    private Firebase.Auth.FirebaseAuth auth;
 
     void Awake()
     {
         Screen.orientation = ScreenOrientation.LandscapeLeft;
-        auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-        Firebase.Auth.FirebaseUser user = auth.CurrentUser;
-        if (user != null)
+        
+        if (SesionUsuario.Instance.ExisteSesion())
         {
             SceneManager.LoadScene("Menu");
         }
@@ -22,8 +20,6 @@ public class Inicio : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        //Screen.orientation = ScreenOrientation.LandscapeLeft;
-        //auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
     }
 
     // Update is called once per frame

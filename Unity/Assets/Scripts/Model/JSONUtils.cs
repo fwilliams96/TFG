@@ -6,7 +6,7 @@ using System.Text;
 using System.Xml;
 using UnityEngine;
 
-public class XMLToJSONUtils {
+public class JSONUtils {
 
     public static void XmlToJSONnode(StringBuilder sbJSON, XmlElement node,
                                            bool showNodeName)
@@ -165,8 +165,13 @@ public class XMLToJSONUtils {
     {
         StringBuilder sbJSON = new StringBuilder();
         sbJSON.Append("{ ");
-        global::XMLToJSONUtils.XmlToJSONnode(sbJSON, xmlDoc.DocumentElement, true);
+        global::JSONUtils.XmlToJSONnode(sbJSON, xmlDoc.DocumentElement, true);
         sbJSON.Append("}");
         return JSON.Parse(sbJSON.ToString());
+    }
+
+    public static JSONNode StringToJSON(string json)
+    {
+        return JSON.Parse(json);
     }
 }

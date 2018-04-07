@@ -34,14 +34,24 @@ public class Elementos : MonoBehaviour {
     }
     // Use this for initialization
     void Start () {
-        ListaElementos = new List<GameObject>();
+        List<System.Object> listaCartas = BaseDatos.Instance.Local.Cartas();
+        //ListaElementos = new List<GameObject>();
         //GameObject c1 = Instantiate(DatosGenerales.Instance.CardPrefab, transform);
         GameObject elemento;
-        for (int i=0; i < 20; i++)
+        foreach(Carta carta in listaCartas)
         {
             //elemento = Instantiate(DatosGenerales.Instance.CardInventario, transform.position, Quaternion.identity) as GameObject;
+            CartaAsset asset = carta.assetCarta;
+            float progresoTrebol = carta.Progreso.Material;
+            float progresoPocion = carta.Progreso.Pocion;
             elemento = Instantiate(DatosGenerales.Instance.CardInventario, transform);
-            ListaElementos.Add(elemento);
+            OneCardManager manager = elemento.GetComponent<OneCardManager>();
+            manager.CartaAsset = asset;
+            manager.PorcentajeProgresoTrebol = progresoTrebol;
+            manager.PorcentajeProgresoPocion = progresoPocion;
+            manager.LeerDatos();
+
+            //ListaElementos.Add(elemento);
             //elemento.transform.parent = gridLayoutGroup.gameObject.transform;
         }
         

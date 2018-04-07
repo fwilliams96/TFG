@@ -10,10 +10,73 @@ public class Carta : IIdentifiable
     // an ID of this card
     private int idCarta;
     // a reference to the card asset that stores all the info about this card
-    public CardAsset assetCarta;
-    // a script of type spell effect that will be attached to this card when it`s created
-    public SpellEffect efecto;
+    private string idAsset;
+    public CartaAsset assetCarta;
+    public CardAsset assetCarta2;
+    private Progreso progreso;
     #endregion
+
+    // CONSTRUCTOR
+    /*public Carta(CardAsset ca)
+    {
+        // set the CardAsset reference
+        this.assetCarta = ca;
+        // get unique int ID
+        idCarta = IDFactory.GetUniqueID();
+        //UniqueCardID = IDFactory.GetUniqueID();
+        ResetCosteMana();
+        // add this card to a dictionary with its ID as a key
+        //Recursos.CartasCreadasEnElJuego.Add(idCarta, this);
+        progreso = new Progreso();
+    }*/
+
+    public Carta()
+    {
+        idCarta = IDFactory.GetUniqueID();
+        progreso = new Progreso();
+    }
+
+    public Carta(CartaAsset ca)
+    {
+        // set the CardAsset reference
+        this.assetCarta = ca;
+        // get unique int ID
+        idCarta = IDFactory.GetUniqueID();
+        //UniqueCardID = IDFactory.GetUniqueID();
+        ResetCosteMana();
+        // add this card to a dictionary with its ID as a key
+        //Recursos.CartasCreadasEnElJuego.Add(idCarta, this);
+        progreso = new Progreso();
+    }
+
+    public Carta(string idAsset,CartaAsset ca)
+    {
+        // set the CardAsset reference
+        this.idAsset = idAsset;
+        this.assetCarta = ca;
+        // get unique int ID
+        idCarta = IDFactory.GetUniqueID();
+        //UniqueCardID = IDFactory.GetUniqueID();
+        ResetCosteMana();
+        // add this card to a dictionary with its ID as a key
+        //Recursos.CartasCreadasEnElJuego.Add(idCarta, this);
+        progreso = new Progreso();
+    }
+
+    // method to set or reset mana cost
+    public void ResetCosteMana()
+    {
+        CosteManaActual = assetCarta2.CosteMana;
+    }
+
+    public Dictionary<string, System.Object> ToDictionary()
+    {
+        Dictionary<string, System.Object> result = new Dictionary<string, System.Object>();
+        result["asset"] = idAsset;
+        result["progreso"] = JsonUtility.ToJson(progreso);
+        return result;
+    }
+
     #region Getters/Setters
     // PROPERTIES
     public int ID
@@ -23,31 +86,19 @@ public class Carta : IIdentifiable
 
     public int CosteManaActual { get; set; }
 
-    #endregion
-
-    // CONSTRUCTOR
-    public Carta(CardAsset ca)
+    public Progreso Progreso
     {
-        // set the CardAsset reference
-        this.assetCarta = ca;
-        // get unique int ID
-        idCarta = IDFactory.GetUniqueID();
-        //UniqueCardID = IDFactory.GetUniqueID();
-        ResetCosteMana();
-        // create an instance of SpellEffect with a name from our CardAsset
-        // and attach it to 
-        if (ca.SpellScriptName != null && ca.SpellScriptName != "")
+        get
         {
-            efecto = System.Activator.CreateInstance(System.Type.GetType(ca.SpellScriptName)) as SpellEffect;
+            return progreso;
         }
-        // add this card to a dictionary with its ID as a key
-        Recursos.CartasCreadasEnElJuego.Add(idCarta, this);
+
+        set
+        {
+            progreso = value;
+        }
     }
 
-    // method to set or reset mana cost
-    public void ResetCosteMana()
-    {
-        CosteManaActual = assetCarta.CosteMana;
-    }
+    #endregion
 
 }

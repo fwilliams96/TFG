@@ -2,8 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Mano : MonoBehaviour 
+public class Mano 
 {
-    public List<Carta> CartasEnMano = new List<Carta>(); 
+    public List<Carta> CartasEnMano;
+
+    public Mano()
+    {
+        CartasEnMano = new List<Carta>();
+    }
 
 }

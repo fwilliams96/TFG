@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System;
 
-public class Jugador : MonoBehaviour, ICharacter
+public class Jugador : ICharacter
 {
 
     #region Atributos
@@ -10,9 +12,13 @@ public class Jugador : MonoBehaviour, ICharacter
     private int PlayerID;
 
     // REFERENCES TO LOGICAL STUFF THAT BELONGS TO THIS PLAYER
+    //private Dictionary<string, System.Object> cartas = new Dictionary<string, System.Object>();
+    private List<System.Object> cartas = new List<System.Object>();
     private Mazo mazo;
     private Mano mano;
-    private Tablero mesa;
+    private Mesa mesa;
+    private int nivel;
+    private string area;
 
     #endregion Atributos
     #region Getters/Setters
@@ -55,6 +61,14 @@ public class Jugador : MonoBehaviour, ICharacter
             defensa = value;
         }
     }
+
+    public string Area
+    {
+        get
+        {
+            return area;
+        }
+    }
     #endregion
 
     // CODE FOR EVENTS TO LET CREATURES KNOW WHEN TO CAUSE EFFECTS
@@ -64,16 +78,13 @@ public class Jugador : MonoBehaviour, ICharacter
     //public event VoidWithNoArguments StartTurnEvent;
     public event VoidWithNoArguments EndTurnEvent;
 
-    // ALL METHODS
-    void Awake()
+    public Jugador()
     {
-        // obtain unique id from IDFactory
         PlayerID = IDFactory.GetUniqueID();
-        mazo = GetComponentInChildren<Mazo>();
-        mano = GetComponentInChildren<Mano>();
-        mesa = GetComponentInChildren<Tablero>();
-        //TODO luego debería leerlo desde otro lado este 30
-        Defensa = 30;
+        this.mano = new Mano();
+        this.mazo = new Mazo();
+        this.mesa = new Mesa();
+        this.defensa = 30;
     }
 
     //TODO get mana from coin or other spells 
@@ -83,13 +94,17 @@ public class Jugador : MonoBehaviour, ICharacter
         ManaRestante += amount;
     }
 
-    void Update()
+    public void Morir() { }
+
+    public void AñadirCarta(Carta carta)
     {
-        //if (Input.GetKeyDown(KeyCode.D))
-        // DibujarCartaMazo();
+        cartas.Add(carta);
     }
 
-    public void Morir() { }
+    public void EliminarCarta(string idCarta)
+    {
+        cartas.Remove(idCarta);
+    }
 
     public void AñadirEnteMesa(int posicionMesa, Ente ente)
     {
@@ -101,9 +116,9 @@ public class Jugador : MonoBehaviour, ICharacter
         mano.CartasEnMano.Insert(posicionMano, carta);
     }
 
-    public void AñadirCartaMazo(int posicionMazo, CardAsset carta)
+    public void AñadirCartaMazo(Carta carta)
     {
-        mazo.CartasEnMazo.Insert(posicionMazo, carta);
+        mazo.CartasEnMazo.Add(carta);
     }
 
     public void EliminarEnteMesa(Ente ente)
@@ -121,6 +136,11 @@ public class Jugador : MonoBehaviour, ICharacter
         mazo.CartasEnMazo.RemoveAt(pos);
     }
 
+    public List<System.Object> Cartas()
+    {
+        return cartas;
+    }
+
     public Ente[] EntesEnLaMesa()
     {
         return mesa.EntesEnTablero.ToArray();
@@ -131,7 +151,7 @@ public class Jugador : MonoBehaviour, ICharacter
         return mano.CartasEnMano.ToArray();
     }
 
-    public CardAsset[] CartasEnElMazo()
+    public Carta[] CartasEnElMazo()
     {
         return mazo.CartasEnMazo.ToArray();
     }
@@ -151,23 +171,36 @@ public class Jugador : MonoBehaviour, ICharacter
         return mazo.CartasEnMazo.Count;
     }
 
-    //TODO
     public virtual void OnTurnStart()
     {
         // add one mana crystal to the pool;
-        Debug.Log("In ONTURNSTART for " + gameObject.name);
         ManaEnEsteTurno++;
         ManaRestante = ManaEnEsteTurno;
         foreach (Ente cl in mesa.EntesEnTablero)
             cl.OnTurnStart();
     }
-    //TODO
+
     public void OnTurnEnd()
     {
         if (EndTurnEvent != null)
             EndTurnEvent.Invoke();
-        //ManaEnEsteTurno -= bonusManaThisTurn;
-        //bonusManaThisTurn = 0;
-        GetComponent<TurnMaker>().StopAllCoroutines();
+        //TODO Controlador.PararTurnMaker(this);
+        //GetComponent<TurnMaker>().StopAllCoroutines();
+    }
+
+    public Dictionary<string, System.Object> ToDictionary()
+    {
+        Dictionary <string, System.Object> result = new Dictionary<string, System.Object>();
+        result["nivel"] = nivel;
+        int i = 1;
+        Dictionary<string, System.Object> cards = new Dictionary<string, System.Object>();
+        foreach (Carta carta in cartas)
+        {
+            cards[i.ToString()] = carta.ToDictionary();
+            i += 1;
+        }
+        result["cartas"] = cards;
+
+        return result;
     }
 }

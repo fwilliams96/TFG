@@ -18,6 +18,6 @@ public class Magica: Ente,ICharacter
         }
     }
     // CONSTRUCTOR
-    public Magica(CardAsset ca) : base(ca) { efectoActivado = false; }
+    public Magica(CartaAsset ca) : base(ca) { efectoActivado = false; }
 
 }

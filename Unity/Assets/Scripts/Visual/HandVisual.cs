@@ -81,7 +81,7 @@ public class HandVisual : MonoBehaviour
     }
 
     // CARD DRAW METHODS
-    public void DarCartaJugador(CardAsset c, int UniqueID, bool fast = false, bool fromDeck = true)
+    public void DarCartaJugador(CartaAsset c, int UniqueID, bool fast = false, bool fromDeck = true)
     {
         GameObject card;
         if (fromDeck)
@@ -151,7 +151,7 @@ public class HandVisual : MonoBehaviour
         Comandas.Instance.CompletarEjecucionComanda();
     }
 
-    GameObject CrearCartaPorPosicion(CardAsset c, Vector3 position, Vector3 eulerAngles)
+    GameObject CrearCartaPorPosicion(CartaAsset c, Vector3 position, Vector3 eulerAngles)
     {
         // Instantiate a card depending on its type
         GameObject card;
@@ -161,7 +161,7 @@ public class HandVisual : MonoBehaviour
 
         // apply the look of the card based on the info from CardAsset
         OneCardManager manager = card.GetComponent<OneCardManager>();
-        manager.cardAsset = c;
+        manager.CartaAsset = c;
         manager.LeerDatosAsset();
 
         return card;

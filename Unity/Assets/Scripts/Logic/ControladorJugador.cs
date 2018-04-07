@@ -45,7 +45,7 @@ public class ControladorJugador
         if (jugador == _jugadorActual)
             return areaJugadorActual;
         PlayerArea areaJugador;
-        AreaPosition area = jugador.gameObject.tag == "TopPlayer" ? AreaPosition.Top : AreaPosition.Low;
+        AreaPosition area = jugador.Area == "TopPlayer" ? AreaPosition.Top : AreaPosition.Low;
         switch (area)
         {
             case AreaPosition.Low:
@@ -75,7 +75,8 @@ public class ControladorJugador
         PlayerArea areaJugador = AreaJugador(jugador);
         //TODO cuando el jugador muere esta dando un pete aqui por acceder a algo destruido
         areaJugador.Personaje.gameObject.AddComponent<IDHolder>().UniqueID = jugador.ID;
-        if (jugador.GetComponent<TurnMaker>() is AITurnMaker)
+        areaJugador.PermitirControlJugador = true;
+        /*if (jugador.GetComponent<TurnMaker>() is AITurnMaker)
         {
             // turn off turn making for this character
             areaJugador.PermitirControlJugador = false;
@@ -84,7 +85,7 @@ public class ControladorJugador
         {
             // allow turn making for this character
             areaJugador.PermitirControlJugador = true;
-        }
+        }*/
     }
 
     public void InicializarValoresJugador(Jugador jugador)
@@ -102,16 +103,28 @@ public class ControladorJugador
 
     public void ActualizarValoresJugador()
     {
-        TurnMaker tm = JugadorActual.GetComponent<TurnMaker>();
+        //TurnMaker tm = JugadorActual.GetComponent<TurnMaker>();
         // player`s method OnTurnStart() will be called in tm.OnTurnStart();
         //Aqui se crea la comanda para dar la carta al jugador
-        tm.OnTurnStart();
-        if (tm is PlayerTurnMaker)
-        {
+        OnTurnStart();
+        //tm.OnTurnStart();
+        //if (tm is PlayerTurnMaker)
+        //{
             ActualizarManaJugador(JugadorActual);
             MostrarCartasJugablesJugador(JugadorActual);
-        }
+        //}
         OcultarCartasJugablesJugadorContrario(JugadorActual);
+    }
+
+    private void OnTurnStart()
+    {
+        JugadorActual.OnTurnStart();
+        // dispay a message that it is player`s turn
+        if (JugadorActual == DatosGenerales.Instance.TopPlayer)
+            new ShowMessageCommand("Enemy Turn!", 2.0f).AñadirAlaCola();
+        else
+            new ShowMessageCommand("Your Turn!", 2.0f).AñadirAlaCola();
+        Controlador.Instance.DibujarCartaMazo(JugadorActual);
     }
 
     public void ActualizarManaJugador(Jugador jugador)
@@ -172,7 +185,7 @@ public class ControladorJugador
 
     public bool CartaOCriaturaDelJugador(string tagCartaOCriatura)
     {
-        return _jugadorActual.gameObject.tag.Substring(0,3).Equals(tagCartaOCriatura.Substring(0, 3));
+        return _jugadorActual.Area.Substring(0,3).Equals(tagCartaOCriatura.Substring(0, 3));
     }
 
     public Jugador OtroJugador(Jugador jugador)

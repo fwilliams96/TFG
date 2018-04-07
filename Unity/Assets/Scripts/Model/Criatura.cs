@@ -23,7 +23,7 @@ public class Criatura : Ente, ICharacter
     #endregion
 
     // CONSTRUCTOR
-    public Criatura(CardAsset ca, PosicionCriatura posicionCriatura) : base(ca)
+    public Criatura(CartaAsset ca, PosicionCriatura posicionCriatura) : base(ca)
     {
         this.posicionCriatura = posicionCriatura;
     }

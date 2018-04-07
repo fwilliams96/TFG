@@ -2,9 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Tablero : MonoBehaviour
+public class Mesa
 {
-    public List<Ente> EntesEnTablero = new List<Ente>();
+    public List<Ente> EntesEnTablero;
+
+    public Mesa()
+    {
+        EntesEnTablero = new List<Ente>();
+    }
 
     public void PlaceCreatureAt(int index, Ente ente)
     {

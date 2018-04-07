@@ -62,7 +62,7 @@ public class TableVisual : MonoBehaviour
         }
         cursorSobreEstaMesa = haPasadoPorColider;
     }
-    public void AñadirMagica(CardAsset ca, int idUnico, int indiceSlot)
+    public void AñadirMagica(CartaAsset ca, int idUnico, int indiceSlot)
     {
         Debug.Log("Añadir ente magica");
         //Quaternion.Euler(new Vector3(0f, -179f, 0f))
@@ -71,7 +71,7 @@ public class TableVisual : MonoBehaviour
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
     //TODO mejorar codigo
-    public void AñadirCriaturaDefensa(CardAsset ca, int idUnico, int indiceSlot)
+    public void AñadirCriaturaDefensa(CartaAsset ca, int idUnico, int indiceSlot)
     {
         Debug.Log("Añadir ente criatura como defensa");
         //TODO cuando sea una carta magica no entrara en esta funcion
@@ -86,7 +86,7 @@ public class TableVisual : MonoBehaviour
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 
-    public void AñadirCriaturaAtaque(CardAsset ca, int idUnico, int indiceSlot)
+    public void AñadirCriaturaAtaque(CartaAsset ca, int idUnico, int indiceSlot)
     {
         Debug.Log("Añadir ente criatura como ataque");
         // create a new creature from prefab
@@ -95,10 +95,10 @@ public class TableVisual : MonoBehaviour
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 
-    private void ConfigurarEnte(GameObject criaturaOMagica, CardAsset ca, int idUnico, int indiceSlot)
+    private void ConfigurarEnte(GameObject criaturaOMagica, CartaAsset ca, int idUnico, int indiceSlot)
     {
         OneCreatureManager manager = criaturaOMagica.GetComponent<OneCreatureManager>();
-        manager.cardAsset = ca;
+        manager.CartaAsset = ca;
         manager.LeerDatosAsset();
         // add tag according to owner
         foreach (Transform t in criaturaOMagica.GetComponentsInChildren<Transform>())

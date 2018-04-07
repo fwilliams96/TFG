@@ -5,7 +5,9 @@ using UnityEngine.UI;
 // holds the refs to all the Text, Images on the card
 public class OneCardManager : MonoBehaviour {
 
-    public CardAsset cardAsset;
+    public CartaAsset CartaAsset;
+    public float PorcentajeProgresoTrebol = 0;
+    public float PorcentajeProgresoPocion = 0;
     public OneCardManager PreviewManager;
     [Header("Text Component References")]
     public Text NameText;
@@ -23,11 +25,14 @@ public class OneCardManager : MonoBehaviour {
     public Image CardFaceFrameImage;
     public Image CardFaceGlowImage;
     public Image CardBackGlowImage;
+    [Header("Progress Card References")]
+    public Slider ProgresoTrebol;
+    public Slider ProgresoPocion;
 
     void Awake()
     {
-        if (cardAsset != null)
-            LeerDatosAsset();
+        if (CartaAsset != null)
+            LeerDatos();  
     }
 
     private bool puedeSerJugada = false;
@@ -46,6 +51,12 @@ public class OneCardManager : MonoBehaviour {
         }
     }
 
+    public void LeerDatos()
+    {
+        LeerDatosAsset();
+        LeerProgreso();
+    }
+
     public void LeerDatosAsset()
     {
         // universal actions for any Card
@@ -59,29 +70,35 @@ public class OneCardManager : MonoBehaviour {
             // this is a card and not a preview
             // Preview GameObject will have OneCardManager as well, but PreviewManager should be null there
 
-            PreviewManager.cardAsset = cardAsset;
+            PreviewManager.CartaAsset = CartaAsset;
             PreviewManager.LeerDatosAsset();
         }
+    }
+
+    public void LeerProgreso()
+    {
+        ProgresoTrebol.value = PorcentajeProgresoTrebol;
+        ProgresoPocion.value = PorcentajeProgresoPocion;
     }
 
     private void LeerDatosCarta()
     {
 
-        if (cardAsset.TipoDeCarta != TipoCarta.Magica && cardAsset.TipoDeCarta != TipoCarta.Spell)
+        if (CartaAsset.Familia != Familia.Magica)
         {
             // this is a creature
-            AttackText.text = cardAsset.Ataque.ToString();
-            DefenseText.text = cardAsset.Defensa.ToString();
+            AttackText.text = CartaAsset.Ataque.ToString();
+            DefenseText.text = CartaAsset.Defensa.ToString();
             //EvolutionText.text = cardAsset.Evolucion;
         }
         // 2) add card name
-        NameText.text = cardAsset.name;
+        NameText.text = CartaAsset.name;
         // 3) add mana cost
-        ManaCostText.text = cardAsset.CosteMana.ToString();
+        ManaCostText.text = CartaAsset.CosteMana.ToString();
         // 4) add description
-        DescriptionText.text = cardAsset.Descripcion;
+        DescriptionText.text = CartaAsset.Descripcion;
         // 5) add type
-        TypeText.text = cardAsset.TipoDeCarta.ToString();
+        TypeText.text = CartaAsset.Familia.ToString();
     }
 
     private void AplicarColor()
@@ -92,7 +109,7 @@ public class OneCardManager : MonoBehaviour {
     private void LeerSpritesItem()
     {
         // 6) Change the card graphic sprite
-        CardGraphicImage.sprite = cardAsset.ImagenCarta;
+        CardGraphicImage.sprite = CartaAsset.ImagenCarta;
         //TODO cuando use CartaAsset en vez de CardAsset
         //if(cardAsset.Fondo != null)
             //CardBodyImage.sprite = cardAsset.Fondo;

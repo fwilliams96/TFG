@@ -2,6 +2,9 @@
 using System.IO;
 using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
+using Firebase;
+using Firebase.Unity.Editor;
+using Firebase.Database;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -18,14 +21,16 @@ public class Recursos  {
 
     public static void InicializarJugadores()
     {
-        Players.Instance.Add(DatosGenerales.Instance.TopPlayer);
-        Players.Instance.Add(DatosGenerales.Instance.LowPlayer);
+        //Players.Instance.Add(BaseDatos.Instance.Local);
+        //Players.Instance.Add(BaseDatos.Instance.Enemigo);
     }
 
     public static void InicializarCartas()
     {
-        LeerInformacionCartas();
-        CrearAssetsCartas();
+        //BaseDatos.Instance.RecuperarCarta();
+        BaseDatos.Instance.Prueba();
+        //LeerInformacionCartas();
+        //CrearAssetsCartas();
         //var asset = LeerCartaAssetApartirJSON("Asset2.json");
 
     }
@@ -51,7 +56,7 @@ public class Recursos  {
                 if (File.Exists(cardPath))
                 {
 
-                    var json = XMLToJSONUtils.XMLFileToJSON(cardPath);
+                    var json = JSONUtils.XMLFileToJSON(cardPath);
                     Debug.Log(">>>>>>>>>> FAMILIA: " + familia + " <<<<<<<<<<");
                     Debug.Log("CARTA: " + carta);
                     Debug.Log(json.ToString());
@@ -111,7 +116,8 @@ public class Recursos  {
                     asset.Ataque = ataque;
                     if (evolucion != -1)
                         asset.Evolucion = evolucion;
-                    GuardarJSONApartirCartaAsset(asset, obtenerRutaJSON(familia, carpetaCarta),nombre+".json");
+                    GuardarAssetBaseDatos(familia, asset);
+                    //GuardarJSONApartirCartaAsset(asset, obtenerRutaJSON(familia, carpetaCarta),nombre+".json");
                     AssetsCreadosCartas.Add(asset);
 
                 }
@@ -211,32 +217,6 @@ public class Recursos  {
         return tipo;
     }
 
-    /*public static void Save(CartaAsset asset)
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        string path = Application.persistentDataPath;// + "/Asset2.asset";
-        bool dirExists = System.IO.Directory.Exists(path);
-        if (!dirExists)
-            System.IO.Directory.CreateDirectory(path);
-        FileStream file = File.Create(path+"/Asset2.asset");
-
-        bf.Serialize(file, asset);
-        Debug.Log("Asset guardado con exito");
-        file.Close();
-    }
-
-    public static void Load()
-    {
-        if (File.Exists(Application.persistentDataPath + "/Asset2.asset"))
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/Asset2.asset", FileMode.Open);
-            CartaAsset asset = (CartaAsset)bf.Deserialize(file);
-            Debug.Log("Asset cargado con exito");
-            file.Close();
-        }
-    }*/
-
     public static CartaAsset LeerCartaAssetApartirJSON(string rutaArchivo)
     {
         string path = (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer ? Application.persistentDataPath : Application.dataPath);
@@ -266,8 +246,14 @@ public class Recursos  {
         Debug.Log("Guardar json");
         string json = JsonUtility.ToJson(asset);
         ruta = Path.Combine(ruta, nombreArchivo);
+        //BaseDatos.Instance.GuardarCartaJugador(SesionUsuario.Instance.UserID,json);
         Debug.Log("Ruta: " + ruta);
         File.WriteAllText(ruta, json);
         Debug.Log("Asset guardado con exito");
+    }
+
+    public static void GuardarAssetBaseDatos(string familia,CartaAsset asset)
+    {
+        BaseDatos.Instance.GuardarCarta(familia, asset);
     }
 }

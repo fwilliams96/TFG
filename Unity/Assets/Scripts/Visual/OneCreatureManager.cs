@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class OneCreatureManager : MonoBehaviour 
 {
-    public CardAsset cardAsset;
+    public CartaAsset CartaAsset;
     public OneCardManager PreviewManager;
     [Header("Text Component References")]
     public Text HealthText;
@@ -15,7 +15,7 @@ public class OneCreatureManager : MonoBehaviour
 
     void Awake()
     {
-        if (cardAsset != null)
+        if (CartaAsset != null)
             LeerDatosAsset();
     }
 
@@ -38,14 +38,14 @@ public class OneCreatureManager : MonoBehaviour
     public void LeerDatosAsset()
     {
         // Change the card graphic sprite
-        CreatureGraphicImage.sprite = cardAsset.ImagenCarta;
+        CreatureGraphicImage.sprite = CartaAsset.ImagenCarta;
 
-        AttackText.text = cardAsset.Ataque.ToString();
-        HealthText.text = cardAsset.Defensa.ToString();
+        AttackText.text = CartaAsset.Ataque.ToString();
+        HealthText.text = CartaAsset.Defensa.ToString();
 
         if (PreviewManager != null)
         {
-            PreviewManager.cardAsset = cardAsset;
+            PreviewManager.CartaAsset = CartaAsset;
             PreviewManager.LeerDatosAsset();
         }
     }	

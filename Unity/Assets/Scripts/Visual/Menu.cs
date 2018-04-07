@@ -17,7 +17,6 @@ public class Menu : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://battle-galaxy-cda70.firebaseio.com/");
     }
 	
 	// Update is called once per frame

@@ -57,7 +57,8 @@ public class Controlador : MonoBehaviour
     {
         //Debug.Log("In TurnManager.OnGameStart()");
 
-        foreach (Jugador p in Players.Instance.GetPlayers())
+        //foreach (Jugador p in Players.Instance.GetPlayers())
+        foreach (Jugador p in BaseDatos.Instance.GetPlayers())
         {
             controladorJugador.InicializarValoresJugador(p);
             controladorJugador.ActualizarManaJugador(p);
@@ -173,7 +174,8 @@ public class Controlador : MonoBehaviour
             if (jugador.NumCartasMano() < controladorJugador.AreaJugador(jugador).manoVisual.slots.Children.Length)
             {
                 // 1) logic: add card to hand
-                Carta newCard = new Carta(jugador.CartasEnElMazo()[0]);
+                //Carta newCard = new Carta(jugador.CartasEnElMazo()[0]);
+                Carta newCard = jugador.CartasEnElMazo()[0];
                 jugador.AñadirCartaMano(0, newCard);
                 // Debug.Log(hand.CardsInHand.Count);
                 // 2) logic: remove the card from the deck
@@ -199,7 +201,8 @@ public class Controlador : MonoBehaviour
         if (jugador.NumCartasMano() < controladorJugador.AreaJugador(jugador).manoVisual.slots.Children.Length)
         {
             // 1) logic: add card to hand
-            Carta newCard = new Carta(assetCarta);
+            //ELIMINATE
+            Carta newCard = new Carta(null);
             jugador.AñadirCartaMano(0, newCard);
             // 2) send message to the visual Deck
             new DrawACardCommand(jugador.CartasEnLaMano()[0], jugador, fast: true, fromDeck: false).AñadirAlaCola();

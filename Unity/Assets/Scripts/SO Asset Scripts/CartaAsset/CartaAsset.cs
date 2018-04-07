@@ -24,12 +24,10 @@ public class CartaAsset : ScriptableObject
     public Sprite Fondo;
     //Excepto si es ancestral
     public int Evolucion;
-    public string NombreScriptEfecto;
 
     [Header("Carta no mágica")]
     public int Defensa;
     public int Ataque;
-    public int AtaquesPorTurno = 1;
         
     public CartaAsset()
     {
