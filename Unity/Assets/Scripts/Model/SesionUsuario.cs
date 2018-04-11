@@ -6,6 +6,7 @@ public class SesionUsuario
     private Firebase.Auth.FirebaseAuth auth;
     private Firebase.Auth.FirebaseUser user;
     private bool registro;
+    public delegate void CallBack();
     //private BaseDatos baseDatos;
 
     private SesionUsuario()
@@ -58,7 +59,7 @@ public class SesionUsuario
                 if (!registro)
                 {
                     Debug.Log("Signed in " + user.UserId);
-                    BaseDatos.Instance.InicializarJugador(user.UserId);
+                    //BaseDatos.Instance.InicializarJugador(user.UserId);
                 }
                
             }
@@ -79,7 +80,7 @@ public class SesionUsuario
         return user != null;
     }
 
-    public void Login(string email, string password)
+    public void Login(string email, string password, CallBack callback)
     {
         registro = false;
         auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
@@ -94,14 +95,15 @@ public class SesionUsuario
                 return;
             }
 
-            Firebase.Auth.FirebaseUser newUser = task.Result;
+            user = task.Result;
+            BaseDatos.Instance.RecogerJugador(user.UserId, callback);
             Debug.LogFormat("User signed in successfully: {0} ({1})",
-                newUser.DisplayName, newUser.UserId);
+                user.DisplayName, user.UserId);
 
         });
     }
     
-    public void Registro(string email, string password)
+    public void Registro(string email, string password, CallBack callBack)
     {
         registro = true;
         auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
@@ -117,13 +119,12 @@ public class SesionUsuario
             }
 
             // Firebase user has been created.
-            Firebase.Auth.FirebaseUser newUser = task.Result;
+            user = task.Result;
             registro = false;
-            BaseDatos.Instance.crearJugador = true;
-            BaseDatos.Instance.InicializarJugador(newUser.UserId);
-            //BaseDatos.Instance.CrearJugador(newUser.UserId);
             Debug.LogFormat("Firebase user created successfully: {0} ({1})",
-                newUser.DisplayName, newUser.UserId);
+               user.DisplayName, user.UserId);
+            BaseDatos.Instance.CrearJugador(user.UserId, callBack);
+           
         });
     }
 

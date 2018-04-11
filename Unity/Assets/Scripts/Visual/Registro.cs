@@ -25,8 +25,7 @@ public class Registro : MonoBehaviour {
         {
             try
             {
-                SesionUsuario.Instance.Registro(email.text, password.text);
-                //SceneManager.LoadScene("Menu");
+                SesionUsuario.Instance.Registro(email.text, password.text, RegistroCompleto);
             }catch(System.Exception e)
             {
                 Debug.Log(e.Message);
@@ -39,6 +38,11 @@ public class Registro : MonoBehaviour {
         }
         
         
+    }
+
+    public void RegistroCompleto()
+    {
+        SceneManager.LoadSceneAsync("Menu");
     }
 
     public bool camposVacios()

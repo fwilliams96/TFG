@@ -51,8 +51,8 @@ public class Elementos : MonoBehaviour {
             manager.PorcentajeProgresoPocion = progresoPocion;
             manager.LeerDatos();
 
-            //ListaElementos.Add(elemento);
-            //elemento.transform.parent = gridLayoutGroup.gameObject.transform;
+            ListaElementos.Add(elemento);
+            elemento.transform.parent = gridLayoutGroup.gameObject.transform;
         }
         
         //c1.transform.SetParent(transform);

@@ -92,7 +92,7 @@ public class OneCardManager : MonoBehaviour {
             //EvolutionText.text = cardAsset.Evolucion;
         }
         // 2) add card name
-        NameText.text = CartaAsset.name;
+        NameText.text = CartaAsset.Nombre;
         // 3) add mana cost
         ManaCostText.text = CartaAsset.CosteMana.ToString();
         // 4) add description

@@ -21,13 +21,19 @@ public class Login : MonoBehaviour {
     {
         try
         {
-            SesionUsuario.Instance.Login(email.text, password.text);
-            //TODO mirar si hay excepcion, en ese caso no debo logear
-            SceneManager.LoadScene("Menu");
-        }catch(System.Exception e)
+            SesionUsuario.Instance.Login(email.text, password.text, LogeadoCompleto);
+        }
+        catch(System.Exception e)
         {
             Debug.Log(e.Message);
         }
         
     }
+
+    public void LogeadoCompleto()
+    {
+        SceneManager.LoadSceneAsync("Menu");
+
+    }
+
 }

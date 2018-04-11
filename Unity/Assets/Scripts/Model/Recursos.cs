@@ -28,9 +28,9 @@ public class Recursos  {
     public static void InicializarCartas()
     {
         //BaseDatos.Instance.RecuperarCarta();
-        BaseDatos.Instance.Prueba();
-        //LeerInformacionCartas();
-        //CrearAssetsCartas();
+        //BaseDatos.Instance.Prueba();
+        LeerInformacionCartas();
+        CrearAssetsCartas();
         //var asset = LeerCartaAssetApartirJSON("Asset2.json");
 
     }
@@ -93,7 +93,8 @@ public class Recursos  {
                     if(!tipoCarta.Equals(TipoCarta.Ancestral))
                         evolucion = System.Int32.Parse(entrada.Value["carta"]["delante"]["evolucion"]);
 
-                    CartaAsset asset = ScriptableObject.CreateInstance<CartaAsset>();
+                    CartaAsset asset = new CartaAsset();
+                    asset.Nombre = nombre;
                     asset.Descripcion = descripcion;
                     asset.Familia = tipoCarta;
                     //Cargar imagen a partir de la rutaImagen y setearla en el Sprite de CardAsset
@@ -217,7 +218,7 @@ public class Recursos  {
         return tipo;
     }
 
-    public static CartaAsset LeerCartaAssetApartirJSON(string rutaArchivo)
+    public static CartaAsset2 LeerCartaAssetApartirJSON(string rutaArchivo)
     {
         string path = (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer ? Application.persistentDataPath : Application.dataPath);
         string ruta = Path.Combine(path, rutaArchivo);
@@ -226,7 +227,7 @@ public class Recursos  {
         if (File.Exists(ruta))
         {
             var json = File.ReadAllText(ruta);
-            CartaAsset carta = ScriptableObject.CreateInstance<CartaAsset>();
+            CartaAsset2 carta = ScriptableObject.CreateInstance<CartaAsset2>();
             JsonUtility.FromJsonOverwrite(json, carta);
             Debug.Log("Asset cargado con exito");
             return carta;

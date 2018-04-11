@@ -192,7 +192,7 @@ public class Jugador : ICharacter
     {
         Dictionary <string, System.Object> result = new Dictionary<string, System.Object>();
         result["nivel"] = nivel;
-        int i = 1;
+        int i = 0;
         Dictionary<string, System.Object> cards = new Dictionary<string, System.Object>();
         foreach (Carta carta in cartas)
         {

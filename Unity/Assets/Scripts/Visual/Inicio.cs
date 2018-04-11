@@ -11,11 +11,6 @@ public class Inicio : MonoBehaviour {
     void Awake()
     {
         Screen.orientation = ScreenOrientation.LandscapeLeft;
-        
-        if (SesionUsuario.Instance.ExisteSesion())
-        {
-            SceneManager.LoadScene("Menu");
-        }
     }
 
     // Use this for initialization

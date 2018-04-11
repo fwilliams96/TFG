@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Progreso 
 {
@@ -40,6 +41,15 @@ public class Progreso
             pocion = value;
         }
     }
+
+    public Dictionary<string, System.Object> ToDictionary()
+    {
+        Dictionary<string, System.Object> result = new Dictionary<string, System.Object>();
+        result["material"] = material;
+        result["pocion"] = pocion;
+        return result;
+    }
+
     #endregion
 
 

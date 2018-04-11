@@ -1,5 +1,5 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
 public enum Familia
 {
@@ -12,12 +12,10 @@ public enum Familia
     Ancestral
 }
 
-[Serializable]
-public class CartaAsset : ScriptableObject 
+public class CartaAsset
 {
-    [Header("Información general")]
-    [TextArea(2,3)]
-    public string Descripcion; 
+    public string Nombre;
+    public string Descripcion;
     public Familia Familia;
     public Sprite ImagenCarta;
     public int CosteMana;
@@ -25,13 +23,13 @@ public class CartaAsset : ScriptableObject
     //Excepto si es ancestral
     public int Evolucion;
 
-    [Header("Carta no mágica")]
     public int Defensa;
     public int Ataque;
-        
+
     public CartaAsset()
     {
         //TipoDeCarta = TipoCarta.Ancestral;
         //Defensa = 2;
     }
 }
+

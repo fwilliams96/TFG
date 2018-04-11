@@ -66,14 +66,14 @@ public class Carta : IIdentifiable
     // method to set or reset mana cost
     public void ResetCosteMana()
     {
-        CosteManaActual = assetCarta2.CosteMana;
+        CosteManaActual = assetCarta.CosteMana;
     }
 
     public Dictionary<string, System.Object> ToDictionary()
     {
         Dictionary<string, System.Object> result = new Dictionary<string, System.Object>();
         result["asset"] = idAsset;
-        result["progreso"] = JsonUtility.ToJson(progreso);
+        result["progreso"] = progreso.ToDictionary();
         return result;
     }
 

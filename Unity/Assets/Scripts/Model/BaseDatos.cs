@@ -16,7 +16,8 @@ public class BaseDatos
     private string userIDActual;
     private DataSnapshot usuarioActual;
     private DataSnapshot assets;
-    public bool crearJugador;
+    public delegate void CallBack();
+    private SesionUsuario.CallBack callBack;
     #endregion
 
     private BaseDatos()
@@ -24,10 +25,8 @@ public class BaseDatos
         InitializeDataBase();
         this.assets = null;
         this.usuarioActual = null;
-        this.crearJugador = false;
         this.numJugadores = 0;
         this.jugadores = new Jugador[2];
-        ObtenerAssets();
     }
 
     public static BaseDatos Instance
@@ -43,6 +42,11 @@ public class BaseDatos
         }
     }
 
+    public void InicializarBase(CallBack callback)
+    {
+        ObtenerAssets(callback);
+    }
+
     private void InitializeDataBase()
     {
         //TODO quizas la parte de base de datos en el futuro la ponga en una clase aparte.
@@ -53,7 +57,7 @@ public class BaseDatos
         reference = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
-    private void ObtenerAssets()
+    private void ObtenerAssets(CallBack callback)
     {
         reference.Child("assets").GetValueAsync().ContinueWith(task => {
             if (task.IsFaulted)
@@ -65,37 +69,9 @@ public class BaseDatos
             {
                 //Assigno los assets a una variable global
                 assets = task.Result;
+                callback.Invoke();
             }
         });
-    }
-
-    public void InicializarJugador(string userID)
-    {
-        if (crearJugador)
-        {
-            while (assets == null) ;
-            Debug.Log("Assets diferent null");
-            //CrearJugador(userID);
-        }
-        else
-        {
-            this.userIDActual = userID;
-            reference.Child("users").Child(userID)
-            .ValueChanged += RecogerUsuario;
-        }
-        
-    }
-
-    public void CrearJugador(string UserID)
-    {
-        this.userIDActual = UserID;
-        AñadirJugador(new Jugador());
-        AñadirJugador(new Jugador());
-        //TODO aquí finalmente solo deberán añadirse las 8 cartas de welcome pack al jugador que se acaba de registrar. No a ambos.
-        while (assets == null) ;
-        AñadirWelcomePackJugador(Local);
-        AñadirJugadorBaseDatos(Local);
-        //AñadirWelcomePackJugador(Enemigo);
     }
 
     public void Prueba()
@@ -105,9 +81,17 @@ public class BaseDatos
         reference.Child("pruebas2").Push().SetValueAsync(dict);
     }
 
+    public void RecogerJugador(string userId, SesionUsuario.CallBack callback)
+    {
+        this.userIDActual = userId;
+        reference.Child("users").Child(userId)
+        .ValueChanged += RecogerUsuario;
+        callBack = callback;
+    }
+
     public void AñadirWelcomePackJugador(Jugador jugador)
     {
-        while (assets == null) ;
+        //while (assets == null) ;
         //var json = JSONUtils.StringToJSON(assets.GetRawJsonValue());
         List<string> idCartasWelcomePack = ObtenerIdsAssetsAleatorios();
         AñadirCartasJugador(jugador, idCartasWelcomePack);
@@ -126,6 +110,20 @@ public class BaseDatos
             idCartasWelcomePack.Add(idAssetRandom);
         }
         return idCartasWelcomePack;
+    }
+
+    public void CrearJugador(string userId, SesionUsuario.CallBack callBack)
+    {
+        Debug.Log("Crear jugador");
+        this.userIDActual = userId;
+        AñadirJugador(new Jugador());
+        AñadirJugador(new Jugador());
+        //TODO aquí finalmente solo deberán añadirse las 8 cartas de welcome pack al jugador que se acaba de registrar. No a ambos.
+        //while (assets == null) ;
+        AñadirWelcomePackJugador(Local);
+        AñadirJugadorBaseDatos(userId,Local);
+        //AñadirWelcomePackJugador(Enemigo);
+        callBack.Invoke();
     }
 
     private void AñadirCartasJugador(Jugador jugador, List<String> idCartas)
@@ -147,7 +145,8 @@ public class BaseDatos
 
     private Carta CrearCartaJugador(string idAsset, Progreso progreso)
     {
-        CartaAsset asset = JsonUtility.FromJson<CartaAsset>(assets.Child(idAsset).GetRawJsonValue());
+        string assetJSON = assets.Child(idAsset).GetRawJsonValue();
+        CartaAsset asset = JsonUtility.FromJson<CartaAsset>(assetJSON);
         Carta carta = new Carta(idAsset, asset);
         if(progreso != null)
             carta.Progreso = progreso;
@@ -159,9 +158,9 @@ public class BaseDatos
         jugador.AñadirCarta(carta);
     }
 
-    private void AñadirJugadorBaseDatos(Jugador jugador)
+    private void AñadirJugadorBaseDatos(string userID, Jugador jugador)
     {
-        reference.Child("users").SetValueAsync(jugador.ToDictionary());
+        reference.Child("users").Child(userID).SetValueAsync(jugador.ToDictionary());
     }
 
     public void RecogerUsuario(object sender, ValueChangedEventArgs args)
@@ -177,7 +176,7 @@ public class BaseDatos
 
     private void ObtenerDatosJugador(DataSnapshot usuario)
     {
-        while (assets == null) ;
+        //while (assets == null) ;
         AñadirJugador(new Jugador());
         AñadirJugador(new Jugador());
         int nivel = ObtenerNivelJugador(usuario);
@@ -185,19 +184,33 @@ public class BaseDatos
         AñadirCartasJugador(Local, cartasJugador);
         //TODO solo deberá ser al usuario que se ha logueado
         AñadirCartasJugador(Enemigo, cartasJugador);
+        callBack.Invoke();
     }
 
     private List<Carta> ObtenerCartasJugador(DataSnapshot usuario)
     {
         List<Carta> cartasJugador = new List<Carta>();
         var idCartas = usuario.Child("cartas").Value as Dictionary<string, object>;
-        List<string> keyList = new List<string>(idCartas.Keys);
-        foreach (string idCarta in keyList)
+        string raw = usuario.Child("cartas").GetRawJsonValue();
+        var rawjson = JSONUtils.StringToJSON(raw);
+        Debug.Log("num: " + rawjson.Count);
+        Debug.Log("1: " + rawjson[0]["asset"]);
+        Debug.Log(usuario.Child("cartas").Child("0").GetRawJsonValue());
+        //var variable = usuario.Child("cartas").GetValue(true) as Dictionary<string, object>;
+        for (int i = 0; i < rawjson.Count; i++)
         {
-            string idAsset = (string)usuario.Child("cartas").Child(idCarta).Child("asset").GetValue(true);
-            Progreso progreso = JsonUtility.FromJson<Progreso>(usuario.Child("cartas").Child(idCarta).Child("progreso").GetRawJsonValue());
+            string idAsset = (string)usuario.Child("cartas").Child(i.ToString()).Child("asset").GetValue(true);
+            Progreso progreso = JsonUtility.FromJson<Progreso>(usuario.Child("cartas").Child(i.ToString()).Child("progreso").GetRawJsonValue());
             cartasJugador.Add(CrearCartaJugador(idAsset, progreso));
         }
+
+        /*List<string> keyList = new List<string>(idCartas.Keys);
+        foreach (string idCarta in keyList)
+        {
+            string idAsset = (string)usuario.Child("cartas").Child(idCarta.ToString()).Child("asset").GetValue(true);
+            Progreso progreso = JsonUtility.FromJson<Progreso>(usuario.Child("cartas").Child(idCarta.ToString()).Child("progreso").GetRawJsonValue());
+            cartasJugador.Add(CrearCartaJugador(idAsset, progreso));
+        }*/
         return cartasJugador;
     }
 
@@ -241,6 +254,14 @@ public class BaseDatos
     public Jugador [] GetPlayers()
     {
         return jugadores;
+    }
+
+    public bool BaseDatosInicializada
+    {
+        get
+        {
+            return assets != null;
+        }
     }
 
 }
