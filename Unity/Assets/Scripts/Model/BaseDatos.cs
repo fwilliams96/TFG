@@ -18,6 +18,7 @@ public class BaseDatos
     private DataSnapshot assets;
     public delegate void CallBack();
     private SesionUsuario.CallBack callBack;
+	public Dictionary<int, Carta> Cartas;
     #endregion
 
     private BaseDatos()
@@ -27,6 +28,7 @@ public class BaseDatos
         this.usuarioActual = null;
         this.numJugadores = 0;
         this.jugadores = new Jugador[2];
+		Cartas = new Dictionary<int, Carta>();
     }
 
     public static BaseDatos Instance
@@ -102,11 +104,11 @@ public class BaseDatos
         var json = assets.Value as Dictionary<string, object>;
         List<string> keyList = new List<string>(json.Keys);
         List<string> idCartasWelcomePack = new List<string>();
+		System.Random rnd = new System.Random();
         for (int i = 0; i < 8; i++)
         {
-            System.Random rnd = new System.Random();
-            int numCarta = rnd.Next(1, json.Count);
-            string idAssetRandom = keyList[numCarta];
+			int numCarta = rnd.Next(0, json.Count);
+			string idAssetRandom = keyList[numCarta];
             idCartasWelcomePack.Add(idAssetRandom);
         }
         return idCartasWelcomePack;
@@ -116,8 +118,8 @@ public class BaseDatos
     {
         Debug.Log("Crear jugador");
         this.userIDActual = userId;
-        AñadirJugador(new Jugador());
-        AñadirJugador(new Jugador());
+        AñadirJugador(new Jugador("Low"));
+        AñadirJugador(new Jugador("Top"));
         //TODO aquí finalmente solo deberán añadirse las 8 cartas de welcome pack al jugador que se acaba de registrar. No a ambos.
         //while (assets == null) ;
         AñadirWelcomePackJugador(Local);
@@ -148,6 +150,7 @@ public class BaseDatos
         string assetJSON = assets.Child(idAsset).GetRawJsonValue();
         CartaAsset asset = JsonUtility.FromJson<CartaAsset>(assetJSON);
         Carta carta = new Carta(idAsset, asset);
+		Cartas.Add (carta.ID, carta);
         if(progreso != null)
             carta.Progreso = progreso;
         return carta;
@@ -177,8 +180,8 @@ public class BaseDatos
     private void ObtenerDatosJugador(DataSnapshot usuario)
     {
         //while (assets == null) ;
-        AñadirJugador(new Jugador());
-        AñadirJugador(new Jugador());
+        AñadirJugador(new Jugador("Low"));
+        AñadirJugador(new Jugador("Top"));
         int nivel = ObtenerNivelJugador(usuario);
         List<Carta> cartasJugador = ObtenerCartasJugador(usuario);
         AñadirCartasJugador(Local, cartasJugador);

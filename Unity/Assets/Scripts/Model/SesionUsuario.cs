@@ -128,14 +128,11 @@ public class SesionUsuario
         });
     }
 
-    public string UserID
+	public Firebase.Auth.FirebaseUser User
     {
         get
         {
-            if(user != null)
-                return user.UserId;
-            //TODO
-            return "0";
+			return user;
         }
     }
 

@@ -78,13 +78,25 @@ public class Jugador : ICharacter
     //public event VoidWithNoArguments StartTurnEvent;
     public event VoidWithNoArguments EndTurnEvent;
 
-    public Jugador()
+	public Jugador()
+	{
+		PlayerID = IDFactory.GetUniqueID();
+		this.mano = new Mano();
+		this.mazo = new Mazo();
+		this.mesa = new Mesa();
+		this.defensa = 30;
+		this.nivel = 0;
+	}
+
+	public Jugador(string area)
     {
         PlayerID = IDFactory.GetUniqueID();
         this.mano = new Mano();
         this.mazo = new Mazo();
         this.mesa = new Mesa();
         this.defensa = 30;
+		this.nivel = 0;
+		this.area = area;
     }
 
     //TODO get mana from coin or other spells 
@@ -203,4 +215,10 @@ public class Jugador : ICharacter
 
         return result;
     }
+
+	public void InicializarMazo(){
+		foreach (System.Object carta in cartas) {
+			AñadirCartaMazo ((Carta)carta);
+		}
+	}
 }

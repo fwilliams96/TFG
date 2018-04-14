@@ -33,6 +33,22 @@ public class Controlador : MonoBehaviour
             controladorJugador.JugadorActual = value;
         }
     }
+
+    public Jugador Local
+    {
+        get
+        {
+            return BaseDatos.Instance.Local;
+        }
+    }
+
+    public Jugador Enemigo
+    {
+        get
+        {
+            return BaseDatos.Instance.Enemigo;
+        }
+    }
     #endregion
 
     // METHODS
@@ -57,7 +73,6 @@ public class Controlador : MonoBehaviour
     {
         //Debug.Log("In TurnManager.OnGameStart()");
 
-        //foreach (Jugador p in Players.Instance.GetPlayers())
         foreach (Jugador p in BaseDatos.Instance.GetPlayers())
         {
             controladorJugador.InicializarValoresJugador(p);
@@ -66,8 +81,8 @@ public class Controlador : MonoBehaviour
 
         Sequence s = DOTween.Sequence();
         //mueve los jugadores del centro a su posición
-        PlayerArea areaJugador = controladorJugador.AreaJugador(Players.Instance.GetPlayers()[0]);
-        PlayerArea areaJugador2 = controladorJugador.AreaJugador(Players.Instance.GetPlayers()[1]);
+		PlayerArea areaJugador = controladorJugador.AreaJugador(BaseDatos.Instance.Local);
+		PlayerArea areaJugador2 = controladorJugador.AreaJugador(BaseDatos.Instance.Enemigo);
         s.Append(areaJugador.Personaje.transform.DOMove(areaJugador.PosicionPersonaje.position, 1f).SetEase(Ease.InQuad));
         s.Insert(0f, areaJugador2.Personaje.transform.DOMove(areaJugador2.PosicionPersonaje.position, 1f).SetEase(Ease.InQuad));
         //espera 3 segundos antes de ejecutar el onComplete
@@ -78,7 +93,7 @@ public class Controlador : MonoBehaviour
             //int rnd = Random.Range(0,2);  // 2 is exclusive boundary
             int rnd = 1;
             // Debug.Log(Player.Players.Length);
-            Jugador whoGoesFirst = Players.Instance.GetPlayers()[rnd];
+			Jugador whoGoesFirst = BaseDatos.Instance.Local;
             // Debug.Log(whoGoesFirst);
             Jugador whoGoesSecond = OtroJugador(whoGoesFirst);
             // Debug.Log(whoGoesSecond);
@@ -171,6 +186,7 @@ public class Controlador : MonoBehaviour
     {
         if (jugador.NumCartasMazo() > 0)
         {
+			//TODO esto se limitara a 4.
             if (jugador.NumCartasMano() < controladorJugador.AreaJugador(jugador).manoVisual.slots.Children.Length)
             {
                 // 1) logic: add card to hand
@@ -217,7 +233,7 @@ public class Controlador : MonoBehaviour
     /// <param name="tablePos"></param>
     public void JugarMagicaMano(int UniqueID, int tablePos)
     {
-        JugarMagicaMano(Recursos.CartasCreadasEnElJuego[UniqueID], tablePos);
+		JugarMagicaMano(BaseDatos.Instance.Cartas[UniqueID], tablePos);
     }
 
     /// <summary>
@@ -240,7 +256,8 @@ public class Controlador : MonoBehaviour
     /// <param name="posicionAtaque"></param>
     public void JugarCartaMano(int UniqueID, int tablePos, bool posicionAtaque)
     {
-        JugarCartaMano(Recursos.CartasCreadasEnElJuego[UniqueID], tablePos, posicionAtaque);
+        Debug.Log("Jugar carta mano: " + UniqueID);
+		JugarCartaMano(BaseDatos.Instance.Cartas[UniqueID], tablePos, posicionAtaque);
     }
 
     /// <summary>
@@ -401,6 +418,7 @@ public class Controlador : MonoBehaviour
     {
         controladorEnte.MostrarAccion(idEnte);
     }
+
 
 
 

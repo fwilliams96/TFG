@@ -45,7 +45,7 @@ public class ControladorJugador
         if (jugador == _jugadorActual)
             return areaJugadorActual;
         PlayerArea areaJugador;
-        AreaPosition area = jugador.Area == "TopPlayer" ? AreaPosition.Top : AreaPosition.Low;
+        AreaPosition area = jugador.Area.Equals("Top") ? AreaPosition.Top : AreaPosition.Low;
         switch (area)
         {
             case AreaPosition.Low:
@@ -95,7 +95,7 @@ public class ControladorJugador
         jugador.ManaRestante = 0;
         //LeerInformacionPersonajeAsset();
         TransmitirInformacionVisualJugador(jugador);
-        //TO
+		jugador.InicializarMazo ();
         areaJugador.mazoVisual.CartasEnMazo = jugador.NumCartasMazo();//mazo.CartasEnMazo.Count;
         // move both portraits to the center
         areaJugador.Personaje.transform.position = areaJugador.PosicionInicialPersonaje.position;
@@ -120,7 +120,7 @@ public class ControladorJugador
     {
         JugadorActual.OnTurnStart();
         // dispay a message that it is player`s turn
-        if (JugadorActual == DatosGenerales.Instance.TopPlayer)
+        if (JugadorActual.Area.Equals("Top"))
             new ShowMessageCommand("Enemy Turn!", 2.0f).AñadirAlaCola();
         else
             new ShowMessageCommand("Your Turn!", 2.0f).AñadirAlaCola();
@@ -177,7 +177,7 @@ public class ControladorJugador
 
     public void PararControlJugadores()
     {
-        foreach (Jugador player in Players.Instance.GetPlayers())
+		foreach (Jugador player in BaseDatos.Instance.GetPlayers())
         {
             AreaJugador(player).ControlActivado = false;
         }
@@ -190,7 +190,7 @@ public class ControladorJugador
 
     public Jugador OtroJugador(Jugador jugador)
     {
-        return Players.Instance.GetPlayers()[0] == jugador ? Players.Instance.GetPlayers()[1] : Players.Instance.GetPlayers()[0];
+		return BaseDatos.Instance.Local == jugador ? BaseDatos.Instance.Enemigo : BaseDatos.Instance.Local;
     }
 
     /// <summary>

@@ -77,8 +77,11 @@ public class OneCardManager : MonoBehaviour {
 
     public void LeerProgreso()
     {
-        ProgresoTrebol.value = PorcentajeProgresoTrebol;
-        ProgresoPocion.value = PorcentajeProgresoPocion;
+        if (PreviewManager != null) {
+            ProgresoTrebol.value = PorcentajeProgresoTrebol;
+            ProgresoPocion.value = PorcentajeProgresoPocion;
+        }
+            
     }
 
     private void LeerDatosCarta()
@@ -109,7 +112,7 @@ public class OneCardManager : MonoBehaviour {
     private void LeerSpritesItem()
     {
         // 6) Change the card graphic sprite
-        CardGraphicImage.sprite = CartaAsset.ImagenCarta;
+		CardGraphicImage.sprite = Resources.Load<Sprite>(CartaAsset.RutaImagenCarta);
         //TODO cuando use CartaAsset en vez de CardAsset
         //if(cardAsset.Fondo != null)
             //CardBodyImage.sprite = cardAsset.Fondo;

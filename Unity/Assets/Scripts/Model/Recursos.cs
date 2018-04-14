@@ -102,7 +102,7 @@ public class Recursos  {
                     {
                         asset.ImagenCarta = Resources.Load<Sprite>(rutaImagen);
                     }*/
-                    asset.ImagenCarta = Resources.Load<Sprite>(rutaImagen);
+					asset.RutaImagenCarta = rutaImagen;
                     asset.CosteMana = mana;
                     if (!"".Equals(fondo))
                     {

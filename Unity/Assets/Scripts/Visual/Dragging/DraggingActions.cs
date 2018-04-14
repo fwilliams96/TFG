@@ -22,11 +22,11 @@ public abstract class DraggingActions : MonoBehaviour {
     protected virtual Jugador playerOwner
     {
         get{
-            
+
             if (tag.Contains("Low"))
-                return DatosGenerales.Instance.LowPlayer;
+                return Controlador.Instance.Local;
             else if (tag.Contains("Top"))
-                return DatosGenerales.Instance.TopPlayer;
+                return Controlador.Instance.Enemigo;
             else
             {
                 Debug.LogError("Untagged Card or creature " + transform.parent.name);

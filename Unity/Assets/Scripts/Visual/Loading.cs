@@ -17,13 +17,18 @@ public class Loading : MonoBehaviour {
     {
         if (SesionUsuario.Instance.ExisteSesion())
         {
-            CargarEscenaMenu();
+			BaseDatos.Instance.RecogerJugador(SesionUsuario.Instance.User.UserId, CargaJugador);
+            
         }
         else
         {
             CargarEscenaLogin();
         }
     }
+
+	public void CargaJugador(){
+		CargarEscenaMenu();
+	}
 
     public void CargarEscenaMenu()
     {
