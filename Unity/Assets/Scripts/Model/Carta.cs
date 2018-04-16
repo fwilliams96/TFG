@@ -44,7 +44,7 @@ public class Carta : IIdentifiable
         //UniqueCardID = IDFactory.GetUniqueID();
         ResetCosteMana();
         // add this card to a dictionary with its ID as a key
-        Recursos.CartasCreadasEnElJuego.Add(idCarta, this);
+        //Recursos.CartasCreadasEnElJuego.Add(idCarta, this);
         progreso = new Progreso();
     }
 
@@ -58,7 +58,7 @@ public class Carta : IIdentifiable
         //UniqueCardID = IDFactory.GetUniqueID();
         ResetCosteMana();
         // add this card to a dictionary with its ID as a key
-        Recursos.CartasCreadasEnElJuego.Add(idCarta, this);
+        //Recursos.CartasCreadasEnElJuego.Add(idCarta, this);
         Debug.Log("Carta creada");
         progreso = new Progreso();
     }

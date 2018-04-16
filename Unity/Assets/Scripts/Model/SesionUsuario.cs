@@ -14,14 +14,6 @@ public class SesionUsuario
         InitializeFirebase();
     }
 
-    /*public BaseDatos BaseDatos
-    {
-        get
-        {
-            return baseDatos;
-        }
-    }*/
-
     public static SesionUsuario Instance
     {
         get
@@ -39,6 +31,7 @@ public class SesionUsuario
     {
         Debug.Log("Setting up Firebase Auth");
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+		user = auth.CurrentUser;
         //auth.StateChanged += AuthStateChanged;
         //AuthStateChanged(this, null);
     }
@@ -74,9 +67,6 @@ public class SesionUsuario
 
     public bool ExisteSesion()
     {
-        auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-
-        Firebase.Auth.FirebaseUser user = auth.CurrentUser;
         return user != null;
     }
 

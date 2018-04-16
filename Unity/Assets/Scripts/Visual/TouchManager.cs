@@ -55,11 +55,14 @@ public class TouchManager : MonoBehaviour {
                        
                         Debug.Log("Ningun gameobject con evento tocado "+gObj.name);
                         gObj = null;
-                        //if (OpcionesObjeto.PrevisualizandoAlgunaCarta())
-                            //OpcionesObjeto.PararTodasPrevisualizaciones();
+						if (null != EventSystem.current.currentSelectedGameObject) {
+							Debug.Log ("Event system: " + EventSystem.current.currentSelectedGameObject);
+						} else {
+							if (OpcionesObjeto.PrevisualizandoAlgunaCarta())
+								OpcionesObjeto.PararTodasPrevisualizaciones();
+						}
                     }
-                    if(null != EventSystem.current.currentSelectedGameObject)
-                        Debug.Log("Eveny system: "+ EventSystem.current.currentSelectedGameObject);
+                    
                 }
             }
             else if(Input.GetTouch(0).phase == TouchPhase.Moved && gObj)

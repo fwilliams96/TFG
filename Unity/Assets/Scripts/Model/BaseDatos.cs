@@ -121,8 +121,8 @@ public class BaseDatos
         AñadirJugador(new Jugador("Low"));
         AñadirJugador(new Jugador("Top"));
         //TODO aquí finalmente solo deberán añadirse las 8 cartas de welcome pack al jugador que se acaba de registrar. No a ambos.
-        //while (assets == null) ;
         AñadirWelcomePackJugador(Local);
+		AñadirWelcomePackJugador(Enemigo);
         AñadirJugadorBaseDatos(userId,Local);
         //AñadirWelcomePackJugador(Enemigo);
         callBack.Invoke();
@@ -186,7 +186,8 @@ public class BaseDatos
         List<Carta> cartasJugador = ObtenerCartasJugador(usuario);
         AñadirCartasJugador(Local, cartasJugador);
         //TODO solo deberá ser al usuario que se ha logueado
-        AñadirCartasJugador(Enemigo, cartasJugador);
+        //AñadirCartasJugador(Enemigo, cartasJugador);
+		AñadirWelcomePackJugador(Enemigo);
         callBack.Invoke();
     }
 

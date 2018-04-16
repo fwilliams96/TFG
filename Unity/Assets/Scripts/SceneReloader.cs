@@ -13,6 +13,6 @@ public class SceneReloader: MonoBehaviour {
         IDHolder.ClearIDHoldersList();
         Comandas.Instance.Clear();
         Comandas.Instance.CompletarEjecucionComanda();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadSceneAsync("Menu");
     }
 }

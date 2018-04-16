@@ -5,10 +5,10 @@
     <nombreImagen>Foto_bebe_dragon</nombreImagen>
     <descripcion>Dragon de fuego ansioso de quemar</descripcion>
     <evolucion>1</evolucion>
-    <mana>3</mana>
+    <mana>1</mana>
     <fondo></fondo>
-    <ataque>4000</ataque>
-    <defensa>1500</defensa>
+    <ataque>350</ataque>
+    <defensa>180</defensa>
   </delante>
   <detras>
     <simbolo>cuadrado.png</simbolo>

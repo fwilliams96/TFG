@@ -115,15 +115,11 @@ public class Controlador : MonoBehaviour
         //if (Input.GetKeyDown(KeyCode.Space))
         //EndTurn();
     }
-
-    public void EndTurnTest()
-    {
-        timer.StopTimer();
-        timer.StartTimer();
-    }
-
+		
     public void EndTurn()
     {
+		if (OpcionesObjeto.PrevisualizandoAlgunaCarta())
+			OpcionesObjeto.PararTodasPrevisualizaciones();
         // stop timer
         timer.StopTimer();
         // send all commands in the end of current player`s turn
