@@ -183,7 +183,7 @@ public class Controlador : MonoBehaviour
         if (jugador.NumCartasMazo() > 0)
         {
 			//TODO esto se limitara a 4.
-            if (jugador.NumCartasMano() < controladorJugador.AreaJugador(jugador).manoVisual.slots.Children.Length)
+            if (jugador.NumCartasMano() < 4)
             {
                 // 1) logic: add card to hand
                 //Carta newCard = new Carta(jugador.CartasEnElMazo()[0]);

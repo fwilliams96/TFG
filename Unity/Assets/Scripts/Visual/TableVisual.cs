@@ -170,6 +170,7 @@ public class TableVisual : MonoBehaviour
     {
         float posX;
         if (CreaturesOnTable.Count > 0)
+			//posX = (slots.Children[CreaturesOnTable.Count - 1].transform.localPosition.x - slots.Children[0].transform.localPosition.x) / 2f;
             posX = (slots.Children[0].transform.localPosition.x - slots.Children[CreaturesOnTable.Count - 1].transform.localPosition.x) / 2f;
         else
             posX = 0f;
@@ -184,7 +185,9 @@ public class TableVisual : MonoBehaviour
     void MoverSlotCartas()
     {
         foreach (GameObject g in CreaturesOnTable)
+		//for (int i = CreaturesOnTable.Count; i > 0;i--)
         {
+			//GameObject g = CreaturesOnTable [i];
             g.transform.DOLocalMoveX(slots.Children[CreaturesOnTable.IndexOf(g)].transform.localPosition.x, 0.3f);
             // apply correct sorting order and HandSlot value for later 
             // TODO: figure out if I need to do something here:

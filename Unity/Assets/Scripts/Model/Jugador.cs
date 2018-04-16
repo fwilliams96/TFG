@@ -94,7 +94,7 @@ public class Jugador : ICharacter
         this.mano = new Mano();
         this.mazo = new Mazo();
         this.mesa = new Mesa();
-        this.defensa = 30;
+        this.defensa = 3000;
 		this.nivel = 0;
 		this.area = area;
     }
