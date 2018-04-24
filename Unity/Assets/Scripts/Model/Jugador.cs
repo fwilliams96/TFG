@@ -19,6 +19,7 @@ public class Jugador : ICharacter
     private Mesa mesa;
     private int nivel;
     private string area;
+	private int posCartaActual;
 
     #endregion Atributos
     #region Getters/Setters
@@ -69,6 +70,17 @@ public class Jugador : ICharacter
             return area;
         }
     }
+	private int PosCartaActual {
+		get {
+			int cActual = posCartaActual;
+			if (cActual == NumCartasMazo() - 1) {
+				posCartaActual = 0;
+			} else {
+				posCartaActual++;
+			}
+			return cActual;
+		}
+	}
     #endregion
 
     // CODE FOR EVENTS TO LET CREATURES KNOW WHEN TO CAUSE EFFECTS
@@ -97,6 +109,7 @@ public class Jugador : ICharacter
         this.defensa = 3000;
 		this.nivel = 0;
 		this.area = area;
+		this.posCartaActual = 0;
     }
 
     //TODO get mana from coin or other spells 
@@ -167,6 +180,10 @@ public class Jugador : ICharacter
     {
         return mazo.CartasEnMazo.ToArray();
     }
+
+	public Carta CartaActual(){
+		return mazo.CartasEnMazo [PosCartaActual];
+	}
 
     public int NumEntesEnLaMesa()
     {

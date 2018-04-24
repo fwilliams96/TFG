@@ -44,7 +44,9 @@ public class TouchManager : MonoBehaviour {
                 
                 if (Physics.Raycast(mouseRay.origin,mouseRay.direction,out hit))
                 {
-                    //Cogemos el objeto
+                    //TODO en funcion de la escena en la que nos encontremos haremos una cosa u otra
+					//switch(Settings.Instance.EscenaActual)
+
                     gObj = hit.transform.gameObject;
                     if (gObj.GetComponent<Eventos>() != null)
                     {

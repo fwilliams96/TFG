@@ -182,23 +182,15 @@ public class Controlador : MonoBehaviour
     {
         if (jugador.NumCartasMazo() > 0)
         {
-			//TODO esto se limitara a 4.
             if (jugador.NumCartasMano() < 4)
             {
-                // 1) logic: add card to hand
                 //Carta newCard = new Carta(jugador.CartasEnElMazo()[0]);
-                Carta newCard = jugador.CartasEnElMazo()[0];
+				//Esto nos devuelve la carta actual del mazo que se recorre infinitamente
+				Carta newCard = jugador.CartaActual();
                 jugador.AñadirCartaMano(0, newCard);
                 // Debug.Log(hand.CardsInHand.Count);
-                // 2) logic: remove the card from the deck
-                jugador.EliminarCartaMazo(0);
-                // 2) create a command
                 new DrawACardCommand(jugador.CartasEnLaMano()[0], jugador, fast, fromDeck: true).AñadirAlaCola();
             }
-        }
-        else
-        {
-            // there are no cards in the deck, take fatigue damage.
         }
 
     }

@@ -23,6 +23,7 @@ public class PlayAEntityCommand : Comanda
         //TODO se podria hacer que el id de la carta pase a ser el id de la criatura 
         GameObject card = IDHolder.GetGameObjectWithID(cl.ID);
         PlayerHand.EliminarCarta(card);
+		IDHolder.EliminarElemento (card.GetComponent<IDHolder>());
         GameObject.Destroy(card);
         //Permite la previsualizacion de cartas
         //HoverPreview.PrevisualizacionesPermitidas = true;

@@ -68,7 +68,7 @@ public class ControladorEnte
         if (ente.GetType() == typeof(Magica))
         {
             //Solo mostraremos la opcion activar efecto si no lo ha activado aun
-            if (!((Magica)ente).EfectoActivado)
+			if (!((Magica)ente).EfectoActivado && CartaPreparada(ente))
             {
                 AccionesPopUp.Instance.MostrarAccionEfecto();
                 AccionesPopUp.Instance.RegistrarCallBack(ActivarEfectoMagica, idEnte);
@@ -88,6 +88,11 @@ public class ControladorEnte
             AccionesPopUp.Instance.RegistrarCallBack(CambiarPosicionCriatura, idEnte);
         }
     }
+
+	public bool CartaPreparada(Ente ente){
+		GameObject g = IDHolder.GetGameObjectWithID(ente.ID);
+		return g.GetComponent<OneCreatureManager> ().PuedeAtacar;
+	}
 
     public void MuerteEnte(int idCriatura)
     {
