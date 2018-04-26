@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MenuInventario : MonoBehaviour {
 
+	public GameObject SeccionCartas;
+	public GameObject SeccionItems;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -12,5 +15,15 @@ public class MenuInventario : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	public void MostrarSeccionCartas(){
+		SeccionCartas.SetActive (true);
+		SeccionItems.SetActive (false);
+	}
+
+	public void MostrarSeccionItems(){
+		SeccionCartas.SetActive (false);
+		SeccionItems.SetActive (true);
 	}
 }

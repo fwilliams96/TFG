@@ -76,13 +76,6 @@ public class BaseDatos
         });
     }
 
-    public void Prueba()
-    {
-        Dictionary<string, System.Object> dict = new Dictionary<string, System.Object>();
-        dict.Add("jugador", new Jugador().ToDictionary());
-        reference.Child("pruebas2").Push().SetValueAsync(dict);
-    }
-
     public void RecogerJugador(string userId, SesionUsuario.CallBack callback)
     {
         this.userIDActual = userId;
@@ -97,6 +90,7 @@ public class BaseDatos
         //var json = JSONUtils.StringToJSON(assets.GetRawJsonValue());
         List<string> idCartasWelcomePack = ObtenerIdsAssetsAleatorios();
         AñadirCartasJugador(jugador, idCartasWelcomePack);
+		AñadirItemsJugador (jugador);
     }
 
     private List<String> ObtenerIdsAssetsAleatorios()
@@ -137,6 +131,16 @@ public class BaseDatos
         
     }
 
+	private void AñadirItemsJugador(Jugador jugador)
+	{
+		System.Random rnd = new System.Random();
+		for(int i = 0; i < 8; i++)
+		{    
+			AñadirItemJugador(jugador, GenerarItemAleatorio(rnd));
+		}
+
+	}
+
     private void AñadirCartasJugador(Jugador jugador, List<Carta> cartas)
     {
         foreach (Carta carta in cartas)
@@ -144,6 +148,27 @@ public class BaseDatos
             AñadirCartaJugador(jugador, carta);
         }
     }
+
+	private void AñadirItemsJugador(Jugador jugador, List<Item> items)
+	{
+		foreach (Item item in items)
+		{
+			AñadirItemJugador(jugador, item);
+		}
+	}
+
+	private Item GenerarItemAleatorio(System.Random rnd){
+		TipoItem tipoItem = (TipoItem)rnd.Next(0, 2);
+		int cantidad = rnd.Next (10, 50);
+		string rutaImagen;
+		//TODO mejorar este hardcode
+		if (tipoItem.Equals (TipoItem.Material)) {
+			rutaImagen = "Sprites/Recursos/Componentes/trebol";
+		} else {
+			rutaImagen = "Sprites/Recursos/Componentes/Poción_azul";
+		}
+		return new Item (tipoItem, rutaImagen,cantidad);
+	}
 
     private Carta CrearCartaJugador(string idAsset, Progreso progreso)
     {
@@ -156,10 +181,22 @@ public class BaseDatos
         return carta;
     }
 
+	private Item CrearItemJugador(int tipoItem, string rutaImagen, int cantidad)
+	{
+		TipoItem tipo = (TipoItem)tipoItem;
+		Item item = new Item (tipo,rutaImagen,cantidad);
+		return item;
+	}
+
     private void AñadirCartaJugador(Jugador jugador, Carta carta)
     {
         jugador.AñadirCarta(carta);
     }
+
+	private void AñadirItemJugador(Jugador jugador, Item item)
+	{
+		jugador.AñadirItem(item);
+	}
 
     private void AñadirJugadorBaseDatos(string userID, Jugador jugador)
     {
@@ -184,7 +221,9 @@ public class BaseDatos
         AñadirJugador(new Jugador("Top"));
         int nivel = ObtenerNivelJugador(usuario);
         List<Carta> cartasJugador = ObtenerCartasJugador(usuario);
+		List<Item> itemsJugador = ObtenerItemsJugador (usuario);
         AñadirCartasJugador(Local, cartasJugador);
+		AñadirItemsJugador (Local, itemsJugador);
         //TODO solo deberá ser al usuario que se ha logueado
         //AñadirCartasJugador(Enemigo, cartasJugador);
 		AñadirWelcomePackJugador(Enemigo);
@@ -194,29 +233,29 @@ public class BaseDatos
     private List<Carta> ObtenerCartasJugador(DataSnapshot usuario)
     {
         List<Carta> cartasJugador = new List<Carta>();
-        var idCartas = usuario.Child("cartas").Value as Dictionary<string, object>;
-        string raw = usuario.Child("cartas").GetRawJsonValue();
-        var rawjson = JSONUtils.StringToJSON(raw);
-        Debug.Log("num: " + rawjson.Count);
-        Debug.Log("1: " + rawjson[0]["asset"]);
-        Debug.Log(usuario.Child("cartas").Child("0").GetRawJsonValue());
-        //var variable = usuario.Child("cartas").GetValue(true) as Dictionary<string, object>;
+		var rawjson = JSONUtils.StringToJSON(usuario.Child("cartas").GetRawJsonValue());
         for (int i = 0; i < rawjson.Count; i++)
         {
             string idAsset = (string)usuario.Child("cartas").Child(i.ToString()).Child("asset").GetValue(true);
             Progreso progreso = JsonUtility.FromJson<Progreso>(usuario.Child("cartas").Child(i.ToString()).Child("progreso").GetRawJsonValue());
             cartasJugador.Add(CrearCartaJugador(idAsset, progreso));
         }
-
-        /*List<string> keyList = new List<string>(idCartas.Keys);
-        foreach (string idCarta in keyList)
-        {
-            string idAsset = (string)usuario.Child("cartas").Child(idCarta.ToString()).Child("asset").GetValue(true);
-            Progreso progreso = JsonUtility.FromJson<Progreso>(usuario.Child("cartas").Child(idCarta.ToString()).Child("progreso").GetRawJsonValue());
-            cartasJugador.Add(CrearCartaJugador(idAsset, progreso));
-        }*/
         return cartasJugador;
     }
+
+	private List<Item> ObtenerItemsJugador(DataSnapshot usuario)
+	{
+		List<Item> itemsJugador = new List<Item>();
+		var rawjson = JSONUtils.StringToJSON(usuario.Child("items").GetRawJsonValue());
+		for (int i = 0; i < rawjson.Count; i++)
+		{
+			int tipoItem = Convert.ToInt32 ((long)usuario.Child ("items").Child (i.ToString ()).Child ("tipoItem").GetValue (true));
+			string rutaImagenItem = (string)usuario.Child("items").Child(i.ToString()).Child("rutaImagen").GetValue(true);
+			int cantidad = Convert.ToInt32((long)usuario.Child("items").Child(i.ToString()).Child("cantidad").GetValue(true));
+			itemsJugador.Add(CrearItemJugador(tipoItem, rutaImagenItem,cantidad));
+		}
+		return itemsJugador;
+	}
 
     private int ObtenerNivelJugador(DataSnapshot usuario)
     {

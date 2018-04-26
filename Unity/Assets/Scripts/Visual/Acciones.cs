@@ -28,9 +28,20 @@ public class Acciones : MonoBehaviour {
 		visualizar.SetActive (true);
 	}
 
+	public void AñadirItem(){
+		opciones.SetActive (false);
+		añadirItem.SetActive (true);
+	}
+
+	public void Evolucionar(){
+		opciones.SetActive (false);
+		evolucionar.SetActive (true);
+	}
+
 	public void CerrarMenu(){
 		opciones.SetActive (true);
 		visualizar.SetActive (false);
+		añadirItem.SetActive (false);
 		this.gameObject.SetActive (false);
 	}
 

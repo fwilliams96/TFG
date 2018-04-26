@@ -17,6 +17,8 @@ public class MenuBatalla : MonoBehaviour {
 
     public void Jugar()
     {
+		//TODO revisar que esto funcione bien
+		IDHolder.ClearIDHoldersList ();
         SceneManager.LoadScene("BattleGalaxy");
     }
 }

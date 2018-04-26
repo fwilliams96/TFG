@@ -19,8 +19,6 @@ public class CargarCarta : MonoBehaviour {
 	}
 
 	void Start () {
-		/*GameObject elemento = Instantiate (TouchManager2.Instance.ObjetoActual, transform);
-		elemento.transform.parent = gridLayoutGroup.gameObject.transform;*/
 	}
 	
 	// Update is called once per frame

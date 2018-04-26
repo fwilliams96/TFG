@@ -99,6 +99,13 @@ public class Carta : IIdentifiable
         }
     }
 
+	public void AñadirMaterial(int cantidad){
+		progreso.Material += cantidad;
+	}
+	public void AñadirPocion(int cantidad){
+		progreso.Pocion += cantidad;
+	}
+
     #endregion
 
 }

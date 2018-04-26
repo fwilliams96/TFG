@@ -14,6 +14,7 @@ public class Jugador : ICharacter
     // REFERENCES TO LOGICAL STUFF THAT BELONGS TO THIS PLAYER
     //private Dictionary<string, System.Object> cartas = new Dictionary<string, System.Object>();
     private List<System.Object> cartas = new List<System.Object>();
+	private List<System.Object> items = new List<System.Object>();
     private Mazo mazo;
     private Mano mano;
     private Mesa mesa;
@@ -126,6 +127,11 @@ public class Jugador : ICharacter
         cartas.Add(carta);
     }
 
+	public void AñadirItem(Item item)
+	{
+		items.Add(item);
+	}
+
     public void EliminarCarta(string idCarta)
     {
         cartas.Remove(idCarta);
@@ -165,6 +171,11 @@ public class Jugador : ICharacter
     {
         return cartas;
     }
+
+	public List<System.Object> Items()
+	{
+		return items;
+	}
 
     public Ente[] EntesEnLaMesa()
     {
@@ -228,8 +239,15 @@ public class Jugador : ICharacter
             cards[i.ToString()] = carta.ToDictionary();
             i += 1;
         }
-        result["cartas"] = cards;
-
+		result["cartas"] = cards;
+		i = 0;
+		Dictionary<string, System.Object> dictItems = new Dictionary<string, System.Object>();
+		foreach (Item item in items)
+		{
+			dictItems [i.ToString ()] = item.ToDictionary ();
+			i += 1;
+		}
+		result["items"] = dictItems;
         return result;
     }
 

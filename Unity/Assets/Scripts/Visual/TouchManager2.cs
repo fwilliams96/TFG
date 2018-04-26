@@ -51,20 +51,24 @@ public class TouchManager2 : MonoBehaviour {
             {
                 //A partir de la posición de pantalla del mouse generamos un rayo
                 Ray mouseRay = GenerateMouseRay(Input.GetTouch(0).position);
-                RaycastHit hit;
                 //Miramos con que objeto ha chocado el rayo
-				RaycastHit2D hit2 = Physics2D.GetRayIntersection(mouseRay);
-				//bool hayHit = Physics2D.Raycast(mouseRay.origin,mouseRay.direction,out hit);
+				RaycastHit2D hit = Physics2D.GetRayIntersection(mouseRay);
                 
-				if (hit2.collider != null)
+				if (hit.collider != null)
                 {
                     //TODO en funcion de la escena en la que nos encontremos haremos una cosa u otra
 					//switch(Settings.Instance.EscenaActual)
-					if (!acciones.activeSelf) {
-						gObj = hit2.transform.gameObject;
-						if (gObj.tag.Equals("CartaInventario")) {
-							if(acciones != null)
-								acciones.SetActive (true);
+					if (!acciones.activeSelf) {	
+						if (hit.transform.gameObject.tag.Equals ("CartaInventario")) {
+							gObj = hit.transform.gameObject;
+							acciones.SetActive (true);
+						}else if (hit.transform.gameObject.tag.Equals ("ItemInventario")) {
+							gObj = hit.transform.gameObject;
+							//acciones.SetActive (true);
+						}else if (hit.transform.gameObject.tag.Equals("ItemConsumible")) {
+							Controlador.Instance.AgregarItemCarta (gObj.GetComponent<IDHolder> ().UniqueID, hit.transform.gameObject.GetComponent<IDHolder> ().UniqueID);
+						}else if (hit.transform.gameObject.tag.Equals("CartaConsumible")) {
+							Controlador.Instance.AgregarItemCarta (hit.transform.gameObject.GetComponent<IDHolder> ().UniqueID,gObj.GetComponent<IDHolder> ().UniqueID);
 						}
 					}
                     
