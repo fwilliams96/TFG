@@ -10,9 +10,10 @@ public class ProgresoVisual : MonoBehaviour
 
 	public void AñadirItem(TipoItem tipoItem, int cantidad){
 		if(tipoItem.Equals(TipoItem.Material))
-			ProgresoMaterial.value += cantidad;
+			ProgresoMaterial.value += cantidad/100f;
 		else
-			ProgresoPocion.value += cantidad;
+			ProgresoPocion.value += cantidad/100f;
+		Comandas.Instance.CompletarEjecucionComanda();
 	}
 
 }

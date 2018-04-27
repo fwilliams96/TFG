@@ -9,8 +9,12 @@ public class Elementos : MonoBehaviour {
 	public bool cartas;
 	public bool consumible;
     // Use this for initialization
-    void Start () {
-       
+	void Start () {
+		MostrarElementos ();
+	}
+
+	public void MostrarElementos () {
+		VaciarElementos ();
 		if (cartas) {
 			RellenarConCartas ();
 		} else {
@@ -18,12 +22,31 @@ public class Elementos : MonoBehaviour {
 		}
     }
 
+	private void VaciarElementos(){
+		for(int i = 0; i < gridLayoutGroup.transform.childCount; i++){
+			IDHolder.EliminarElemento (gridLayoutGroup.transform.GetChild(i).gameObject.GetComponent<IDHolder>());
+			Destroy (gridLayoutGroup.transform.GetChild (i).gameObject);
+		}
+	}
+
+	public void DeshabilitarColliderElementos(){
+		for(int i = 0; i < gridLayoutGroup.transform.childCount; i++){
+			gridLayoutGroup.transform.GetChild (i).gameObject.GetComponent<BoxCollider2D> ().enabled = false;
+		}
+	}
+
+	public void HabilitarColliderElementos(){
+		for(int i = 0; i < gridLayoutGroup.transform.childCount; i++){
+			gridLayoutGroup.transform.GetChild (i).gameObject.GetComponent<BoxCollider2D> ().enabled = true;
+		}
+	}
+
 	private void RellenarConCartas(){
+		gridLayoutGroup.cellSize = new Vector2 (270f, 400f);
 		List<System.Object> listaCartas = BaseDatos.Instance.Local.Cartas();
 		GameObject elemento;
 		foreach(Carta carta in listaCartas)
 		{
-			//elemento = Instantiate(DatosGenerales.Instance.CardInventario, transform.position, Quaternion.identity) as GameObject;
 			CartaAsset asset = carta.assetCarta;
 			float progresoTrebol = carta.Progreso.Material;
 			float progresoPocion = carta.Progreso.Pocion;
@@ -41,11 +64,14 @@ public class Elementos : MonoBehaviour {
 
 			ListaElementos.Add(elemento);
 			elemento.transform.SetParent (gridLayoutGroup.gameObject.transform);
-			//elemento.GetComponent<BoxCollider2D> ().size = new Vector2 (elemento.GetComponent<RectTransform> ().rect.width, elemento.GetComponent<RectTransform> ().rect.height);
 		}
 	}
 
 	private void RellenarConItems(){
+		if(consumible)
+			gridLayoutGroup.cellSize = new Vector2 (200f, 200f);
+		else
+			gridLayoutGroup.cellSize = new Vector2 (300f, 300f);
 		List<System.Object> listaCartas = BaseDatos.Instance.Local.Items();
 		GameObject elemento;
 		foreach(Item item in listaCartas)

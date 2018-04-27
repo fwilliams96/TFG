@@ -58,17 +58,20 @@ public class TouchManager2 : MonoBehaviour {
                 {
                     //TODO en funcion de la escena en la que nos encontremos haremos una cosa u otra
 					//switch(Settings.Instance.EscenaActual)
+					//TODO mejorar comprobación
 					if (!acciones.activeSelf) {	
 						if (hit.transform.gameObject.tag.Equals ("CartaInventario")) {
 							gObj = hit.transform.gameObject;
-							acciones.SetActive (true);
-						}else if (hit.transform.gameObject.tag.Equals ("ItemInventario")) {
+							Acciones.Instance.MostrarAcciones (true);
+						} else if (hit.transform.gameObject.tag.Equals ("ItemInventario")) {
 							gObj = hit.transform.gameObject;
-							//acciones.SetActive (true);
-						}else if (hit.transform.gameObject.tag.Equals("ItemConsumible")) {
-							Controlador.Instance.AgregarItemCarta (gObj.GetComponent<IDHolder> ().UniqueID, hit.transform.gameObject.GetComponent<IDHolder> ().UniqueID);
+							//Acciones.Instance.MostrarAcciones (false);
+						}
+					} else {
+						if (hit.transform.gameObject.tag.Equals("ItemConsumible")) {
+							ControladorMenu.Instance.AgregarItemCarta (gObj.GetComponent<IDHolder> ().UniqueID, hit.transform.gameObject.GetComponent<IDHolder> ().UniqueID);
 						}else if (hit.transform.gameObject.tag.Equals("CartaConsumible")) {
-							Controlador.Instance.AgregarItemCarta (hit.transform.gameObject.GetComponent<IDHolder> ().UniqueID,gObj.GetComponent<IDHolder> ().UniqueID);
+							ControladorMenu.Instance.AgregarItemCarta (hit.transform.gameObject.GetComponent<IDHolder> ().UniqueID,gObj.GetComponent<IDHolder> ().UniqueID);
 						}
 					}
                     

@@ -132,10 +132,15 @@ public class Jugador : ICharacter
 		items.Add(item);
 	}
 
-    public void EliminarCarta(string idCarta)
+    public void EliminarCarta(Carta carta)
     {
-        cartas.Remove(idCarta);
+		cartas.Remove(carta);
     }
+
+	public void EliminarItem(Item item)
+	{
+		items.Remove(item);
+	}
 
     public void AñadirEnteMesa(int posicionMesa, Ente ente)
     {

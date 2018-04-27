@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class MenuInventario : MonoBehaviour {
 
-	public GameObject SeccionCartas;
-	public GameObject SeccionItems;
+	public GameObject Elementos;
 
 	// Use this for initialization
 	void Start () {
@@ -18,12 +17,12 @@ public class MenuInventario : MonoBehaviour {
 	}
 
 	public void MostrarSeccionCartas(){
-		SeccionCartas.SetActive (true);
-		SeccionItems.SetActive (false);
+		Elementos.GetComponent<Elementos> ().cartas = true;
+		Elementos.GetComponent<Elementos> ().MostrarElementos ();
 	}
 
 	public void MostrarSeccionItems(){
-		SeccionCartas.SetActive (false);
-		SeccionItems.SetActive (true);
+		Elementos.GetComponent<Elementos> ().cartas = false;
+		Elementos.GetComponent<Elementos> ().MostrarElementos ();
 	}
 }

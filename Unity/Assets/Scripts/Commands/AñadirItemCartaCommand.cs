@@ -15,8 +15,11 @@ public class AñadirItemCartaCommand : Comanda {
 
     public override void EmpezarEjecucionComanda()
     {
-		GameObject carta = IDHolder.GetGameObjectWithID (item.ID);
-		carta.GetComponent<ProgresoVisual> ().AñadirItem (item.Tipo, item.Cantidad);
+		GameObject cartaG = IDHolder.GetGameObjectWithID (carta.ID);
+		GameObject itemG = IDHolder.GetGameObjectWithID (item.ID);
+		cartaG.GetComponent<ProgresoVisual> ().AñadirItem (item.Tipo, item.Cantidad);
+		IDHolder.EliminarElemento (itemG.GetComponent<IDHolder> ());
+		GameObject.Destroy (itemG);
 
     }
 }

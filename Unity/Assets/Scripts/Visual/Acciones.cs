@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class Acciones : MonoBehaviour {
 
-	public GameObject opciones;
-	public GameObject visualizar;
-	public GameObject añadirItem;
-	public GameObject evolucionar;
+	public GameObject PanelAcciones;
+	public GameObject accionesCarta;
+	public GameObject accionesItem;
 	public static Acciones Instance;
+	public GameObject Elementos;
 	void Awake(){
 		Instance = this;
+		PanelAcciones.SetActive (false);
 	}
 
 	// Use this for initialization
@@ -23,26 +24,26 @@ public class Acciones : MonoBehaviour {
 		
 	}
 
-	public void Visualizar(){
-		opciones.SetActive (false);
-		visualizar.SetActive (true);
+	public void MostrarAcciones(bool cartas){
+		PanelAcciones.SetActive (true);
+		Elementos.GetComponent<Elementos>().DeshabilitarColliderElementos ();
+		if (cartas) {
+			accionesCarta.GetComponent<AccionesCarta> ().MostrarAccionesCarta ();
+		} else {
+			//accionesItem.GetComponent<AccionesItem> ().MostrarAccionesItem ();
+		}
 	}
 
-	public void AñadirItem(){
-		opciones.SetActive (false);
-		añadirItem.SetActive (true);
-	}
 
-	public void Evolucionar(){
-		opciones.SetActive (false);
-		evolucionar.SetActive (true);
-	}
-
+		
 	public void CerrarMenu(){
-		opciones.SetActive (true);
-		visualizar.SetActive (false);
-		añadirItem.SetActive (false);
-		this.gameObject.SetActive (false);
+		if (accionesCarta.activeSelf) {
+			accionesCarta.GetComponent<AccionesCarta> ().OcultarAccionesCarta ();
+		} else {
+			//accionesItem.GetComponent<AccionesItem> ().OcultarAccionesItem();
+		}
+		Elementos.GetComponent<Elementos>().HabilitarColliderElementos ();
+		PanelAcciones.SetActive (false);
 	}
 
 
