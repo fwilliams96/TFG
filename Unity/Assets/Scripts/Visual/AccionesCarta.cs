@@ -45,6 +45,7 @@ public class AccionesCarta : MonoBehaviour {
 	}
 
 	public void Evolucionar(){
+		ControladorMenu.Instance.EvolucionarCarta (TouchManager2.Instance.ObjetoActual);
 		opciones.SetActive (false);
 		evolucionar.SetActive (true);
 	}

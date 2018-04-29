@@ -276,6 +276,22 @@ public class BaseDatos
         Debug.Log("Guardar carta ok");
     }
 
+	public CartaAsset BuscarEvolucion(Familia familia, int evolucion){
+		var json = assets.Value as Dictionary<string, object>;
+		List<string> keyList = new List<string>(json.Keys);
+
+		foreach(string idAsset in keyList)
+		{
+			string assetJSON = assets.Child(idAsset).GetRawJsonValue();
+			CartaAsset asset = JsonUtility.FromJson<CartaAsset>(assetJSON);
+			if (asset.Evolucion == (evolucion+1) && asset.Familia.Equals (familia)) {
+				return asset;
+			}
+
+		}
+		return null;
+	}
+
     //public bool Carga
 
     public Jugador Enemigo

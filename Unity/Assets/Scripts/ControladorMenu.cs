@@ -29,8 +29,9 @@ public class ControladorMenu : MonoBehaviour {
 		//else if(item.Tipo.Equals (TipoItem.Pocion))
 		else
 			carta.AñadirPocion (item.Cantidad);
-		BaseDatos.Instance.Local.EliminarItem (item);
+		new AñadirItemCartaPrevisualizadaCommand (item).AñadirAlaCola ();
 		new AñadirItemCartaCommand (carta,item).AñadirAlaCola ();
+		BaseDatos.Instance.Local.EliminarItem (item);
 	}
 
 	private Carta BuscarCarta(int idCarta){
@@ -61,5 +62,37 @@ public class ControladorMenu : MonoBehaviour {
 				i += 1;
 		}
 		return item;
+	}
+
+	public bool SePuedeEvolucionar(int idCarta){
+		Carta carta = BuscarCarta (idCarta);
+		return ExisteEvolucion(carta) && carta.Progreso.Material >= 100f && carta.Progreso.Pocion >= 100f;
+	}
+
+	private bool ExisteEvolucion(Carta carta){
+		Familia familia = carta.assetCarta.Familia;
+		int evolucionActual = carta.assetCarta.Evolucion;
+		return BuscarEvolucion(familia,evolucionActual) != null;
+	}
+
+	public CartaAsset BuscarEvolucion(Familia familia, int evolucionActual){
+		return BaseDatos.Instance.BuscarEvolucion (familia, evolucionActual);
+	}
+
+	public void EvolucionarCarta(GameObject cartaG){
+		Carta carta = BuscarCarta (cartaG.GetComponent<IDHolder>().UniqueID);
+		//Buscamos la evolución
+		CartaAsset asset = BuscarEvolucion (carta.assetCarta.Familia, carta.assetCarta.Evolucion);
+		//modificamos el progreso de la carta restando las 100 unidades necesarias para evolucionar
+		carta.Progreso.Material -= 100;
+		carta.Progreso.Pocion -= 100;
+		carta.assetCarta = asset;
+		OneCardManager manager = cartaG.GetComponent<OneCardManager>();
+		//modificamos el asset de la carta seleccionada actual y lo cambiamos por la evolución
+		manager.CartaAsset = asset;
+		//actualizamos en la carta visual el progreso
+		manager.PorcentajeProgresoTrebol = carta.Progreso.Material > 100 ? 100: carta.Progreso.Material;
+		manager.PorcentajeProgresoPocion = carta.Progreso.Pocion > 100 ? 100: carta.Progreso.Pocion;
+		manager.LeerDatos();
 	}
 }

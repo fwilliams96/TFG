@@ -77,23 +77,21 @@ public class OneCardManager : MonoBehaviour {
 
     public void LeerProgreso()
     {
-        if (PreviewManager != null) {
-            ProgresoTrebol.value = PorcentajeProgresoTrebol;
-            ProgresoPocion.value = PorcentajeProgresoPocion;
-        }
+        ProgresoTrebol.value = PorcentajeProgresoTrebol/100f;
+        ProgresoPocion.value = PorcentajeProgresoPocion/100f;
             
     }
 
     private void LeerDatosCarta()
     {
 
-        if (CartaAsset.Familia != Familia.Magica)
+		if (!CartaAsset.Familia.Equals(Familia.Magica))
         {
             // this is a creature
             AttackText.text = CartaAsset.Ataque.ToString();
             DefenseText.text = CartaAsset.Defensa.ToString();
-            //EvolutionText.text = cardAsset.Evolucion;
         }
+		EvolutionText.text = CartaAsset.Evolucion.ToString();
         // 2) add card name
         NameText.text = CartaAsset.Nombre;
         // 3) add mana cost

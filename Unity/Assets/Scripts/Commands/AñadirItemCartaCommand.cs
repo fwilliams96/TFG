@@ -20,6 +20,5 @@ public class AñadirItemCartaCommand : Comanda {
 		cartaG.GetComponent<ProgresoVisual> ().AñadirItem (item.Tipo, item.Cantidad);
 		IDHolder.EliminarElemento (itemG.GetComponent<IDHolder> ());
 		GameObject.Destroy (itemG);
-
     }
 }
