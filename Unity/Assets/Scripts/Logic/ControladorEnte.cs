@@ -34,9 +34,9 @@ public class ControladorEnte
     public void QuitarVidaEnte(Ente atacante,  Criatura objetivo)
     {
         atacante.AtaquesRestantesEnTurno--;
-        objetivo.Defensa -= objetivo.Ataque;
         new CreatureAttackCommand(objetivo.ID, atacante.ID, objetivo.Ataque, atacante.Ataque, atacante.Defensa, objetivo.Defensa).AñadirAlaCola();
-        if(EnteMuerto(objetivo))
+		objetivo.Defensa -= objetivo.Ataque;
+		if(EnteMuerto(objetivo))
             MuerteEnte(objetivo.ID);
     }
 
@@ -79,9 +79,10 @@ public class ControladorEnte
         else
         {
             Criatura criatura = (Criatura)ente;
-			if (criatura.PosicionCriatura.Equals(PosicionCriatura.ATAQUE) && !CriaturaHaAtacado(criatura))
+			if (criatura.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
             {
-                AccionesPopUp.Instance.MostrarAccionDefensa();
+				if(!CriaturaHaAtacado(criatura))
+                	AccionesPopUp.Instance.MostrarAccionDefensa();
             }
             else
             {

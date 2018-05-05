@@ -210,8 +210,8 @@ public class ControladorJugador
     {
         //TODO quitar vida al jugador, se haria jugadorObjetivo.Defensa -= objetivo.Defensa
         Jugador jugadorObjetivo = OtroJugador(JugadorActual);
+		new DealDamageCommand(jugadorObjetivo.ID, valorAtaque, jugadorObjetivo.Defensa).AñadirAlaCola();
         jugadorObjetivo.Defensa -= valorAtaque;
-        new DealDamageCommand(jugadorObjetivo.ID, valorAtaque, jugadorObjetivo.Defensa).AñadirAlaCola();
         if (JugadorMuerto(jugadorObjetivo))
             MuerteJugador(jugadorObjetivo);
     }

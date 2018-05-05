@@ -50,12 +50,12 @@ public class OneCreatureManager : MonoBehaviour
         }
     }	
 
-    public void HacerDaño(int daño, int healthAfter)
+	public void HacerDaño(int daño, int vida)
     {
-        if (daño > 0)
+		if (vida > 0)
         {
-            DamageEffect.CreateDamageEffect(transform.position, daño);
-            HealthText.text = healthAfter.ToString();
+            DamageEffect.CreateDamageEffect(transform.position, vida, daño);
+			HealthText.text = (vida-daño).ToString();
         }
     }
 }

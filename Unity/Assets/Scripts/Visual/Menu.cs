@@ -15,20 +15,12 @@ public class Menu : MonoBehaviour {
         Screen.orientation = ScreenOrientation.LandscapeLeft;
     }
 
-    // Use this for initialization
-    void Start () {
-    }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     public void Inventario()
     {
         //SceneManager.LoadScene("Inventario");
         inventario.SetActive(true);
         batalla.SetActive(false);
+		perfil.SetActive(false);
     }
 
     public void Batalla()
@@ -36,5 +28,14 @@ public class Menu : MonoBehaviour {
         //SceneManager.LoadScene("Batalla");
         batalla.SetActive(true);
         inventario.SetActive(false);
+		perfil.SetActive(false);
     }
+
+	public void Perfil()
+	{
+		//SceneManager.LoadScene("Batalla");
+		perfil.SetActive(true);
+		batalla.SetActive(false);
+		inventario.SetActive(false);
+	}
 }

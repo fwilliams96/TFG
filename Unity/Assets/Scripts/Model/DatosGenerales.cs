@@ -22,22 +22,22 @@ public class DatosGenerales: MonoBehaviour
 	public GameObject ItemInventario;
     public GameObject CardInventario;
     public GameObject CardPrefab;
-    public GameObject CardPrefabPC;
     public GameObject CriaturaPrefab;
-    public GameObject CriaturaPrefabPC;
     public GameObject MagicaPrefab;
     public GameObject DamageEffectPrefab;
     public GameObject ExplosionPrefab;
     [Header("Other")]
-    public Button EndTurnButton;
     public GameObject GameOverPanel;
     //public Sprite HeroPowerCrossMark;
     // SINGLETON
-    public static DatosGenerales Instance;
+    public static DatosGenerales Instance = null;
 
     void Awake()
     {
-        Instance = this;
+		if (Instance == null) {
+			DontDestroyOnLoad(this.gameObject);
+			Instance = this;
+		}
     }
 
 }

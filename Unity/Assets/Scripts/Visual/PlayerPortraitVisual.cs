@@ -34,12 +34,12 @@ public class PlayerPortraitVisual : MonoBehaviour {
 
     }
 
-    public void HacerDaño(int amount, int healthAfter)
+    public void HacerDaño(int daño, int vida)
     {
-        if (amount > 0)
+        if (daño > 0)
         {
-            DamageEffect.CreateDamageEffect(transform.position, amount);
-            HealthText.text = healthAfter.ToString();
+            DamageEffect.CreateDamageEffect(transform.position, vida,daño);
+			HealthText.text = (vida-daño).ToString();
         }
     }
 

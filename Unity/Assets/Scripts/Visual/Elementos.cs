@@ -13,6 +13,13 @@ public class Elementos : MonoBehaviour {
 		MostrarElementos ();
 	}
 
+	void OnEnable(){
+		MostrarElementos ();
+	}
+
+	void OnDisable(){
+	}
+
 	public void MostrarElementos () {
 		VaciarElementos ();
 		if (cartas) {

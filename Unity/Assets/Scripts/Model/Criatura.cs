@@ -38,6 +38,7 @@ public class Criatura : Ente, ICharacter
     public Criatura(CartaAsset ca, PosicionCriatura posicionCriatura) : base(ca)
     {
         this.posicionCriatura = posicionCriatura;
+		this.haAtacado = false;
     }
 
 }

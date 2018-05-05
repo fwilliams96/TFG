@@ -5,13 +5,13 @@ public class DealDamageCommand : Comanda {
 
     private int targetID;
     private int amount;
-    private int healthAfter;
+	private int health;
 
-    public DealDamageCommand( int targetID, int amount, int healthAfter)
+    public DealDamageCommand( int targetID, int amount, int health)
     {
         this.targetID = targetID;
         this.amount = amount;
-        this.healthAfter = healthAfter;
+        this.health = health;
     }
 
 	public override void EmpezarEjecucionComanda()
@@ -21,11 +21,12 @@ public class DealDamageCommand : Comanda {
 		GameObject target = IDHolder.GetGameObjectWithID(targetID);
 		if (targetID == Controlador.Instance.Local.ID || targetID == Controlador.Instance.Enemigo.ID)
 		{
-			target.GetComponent<PlayerPortraitVisual>().HacerDaño(amount,healthAfter);
+			target.GetComponent<PlayerPortraitVisual>().HacerDaño(amount,health);
 		}
 		else
 		{
-			target.GetComponent<OneCreatureManager>().HacerDaño(amount, healthAfter);
+			//TODO ver si se elimina porque supuestamente solo se está usando DealDamageCommand para atacar jugadores y no criaturas (criaturas ya lo hace creature attack)
+			target.GetComponent<OneCreatureManager>().HacerDaño(amount, health);
 		}
 		comandas.CompletarEjecucionComanda();
 	}

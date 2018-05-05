@@ -8,7 +8,7 @@ public class DamageAllCreatures : SpellEffect {
         Ente[] CreaturesToDamage = Controlador.Instance.OtroJugador(Controlador.Instance.JugadorActual).EntesEnLaMesa();
         foreach (Ente cl in CreaturesToDamage)
         {
-            new DealDamageCommand(cl.ID, specialAmount, healthAfter: cl.Defensa - specialAmount).AñadirAlaCola();
+            new DealDamageCommand(cl.ID, specialAmount, health: cl.Defensa - specialAmount).AñadirAlaCola();
             cl.Defensa -= specialAmount;
         }
     }

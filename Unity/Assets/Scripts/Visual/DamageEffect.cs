@@ -52,7 +52,7 @@ public class DamageEffect : MonoBehaviour {
     /// <param name="position">Position.</param>
     /// <param name="amount">Amount.</param>
    
-    public static void CreateDamageEffect(Vector3 position, int amount)
+    public static void CreateDamageEffect(Vector3 position, int health, int amount)
     {
         // Instantiate a DamageEffect from prefab
         GameObject newDamageEffect = new GameObject();
@@ -61,7 +61,11 @@ public class DamageEffect : MonoBehaviour {
         // Get DamageEffect component in this new game object
         DamageEffect de = newDamageEffect.GetComponent<DamageEffect>();
         // Change the amount text to reflect the amount of damage dealt
-        de.AmountText.text = "-"+amount.ToString();
+		Settings settings = Settings.Instance;
+		if(settings.Batalla.Equals(Settings.TIPO_NUMERO.ENTERO))
+        	de.AmountText.text = "-"+amount.ToString();
+		else
+			de.AmountText.text = "-"+Settings.ObtenerFraccion(amount,health);
         // start a coroutine to fade away and delete this effect after a certain time
         de.StartCoroutine(de.ShowDamageEffect());
         //Comandas.Instance.CompletarEjecucionComanda();

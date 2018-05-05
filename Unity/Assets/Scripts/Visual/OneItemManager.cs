@@ -28,7 +28,11 @@ public class OneItemManager : MonoBehaviour {
 	}
 
 	public void LeerDatosItem(){
-		CantidadText.text = Item.Cantidad.ToString ();
+		Settings settings = Settings.Instance;
+		if (settings.Items.Equals (Settings.TIPO_NUMERO.ENTERO))
+			CantidadText.text = Item.Cantidad.ToString ();
+		else
+			CantidadText.text = Settings.ObtenerFraccion (Item.Cantidad, 100);
 		ItemImage.sprite = Resources.Load<Sprite>(Item.RutaImagen);
 	}
 }

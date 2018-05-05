@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using DG.Tweening;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 
 public enum PosicionCriatura { ATAQUE, DEFENSA };
@@ -152,10 +153,11 @@ public class Controlador : MonoBehaviour
 
     public void ActivarBotonFinDeTurno(Jugador P)
     {
-        if (SePermiteControlarElJugador(P))
-            DatosGenerales.Instance.EndTurnButton.interactable = true;
-        else
-            DatosGenerales.Instance.EndTurnButton.interactable = false;
+		
+		if (SePermiteControlarElJugador (P))
+			GameObject.FindGameObjectWithTag ("BotonFinTurno").GetComponent<Button> ().interactable = true;
+		else
+			GameObject.FindGameObjectWithTag ("BotonFinTurno").GetComponent<Button> ().interactable = false;
 
     }
 

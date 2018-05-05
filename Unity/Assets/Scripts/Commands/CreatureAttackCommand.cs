@@ -8,16 +8,16 @@ public class CreatureAttackCommand : Comanda
     private int TargetUniqueID;
     private int AttackerUniqueID;
     private int AttackerHealthAfter;
-    private int TargetHealthAfter;
+	private int TargetHealth;
     private int DamageTakenByAttacker;
     private int DamageTakenByTarget;
 
-    public CreatureAttackCommand(int targetID, int attackerID, int damageTakenByAttacker, int damageTakenByTarget, int attackerHealthAfter, int targetHealthAfter)
+    public CreatureAttackCommand(int targetID, int attackerID, int damageTakenByAttacker, int damageTakenByTarget, int attackerHealthAfter, int targetHealth)
     {
         this.TargetUniqueID = targetID;
         this.AttackerUniqueID = attackerID;
         this.AttackerHealthAfter = attackerHealthAfter;
-        this.TargetHealthAfter = targetHealthAfter;
+        this.TargetHealth = targetHealth;
         this.DamageTakenByTarget = damageTakenByTarget;
         this.DamageTakenByAttacker = damageTakenByAttacker;
     }
@@ -26,7 +26,6 @@ public class CreatureAttackCommand : Comanda
     {
         GameObject Attacker = IDHolder.GetGameObjectWithID(AttackerUniqueID);
 
-        //Debug.Log(TargetUniqueID);
-        Attacker.GetComponent<CreatureAttackVisual>().AttackTarget(TargetUniqueID, DamageTakenByTarget, DamageTakenByAttacker, AttackerHealthAfter, TargetHealthAfter);
+        Attacker.GetComponent<CreatureAttackVisual>().AttackTarget(TargetUniqueID, DamageTakenByTarget, DamageTakenByAttacker, AttackerHealthAfter, TargetHealth);
     }
 }
