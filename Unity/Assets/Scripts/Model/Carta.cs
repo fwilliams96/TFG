@@ -15,20 +15,6 @@ public class Carta : IIdentifiable
     private Progreso progreso;
     #endregion
 
-    // CONSTRUCTOR
-    /*public Carta(CardAsset ca)
-    {
-        // set the CardAsset reference
-        this.assetCarta = ca;
-        // get unique int ID
-        idCarta = IDFactory.GetUniqueID();
-        //UniqueCardID = IDFactory.GetUniqueID();
-        ResetCosteMana();
-        // add this card to a dictionary with its ID as a key
-        //Recursos.CartasCreadasEnElJuego.Add(idCarta, this);
-        progreso = new Progreso();
-    }*/
-
     public Carta()
     {
         idCarta = IDFactory.GetUniqueID();

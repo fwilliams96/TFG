@@ -48,16 +48,16 @@ public class Recursos  {
 
             string[] arrayFamilia = (string[])prop.GetValue(null);
             diccionarioTemp = new Dictionary<string, SimpleJSON.JSONNode>();
-
+			Debug.Log(">>>>>>>>>> FAMILIA: " + familia + " <<<<<<<<<<");
             foreach (string carta in arrayFamilia)
             {
                 //Vigilar que carta tambien es sensible a mayusculas y minisculas
                 cardPath = filePath + "/" + familia + "/" + carta + ".xml";
+
                 if (File.Exists(cardPath))
                 {
 
                     var json = JSONUtils.XMLFileToJSON(cardPath);
-                    Debug.Log(">>>>>>>>>> FAMILIA: " + familia + " <<<<<<<<<<");
                     Debug.Log("CARTA: " + carta);
                     Debug.Log(json.ToString());
                     diccionarioTemp.Add(carta, json);
@@ -80,7 +80,7 @@ public class Recursos  {
                     //extraerDatosComunes(entrada);
                     //extraerDatosNoComunes(entrada);
                     string carpetaCarta = obtenerFormatoNombreCorrectoDirectorio(entrada.Key);
-                    Debug.Log(entrada.Value);
+                    //Debug.Log(entrada.Value);
                     string nombre = entrada.Value["carta"]["delante"]["titulo"];
                     Familia tipoCarta = obtenerTipoCarta(entrada.Value["carta"]["delante"]["tipo"]);
                     string descripcion = entrada.Value["carta"]["delante"]["descripcion"];
@@ -97,11 +97,6 @@ public class Recursos  {
                     asset.Nombre = nombre;
                     asset.Descripcion = descripcion;
                     asset.Familia = tipoCarta;
-                    //Cargar imagen a partir de la rutaImagen y setearla en el Sprite de CardAsset
-                    /*if (File.Exists(rutaImagen))
-                    {
-                        asset.ImagenCarta = Resources.Load<Sprite>(rutaImagen);
-                    }*/
 					asset.RutaImagenCarta = rutaImagen;
                     asset.CosteMana = mana;
                     if (!"".Equals(fondo))
@@ -130,7 +125,9 @@ public class Recursos  {
 
     private static string obtenerFormatoNombreCorrectoDirectorio(string carpeta)
     {
-        return carpeta.Substring(0,1).ToUpper() + carpeta.Substring(1, carpeta.Length-1) ;
+		if(carpeta.Length > 1)
+        	return carpeta.Substring(0,1).ToUpper() + carpeta.Substring(1, carpeta.Length-1) ;
+		return carpeta;
     }
 
     private static string obtenerRutaImagen(string familia, string carpetaCarta, string nombreImagen)

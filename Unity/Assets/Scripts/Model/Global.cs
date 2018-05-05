@@ -16,7 +16,7 @@ public class Global {
             public static string[] FUEGO = { "Dragon1", "Dragon2", "Dragon3" };
             public static string[] TIERRA = { "Dragon1", "Dragon2", "Dragon3" , "Soldado", "Caballero", "Principe"};
             public static string[] ELECTRICIDAD = { "Dragon1", "Dragon2", "Dragon3" };
-            public static string[] MAGICA = { "Dragon" };
+            public static string[] MAGICA = { "Arpia","Dragon" };
             public static string[] FUSION = { "Dragon" };
             public static string[] ANCESTRAL = { "Dragon" };
         }

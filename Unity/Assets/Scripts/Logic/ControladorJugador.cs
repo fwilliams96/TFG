@@ -111,9 +111,9 @@ public class ControladorJugador
         //if (tm is PlayerTurnMaker)
         //{
             ActualizarManaJugador(JugadorActual);
-            MostrarCartasJugablesJugador(JugadorActual);
+            ActualizarEstadoCartasJugadorActual(JugadorActual);
         //}
-        OcultarCartasJugablesJugadorContrario(JugadorActual);
+        ActualizarEstadoCartasJugadorEnemigo(JugadorActual);
     }
 
     private void OnTurnStart()
@@ -134,20 +134,20 @@ public class ControladorJugador
     }
 
     // Muestra cartas jugables de la mano del jugador
-    public void MostrarCartasJugablesJugador(Jugador jugador)
+    public void ActualizarEstadoCartasJugadorActual(Jugador jugador)
     {
         if (jugador == JugadorActual)
-            MostrarUOcultarCartas(jugador, false);
+            ActualizarEstadoCartasJugador(jugador, false);
 
     }
 
-    private void OcultarCartasJugablesJugadorContrario(Jugador jugador)
+    private void ActualizarEstadoCartasJugadorEnemigo(Jugador jugador)
     {
         if (jugador == JugadorActual)
-            MostrarUOcultarCartas(OtroJugador(jugador), true);
+            ActualizarEstadoCartasJugador(OtroJugador(jugador), true);
             }
 
-    private void MostrarUOcultarCartas(Jugador jugador, bool quitarTodasRemarcadas = false)
+    private void ActualizarEstadoCartasJugador(Jugador jugador, bool quitarTodasRemarcadas = false)
     {
         //Debug.Log("HighlightPlayable remove: "+ removeAllHighlights);
         foreach (Carta cl in jugador.CartasEnLaMano())
@@ -159,6 +159,8 @@ public class ControladorJugador
 
         foreach (Ente crl in jugador.EntesEnLaMesa())
         {
+			if (crl.GetType () == typeof(Criatura)) 
+				((Criatura)crl).HaAtacado = false;
             GameObject g = IDHolder.GetGameObjectWithID(crl.ID);
             if (g != null)
                 g.GetComponent<OneCreatureManager>().PuedeAtacar = (crl.AtaquesRestantesEnTurno > 0) && !quitarTodasRemarcadas;

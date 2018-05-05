@@ -65,6 +65,8 @@ public class ControladorEnte
     public void MostrarAccion(int idEnte)
     {
         Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
+		/*if (!CartaPreparada (ente))
+			return;*/
         if (ente.GetType() == typeof(Magica))
         {
             //Solo mostraremos la opcion activar efecto si no lo ha activado aun
@@ -77,7 +79,7 @@ public class ControladorEnte
         else
         {
             Criatura criatura = (Criatura)ente;
-            if (criatura.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
+			if (criatura.PosicionCriatura.Equals(PosicionCriatura.ATAQUE) && !CriaturaHaAtacado(criatura))
             {
                 AccionesPopUp.Instance.MostrarAccionDefensa();
             }
@@ -92,6 +94,10 @@ public class ControladorEnte
 	public bool CartaPreparada(Ente ente){
 		GameObject g = IDHolder.GetGameObjectWithID(ente.ID);
 		return g.GetComponent<OneCreatureManager> ().PuedeAtacar;
+	}
+
+	public bool CriaturaHaAtacado(Criatura criatura){
+		return criatura.HaAtacado;
 	}
 
     public void MuerteEnte(int idCriatura)

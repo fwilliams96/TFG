@@ -300,7 +300,7 @@ public class Controlador : MonoBehaviour
     // Muestra cartas jugables de la mano del jugador
     public void MostrarCartasJugablesJugador(Jugador jugador)
     {
-        controladorJugador.MostrarCartasJugablesJugador(jugador);
+		controladorJugador.ActualizarEstadoCartasJugadorActual(jugador);
     }
 
     public PlayerArea AreaJugador(Jugador jugador)
@@ -374,6 +374,9 @@ public class Controlador : MonoBehaviour
         //TODO ver quien ataca, si magica o criatura
         Ente atacante = Recursos.EntesCreadosEnElJuego[idAtacante];
         Ente objetivo = Recursos.EntesCreadosEnElJuego[idObjetivo];
+		if (atacante.GetType () == typeof(Criatura)) 
+			((Criatura)atacante).HaAtacado = true;
+			
         if(objetivo.GetType() == typeof(Criatura))
         {
             Criatura criaturaObjetivo = (Criatura)objetivo;

@@ -28,8 +28,8 @@ public class AccionesCarta : MonoBehaviour {
 			visualizar.SetActive (false);
 		if(añadirItem.activeSelf)
 			añadirItem.SetActive (false);
-		/*if(evolucionar.activeSelf)
-			evolucionar.SetActive (false);*/
+		if(evolucionar.activeSelf)
+			evolucionar.SetActive (false);
 		if(opciones.activeSelf)
 			opciones.SetActive (false);
 	}
