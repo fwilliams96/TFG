@@ -58,8 +58,8 @@ public class Controlador : MonoBehaviour
     // METHODS
     void Awake()
     {
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
         Instance = this;
+		BaseDatos.Instance.CrearJugadorEnemigo ();
         timer = GetComponent<RopeTimer>();
         controladorJugador = ControladorJugador.Instance;
         controladorEnte = ControladorEnte.Instance;
@@ -224,9 +224,9 @@ public class Controlador : MonoBehaviour
     /// </summary>
     /// <param name="UniqueID"></param>
     /// <param name="tablePos"></param>
-    public void JugarMagicaMano(int UniqueID, int tablePos)
+    public void JugarMagicaMano(Jugador jugador,int UniqueID, int tablePos)
     {
-		JugarMagicaMano(BaseDatos.Instance.Cartas[UniqueID], tablePos);
+		JugarMagicaMano(jugador,BaseDatos.Instance.Cartas[UniqueID], tablePos);
     }
 
     /// <summary>
@@ -234,11 +234,11 @@ public class Controlador : MonoBehaviour
     /// </summary>
     /// <param name="magicaJugada"></param>
     /// <param name="tablePos"></param>
-    public void JugarMagicaMano(Carta magicaJugada, int tablePos)
+    public void JugarMagicaMano(Jugador jugador,Carta magicaJugada, int tablePos)
     {
-        RestarManaCarta(JugadorActual, magicaJugada);
+		RestarManaCarta(jugador, magicaJugada);
         Magica nuevaMagica = new Magica(magicaJugada.assetCarta);
-        JugarCarta(magicaJugada, nuevaMagica, tablePos);
+		JugarCarta(jugador,magicaJugada, nuevaMagica, tablePos);
     }
 
     /// <summary>
@@ -247,10 +247,10 @@ public class Controlador : MonoBehaviour
     /// <param name="UniqueID"></param>
     /// <param name="tablePos"></param>
     /// <param name="posicionAtaque"></param>
-    public void JugarCartaMano(int UniqueID, int tablePos, bool posicionAtaque)
+    public void JugarCartaMano(Jugador jugador,int UniqueID, int tablePos, bool posicionAtaque)
     {
         Debug.Log("Jugar carta mano: " + UniqueID);
-		JugarCartaMano(BaseDatos.Instance.Cartas[UniqueID], tablePos, posicionAtaque);
+		JugarCartaMano(jugador,BaseDatos.Instance.Cartas[UniqueID], tablePos, posicionAtaque);
     }
 
     /// <summary>
@@ -259,12 +259,12 @@ public class Controlador : MonoBehaviour
     /// <param name="cartaJugada"></param>
     /// <param name="tablePos"></param>
     /// <param name="posicionAtaque"></param>
-    public void JugarCartaMano(Carta cartaJugada, int tablePos, bool posicionAtaque)
+    public void JugarCartaMano(Jugador jugador,Carta cartaJugada, int tablePos, bool posicionAtaque)
     {
         //ELIMINATE
-        RestarManaCarta(JugadorActual, cartaJugada);
+		RestarManaCarta(jugador, cartaJugada);
         Criatura newCreature = new Criatura(cartaJugada.assetCarta, posicionAtaque == true ? PosicionCriatura.ATAQUE : PosicionCriatura.DEFENSA);
-        JugarCarta(cartaJugada,newCreature, tablePos);
+        JugarCarta(jugador,cartaJugada,newCreature, tablePos);
         
     }
 
@@ -274,19 +274,16 @@ public class Controlador : MonoBehaviour
     /// <param name="cartaJugada"></param>
     /// <param name="ente"></param>
     /// <param name="tablePos"></param>
-    private void JugarCarta(Carta cartaJugada,Ente ente, int tablePos)
+    private void JugarCarta(Jugador jugador,Carta cartaJugada,Ente ente, int tablePos)
     {
-        JugadorActual.AñadirEnteMesa(tablePos, ente);
+		jugador.AñadirEnteMesa(tablePos, ente);
         // no matter what happens, move this card to PlayACardSpot
-        new PlayAEntityCommand(cartaJugada, JugadorActual, tablePos, ente).AñadirAlaCola();
+		new PlayAEntityCommand(cartaJugada, jugador, tablePos, ente).AñadirAlaCola();
         //causa battlecry effect
         if (ente.efecto != null)
             ente.efecto.WhenACreatureIsPlayed();
         // remove this card from hand
-        JugadorActual.EliminarCartaMano(cartaJugada);
-        //ELIMINATE o sobra esto
-        //controladorJugador.ActualizarManaJugador(JugadorActual);
-        //MostrarCartasJugablesJugadorActual();
+		jugador.EliminarCartaMano(cartaJugada);
     }
 
     public void ActualizarManaJugador(Jugador jugador)
@@ -414,6 +411,12 @@ public class Controlador : MonoBehaviour
     {
         controladorEnte.MostrarAccion(idEnte);
     }
+
+	public void Clear(){
+		BaseDatos.Instance.Clear ();
+		controladorJugador.Clear ();
+		controladorEnte.Clear ();
+	}
 
 }
 

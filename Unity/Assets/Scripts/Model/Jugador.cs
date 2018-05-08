@@ -104,13 +104,9 @@ public class Jugador : ICharacter
 	public Jugador(string area)
     {
         PlayerID = IDFactory.GetUniqueID();
-        this.mano = new Mano();
-        this.mazo = new Mazo();
-        this.mesa = new Mesa();
-        this.defensa = 3000;
 		this.nivel = 0;
 		this.area = area;
-		this.posCartaActual = 0;
+		Reset ();
     }
 
     //TODO get mana from coin or other spells 
@@ -260,5 +256,13 @@ public class Jugador : ICharacter
 		foreach (System.Object carta in cartas) {
 			AñadirCartaMazo ((Carta)carta);
 		}
+	}
+
+	public void Reset(){
+		this.mano = new Mano();
+		this.mazo = new Mazo();
+		this.mesa = new Mesa();
+		this.defensa = 3000;
+		this.posCartaActual = 0;
 	}
 }

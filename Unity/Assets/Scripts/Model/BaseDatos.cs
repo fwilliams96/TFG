@@ -11,7 +11,7 @@ public class BaseDatos
     #region Atributos
     private static BaseDatos instance;
     private DatabaseReference reference;
-    private Jugador [] jugadores;
+	private List<Jugador> jugadores;
     private int numJugadores;
     private string userIDActual;
     private DataSnapshot usuarioActual;
@@ -27,7 +27,7 @@ public class BaseDatos
         this.assets = null;
         this.usuarioActual = null;
         this.numJugadores = 0;
-        this.jugadores = new Jugador[2];
+		this.jugadores = new List<Jugador>();
 		Cartas = new Dictionary<int, Carta>();
     }
 
@@ -86,8 +86,6 @@ public class BaseDatos
 
     public void AñadirWelcomePackJugador(Jugador jugador)
     {
-        //while (assets == null) ;
-        //var json = JSONUtils.StringToJSON(assets.GetRawJsonValue());
         List<string> idCartasWelcomePack = ObtenerIdsAssetsAleatorios();
         AñadirCartasJugador(jugador, idCartasWelcomePack);
 		AñadirItemsJugador (jugador);
@@ -113,14 +111,37 @@ public class BaseDatos
         Debug.Log("Crear jugador");
         this.userIDActual = userId;
         AñadirJugador(new Jugador("Low"));
-        AñadirJugador(new Jugador("Top"));
-        //TODO aquí finalmente solo deberán añadirse las 8 cartas de welcome pack al jugador que se acaba de registrar. No a ambos.
+        //AñadirJugador(new Jugador("Top"));
         AñadirWelcomePackJugador(Local);
-		AñadirWelcomePackJugador(Enemigo);
+		//AñadirWelcomePackJugador(Enemigo);
         AñadirJugadorBaseDatos(userId,Local);
-        //AñadirWelcomePackJugador(Enemigo);
         callBack.Invoke();
     }
+
+	public void RecogerUsuario(object sender, ValueChangedEventArgs args)
+	{
+		if (args.DatabaseError != null)
+		{
+			Debug.LogError(args.DatabaseError.Message);
+			return;
+		}
+		usuarioActual = args.Snapshot;
+		ObtenerDatosJugador(usuarioActual);
+	}
+
+	private void ObtenerDatosJugador(DataSnapshot usuario)
+	{
+		Debug.Log("Obtener jugador");
+		AñadirJugador(new Jugador("Low"));
+		//AñadirJugador(new Jugador("Top"));
+		int nivel = ObtenerNivelJugador(usuario);
+		List<Carta> cartasJugador = ObtenerCartasJugador(usuario);
+		List<Item> itemsJugador = ObtenerItemsJugador (usuario);
+		AñadirCartasJugador(Local, cartasJugador);
+		AñadirItemsJugador (Local, itemsJugador);
+		//AñadirWelcomePackJugador(Enemigo);
+		callBack.Invoke();
+	}
 
     private void AñadirCartasJugador(Jugador jugador, List<String> idCartas)
     {
@@ -203,33 +224,6 @@ public class BaseDatos
         reference.Child("users").Child(userID).SetValueAsync(jugador.ToDictionary());
     }
 
-    public void RecogerUsuario(object sender, ValueChangedEventArgs args)
-    {
-        if (args.DatabaseError != null)
-        {
-            Debug.LogError(args.DatabaseError.Message);
-            return;
-        }
-        usuarioActual = args.Snapshot;
-        ObtenerDatosJugador(usuarioActual);
-    }
-
-    private void ObtenerDatosJugador(DataSnapshot usuario)
-    {
-        //while (assets == null) ;
-        AñadirJugador(new Jugador("Low"));
-        AñadirJugador(new Jugador("Top"));
-        int nivel = ObtenerNivelJugador(usuario);
-        List<Carta> cartasJugador = ObtenerCartasJugador(usuario);
-		List<Item> itemsJugador = ObtenerItemsJugador (usuario);
-        AñadirCartasJugador(Local, cartasJugador);
-		AñadirItemsJugador (Local, itemsJugador);
-        //TODO solo deberá ser al usuario que se ha logueado
-        //AñadirCartasJugador(Enemigo, cartasJugador);
-		AñadirWelcomePackJugador(Enemigo);
-        callBack.Invoke();
-    }
-
     private List<Carta> ObtenerCartasJugador(DataSnapshot usuario)
     {
         List<Carta> cartasJugador = new List<Carta>();
@@ -265,9 +259,15 @@ public class BaseDatos
 
     private void AñadirJugador(Jugador jugador)
     {
-        jugadores[numJugadores] = jugador;
-        numJugadores += 1;
+		jugadores.Add (jugador);
     }
+
+	private void EliminarEnemigo(){
+		foreach (Carta carta in Enemigo.Cartas()) {
+			Cartas.Remove (carta.ID);
+		}
+		jugadores.Remove (Enemigo);
+	}
 
     public void GuardarCarta(string familia,CartaAsset asset)
     {
@@ -312,7 +312,7 @@ public class BaseDatos
 
     public Jugador [] GetPlayers()
     {
-        return jugadores;
+		return jugadores.ToArray ();
     }
 
     public bool BaseDatosInicializada
@@ -322,5 +322,15 @@ public class BaseDatos
             return assets != null;
         }
     }
+
+	public void CrearJugadorEnemigo(){
+		AñadirJugador(new Jugador("Top"));
+		AñadirWelcomePackJugador(Enemigo);
+	}
+
+	public void Clear(){
+		Local.Reset ();
+		EliminarEnemigo ();
+	}
 
 }

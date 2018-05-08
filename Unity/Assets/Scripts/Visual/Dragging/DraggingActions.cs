@@ -9,6 +9,16 @@ public abstract class DraggingActions : MonoBehaviour {
 
     public abstract void OnDraggingInUpdate();
 
+	public abstract void resetDragg();
+
+	protected bool reset;
+
+	public bool Reset {
+		get {
+			return reset;
+		}
+	}
+
     public virtual bool SePuedeArrastrar
     {
         get

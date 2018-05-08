@@ -135,4 +135,8 @@ public class ControladorEnte
         return ente.GetType() == typeof(Magica);
     }
 
+	public void Clear(){
+		instance = null;
+	}
+
 }

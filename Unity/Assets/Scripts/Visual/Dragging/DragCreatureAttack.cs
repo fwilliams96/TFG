@@ -62,6 +62,7 @@ public class DragCreatureAttack : DraggingActions {
         sr.enabled = true;
         // enable line renderer to start drawing the line.
         lr.enabled = true;
+		reset = false;
     }
 
     public override void OnDraggingInUpdate()
@@ -109,8 +110,8 @@ public class DragCreatureAttack : DraggingActions {
             }
 
         }
-        // not a valid target, return
-        if (tag.Contains("Low"))
+		resetDragg ();
+        /*if (tag.Contains("Low"))
             dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorAbajo;
         else
             dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorArriba;
@@ -120,9 +121,24 @@ public class DragCreatureAttack : DraggingActions {
         transform.localPosition = Vector3.zero;
         sr.enabled = false;
         lr.enabled = false;
-        triangleSR.enabled = false;
+        triangleSR.enabled = false;*/
         
     }
+
+	public override void resetDragg(){
+		if (tag.Contains("Low"))
+			dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorAbajo;
+		else
+			dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorArriba;
+		dondeEstaCartaOCriatura.SetearOrdenCriatura();
+
+		// return target and arrow to original position
+		transform.localPosition = Vector3.zero;
+		sr.enabled = false;
+		lr.enabled = false;
+		triangleSR.enabled = false;
+		reset = true;
+	}
 
     // NOT USED IN THIS SCRIPT
     protected override bool DragSuccessful()

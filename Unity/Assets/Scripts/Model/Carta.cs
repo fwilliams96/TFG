@@ -41,11 +41,7 @@ public class Carta : IIdentifiable
         this.assetCarta = ca;
         // get unique int ID
         idCarta = IDFactory.GetUniqueID();
-        //UniqueCardID = IDFactory.GetUniqueID();
         ResetCosteMana();
-        // add this card to a dictionary with its ID as a key
-        //Recursos.CartasCreadasEnElJuego.Add(idCarta, this);
-        Debug.Log("Carta creada");
         progreso = new Progreso();
     }
 

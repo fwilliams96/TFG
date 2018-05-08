@@ -74,14 +74,8 @@ public class TableVisual : MonoBehaviour
     public void AñadirCriaturaDefensa(CartaAsset ca, int idUnico, int indiceSlot)
     {
         Debug.Log("Añadir ente criatura como defensa");
-        //TODO cuando sea una carta magica no entrara en esta funcion
-        // create a new creature from prefab
         GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
-        creature.GetComponent<CreatureAttackVisual>().ColocarCriaturaEnDefensa(DatosGenerales.Instance.CardTransitionTimeFast);
-        /*float x = creature.transform.eulerAngles.x;
-        float y = creature.transform.eulerAngles.y;
-        float z = creature.transform.eulerAngles.z + 90;
-        creature.transform.DORotate(new Vector3(x, y, z), 0.1f);*/
+		creature.GetComponent<CreatureAttackVisual>().ColocarCriaturaEnDefensa(Settings.Instance.CardTransitionTimeFast);
         // apply the look from CardAsset
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }

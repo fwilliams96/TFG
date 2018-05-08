@@ -37,34 +37,53 @@ public class Eventos : MonoBehaviour {
         m0 = transform.position - mRay.GetPoint(rayDistance);
     }
 
+	public void Still(){
+		if (da != null) {
+			if (!da.SePuedeArrastrar && dragging) { 
+				if(!da.Reset)
+					da.resetDragg ();
+			}
+			/*if (da.SePuedeArrastrar) { 
+			} else {
+				if (dragging && !da.Reset)
+					da.resetDragg ();
+			}*/
+		}
+
+	}
+
     public void Dragg()
     {
-        Debug.Log("Dragg");
-        if (da != null && da.SePuedeArrastrar) { 
-            if (!dragging)
-            {
-                dragging = true;
-                OpcionesObjeto.PrevisualizacionesPermitidas = false;
-                _draggingThis = this;
-                da.OnStartDrag();
-            }
-                
-            Ray mRay = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-            float rayDistance;
-            if (objPlane.Raycast(mRay, out rayDistance))
-            {
-                transform.position = mRay.GetPoint(rayDistance) + m0;
-            }
-            da.OnDraggingInUpdate();
-        }
+        //Debug.Log("Dragg");
+		if (da != null) {
+			if (da.SePuedeArrastrar) { 
+				if (!dragging) {
+					dragging = true;
+					OpcionesObjeto.PrevisualizacionesPermitidas = false;
+					_draggingThis = this;
+					da.OnStartDrag ();
+				}
+	                
+				Ray mRay = Camera.main.ScreenPointToRay (Input.GetTouch (0).position);
+				float rayDistance;
+				if (objPlane.Raycast (mRay, out rayDistance)) {
+					transform.position = mRay.GetPoint (rayDistance) + m0;
+				} 
+				da.OnDraggingInUpdate ();
+			} else {
+				if (dragging && !da.Reset) {
+					da.resetDragg ();
+				}
+
+			}
+		}
         //mostrar previsualizacion
     }
 
     public void End()
     {
         Debug.Log("End");
-        if (!dragging) {
-            //OPTIONAL comprobar aqui si el jugador puede previsualizar y/o abrir menu en vez de dentro de opciones
+		if (!dragging) {
             //Mostrar previsualizacion y menu
             GetComponent<OpcionesObjeto>().MostrarOpciones();
         }
@@ -72,7 +91,9 @@ public class Eventos : MonoBehaviour {
         {
             OpcionesObjeto.PrevisualizacionesPermitidas = true;
             _draggingThis = null;
-            da.OnEndDrag();
+			if (da.SePuedeArrastrar)
+				da.OnEndDrag ();
+
             dragging = false;
         }
         

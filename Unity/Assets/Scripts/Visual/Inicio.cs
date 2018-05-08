@@ -10,7 +10,6 @@ public class Inicio : MonoBehaviour {
 
     void Awake()
     {
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
     }
 
     // Use this for initialization

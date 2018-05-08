@@ -35,6 +35,7 @@ public class DragMagicEffect : DraggingActions {
     public override void OnStartDrag()
     {
         dondeEstaCartaOCriatura.EstadoVisual = VisualStates.Arrastrando;
+		reset = false;
     }
 
     public override void OnDraggingInUpdate()
@@ -44,38 +45,17 @@ public class DragMagicEffect : DraggingActions {
 
     public override void OnEndDrag()
     {
-        /*Target = FindTarget();
-        int magicID = GetComponentInParent<IDHolder>().UniqueID;
-        if (Target != null)
-        {
-            int targetID = Target.GetComponent<IDHolder>().UniqueID;
-            
-            Debug.Log("Target ID: " + targetID);
-            if (magicID != targetID && Recursos.EntesCreadosEnElJuego[targetID] != null)
-            {
-                // if targeted creature is still alive, attack creature
-                Controlador.Instance.ActivarEfectoMagica(magicID);
-                Debug.Log("Attacking "+Target);
-            }
-
-        }
-        else
-        {
-            // if targeted creature is still alive, attack creature
-            Controlador.Instance.ActivarEfectoMagica(magicID);
-            Debug.Log("Attacking " + Target);
-        }*/
-        // not a valid target, return
         if(tag.Contains("Low"))
             dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorAbajo;
         else
             dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorArriba;
         dondeEstaCartaOCriatura.SetearOrdenCriatura();
 
-        // return target and arrow to original position
-        //transform.localPosition = Vector3.zero;
-
     }
+
+	public override void resetDragg(){
+		reset = true;
+	}
 
     // NOT USED IN THIS SCRIPT
     protected override bool DragSuccessful()

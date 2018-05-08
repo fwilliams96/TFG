@@ -13,10 +13,29 @@ public static class IDFactory {
         return Count;
     }
 	
-	 public static void ResetIDs()
+	/*public static void ResetIDs()
     {
         Count = 0;
-    }
+    }*/
+
+	public static void ResetIDs()
+	{
+		//Cartas enemigo
+		for (int i = 0; i < 8; i++) {
+			Count -= 1;
+		}
+		//Entes enemigo
+		for (int i = 0; i < 8; i++) {
+			Count -= 1;
+		}
+		//Enemigo
+		Count -= 1;
+	}
+
+	public static void EliminarID(){
+		Count -= 1;
+	}
+
 
 
 }

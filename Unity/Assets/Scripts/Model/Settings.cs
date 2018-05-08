@@ -13,6 +13,17 @@ public class Settings : MonoBehaviour {
 		RACIONAL
 	}
 
+	[Header("Colors")]
+	public Color32 CardBodyStandardColor;
+	public Color32 CardRibbonsStandardColor;
+	public Color32 CardGlowColor;
+	[Header("Numbers and Values")]
+	public float CardPreviewTime = 1f;
+	public float CardTransitionTime= 1f;
+	public float CardPreviewTimeFast = 0.2f;
+	public float CardTransitionTimeFast = 0.5f;
+	public int NumMaximoCriaturasMesa = 7;
+	[Header("Opciones parametrizables")]
 	public TIPO_NUMERO Batalla;
 	public TIPO_NUMERO Items;
 
@@ -25,14 +36,6 @@ public class Settings : MonoBehaviour {
 		}
 			
 	}
-
-	/*public static Settings Instance{
-		get{
-			if (instance == null)
-				instance = new Settings ();
-			return instance;
-		}
-	}*/
 
 	public static string ObtenerFraccion(int numerador, int denominador){
 		int gcd = MayorDenominadorComun (numerador, denominador);

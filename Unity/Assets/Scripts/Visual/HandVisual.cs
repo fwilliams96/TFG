@@ -119,19 +119,19 @@ public class HandVisual : MonoBehaviour
         if (!fast)
         {
             Debug.Log("Not fast!!!");
-            s.Append(card.transform.DOMove(DrawPreviewSpot.position, DatosGenerales.Instance.CardTransitionTime));
+			s.Append(card.transform.DOMove(DrawPreviewSpot.position, Settings.Instance.CardTransitionTime));
             if (TakeCardsOpenly)
-                s.Insert(0f, card.transform.DORotate(Vector3.zero, DatosGenerales.Instance.CardTransitionTime));
+				s.Insert(0f, card.transform.DORotate(Vector3.zero, Settings.Instance.CardTransitionTime));
             else
-                s.Insert(0f, card.transform.DORotate(new Vector3(0f, 179f, 0f), DatosGenerales.Instance.CardTransitionTime));
-            s.AppendInterval(DatosGenerales.Instance.CardPreviewTime);
+				s.Insert(0f, card.transform.DORotate(new Vector3(0f, 179f, 0f), Settings.Instance.CardTransitionTime));
+			s.AppendInterval(Settings.Instance.CardPreviewTime);
             // displace the card so that we can select it in the scene easier.
-            s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, DatosGenerales.Instance.CardTransitionTime));
+			s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, Settings.Instance.CardTransitionTime));
         }
         else
         {
             // displace the card so that we can select it in the scene easier.
-            s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, DatosGenerales.Instance.CardTransitionTimeFast));
+			s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, Settings.Instance.CardTransitionTimeFast));
             //if (TakeCardsOpenly)
                 //s.Insert(0f, card.transform.DORotate(Vector3.zero, DatosGenerales.Instance.CardTransitionTimeFast));
         }
@@ -185,7 +185,7 @@ public class HandVisual : MonoBehaviour
             float x = carta.transform.eulerAngles.x;
             float y = grado;
             float z = carta.transform.eulerAngles.z;
-            carta.transform.DORotate(new Vector3(x, y, z), DatosGenerales.Instance.CardTransitionTime);
+            carta.transform.DORotate(new Vector3(x, y, z), Settings.Instance.CardTransitionTime);
         }
     }
 

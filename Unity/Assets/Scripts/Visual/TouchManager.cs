@@ -75,11 +75,15 @@ public class TouchManager : MonoBehaviour {
                 }*/
                 gObj.GetComponent<Eventos>().Dragg();
             }
-            else if(Input.GetTouch(0).phase == TouchPhase.Ended && gObj)
+			else if(Input.GetTouch(0).phase == TouchPhase.Stationary && gObj)
             {
-                gObj.GetComponent<Eventos>().End();
-                gObj = null;
+				gObj.GetComponent<Eventos>().Still();
             }
+			else if(Input.GetTouch(0).phase == TouchPhase.Ended && gObj)
+			{
+				gObj.GetComponent<Eventos>().End();
+				gObj = null;
+			}
         }
     }
 

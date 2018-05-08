@@ -48,7 +48,7 @@ public class PlayerPortraitVisual : MonoBehaviour {
         Instantiate(DatosGenerales.Instance.ExplosionPrefab, transform.position, Quaternion.identity);
         Sequence s = DOTween.Sequence();
         s.PrependInterval(2f);
-        s.OnComplete(() => DatosGenerales.Instance.GameOverPanel.SetActive(true));
+		s.OnComplete(() => GameOver.Instance.MostrarGameOver());
 
     }
 

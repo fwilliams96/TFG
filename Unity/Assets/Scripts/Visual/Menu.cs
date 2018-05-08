@@ -12,7 +12,6 @@ public class Menu : MonoBehaviour {
 
     void Awake()
     {
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
     }
 
     public void Inventario()

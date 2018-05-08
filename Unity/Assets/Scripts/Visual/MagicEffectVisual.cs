@@ -7,7 +7,7 @@ public class MagicEffectVisual : EnteVisual
 
     public void ActivateEffect()
     {
-        RotarObjetoEjeY(gameObject.transform.Find("Cuerpo").gameObject, 0, DatosGenerales.Instance.CardTransitionTime);
+		RotarObjetoEjeY(gameObject.transform.Find("Cuerpo").gameObject, 0, Settings.Instance.CardTransitionTime);
         /*GameObject canvas = gameObject.transform.Find("Cuerpo").gameObject;
         float x = canvas.transform.eulerAngles.x;
         //float y = gameObject.transform.eulerAngles.y + 180;

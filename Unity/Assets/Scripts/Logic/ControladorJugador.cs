@@ -65,6 +65,13 @@ public class ControladorJugador
     {
         PlayerArea areaJugador = AreaJugador(jugador);
         bool TurnoDelJugador = (_jugadorActual == jugador);
+		if (jugador.Area.Equals ("Low")) {
+			Debug.Log ("Jug actual: "+_jugadorActual.Area);
+			Debug.Log ("Jug: "+jugador.Area);
+			Debug.Log ("Turno: " + TurnoDelJugador);
+		}
+
+
         bool NoCartasPendientesPorMostrar = !Comandas.Instance.ComandasDeDibujoCartaPendientes();
         return areaJugador.PermitirControlJugador && areaJugador.ControlActivado && TurnoDelJugador && NoCartasPendientesPorMostrar;
     }
@@ -232,5 +239,9 @@ public class ControladorJugador
         //Mostramos la mano del nuevo jugador actual
         AreaJugador(JugadorActual).manoVisual.MostrarMano();
     }
+
+	public void Clear(){
+		instance = null;
+	}
 
 }

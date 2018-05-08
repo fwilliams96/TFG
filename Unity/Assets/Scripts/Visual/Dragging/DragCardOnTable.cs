@@ -35,6 +35,7 @@ public class DragCardOnTable : DraggingActions
         tempState = whereIsCard.EstadoVisual;
         whereIsCard.EstadoVisual = VisualStates.Arrastrando;
         whereIsCard.TraerAlFrente();
+		reset = false;
 
     }
 
@@ -65,7 +66,7 @@ public class DragCardOnTable : DraggingActions
         }
         else
         {
-            VolverALaMano();
+			resetDragg ();
         }
         //whereIsCard.SetearOrdenCarta();
        // whereIsCard.EstadoVisual = VisualStates.ManoJugadorAbajo;
@@ -86,13 +87,13 @@ public class DragCardOnTable : DraggingActions
             // play this card
             if (magica)
             {
-                Controlador.Instance.JugarMagicaMano(GetComponent<IDHolder>().UniqueID, tablePos);
+				Controlador.Instance.JugarMagicaMano(playerOwner,GetComponent<IDHolder>().UniqueID, tablePos);
             }
             else
             {
                 bool ataque = PosicionCriaturaPopUp.Instance.Ataque;
                 Debug.Log("ColocarCartaTablero ataque " + ataque);
-                Controlador.Instance.JugarCartaMano(GetComponent<IDHolder>().UniqueID, tablePos, ataque);
+				Controlador.Instance.JugarCartaMano(playerOwner,GetComponent<IDHolder>().UniqueID, tablePos, ataque);
             }
 
         }
@@ -100,7 +101,7 @@ public class DragCardOnTable : DraggingActions
         else
         {
             this.gameObject.SetActive(true);
-            VolverALaMano();
+			resetDragg ();
         }
 
     }
@@ -112,8 +113,7 @@ public class DragCardOnTable : DraggingActions
         return TableVisual.CursorSobreAlgunaMesa && TableNotFull;
     }
 
-    private void VolverALaMano()
-    {
+	public override void resetDragg(){
         // Set old sorting order 
         whereIsCard.SetearOrdenCarta();
         whereIsCard.EstadoVisual = tempState;
@@ -122,5 +122,6 @@ public class DragCardOnTable : DraggingActions
         Vector3 oldCardPos = PlayerHand.slots.Children[savedHandSlot].transform.localPosition;
         //Se usa local move porque a veces puede estar este script en target y alli si pillamos transform.position pillariamos la dl padre
         transform.DOLocalMove(oldCardPos, 1f);
+		reset = true;
     }
 }
