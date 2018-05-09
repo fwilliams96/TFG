@@ -124,6 +124,8 @@ public class Controlador : MonoBehaviour
     {
 		if (OpcionesObjeto.PrevisualizandoAlgunaCarta())
 			OpcionesObjeto.PararTodasPrevisualizaciones();
+		if (AccionesPopUp.Instance.EstaActivo())
+			AccionesPopUp.Instance.OcultarPopup ();
         // stop timer
         timer.StopTimer();
         // send all commands in the end of current player`s turn
@@ -237,7 +239,7 @@ public class Controlador : MonoBehaviour
     public void JugarMagicaMano(Jugador jugador,Carta magicaJugada, int tablePos)
     {
 		RestarManaCarta(jugador, magicaJugada);
-        Magica nuevaMagica = new Magica(magicaJugada.assetCarta);
+		Magica nuevaMagica = new Magica(magicaJugada.AssetCarta);
 		JugarCarta(jugador,magicaJugada, nuevaMagica, tablePos);
     }
 
@@ -263,7 +265,7 @@ public class Controlador : MonoBehaviour
     {
         //ELIMINATE
 		RestarManaCarta(jugador, cartaJugada);
-        Criatura newCreature = new Criatura(cartaJugada.assetCarta, posicionAtaque == true ? PosicionCriatura.ATAQUE : PosicionCriatura.DEFENSA);
+        Criatura newCreature = new Criatura(cartaJugada.AssetCarta, posicionAtaque == true ? PosicionCriatura.ATAQUE : PosicionCriatura.DEFENSA);
         JugarCarta(jugador,cartaJugada,newCreature, tablePos);
         
     }
@@ -338,7 +340,7 @@ public class Controlador : MonoBehaviour
             bool fieldNotFull = true;
             // but if this is a creature, we have to check if there is room on board (table)
             //TODO Esto de momento sobrará porque todas las cartas ocuparan sitio en la mesa
-            if (assetCarta.Defensa > 0)
+            if (AssetCarta.Defensa > 0)
                 fieldNotFull = (jugador.NumCriaturasEnLaMesa() < DatosGenerales.Instance.NumMaximoCriaturasMesa);
             //Debug.Log("Card: " + ca.name + " has params: ownersTurn=" + ownersTurn + "fieldNotFull=" + fieldNotFull + " hasMana=" + (CurrentManaCost <= owner.ManaLeft));
             return nuestroTurno && fieldNotFull && (CosteManaActual <= jugador.ManaRestante);

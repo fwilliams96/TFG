@@ -54,7 +54,7 @@ public class Elementos : MonoBehaviour {
 		GameObject elemento;
 		foreach(Carta carta in listaCartas)
 		{
-			CartaAsset asset = carta.assetCarta;
+			CartaAsset asset = carta.AssetCarta;
 			float progresoTrebol = carta.Progreso.Material;
 			float progresoPocion = carta.Progreso.Pocion;
 			elemento = Instantiate(DatosGenerales.Instance.CardInventario, transform);

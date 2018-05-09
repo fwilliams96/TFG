@@ -17,7 +17,7 @@ public class BaseDatos
     private DataSnapshot usuarioActual;
     private DataSnapshot assets;
     public delegate void CallBack();
-    private SesionUsuario.CallBack callBack;
+    //private SesionUsuario.CallBack callBack;
 	public Dictionary<int, Carta> Cartas;
     #endregion
 
@@ -75,14 +75,32 @@ public class BaseDatos
             }
         });
     }
+	public void RecogerJugador(string userId, SesionUsuario.CallBack callback)
+    {
+        this.userIDActual = userId;
+		reference.Child("users").Child(userId).GetValueAsync().ContinueWith(task => {
+			if (task.IsFaulted)
+			{
+				Debug.Log("Error al recoger el jugador");
+			}
+			else if (task.IsCompleted)
+			{
+				//Recojo los datos del jugador
+				usuarioActual = task.Result;
+				ObtenerDatosJugador(callback,usuarioActual);
+			}
+		});
+        //callBack = callback;
+    }
 
-    public void RecogerJugador(string userId, SesionUsuario.CallBack callback)
+
+    /*public void RecogerJugador(string userId, SesionUsuario.CallBack callback)
     {
         this.userIDActual = userId;
         reference.Child("users").Child(userId)
         .ValueChanged += RecogerUsuario;
         callBack = callback;
-    }
+    }*/
 
     public void AñadirWelcomePackJugador(Jugador jugador)
     {
@@ -111,14 +129,12 @@ public class BaseDatos
         Debug.Log("Crear jugador");
         this.userIDActual = userId;
         AñadirJugador(new Jugador("Low"));
-        //AñadirJugador(new Jugador("Top"));
         AñadirWelcomePackJugador(Local);
-		//AñadirWelcomePackJugador(Enemigo);
         AñadirJugadorBaseDatos(userId,Local);
         callBack.Invoke();
     }
-
-	public void RecogerUsuario(object sender, ValueChangedEventArgs args)
+		
+	/*public void RecogerUsuario(object sender, ValueChangedEventArgs args)
 	{
 		if (args.DatabaseError != null)
 		{
@@ -127,19 +143,17 @@ public class BaseDatos
 		}
 		usuarioActual = args.Snapshot;
 		ObtenerDatosJugador(usuarioActual);
-	}
+	}*/
 
-	private void ObtenerDatosJugador(DataSnapshot usuario)
+	private void ObtenerDatosJugador(SesionUsuario.CallBack callBack,DataSnapshot usuario)
 	{
 		Debug.Log("Obtener jugador");
 		AñadirJugador(new Jugador("Low"));
-		//AñadirJugador(new Jugador("Top"));
 		int nivel = ObtenerNivelJugador(usuario);
 		List<Carta> cartasJugador = ObtenerCartasJugador(usuario);
 		List<Item> itemsJugador = ObtenerItemsJugador (usuario);
 		AñadirCartasJugador(Local, cartasJugador);
 		AñadirItemsJugador (Local, itemsJugador);
-		//AñadirWelcomePackJugador(Enemigo);
 		callBack.Invoke();
 	}
 
@@ -155,7 +169,7 @@ public class BaseDatos
 	private void AñadirItemsJugador(Jugador jugador)
 	{
 		System.Random rnd = new System.Random();
-		for(int i = 0; i < 8; i++)
+		for(int i = 0; i < 10; i++)
 		{    
 			AñadirItemJugador(jugador, GenerarItemAleatorio(rnd));
 		}
@@ -180,7 +194,7 @@ public class BaseDatos
 
 	private Item GenerarItemAleatorio(System.Random rnd){
 		TipoItem tipoItem = (TipoItem)rnd.Next(0, 2);
-		int cantidad = rnd.Next (10, 50);
+		int cantidad = rnd.Next (50, 80);
 		string rutaImagen;
 		//TODO mejorar este hardcode
 		if (tipoItem.Equals (TipoItem.Material)) {
@@ -231,7 +245,11 @@ public class BaseDatos
         for (int i = 0; i < rawjson.Count; i++)
         {
             string idAsset = (string)usuario.Child("cartas").Child(i.ToString()).Child("asset").GetValue(true);
-            Progreso progreso = JsonUtility.FromJson<Progreso>(usuario.Child("cartas").Child(i.ToString()).Child("progreso").GetRawJsonValue());
+			var progresoJSON = JSONUtils.StringToJSON (usuario.Child ("cartas").Child (i.ToString ()).Child ("progreso").GetRawJsonValue ());
+			Progreso progreso = new Progreso ();
+			progreso.Material = Int32.Parse (progresoJSON ["material"]);
+			progreso.Pocion = Int32.Parse (progresoJSON ["pocion"]);
+            //Progreso progreso = JsonUtility.FromJson<Progreso>(usuario.Child("cartas").Child(i.ToString()).Child("progreso").GetRawJsonValue());
             cartasJugador.Add(CrearCartaJugador(idAsset, progreso));
         }
         return cartasJugador;
@@ -269,27 +287,48 @@ public class BaseDatos
 		jugadores.Remove (Enemigo);
 	}
 
+	public void ActualizarItemCarta(Carta carta,Item item){
+		Local.EliminarItem (item);
+		ActualizarItemsBaseDatos ();
+		ActualizarCartaBaseDatos (carta);
+	}
+
+	public void ActualizarCartaBaseDatos(Carta carta){
+		int indiceCarta = Local.BuscarPosicionCarta (carta);
+		ReferenciaCartas().Child (indiceCarta.ToString ()).SetValueAsync (carta.ToDictionary ());
+	}
+
+	private void ActualizarItemsBaseDatos(){
+		
+		ReferenciaItems().SetValueAsync (Local.ItemsToDictionary ());
+	}
+
+	private void ActualizarCartasBaseDatos(){
+
+		ReferenciaCartas().SetValueAsync (Local.CartasToDictionary ());
+	}
+
     public void GuardarCarta(string familia,CartaAsset asset)
     {
-        //reference.Child("asset").Child(familia).SetRawJsonValueAsync(cartaJSON);
-        reference.Child("assets").Push().SetRawJsonValueAsync(JsonUtility.ToJson(asset));
+		ReferenciaAssets().Push().SetRawJsonValueAsync(JsonUtility.ToJson(asset));
         Debug.Log("Guardar carta ok");
     }
 
-	public CartaAsset BuscarEvolucion(Familia familia, int evolucion){
+	public KeyValuePair<string,CartaAsset> BuscarEvolucion(Familia familia, int evolucion){
+		
 		var json = assets.Value as Dictionary<string, object>;
 		List<string> keyList = new List<string>(json.Keys);
-
+		KeyValuePair<string,CartaAsset> evolucionEncontrada = new KeyValuePair<string, CartaAsset> ("",null);
 		foreach(string idAsset in keyList)
 		{
 			string assetJSON = assets.Child(idAsset).GetRawJsonValue();
 			CartaAsset asset = JsonUtility.FromJson<CartaAsset>(assetJSON);
 			if (asset.Evolucion == (evolucion+1) && asset.Familia.Equals (familia)) {
-				return asset;
+				evolucionEncontrada = new KeyValuePair<string, CartaAsset> (idAsset,asset);
 			}
 
 		}
-		return null;
+		return evolucionEncontrada;
 	}
 
     //public bool Carga
@@ -331,6 +370,22 @@ public class BaseDatos
 	public void Clear(){
 		Local.Reset ();
 		EliminarEnemigo ();
+	}
+
+	private DatabaseReference ReferenciaAssets(){
+		return reference.Child ("assets");
+	}
+
+	private DatabaseReference ReferenciaJugador(){
+		return reference.Child ("users").Child (userIDActual);
+	}
+
+	private DatabaseReference ReferenciaCartas(){
+		return reference.Child ("users").Child (userIDActual).Child ("cartas");
+	}
+
+	private DatabaseReference ReferenciaItems(){
+		return reference.Child ("users").Child (userIDActual).Child ("items");
 	}
 
 }

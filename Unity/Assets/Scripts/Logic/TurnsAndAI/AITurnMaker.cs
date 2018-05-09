@@ -47,11 +47,11 @@ public class AITurnMaker: TurnMaker {
         {
             if (c.PuedeSerJugada)
             {
-                if (c.assetCarta.Defensa == 0)
+                if (c.AssetCarta.Defensa == 0)
                 {
                     // code to play a spell from hand
                     // TODO: depending on the targeting options, select a random target.
-                    if (c.assetCarta.Targets == TargetingOptions.NoTarget)
+                    if (c.AssetCarta.Targets == TargetingOptions.NoTarget)
                     {
                         p.JugarSpellMano(c, null);
                         InsertarRetraso(1.5f);

@@ -31,13 +31,13 @@ public class PlayAEntityCommand : Comanda
         // Añade la carta en el tablero
         PlayerArea areaJugador = Controlador.Instance.AreaJugador(p);
         if (ente.GetType() == typeof(Magica))
-            areaJugador.tableVisual.AñadirMagica(cl.assetCarta, ente.ID, tablePos);
+            areaJugador.tableVisual.AñadirMagica(cl.AssetCarta, ente.ID, tablePos);
         else
         {
             if(((Criatura)ente).PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
-                areaJugador.tableVisual.AñadirCriaturaAtaque(cl.assetCarta, ente.ID, tablePos);
+                areaJugador.tableVisual.AñadirCriaturaAtaque(cl.AssetCarta, ente.ID, tablePos);
             else
-                areaJugador.tableVisual.AñadirCriaturaDefensa(cl.assetCarta, ente.ID, tablePos);
+                areaJugador.tableVisual.AñadirCriaturaDefensa(cl.AssetCarta, ente.ID, tablePos);
         }
         Controlador.Instance.ActualizarManaJugador(p);
 

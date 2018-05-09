@@ -31,7 +31,7 @@ public class ControladorMenu : MonoBehaviour {
 			carta.AñadirPocion (item.Cantidad);
 		new AñadirItemCartaPrevisualizadaCommand (item).AñadirAlaCola ();
 		new AñadirItemCartaCommand (carta,item).AñadirAlaCola ();
-		BaseDatos.Instance.Local.EliminarItem (item);
+		BaseDatos.Instance.ActualizarItemCarta (carta,item);
 	}
 
 	private Carta BuscarCarta(int idCarta){
@@ -70,29 +70,32 @@ public class ControladorMenu : MonoBehaviour {
 	}
 
 	private bool ExisteEvolucion(Carta carta){
-		Familia familia = carta.assetCarta.Familia;
-		int evolucionActual = carta.assetCarta.Evolucion;
-		return BuscarEvolucion(familia,evolucionActual) != null;
+		Familia familia = carta.AssetCarta.Familia;
+		int evolucionActual = carta.AssetCarta.Evolucion;
+		KeyValuePair<string,CartaAsset> evolucion = BuscarEvolucion (familia, evolucionActual);
+		return !"".Equals(evolucion.Key)  && null != evolucion.Value;
 	}
 
-	public CartaAsset BuscarEvolucion(Familia familia, int evolucionActual){
+	public KeyValuePair<string,CartaAsset> BuscarEvolucion(Familia familia, int evolucionActual){
 		return BaseDatos.Instance.BuscarEvolucion (familia, evolucionActual);
 	}
 
 	public void EvolucionarCarta(GameObject cartaG){
 		Carta carta = BuscarCarta (cartaG.GetComponent<IDHolder>().UniqueID);
 		//Buscamos la evolución
-		CartaAsset asset = BuscarEvolucion (carta.assetCarta.Familia, carta.assetCarta.Evolucion);
+		KeyValuePair<string,CartaAsset> evolucion = BuscarEvolucion (carta.AssetCarta.Familia, carta.AssetCarta.Evolucion);
 		//modificamos el progreso de la carta restando las 100 unidades necesarias para evolucionar
 		carta.Progreso.Material -= 100;
 		carta.Progreso.Pocion -= 100;
-		carta.assetCarta = asset;
+		carta.IdAsset = evolucion.Key;
+		carta.AssetCarta = evolucion.Value;
 		OneCardManager manager = cartaG.GetComponent<OneCardManager>();
 		//modificamos el asset de la carta seleccionada actual y lo cambiamos por la evolución
-		manager.CartaAsset = asset;
+		manager.CartaAsset = evolucion.Value;
 		//actualizamos en la carta visual el progreso
 		manager.PorcentajeProgresoTrebol = carta.Progreso.Material > 100 ? 100: carta.Progreso.Material;
 		manager.PorcentajeProgresoPocion = carta.Progreso.Pocion > 100 ? 100: carta.Progreso.Pocion;
 		manager.LeerDatos();
+		BaseDatos.Instance.ActualizarCartaBaseDatos (carta);
 	}
 }

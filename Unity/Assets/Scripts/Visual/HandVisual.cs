@@ -161,7 +161,7 @@ public class HandVisual : MonoBehaviour
 
         // apply the look of the card based on the info from CardAsset
         OneCardManager manager = card.GetComponent<OneCardManager>();
-        manager.CartaAsset = c.assetCarta;
+        manager.CartaAsset = c.AssetCarta;
         manager.PorcentajeProgresoTrebol = c.Progreso.Material;
         manager.PorcentajeProgresoPocion = c.Progreso.Pocion;
         manager.LeerDatos();

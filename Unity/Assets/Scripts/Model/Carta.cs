@@ -10,8 +10,8 @@ public class Carta : IIdentifiable
     // an ID of this card
     private int idCarta;
     // a reference to the card asset that stores all the info about this card
-    private string idAsset;
-    public CartaAsset assetCarta;
+	private string idAsset;
+	private CartaAsset assetCarta;
     private Progreso progreso;
     #endregion
 
@@ -60,7 +60,25 @@ public class Carta : IIdentifiable
     }
 
     #region Getters/Setters
+
     // PROPERTIES
+	public string IdAsset{
+		get{
+			return idAsset;
+		}
+		set{
+			idAsset = value;
+		}
+	}
+
+	public CartaAsset AssetCarta{
+		get{
+			return assetCarta;
+		}
+		set{
+			assetCarta = value;
+		}
+	}
     public int ID
     {
         get { return idCarta; }

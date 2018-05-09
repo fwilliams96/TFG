@@ -7,13 +7,21 @@ public class Ente : ICharacter
 {
     #region Atributos
     // PUBLIC FIELDS
-    public CartaAsset assetCarta;
+    private CartaAsset assetCarta;
     public EfectoEnte efecto;
     private int idCriatura;
     public bool Frozen = false;
     #endregion
     #region Getters/Setters
     // property from ICharacter interface
+	public CartaAsset AssetCarta{
+		get{
+			return assetCarta;
+		}
+		set{
+			assetCarta = value;
+		}
+	}
     public int ID
     {
         get { return idCriatura; }

@@ -133,6 +133,32 @@ public class Jugador : ICharacter
 		cartas.Remove(carta);
     }
 
+	public int BuscarPosicionItem(Item item){
+		bool trobat = false;
+		int i = 0; 
+		while(i < items.Count && !trobat){
+			if (items [i] == item)
+				trobat = true;
+			else
+				i+=1;
+		}
+
+		return i;
+	}
+
+	public int BuscarPosicionCarta(Carta carta){
+		bool trobat = false;
+		int i = 0; 
+		while(i < cartas.Count && !trobat){
+			if (cartas [i] == carta)
+				trobat = true;
+			else
+				i+=1;
+		}
+
+		return i;
+	}
+
 	public void EliminarItem(Item item)
 	{
 		items.Remove(item);
@@ -233,24 +259,32 @@ public class Jugador : ICharacter
     {
         Dictionary <string, System.Object> result = new Dictionary<string, System.Object>();
         result["nivel"] = nivel;
-        int i = 0;
-        Dictionary<string, System.Object> cards = new Dictionary<string, System.Object>();
-        foreach (Carta carta in cartas)
-        {
-            cards[i.ToString()] = carta.ToDictionary();
-            i += 1;
-        }
-		result["cartas"] = cards;
-		i = 0;
+		result ["cartas"] = CartasToDictionary ();
+		result["items"] = ItemsToDictionary();
+        return result;
+    }
+
+	public Dictionary<string, System.Object> CartasToDictionary(){
+		int i = 0;
+		Dictionary<string, System.Object> cards = new Dictionary<string, System.Object>();
+		foreach (Carta carta in cartas)
+		{
+			cards[i.ToString()] = carta.ToDictionary();
+			i += 1;
+		}
+		return cards;
+	}
+
+	public Dictionary<string, System.Object> ItemsToDictionary(){
+		int i = 0;
 		Dictionary<string, System.Object> dictItems = new Dictionary<string, System.Object>();
 		foreach (Item item in items)
 		{
 			dictItems [i.ToString ()] = item.ToDictionary ();
 			i += 1;
 		}
-		result["items"] = dictItems;
-        return result;
-    }
+		return dictItems;
+	}
 
 	public void InicializarMazo(){
 		foreach (System.Object carta in cartas) {
