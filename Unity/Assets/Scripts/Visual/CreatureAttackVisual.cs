@@ -7,9 +7,8 @@ public class CreatureAttackVisual : EnteVisual
 
     //void Awake() { base.Awake(); }
 
-    public void AttackTarget(int targetUniqueID, int damageTakenByTarget, int damageTakenByAttacker, int attackerHealthAfter, int targetHealthAfter)
+    public void AttackTarget(int targetUniqueID, int damageTaken,int targetHealthAfter)
     {
-        Debug.Log(targetUniqueID);
         manager.PuedeAtacar = false;
         GameObject target = IDHolder.GetGameObjectWithID(targetUniqueID);
 
@@ -21,12 +20,15 @@ public class CreatureAttackVisual : EnteVisual
         transform.DOMove(target.transform.position, 0.5f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.InCubic).OnComplete(() =>
         {
             //Solo se atacan entes no jugadores
-            target.GetComponent<OneCreatureManager>().HacerDaño(damageTakenByTarget, targetHealthAfter);
+			if(target.tag.Contains("Criatura"))
+				target.GetComponent<OneCreatureManager>().HacerDaño(damageTaken, targetHealthAfter);
+			else
+				target.GetComponent<OneMagicaManager>().HacerDaño();
 
             /*w.SetearOrdenCriatura();
             w.EstadoVisual = tempState;*/
 
-            manager.HealthText.text = attackerHealthAfter.ToString();
+            //manager.HealthText.text = attackerHealthAfter.ToString();
             Sequence s = DOTween.Sequence();
             s.AppendInterval(1f);
             s.OnComplete(Comandas.Instance.CompletarEjecucionComanda);

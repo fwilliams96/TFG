@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ControladorJugador
 {
@@ -65,13 +66,6 @@ public class ControladorJugador
     {
         PlayerArea areaJugador = AreaJugador(jugador);
         bool TurnoDelJugador = (_jugadorActual == jugador);
-		if (jugador.Area.Equals ("Low")) {
-			Debug.Log ("Jug actual: "+_jugadorActual.Area);
-			Debug.Log ("Jug: "+jugador.Area);
-			Debug.Log ("Turno: " + TurnoDelJugador);
-		}
-
-
         bool NoCartasPendientesPorMostrar = !Comandas.Instance.ComandasDeDibujoCartaPendientes();
         return areaJugador.PermitirControlJugador && areaJugador.ControlActivado && TurnoDelJugador && NoCartasPendientesPorMostrar;
     }
@@ -126,7 +120,6 @@ public class ControladorJugador
     private void OnTurnStart()
     {
         JugadorActual.OnTurnStart();
-        // dispay a message that it is player`s turn
         if (JugadorActual.Area.Equals("Top"))
             new ShowMessageCommand("¡Turno enemigo!", 2.0f).AñadirAlaCola();
         else
@@ -137,7 +130,6 @@ public class ControladorJugador
     public void ActualizarManaJugador(Jugador jugador)
     {
         new UpdateManaCrystalsCommand(jugador, jugador.ManaEnEsteTurno, jugador.ManaRestante).AñadirAlaCola();
-        //MostrarCartasJugablesJugador(jugador);
     }
 
     // Muestra cartas jugables de la mano del jugador
@@ -156,7 +148,6 @@ public class ControladorJugador
 
     private void ActualizarEstadoCartasJugador(Jugador jugador, bool quitarTodasRemarcadas = false)
     {
-        //Debug.Log("HighlightPlayable remove: "+ removeAllHighlights);
         foreach (Carta cl in jugador.CartasEnLaMano())
         {
             GameObject g = IDHolder.GetGameObjectWithID(cl.ID);
@@ -169,8 +160,11 @@ public class ControladorJugador
 			if (crl.GetType () == typeof(Criatura)) 
 				((Criatura)crl).HaAtacado = false;
             GameObject g = IDHolder.GetGameObjectWithID(crl.ID);
-            if (g != null)
-                g.GetComponent<OneCreatureManager>().PuedeAtacar = (crl.AtaquesRestantesEnTurno > 0) && !quitarTodasRemarcadas;
+
+			if (g != null) {
+				g.GetComponent<OneEnteManager>().PuedeAtacar = (crl.AtaquesRestantesEnTurno > 0) && !quitarTodasRemarcadas;
+			}
+                
         }
     }
 
@@ -181,8 +175,54 @@ public class ControladorJugador
     {
         PararControlJugadores();
         Controlador.Instance.StopTheTimer();
-        new GameOverCommand(jugador).AñadirAlaCola();
+		new MuerteJugadorCommand (jugador).AñadirAlaCola ();
+		if (jugador.Area.Equals ("Low"))
+			new GameOverCommand (jugador).AñadirAlaCola ();
+		else {
+			Jugador ganador = OtroJugador (jugador);
+			Carta carta = ObtenerCartaPremio ();
+			List<Item> items = ObtenerItemsPremio ();
+			AñadirPremioJugador (ganador,carta,items);
+			int exp = AñadirExperienciaJugador (ganador);
+			BaseDatos.Instance.ActualizarJugadorBaseDatos (carta != null);
+			new PremioPartidaCommand (jugador,carta,items,exp).AñadirAlaCola ();
+		}
+			
     }
+
+	private Carta ObtenerCartaPremio(){
+		
+		Carta carta = null;
+		System.Random rnd = new System.Random ();
+		if(rnd.Next(0,2) == 0)
+			carta = BaseDatos.Instance.GenerarCartasAleatorias (1)[0];
+		return carta;
+	}
+
+	private List<Item> ObtenerItemsPremio(){
+
+		List<Item> items = BaseDatos.Instance.GenerarItemsAleatorios (3);
+		return items;
+	}
+
+	private void AñadirPremioJugador(Jugador jugador,Carta carta, List<Item> items){
+		if (carta != null)
+			jugador.AñadirCarta (carta);
+		foreach (Item item in items) {
+			jugador.AñadirItem (item);
+		}
+	}
+
+	private int AñadirExperienciaJugador(Jugador jugador){
+		System.Random rnd = new System.Random ();
+		int exp = rnd.Next (5, 15);
+		jugador.Experiencia += exp; 
+		if (jugador.Experiencia >= 100) {
+			jugador.Experiencia -= 100;
+			jugador.Nivel += 1;
+		}
+		return exp;
+	}
 
     public void PararControlJugadores()
     {
@@ -209,14 +249,13 @@ public class ControladorJugador
     /// <param name="carta"></param>
     public void RestarManaCarta(Jugador jugador, Carta carta)
     {
-        jugador.ManaRestante -= carta.CosteManaActual;
-        //ActualizarManaJugador(jugador);
+		jugador.ManaRestante -= carta.CosteManaActual;
+		//jugador.ManaEnEsteTurno -= carta.CosteManaActual;
+		//jugador.ManaRestante = jugador.ManaEnEsteTurno;
     }
 
-   public void QuitarVidaJugador(int valorAtaque)
+	public void QuitarVidaJugador(Jugador jugadorObjetivo,int valorAtaque)
     {
-        //TODO quitar vida al jugador, se haria jugadorObjetivo.Defensa -= objetivo.Defensa
-        Jugador jugadorObjetivo = OtroJugador(JugadorActual);
 		new DealDamageCommand(jugadorObjetivo.ID, valorAtaque, jugadorObjetivo.Defensa).AñadirAlaCola();
         jugadorObjetivo.Defensa -= valorAtaque;
         if (JugadorMuerto(jugadorObjetivo))

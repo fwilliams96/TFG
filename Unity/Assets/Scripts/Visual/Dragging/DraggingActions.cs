@@ -59,12 +59,14 @@ public abstract class DraggingActions : MonoBehaviour {
         //OPTIONAL quitar el for y hacer una busqueda
         foreach (RaycastHit h in hits)
         {
-            //TODO El tag this.tag == "LowEnte" o "TopEnte" debe cambiar a "LowCreature/TopCreature" nuevamente porque una magica no atacara de esta manera
-            if ((h.transform.tag == "TopEnte" && this.tag == "LowEnte") ||
-                    (h.transform.tag == "LowEnte" && this.tag == "TopEnte"))
+			if ((h.transform.tag.Equals("TopCriatura") || h.transform.tag.Equals("TopMagica")) && (this.tag.Equals("LowCriatura") || this.tag.Equals("LowMagica")) ||
+				((h.transform.tag.Equals("LowCriatura") || h.transform.tag.Equals("LowMagica")) && (this.tag.Equals("TopCriatura") || this.tag.Equals("TopMagica"))))
             {
-                // hit a creature, save parent transform
-                Target = h.transform.parent.gameObject;
+                // hit a creature or magica, save parent transform
+				if (h.transform.tag.Contains ("Criatura"))
+					Target = h.transform.parent.gameObject;
+				else
+					Target = h.transform.parent.gameObject.transform.parent.gameObject;
             }
 
         }

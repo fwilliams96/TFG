@@ -5,17 +5,21 @@ using DG.Tweening;
 public class MagicEffectVisual : EnteVisual
 {
 
-    public void ActivateEffect()
+    public void ColocarMagicaBocaArriba()
     {
 		RotarObjetoEjeY(gameObject.transform.Find("Cuerpo").gameObject, 0, Settings.Instance.CardTransitionTime);
-        /*GameObject canvas = gameObject.transform.Find("Cuerpo").gameObject;
-        float x = canvas.transform.eulerAngles.x;
-        //float y = gameObject.transform.eulerAngles.y + 180;
-        float y = 0;
-        float z = canvas.transform.eulerAngles.z;
-        canvas.transform.DORotate(new Vector3(x, y, z), DatosGenerales.Instance.CardTransitionTime, RotateMode.WorldAxisAdd);*/
-        Comandas.Instance.CompletarEjecucionComanda();
+		StartCoroutine (MuerteMagica ());
     }
+
+	private IEnumerator MuerteMagica()
+	{
+		yield return new WaitForSeconds(3f);
+		/*for(int i=0; i < 5; i++)
+		{
+			yield return new WaitForSeconds(0.05f);
+		}*/
+		Controlador.Instance.MuerteEnte (GetComponent<IDHolder> ().UniqueID);
+	}
 
     public void ColocarMagicaBocaAbajo(float tiempo)
     {

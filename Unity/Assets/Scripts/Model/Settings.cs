@@ -39,7 +39,11 @@ public class Settings : MonoBehaviour {
 
 	public static string ObtenerFraccion(int numerador, int denominador){
 		int gcd = MayorDenominadorComun (numerador, denominador);
-		return (numerador / gcd).ToString () + "/" + (denominador / gcd).ToString ();
+		numerador /= gcd;
+		denominador /= gcd;
+		if (denominador == 1)
+			return numerador.ToString ();
+		return numerador.ToString () + "/" + denominador.ToString ();
 	}
 
 	private static int MayorDenominadorComun (int a, int b) { 

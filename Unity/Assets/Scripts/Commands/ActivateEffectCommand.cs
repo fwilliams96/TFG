@@ -15,8 +15,7 @@ public class ActivateEffectCommand : Comanda
     public override void EmpezarEjecucionComanda()
     {
         GameObject Attacker = IDHolder.GetGameObjectWithID(AttackerUniqueID);
-
-        //Debug.Log(TargetUniqueID);
-        Attacker.GetComponent<MagicEffectVisual>().ActivateEffect();
+        Attacker.GetComponent<MagicEffectVisual>().ColocarMagicaBocaArriba();
+		Comandas.Instance.CompletarEjecucionComanda();
     }
 }

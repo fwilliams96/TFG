@@ -101,28 +101,14 @@ public class DragCreatureAttack : DraggingActions {
         if (Target != null)
         {
             int targetID = Target.GetComponent<IDHolder>().UniqueID;
-            Debug.Log("Target ID: " + targetID);
+            //Debug.Log("Target ID: " + targetID);
             if (Recursos.EntesCreadosEnElJuego[targetID] != null)
             {
-                // if targeted creature is still alive, attack creature
-                Controlador.Instance.AtacarCriatura(GetComponentInParent<IDHolder>().UniqueID, targetID);
-                Debug.Log("Attacking " + Target);
+                Controlador.Instance.AtacarEnte(GetComponentInParent<IDHolder>().UniqueID, targetID);
             }
 
         }
 		resetDragg ();
-        /*if (tag.Contains("Low"))
-            dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorAbajo;
-        else
-            dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorArriba;
-        dondeEstaCartaOCriatura.SetearOrdenCriatura();
-
-        // return target and arrow to original position
-        transform.localPosition = Vector3.zero;
-        sr.enabled = false;
-        lr.enabled = false;
-        triangleSR.enabled = false;*/
-        
     }
 
 	public override void resetDragg(){

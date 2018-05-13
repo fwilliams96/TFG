@@ -19,7 +19,8 @@ public class Jugador : ICharacter
     private Mano mano;
     private Mesa mesa;
     private int nivel;
-    private string area;
+	private int experiencia;
+	private string area;
 	private int posCartaActual;
 
     #endregion Atributos
@@ -82,6 +83,24 @@ public class Jugador : ICharacter
 			return cActual;
 		}
 	}
+
+	public int Nivel{
+		get{
+			return nivel;
+		}
+		set{ 
+			nivel = value;
+		}
+	}
+
+	public int Experiencia{
+		get{
+			return experiencia;
+		}
+		set{ 
+			experiencia = value;
+		}
+	}
     #endregion
 
     // CODE FOR EVENTS TO LET CREATURES KNOW WHEN TO CAUSE EFFECTS
@@ -91,28 +110,18 @@ public class Jugador : ICharacter
     //public event VoidWithNoArguments StartTurnEvent;
     public event VoidWithNoArguments EndTurnEvent;
 
-	public Jugador()
-	{
-		PlayerID = IDFactory.GetUniqueID();
-		this.mano = new Mano();
-		this.mazo = new Mazo();
-		this.mesa = new Mesa();
-		this.defensa = 3000;
-		this.nivel = 0;
-	}
-
 	public Jugador(string area)
     {
         PlayerID = IDFactory.GetUniqueID();
 		this.nivel = 0;
+		this.experiencia = 0;
 		this.area = area;
 		Reset ();
     }
 
-    //TODO get mana from coin or other spells 
     public void ConseguirManaExtra(int amount)
     {
-        ManaEnEsteTurno += amount;
+        //ManaEnEsteTurno += amount;
         ManaRestante += amount;
     }
 
@@ -241,8 +250,10 @@ public class Jugador : ICharacter
     public virtual void OnTurnStart()
     {
         // add one mana crystal to the pool;
-        ManaEnEsteTurno++;
-        ManaRestante = ManaEnEsteTurno;
+		ManaEnEsteTurno = 10;
+		ManaRestante++;
+        /*ManaEnEsteTurno++;
+        ManaRestante = ManaEnEsteTurno;*/
         foreach (Ente cl in mesa.EntesEnTablero)
             cl.OnTurnStart();
     }

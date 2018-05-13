@@ -2,11 +2,11 @@
   <delante>
     <tipo>Agua</tipo>
     <titulo>Dragon</titulo>
+    <efecto></efecto>
     <nombreImagen>Dragon_agua</nombreImagen>
     <descripcion>Dragon de agua 2 ansioso de ahogar</descripcion>
     <evolucion>2</evolucion>
     <mana>2</mana>
-    <fondo></fondo>
     <ataque>600</ataque>
     <defensa>400</defensa>
   </delante>

@@ -55,10 +55,10 @@ public class TouchManager : MonoBehaviour {
                     else
                     {
                        
-                        Debug.Log("Ningun gameobject con evento tocado "+gObj.name);
+                        //Debug.Log("Ningun gameobject con evento tocado "+gObj.name);
                         gObj = null;
 						if (null != EventSystem.current.currentSelectedGameObject) {
-							Debug.Log ("Event system: " + EventSystem.current.currentSelectedGameObject);
+							//Debug.Log ("Event system: " + EventSystem.current.currentSelectedGameObject);
 						} else {
 							if (OpcionesObjeto.PrevisualizandoAlgunaCarta())
 								OpcionesObjeto.PararTodasPrevisualizaciones();
@@ -69,10 +69,6 @@ public class TouchManager : MonoBehaviour {
             }
             else if(Input.GetTouch(0).phase == TouchPhase.Moved && gObj)
             {
-                /*if (gObj.GetComponent<Eventos>() != null)
-                {
-                    gObj.GetComponent<Eventos>().Click();
-                }*/
                 gObj.GetComponent<Eventos>().Dragg();
             }
 			else if(Input.GetTouch(0).phase == TouchPhase.Stationary && gObj)

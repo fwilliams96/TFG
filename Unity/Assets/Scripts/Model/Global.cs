@@ -33,5 +33,18 @@ public class Global {
         }
 
 
+
+
     }
+
+	public static class MAGICA
+	{
+		public static class TIPO_EFECTO
+		{
+			public const string Destructor = "Destructor";
+			public const string Espejo = "Espejo";
+			public const string Mana = "Mana";
+			public const string Vida = "Vida";
+		}
+	}
 }

@@ -2,11 +2,11 @@
   <delante>
     <tipo>Magica</tipo>
     <titulo>Arpia</titulo>
+    <efecto>Destructor</efecto>
     <nombreImagen>arpia</nombreImagen>
     <descripcion>La vigilante de la tierra</descripcion>
     <evolucion>1</evolucion>
     <mana>2</mana>
-    <fondo></fondo>
     <ataque>400</ataque>
     <defensa>500</defensa>
   </delante>

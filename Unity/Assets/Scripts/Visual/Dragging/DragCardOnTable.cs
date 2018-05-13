@@ -68,8 +68,6 @@ public class DragCardOnTable : DraggingActions
         {
 			resetDragg ();
         }
-        //whereIsCard.SetearOrdenCarta();
-       // whereIsCard.EstadoVisual = VisualStates.ManoJugadorAbajo;
     }
 
     public void ColocarCartaTablero(bool resultOK)
@@ -82,9 +80,6 @@ public class DragCardOnTable : DraggingActions
             // determine table position
             int tablePos = Controlador.Instance.AreaJugador(playerOwner).tableVisual.PosicionSlotNuevaCriatura(Camera.main.ScreenToWorldPoint(
                     new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, transform.position.z - Camera.main.transform.position.z)).x);
-            //new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z - Camera.main.transform.position.z)).x);
-            // Debug.Log("Table Pos for new Creature: " + tablePos.ToString());
-            // play this card
             if (magica)
             {
 				Controlador.Instance.JugarMagicaMano(playerOwner,GetComponent<IDHolder>().UniqueID, tablePos);

@@ -46,11 +46,10 @@ public class PlayerPortraitVisual : MonoBehaviour {
     public void Explotar()
     {
         Instantiate(DatosGenerales.Instance.ExplosionPrefab, transform.position, Quaternion.identity);
-        Sequence s = DOTween.Sequence();
-        s.PrependInterval(2f);
-		s.OnComplete(() => GameOver.Instance.MostrarGameOver());
-
-    }
+		Sequence s = DOTween.Sequence();
+		s.PrependInterval(2f);
+		s.OnComplete(() => Comandas.Instance.CompletarEjecucionComanda ());
+	}
 
     // Use this for initialization
     void Start()

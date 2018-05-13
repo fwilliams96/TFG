@@ -12,6 +12,14 @@ public enum Familia
     Ancestral
 }
 
+public enum Efecto
+{
+	Destructor,
+	Espejo,
+	Mana,
+	Vida
+}
+
 public class CartaAsset
 {
     public string Nombre;
@@ -19,17 +27,15 @@ public class CartaAsset
     public Familia Familia;
     public string RutaImagenCarta;
     public int CosteMana;
-    public Sprite Fondo;
     //Excepto si es ancestral
     public int Evolucion;
+	public Efecto Efecto;
 
     public int Defensa;
     public int Ataque;
 
     public CartaAsset()
     {
-        //TipoDeCarta = TipoCarta.Ancestral;
-        //Defensa = 2;
     }
 }
 

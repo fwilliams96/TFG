@@ -8,6 +8,7 @@ public class Ente : ICharacter
     #region Atributos
     // PUBLIC FIELDS
     private CartaAsset assetCarta;
+	private string area;
     public EfectoEnte efecto;
     private int idCriatura;
     public bool Frozen = false;
@@ -66,11 +67,20 @@ public class Ente : ICharacter
         set;
     }
 
+	public string Area
+	{
+		get
+		{
+			return area;
+		}
+	}
+
     #endregion
 
     // CONSTRUCTOR
-    public Ente(CartaAsset ca)
+    public Ente(string area,CartaAsset ca)
     {
+		this.area = area;
         this.assetCarta = ca;
         defensaBase = ca.Defensa;
         Defensa = ca.Defensa;

@@ -35,7 +35,7 @@ public class DamageEffect : MonoBehaviour {
         // make this effect non-transparent
         cg.alpha = 1f;
         // wait for 1 second before fading
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3.5f);
         // gradually fade the effect by changing its alpha value
         while (cg.alpha > 0)
         {
@@ -54,20 +54,40 @@ public class DamageEffect : MonoBehaviour {
    
     public static void CreateDamageEffect(Vector3 position, int health, int amount)
     {
-        // Instantiate a DamageEffect from prefab
-        GameObject newDamageEffect = new GameObject();
-        //TODO = GameObject.Instantiate(GlobalSettings.Instance.DamageEffectPrefab, position, Quaternion.identity) as GameObject;
-        newDamageEffect = GameObject.Instantiate(DatosGenerales.Instance.DamageEffectPrefab, position, Quaternion.identity) as GameObject;
+		GameObject newDamageEffect = InstanciarPrefab (position);
         // Get DamageEffect component in this new game object
         DamageEffect de = newDamageEffect.GetComponent<DamageEffect>();
         // Change the amount text to reflect the amount of damage dealt
 		Settings settings = Settings.Instance;
+
 		if(settings.Batalla.Equals(Settings.TIPO_NUMERO.ENTERO))
-        	de.AmountText.text = "-"+amount.ToString();
+			de.AmountText.text = "-"+amount.ToString();
+			//de.AmountText.text = health.ToString()+"-"+amount.ToString();
 		else
-			de.AmountText.text = "-"+Settings.ObtenerFraccion(amount,health);
+			de.AmountText.text = "-"+Settings.ObtenerFraccion(amount,health)+"x"+health.ToString();
+			//de.AmountText.text = health.ToString()+"-"+Settings.ObtenerFraccion(amount,health)+"x"+health.ToString();
         // start a coroutine to fade away and delete this effect after a certain time
         de.StartCoroutine(de.ShowDamageEffect());
         //Comandas.Instance.CompletarEjecucionComanda();
     }
+
+	public static void CreateDamageEffect(Vector3 position)
+	{
+		GameObject newDamageEffect = InstanciarPrefab (position);
+		// Get DamageEffect component in this new game object
+		DamageEffect de = newDamageEffect.GetComponent<DamageEffect>();
+		// Change the amount text to reflect the amount of damage dealt
+		de.AmountText.text = "";
+		// start a coroutine to fade away and delete this effect after a certain time
+		de.StartCoroutine(de.ShowDamageEffect());
+		//Comandas.Instance.CompletarEjecucionComanda();
+	}
+
+	private static GameObject InstanciarPrefab(Vector3 position){
+		// Instantiate a DamageEffect from prefab
+		GameObject newDamageEffect = new GameObject();
+		//TODO = GameObject.Instantiate(GlobalSettings.Instance.DamageEffectPrefab, position, Quaternion.identity) as GameObject;
+		newDamageEffect = GameObject.Instantiate(DatosGenerales.Instance.DamageEffectPrefab, position, Quaternion.identity) as GameObject;
+		return newDamageEffect;
+	}
 }

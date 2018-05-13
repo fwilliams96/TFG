@@ -7,25 +7,21 @@ public class CreatureAttackCommand : Comanda
     // if enemyindex == -1 , attack an enemy character 
     private int TargetUniqueID;
     private int AttackerUniqueID;
-    private int AttackerHealthAfter;
 	private int TargetHealth;
-    private int DamageTakenByAttacker;
-    private int DamageTakenByTarget;
+    private int DamageTaken;
 
-    public CreatureAttackCommand(int targetID, int attackerID, int damageTakenByAttacker, int damageTakenByTarget, int attackerHealthAfter, int targetHealth)
+    public CreatureAttackCommand(int targetID, int attackerID,int damageTaken, int targetHealth)
     {
         this.TargetUniqueID = targetID;
         this.AttackerUniqueID = attackerID;
-        this.AttackerHealthAfter = attackerHealthAfter;
         this.TargetHealth = targetHealth;
-        this.DamageTakenByTarget = damageTakenByTarget;
-        this.DamageTakenByAttacker = damageTakenByAttacker;
+		this.DamageTaken = damageTaken;
     }
 
     public override void EmpezarEjecucionComanda()
     {
         GameObject Attacker = IDHolder.GetGameObjectWithID(AttackerUniqueID);
 
-        Attacker.GetComponent<CreatureAttackVisual>().AttackTarget(TargetUniqueID, DamageTakenByTarget, DamageTakenByAttacker, AttackerHealthAfter, TargetHealth);
+		Attacker.GetComponent<CreatureAttackVisual>().AttackTarget(TargetUniqueID, DamageTaken, TargetHealth);
     }
 }

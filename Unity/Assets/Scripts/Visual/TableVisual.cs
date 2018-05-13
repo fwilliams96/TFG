@@ -64,54 +64,59 @@ public class TableVisual : MonoBehaviour
     }
     public void AñadirMagica(CartaAsset ca, int idUnico, int indiceSlot)
     {
-        Debug.Log("Añadir ente magica");
-        //Quaternion.Euler(new Vector3(0f, -179f, 0f))
+        //Debug.Log("Añadir ente magica");
         GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.MagicaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
-        creature.GetComponent<MagicEffectVisual>().ColocarMagicaBocaAbajo(0f);
+		creature.GetComponent<MagicEffectVisual>().ColocarMagicaBocaAbajo(0f);
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
-    //TODO mejorar codigo
+		
     public void AñadirCriaturaDefensa(CartaAsset ca, int idUnico, int indiceSlot)
     {
-        Debug.Log("Añadir ente criatura como defensa");
+        //Debug.Log("Añadir ente criatura como defensa");
         GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
 		creature.GetComponent<CreatureAttackVisual>().ColocarCriaturaEnDefensa(Settings.Instance.CardTransitionTimeFast);
-        // apply the look from CardAsset
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 
     public void AñadirCriaturaAtaque(CartaAsset ca, int idUnico, int indiceSlot)
     {
-        Debug.Log("Añadir ente criatura como ataque");
+        //Debug.Log("Añadir ente criatura como ataque");
         // create a new creature from prefab
         GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
         // apply the look from CardAsset
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 
-    private void ConfigurarEnte(GameObject criaturaOMagica, CartaAsset ca, int idUnico, int indiceSlot)
+	private void ConfigurarEnte(GameObject ente, CartaAsset ca, int idUnico, int indiceSlot)
     {
-        OneCreatureManager manager = criaturaOMagica.GetComponent<OneCreatureManager>();
+		string tagEnte ="";
+		OneEnteManager manager = null;
+		if (ente.name.Contains ("Magica")) {
+			tagEnte = "Magica";
+			manager = ente.GetComponent<OneMagicaManager> ();
+		}else{
+			tagEnte = "Criatura";
+			manager = ente.GetComponent<OneCreatureManager>();
+		}
         manager.CartaAsset = ca;
         manager.LeerDatosAsset();
-        // add tag according to owner
-        foreach (Transform t in criaturaOMagica.GetComponentsInChildren<Transform>())
-            t.tag = owner.ToString() + "Ente";
+        foreach (Transform t in ente.GetComponentsInChildren<Transform>())
+			t.tag = owner.ToString() + tagEnte;
         // parent a new creature gameObject to table slots
-        criaturaOMagica.transform.SetParent(slots.transform);
+        ente.transform.SetParent(slots.transform);
         // add a new creature to the list
         // Debug.Log ("insert index: " + index.ToString());
-        CreaturesOnTable.Insert(indiceSlot, criaturaOMagica);
+        CreaturesOnTable.Insert(indiceSlot, ente);
         // let this creature know about its position
-        WhereIsTheCardOrEntity w = criaturaOMagica.GetComponent<WhereIsTheCardOrEntity>();
+        WhereIsTheCardOrEntity w = ente.GetComponent<WhereIsTheCardOrEntity>();
         w.Slot = indiceSlot;
-        if (criaturaOMagica.tag.Contains("Low"))
+        if (ente.tag.Contains("Low"))
             //PETA
             w.EstadoVisual = VisualStates.MesaJugadorAbajo;
         else
             w.EstadoVisual = VisualStates.MesaJugadorArriba;
         // add our unique ID to this creature
-        IDHolder id = criaturaOMagica.AddComponent<IDHolder>();
+        IDHolder id = ente.AddComponent<IDHolder>();
         id.UniqueID = idUnico;
 
         ActualizarSlots();

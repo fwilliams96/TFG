@@ -16,8 +16,6 @@ public class DealDamageCommand : Comanda {
 
 	public override void EmpezarEjecucionComanda()
 	{
-		Debug.Log("In deal damage command!");
-
 		GameObject target = IDHolder.GetGameObjectWithID(targetID);
 		if (targetID == Controlador.Instance.Local.ID || targetID == Controlador.Instance.Enemigo.ID)
 		{
@@ -25,7 +23,6 @@ public class DealDamageCommand : Comanda {
 		}
 		else
 		{
-			//TODO ver si se elimina porque supuestamente solo se está usando DealDamageCommand para atacar jugadores y no criaturas (criaturas ya lo hace creature attack)
 			target.GetComponent<OneCreatureManager>().HacerDaño(amount, health);
 		}
 		comandas.CompletarEjecucionComanda();

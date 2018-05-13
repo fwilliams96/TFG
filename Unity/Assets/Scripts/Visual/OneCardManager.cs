@@ -85,12 +85,15 @@ public class OneCardManager : MonoBehaviour {
     private void LeerDatosCarta()
     {
 
-		if (!CartaAsset.Familia.Equals(Familia.Magica))
-        {
-            // this is a creature
-            AttackText.text = CartaAsset.Ataque.ToString();
-            DefenseText.text = CartaAsset.Defensa.ToString();
-        }
+		if (!CartaAsset.Familia.Equals (Familia.Magica)) {
+			// this is a creature
+			AttackText.text = CartaAsset.Ataque.ToString ();
+			DefenseText.text = CartaAsset.Defensa.ToString ();
+		} else {
+			//Ponemos ataque y defensa oculto
+			AttackText.transform.parent.gameObject.SetActive (false);
+			DefenseText.transform.parent.gameObject.SetActive (false);
+		}
 		EvolutionText.text = CartaAsset.Evolucion.ToString();
         // 2) add card name
         NameText.text = CartaAsset.Nombre;

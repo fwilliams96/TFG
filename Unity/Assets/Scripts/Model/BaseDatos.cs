@@ -90,7 +90,6 @@ public class BaseDatos
 				ObtenerDatosJugador(callback,usuarioActual);
 			}
 		});
-        //callBack = callback;
     }
 
 
@@ -104,25 +103,44 @@ public class BaseDatos
 
     public void AñadirWelcomePackJugador(Jugador jugador)
     {
-        List<string> idCartasWelcomePack = ObtenerIdsAssetsAleatorios();
-        AñadirCartasJugador(jugador, idCartasWelcomePack);
-		AñadirItemsJugador (jugador);
+        List<Carta> cartasWelcomePack = GenerarCartasAleatorias(8);
+		AñadirCartasJugador(jugador, cartasWelcomePack);
+		List<Item> itemsAleatorios = GenerarItemsAleatorios (8);
+		AñadirItemsJugador (jugador,itemsAleatorios);
     }
 
-    private List<String> ObtenerIdsAssetsAleatorios()
+	public List<Carta> GenerarCartasAleatorias(int numCartas)
     {
         var json = assets.Value as Dictionary<string, object>;
         List<string> keyList = new List<string>(json.Keys);
-        List<string> idCartasWelcomePack = new List<string>();
+		List<Carta> cartasAleatorias = new List<Carta>();
 		System.Random rnd = new System.Random();
-        for (int i = 0; i < 8; i++)
+		for (int i = 0; i < numCartas; i++)
         {
 			int numCarta = rnd.Next(0, json.Count);
 			string idAssetRandom = keyList[numCarta];
-            idCartasWelcomePack.Add(idAssetRandom);
+			cartasAleatorias.Add(CrearCartaJugador(idAssetRandom, null));
         }
-        return idCartasWelcomePack;
+		return cartasAleatorias;
     }
+
+	public List<Item> GenerarItemsAleatorios(int numItems){
+		System.Random rnd = new System.Random();
+		List<Item> itemsAleatorios = new List<Item> ();
+		for (int i = 0; i < numItems; i++) {
+			TipoItem tipoItem = (TipoItem)rnd.Next(0, 2);
+			int cantidad = rnd.Next (50, 80);
+			string rutaImagen;
+			if (tipoItem.Equals (TipoItem.Material)) {
+				rutaImagen = "Sprites/Recursos/Componentes/trebol";
+			} else {
+				rutaImagen = "Sprites/Recursos/Componentes/Poción_azul";
+			}
+			itemsAleatorios.Add (new Item (tipoItem, rutaImagen, cantidad));
+		}
+
+		return itemsAleatorios;
+	}
 
     public void CrearJugador(string userId, SesionUsuario.CallBack callBack)
     {
@@ -133,55 +151,28 @@ public class BaseDatos
         AñadirJugadorBaseDatos(userId,Local);
         callBack.Invoke();
     }
-		
-	/*public void RecogerUsuario(object sender, ValueChangedEventArgs args)
-	{
-		if (args.DatabaseError != null)
-		{
-			Debug.LogError(args.DatabaseError.Message);
-			return;
-		}
-		usuarioActual = args.Snapshot;
-		ObtenerDatosJugador(usuarioActual);
-	}*/
 
 	private void ObtenerDatosJugador(SesionUsuario.CallBack callBack,DataSnapshot usuario)
 	{
 		Debug.Log("Obtener jugador");
 		AñadirJugador(new Jugador("Low"));
 		int nivel = ObtenerNivelJugador(usuario);
+		int experiencia = ObtenerExperienciaJugador(usuario);
 		List<Carta> cartasJugador = ObtenerCartasJugador(usuario);
 		List<Item> itemsJugador = ObtenerItemsJugador (usuario);
 		AñadirCartasJugador(Local, cartasJugador);
 		AñadirItemsJugador (Local, itemsJugador);
+		AñadirExperienciaNivelJugador (Local, nivel,experiencia);
 		callBack.Invoke();
-	}
-
-    private void AñadirCartasJugador(Jugador jugador, List<String> idCartas)
-    {
-        foreach (string idAsset in idCartas)
-        {    
-            AñadirCartaJugador(jugador, CrearCartaJugador(idAsset, null));
-        }
-        
-    }
-
-	private void AñadirItemsJugador(Jugador jugador)
-	{
-		System.Random rnd = new System.Random();
-		for(int i = 0; i < 10; i++)
-		{    
-			AñadirItemJugador(jugador, GenerarItemAleatorio(rnd));
-		}
-
 	}
 
     private void AñadirCartasJugador(Jugador jugador, List<Carta> cartas)
     {
-        foreach (Carta carta in cartas)
-        {
-            AñadirCartaJugador(jugador, carta);
+		foreach (Carta carta in cartas)
+        {    
+			AñadirCartaJugador(jugador,carta);
         }
+        
     }
 
 	private void AñadirItemsJugador(Jugador jugador, List<Item> items)
@@ -192,17 +183,9 @@ public class BaseDatos
 		}
 	}
 
-	private Item GenerarItemAleatorio(System.Random rnd){
-		TipoItem tipoItem = (TipoItem)rnd.Next(0, 2);
-		int cantidad = rnd.Next (50, 80);
-		string rutaImagen;
-		//TODO mejorar este hardcode
-		if (tipoItem.Equals (TipoItem.Material)) {
-			rutaImagen = "Sprites/Recursos/Componentes/trebol";
-		} else {
-			rutaImagen = "Sprites/Recursos/Componentes/Poción_azul";
-		}
-		return new Item (tipoItem, rutaImagen,cantidad);
+	private void AñadirExperienciaNivelJugador(Jugador jugador, int nivel, int experiencia){
+		jugador.Nivel = nivel;
+		jugador.Experiencia = experiencia;
 	}
 
     private Carta CrearCartaJugador(string idAsset, Progreso progreso)
@@ -249,7 +232,6 @@ public class BaseDatos
 			Progreso progreso = new Progreso ();
 			progreso.Material = Int32.Parse (progresoJSON ["material"]);
 			progreso.Pocion = Int32.Parse (progresoJSON ["pocion"]);
-            //Progreso progreso = JsonUtility.FromJson<Progreso>(usuario.Child("cartas").Child(i.ToString()).Child("progreso").GetRawJsonValue());
             cartasJugador.Add(CrearCartaJugador(idAsset, progreso));
         }
         return cartasJugador;
@@ -273,6 +255,11 @@ public class BaseDatos
     {
         return Convert.ToInt32(usuario.Child("nivel").GetValue(true));
     }
+
+	private int ObtenerExperienciaJugador(DataSnapshot usuario)
+	{
+		return Convert.ToInt32(usuario.Child("experiencia").GetValue(true));
+	}
 
 
     private void AñadirJugador(Jugador jugador)
@@ -298,6 +285,14 @@ public class BaseDatos
 		ReferenciaCartas().Child (indiceCarta.ToString ()).SetValueAsync (carta.ToDictionary ());
 	}
 
+	public void ActualizarJugadorBaseDatos(bool cambioCartas){
+		ActualizarItemsBaseDatos ();
+		if(cambioCartas)
+			ActualizarCartasBaseDatos ();
+		ActualizarNivelBaseDatos ();
+		//ActualizarExperienciaBaseDatos ();
+	}
+
 	private void ActualizarItemsBaseDatos(){
 		
 		ReferenciaItems().SetValueAsync (Local.ItemsToDictionary ());
@@ -306,6 +301,14 @@ public class BaseDatos
 	private void ActualizarCartasBaseDatos(){
 
 		ReferenciaCartas().SetValueAsync (Local.CartasToDictionary ());
+	}
+
+	private void ActualizarExperienciaBaseDatos(){
+		ReferenciaExperiencia ().SetValueAsync (Local.Experiencia);
+	}
+
+	private void ActualizarNivelBaseDatos(){
+		ReferenciaNivel().SetValueAsync (Local.Nivel);
 	}
 
     public void GuardarCarta(string familia,CartaAsset asset)
@@ -386,6 +389,14 @@ public class BaseDatos
 
 	private DatabaseReference ReferenciaItems(){
 		return reference.Child ("users").Child (userIDActual).Child ("items");
+	}
+
+	private DatabaseReference ReferenciaNivel(){
+		return reference.Child ("users").Child (userIDActual).Child ("nivel");
+	}
+
+	private DatabaseReference ReferenciaExperiencia(){
+		return reference.Child ("users").Child (userIDActual).Child ("experiencia");
 	}
 
 }

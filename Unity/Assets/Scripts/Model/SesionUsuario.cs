@@ -29,7 +29,6 @@ public class SesionUsuario
 
     void InitializeFirebase()
     {
-        Debug.Log("Setting up Firebase Auth");
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
 		user = auth.CurrentUser;
         //auth.StateChanged += AuthStateChanged;

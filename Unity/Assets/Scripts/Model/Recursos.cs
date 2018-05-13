@@ -97,17 +97,10 @@ public class Recursos  {
                     asset.Nombre = nombre;
                     asset.Descripcion = descripcion;
                     asset.Familia = tipoCarta;
+					if (asset.Familia.Equals (Familia.Magica))
+						asset.Efecto = obtenerEfecto (entrada.Value ["carta"] ["delante"] ["efecto"]);
 					asset.RutaImagenCarta = rutaImagen;
                     asset.CosteMana = mana;
-                    if (!"".Equals(fondo))
-                    {
-                        string rutaImagenFondo = obtenerRutaFamiliaImagen(familia) + fondo;
-                        if (File.Exists(rutaImagenFondo))
-                        {
-                            asset.Fondo = Resources.Load<Sprite>(rutaImagenFondo);
-                        }
-
-                    }
                     asset.Defensa = defensa;
                     asset.Ataque = ataque;
                     if (evolucion != -1)
@@ -181,6 +174,30 @@ public class Recursos  {
         }
         return carpetaFamilia;
     }
+
+	private static Efecto obtenerEfecto(string nombreEfecto){
+		nombreEfecto = nombreEfecto.Replace(nombreEfecto[0],nombreEfecto[0].ToString().ToLower()[0]);
+		Efecto efecto;
+		switch (nombreEfecto) {
+			case Global.MAGICA.TIPO_EFECTO.Destructor:
+				efecto = Efecto.Destructor;
+				break;
+			case Global.MAGICA.TIPO_EFECTO.Espejo:
+				efecto = Efecto.Espejo;
+				break;
+			case Global.MAGICA.TIPO_EFECTO.Mana:
+				efecto = Efecto.Mana;
+				break;
+			case Global.MAGICA.TIPO_EFECTO.Vida:
+				efecto = Efecto.Vida;
+				break;
+			default:
+				efecto = Efecto.Destructor;
+				break;
+		}
+
+		return efecto;
+	}
 
     private static Familia obtenerTipoCarta(string familia)
     {
