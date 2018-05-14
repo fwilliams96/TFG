@@ -2,9 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum PANTALLA_MENU
+{
+	INVENTARIO,
+	BATALLA,
+	PERFIL,
+	MAZO
+}
+
+
 public class ControladorMenu : MonoBehaviour {
 
 	public static ControladorMenu Instance;
+
+	private PANTALLA_MENU pantallaActual;
 
 	void Awake(){
 		Instance = this;
@@ -12,12 +23,22 @@ public class ControladorMenu : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		pantallaActual = PANTALLA_MENU.INVENTARIO;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	public PANTALLA_MENU PantallaActual{
+		get{
+			return pantallaActual;
+		}
+		set{ 
+			pantallaActual = value;
+			TouchManager2.Instance.ObjetoActual = null;
+		}
 	}
 
 	public void AgregarItemCarta(int idCarta, int idItem){
@@ -97,5 +118,74 @@ public class ControladorMenu : MonoBehaviour {
 		manager.PorcentajeProgresoPocion = carta.Progreso.Pocion > 100 ? 100: carta.Progreso.Pocion;
 		manager.LeerDatos();
 		BaseDatos.Instance.ActualizarCartaBaseDatos (carta);
+	}
+
+	public void MostrarAccion(GameObject carta){
+		TablaCartas tabla = TablaActual (carta);
+		tabla.MostrarAccion ();
+	}
+
+	public void CerrarAccion(){
+		TablaCartas.DesactivarTablas ();
+	}
+
+	public static TablaCartas TablaActual(GameObject gObj){
+		TablaCartas tabla = null;
+		if(gObj.tag.Equals("CartaFueraMazo")){
+			tabla = GameObject.FindGameObjectWithTag("TablaCartas").GetComponent<TablaCartas>();
+		}else{
+			tabla = GameObject.FindGameObjectWithTag("TablaMazo").GetComponent<TablaCartas>();
+		}
+		return tabla;
+	}
+
+	public void AñadirElementoMazo(GameObject carta){
+		TablaCartas tabla = GameObject.FindGameObjectWithTag("TablaMazo").GetComponent<TablaCartas>();
+		if (tabla.NumElementos () < 8)
+			tabla.AñadirCarta (carta);
+		else {
+			MessageManager.Instance.ShowMessage ("El mazo está lleno", 3f);
+		}
+	}
+
+	public void AñadirElementoCartas(GameObject carta){
+		TablaCartas tabla = GameObject.FindGameObjectWithTag("TablaCartas").GetComponent<TablaCartas>();
+		tabla.AñadirCarta (carta);
+	}
+
+	public int GuardarNuevoMazo(){
+		int result = 0;
+		TablaCartas tabla = GameObject.FindGameObjectWithTag("TablaMazo").GetComponent<TablaCartas>();
+		if (tabla.NumElementos () == 8) {
+			ModificarMazo (tabla.ObtenerElementos ());
+		} else {
+			MessageManager.Instance.ShowMessage ("El mazo debe tener 8 cartas", 3f);
+			result = -1;
+		}
+		return result;
+	}
+
+	private void ModificarMazo(List<GameObject> cartasMazo){
+		Jugador jugador = BaseDatos.Instance.Local;
+		List<int> idCartasMazo = new List<int>();
+		foreach (GameObject  cartaGobj in cartasMazo) {
+			Carta carta = BuscarCarta (cartaGobj.GetComponent<IDHolder>().UniqueID);
+			int indice = jugador.BuscarPosicionCarta (carta);
+			idCartasMazo.Add(indice);
+		}
+		BaseDatos.Instance.AñadirMazoJugador(jugador,idCartasMazo);
+		BaseDatos.Instance.ActualizarMazoBaseDatos ();
+	}
+
+	public bool CartaFueraMazo(Carta carta){
+		Jugador jugador = BaseDatos.Instance.Local;
+		int indice = jugador.BuscarPosicionCarta (carta);
+		bool trobat = false;
+		foreach (int id in jugador.IDCartasMazo()) {
+			if (id == indice) {
+				trobat = true;
+			}
+		}
+		return !trobat;
 	}
 }

@@ -19,7 +19,13 @@ public abstract class DraggingActions : MonoBehaviour {
 		}
 	}
 
-    public virtual bool SePuedeArrastrar
+	public virtual bool SePuedeArrastrar{
+		get{
+			return SePuedeControlar;
+		}
+	}
+
+	public virtual bool SePuedeControlar
     {
         get
         {
@@ -59,15 +65,17 @@ public abstract class DraggingActions : MonoBehaviour {
         //OPTIONAL quitar el for y hacer una busqueda
         foreach (RaycastHit h in hits)
         {
-			if ((h.transform.tag.Equals("TopCriatura") || h.transform.tag.Equals("TopMagica")) && (this.tag.Equals("LowCriatura") || this.tag.Equals("LowMagica")) ||
-				((h.transform.tag.Equals("LowCriatura") || h.transform.tag.Equals("LowMagica")) && (this.tag.Equals("TopCriatura") || this.tag.Equals("TopMagica"))))
-            {
-                // hit a creature or magica, save parent transform
+			if ((h.transform.tag.Equals ("TopCriatura") || h.transform.tag.Equals ("TopMagica")) && (this.tag.Equals ("LowCriatura") || this.tag.Equals ("LowMagica")) ||
+			    ((h.transform.tag.Equals ("LowCriatura") || h.transform.tag.Equals ("LowMagica")) && (this.tag.Equals ("TopCriatura") || this.tag.Equals ("TopMagica")))) {
+				// hit a creature or magica, save parent transform
 				if (h.transform.tag.Contains ("Criatura"))
 					Target = h.transform.parent.gameObject;
 				else
 					Target = h.transform.parent.gameObject.transform.parent.gameObject;
-            }
+			} else if((h.transform.tag.Equals("TopPlayer") && (this.tag.Equals("LowCriatura"))) || 
+				(h.transform.tag.Equals("LowPlayer") && (this.tag.Equals("TopCriatura")))){
+				Target = h.transform.gameObject;
+			}
 
         }
         return Target;

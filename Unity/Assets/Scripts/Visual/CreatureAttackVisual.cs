@@ -19,12 +19,16 @@ public class CreatureAttackVisual : EnteVisual
 
         transform.DOMove(target.transform.position, 0.5f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.InCubic).OnComplete(() =>
         {
-            //Solo se atacan entes no jugadores
-			if(target.tag.Contains("Criatura"))
-				target.GetComponent<OneCreatureManager>().HacerDaño(damageTaken, targetHealthAfter);
-			else
-				target.GetComponent<OneMagicaManager>().HacerDaño();
 
+			if (targetUniqueID == Controlador.Instance.Local.ID || targetUniqueID == Controlador.Instance.Enemigo.ID)
+			{
+				target.GetComponent<PlayerPortraitVisual>().HacerDaño(damageTaken,targetHealthAfter);
+			}else{
+				if(target.tag.Contains("Criatura"))
+					target.GetComponent<OneCreatureManager>().HacerDaño(damageTaken, targetHealthAfter);
+				else
+					target.GetComponent<OneMagicaManager>().HacerDaño();
+			}
             /*w.SetearOrdenCriatura();
             w.EstadoVisual = tempState;*/
 

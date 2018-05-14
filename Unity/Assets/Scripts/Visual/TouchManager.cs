@@ -42,30 +42,33 @@ public class TouchManager : MonoBehaviour {
                 //Miramos con que objeto ha chocado el rayo
                 
                 
-                if (Physics.Raycast(mouseRay.origin,mouseRay.direction,out hit))
-                {
-                    //TODO en funcion de la escena en la que nos encontremos haremos una cosa u otra
+				if (Physics.Raycast (mouseRay.origin, mouseRay.direction, out hit)) {
+					//TODO en funcion de la escena en la que nos encontremos haremos una cosa u otra
 					//switch(Settings.Instance.EscenaActual)
 
-                    gObj = hit.transform.gameObject;
-                    if (gObj.GetComponent<Eventos>() != null)
-                    {
-                        gObj.GetComponent<Eventos>().Click();
-                    }
-                    else
-                    {
-                       
-                        //Debug.Log("Ningun gameobject con evento tocado "+gObj.name);
-                        gObj = null;
+					gObj = hit.transform.gameObject;
+					if (gObj.GetComponent<Eventos> () != null) {
+						gObj.GetComponent<Eventos> ().Click ();
+					} else {
+						//Debug.Log("Ningun gameobject con evento tocado "+gObj.name);
+						gObj = null;
 						if (null != EventSystem.current.currentSelectedGameObject) {
 							//Debug.Log ("Event system: " + EventSystem.current.currentSelectedGameObject);
 						} else {
-							if (OpcionesObjeto.PrevisualizandoAlgunaCarta())
-								OpcionesObjeto.PararTodasPrevisualizaciones();
+							if (OpcionesObjeto.PrevisualizandoAlgunaCarta ())
+								OpcionesObjeto.PararTodasPrevisualizaciones ();
 						}
-                    }
+					}
                     
-                }
+				} else {
+					/*gObj = null;
+					if (null != EventSystem.current.currentSelectedGameObject) {
+						//Debug.Log ("Event system: " + EventSystem.current.currentSelectedGameObject);
+					} else {
+						if (OpcionesObjeto.PrevisualizandoAlgunaCarta ())
+							OpcionesObjeto.PararTodasPrevisualizaciones ();
+					}*/
+				}
             }
             else if(Input.GetTouch(0).phase == TouchPhase.Moved && gObj)
             {

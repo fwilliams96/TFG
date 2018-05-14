@@ -107,6 +107,9 @@ public class BaseDatos
 		AñadirCartasJugador(jugador, cartasWelcomePack);
 		List<Item> itemsAleatorios = GenerarItemsAleatorios (8);
 		AñadirItemsJugador (jugador,itemsAleatorios);
+		List<int> idCartasMazo = GenerarIDCartasMazo ();
+		AñadirMazoJugador (jugador,idCartasMazo);
+
     }
 
 	public List<Carta> GenerarCartasAleatorias(int numCartas)
@@ -159,8 +162,11 @@ public class BaseDatos
 		int nivel = ObtenerNivelJugador(usuario);
 		int experiencia = ObtenerExperienciaJugador(usuario);
 		List<Carta> cartasJugador = ObtenerCartasJugador(usuario);
+		List<Carta> mazoJugador = ObtenerMazoJugador (usuario);
 		List<Item> itemsJugador = ObtenerItemsJugador (usuario);
 		AñadirCartasJugador(Local, cartasJugador);
+		List<int> idCartasMazo = ObtenerIDCartasMazo (usuario);
+		AñadirMazoJugador (Local, idCartasMazo);
 		AñadirItemsJugador (Local, itemsJugador);
 		AñadirExperienciaNivelJugador (Local, nivel,experiencia);
 		callBack.Invoke();
@@ -174,6 +180,15 @@ public class BaseDatos
         }
         
     }
+
+	public void AñadirMazoJugador(Jugador jugador,List<int> idCartasMazo){
+		jugador.ClearMazo ();
+		jugador.IDCartasMazo ().Clear ();
+		foreach(int idCarta in idCartasMazo) {
+			jugador.AñadirIDCartaMazo (idCarta);
+		}
+		jugador.InicializarMazo ();
+	}
 
 	private void AñadirItemsJugador(Jugador jugador, List<Item> items)
 	{
@@ -221,6 +236,21 @@ public class BaseDatos
         reference.Child("users").Child(userID).SetValueAsync(jugador.ToDictionary());
     }
 
+	private List<Carta> ObtenerMazoJugador(DataSnapshot usuario){
+		List<Carta> cartasJugador = new List<Carta>();
+		var rawjson = JSONUtils.StringToJSON(usuario.Child("cartas").GetRawJsonValue());
+		for (int i = 0; i < rawjson.Count; i++)
+		{
+			string idAsset = (string)usuario.Child("cartas").Child(i.ToString()).Child("asset").GetValue(true);
+			var progresoJSON = JSONUtils.StringToJSON (usuario.Child ("cartas").Child (i.ToString ()).Child ("progreso").GetRawJsonValue ());
+			Progreso progreso = new Progreso ();
+			progreso.Material = Int32.Parse (progresoJSON ["material"]);
+			progreso.Pocion = Int32.Parse (progresoJSON ["pocion"]);
+			cartasJugador.Add(CrearCartaJugador(idAsset, progreso));
+		}
+		return cartasJugador;
+	}
+
     private List<Carta> ObtenerCartasJugador(DataSnapshot usuario)
     {
         List<Carta> cartasJugador = new List<Carta>();
@@ -249,6 +279,23 @@ public class BaseDatos
 			itemsJugador.Add(CrearItemJugador(tipoItem, rutaImagenItem,cantidad));
 		}
 		return itemsJugador;
+	}
+
+	private List<int> ObtenerIDCartasMazo(DataSnapshot usuario){	
+		List<int> idsCartasMazo = new List<int> ();
+		string [] idCartas = ((string)usuario.Child("mazo").GetValue(true)).Split (',');
+		foreach (string id in idCartas) {
+			idsCartasMazo.Add (Int32.Parse (id));
+		}
+		return idsCartasMazo;
+	}
+
+	private List<int> GenerarIDCartasMazo(){	
+		List<int> idsCartasMazo = new List<int> ();
+		for (int i = 0; i < 8; i++) {
+			idsCartasMazo.Add (i);
+		}
+		return idsCartasMazo;
 	}
 
     private int ObtenerNivelJugador(DataSnapshot usuario)
@@ -309,6 +356,10 @@ public class BaseDatos
 
 	private void ActualizarNivelBaseDatos(){
 		ReferenciaNivel().SetValueAsync (Local.Nivel);
+	}
+
+	public void ActualizarMazoBaseDatos(){
+		ReferenciaMazo().SetValueAsync (Local.MazoToDictionary());
 	}
 
     public void GuardarCarta(string familia,CartaAsset asset)
@@ -385,6 +436,10 @@ public class BaseDatos
 
 	private DatabaseReference ReferenciaCartas(){
 		return reference.Child ("users").Child (userIDActual).Child ("cartas");
+	}
+
+	private DatabaseReference ReferenciaMazo(){
+		return reference.Child ("users").Child (userIDActual).Child ("mazo");
 	}
 
 	private DatabaseReference ReferenciaItems(){

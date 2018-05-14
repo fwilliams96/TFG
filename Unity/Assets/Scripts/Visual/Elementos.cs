@@ -6,8 +6,20 @@ public class Elementos : MonoBehaviour {
     // Drag & Drop the vertical layout group here
     public UnityEngine.UI.GridLayoutGroup gridLayoutGroup;
     public List<GameObject> ListaElementos;
-	public bool cartas;
-	public bool consumible;
+	public enum TIPO_ELEMENTOS
+	{
+		CARTAS,
+		CARTAS_FUERAMAZO,
+		ITEMS,
+		MAZO
+	}
+	public TIPO_ELEMENTOS tipoElementos;
+	public enum TIPO_TAG{
+		ORIGINAL,
+		CONSUMIR,
+		BARAJA
+	}
+	public TIPO_TAG tipoTag;
     // Use this for initialization
 	void Start () {
 		MostrarElementos ();
@@ -22,10 +34,14 @@ public class Elementos : MonoBehaviour {
 
 	public void MostrarElementos () {
 		VaciarElementos ();
-		if (cartas) {
+		if (tipoElementos.Equals (TIPO_ELEMENTOS.CARTAS)) {
 			RellenarConCartas ();
-		} else {
+		} else if (tipoElementos.Equals (TIPO_ELEMENTOS.ITEMS)) {
 			RellenarConItems ();
+		}else if(tipoElementos.Equals(TIPO_ELEMENTOS.CARTAS_FUERAMAZO)){
+			RellenarConCartasFueraMazo ();
+		} else {
+			RellenarConMazo ();
 		}
     }
 
@@ -48,6 +64,39 @@ public class Elementos : MonoBehaviour {
 		}
 	}
 
+	private void RellenarConCartasFueraMazo(){
+		gridLayoutGroup.cellSize = new Vector2 (270f, 400f);
+		List<System.Object> listaCartas = BaseDatos.Instance.Local.Cartas();
+		GameObject elemento;
+		foreach(Carta carta in listaCartas)
+		{
+			if (ControladorMenu.Instance.CartaFueraMazo (carta)) {
+				CartaAsset asset = carta.AssetCarta;
+				float progresoTrebol = carta.Progreso.Material;
+				float progresoPocion = carta.Progreso.Pocion;
+				elemento = Instantiate(DatosGenerales.Instance.CardInventario, transform);
+				if (tipoTag.Equals (TIPO_TAG.CONSUMIR))
+					elemento.tag = "CartaConsumible";
+				else if (tipoTag.Equals (TIPO_TAG.BARAJA)) {
+					elemento.tag = "CartaFueraMazo";
+				}
+
+				elemento.GetComponent<BoxCollider2D> ().size = gridLayoutGroup.cellSize;
+				IDHolder id = elemento.AddComponent<IDHolder>();
+				id.UniqueID = carta.ID;
+				OneCardManager manager = elemento.GetComponent<OneCardManager>();
+				manager.CartaAsset = asset;
+				manager.PorcentajeProgresoTrebol = progresoTrebol;
+				manager.PorcentajeProgresoPocion = progresoPocion;
+				manager.LeerDatos();
+
+				ListaElementos.Add(elemento);
+				elemento.transform.SetParent (gridLayoutGroup.gameObject.transform);
+			}
+
+		}
+	}
+
 	private void RellenarConCartas(){
 		gridLayoutGroup.cellSize = new Vector2 (270f, 400f);
 		List<System.Object> listaCartas = BaseDatos.Instance.Local.Cartas();
@@ -58,8 +107,38 @@ public class Elementos : MonoBehaviour {
 			float progresoTrebol = carta.Progreso.Material;
 			float progresoPocion = carta.Progreso.Pocion;
 			elemento = Instantiate(DatosGenerales.Instance.CardInventario, transform);
-			if(consumible)
+			if (tipoTag.Equals (TIPO_TAG.CONSUMIR))
 				elemento.tag = "CartaConsumible";
+			else if (tipoTag.Equals (TIPO_TAG.BARAJA)) {
+				elemento.tag = "CartaFueraMazo";
+			}
+				
+			elemento.GetComponent<BoxCollider2D> ().size = gridLayoutGroup.cellSize;
+			IDHolder id = elemento.AddComponent<IDHolder>();
+			id.UniqueID = carta.ID;
+			OneCardManager manager = elemento.GetComponent<OneCardManager>();
+			manager.CartaAsset = asset;
+			manager.PorcentajeProgresoTrebol = progresoTrebol;
+			manager.PorcentajeProgresoPocion = progresoPocion;
+			manager.LeerDatos();
+
+			ListaElementos.Add(elemento);
+			elemento.transform.SetParent (gridLayoutGroup.gameObject.transform);
+		}
+	}
+
+	private void RellenarConMazo(){
+		List<Carta> listaCartas = BaseDatos.Instance.Local.CartasEnElMazo ();
+		GameObject elemento;
+		foreach(Carta carta in listaCartas)
+		{
+			CartaAsset asset = carta.AssetCarta;
+			float progresoTrebol = carta.Progreso.Material;
+			float progresoPocion = carta.Progreso.Pocion;
+			elemento = Instantiate(DatosGenerales.Instance.CardInventario, transform);
+			if (tipoTag.Equals (TIPO_TAG.BARAJA)) {
+				elemento.tag = "CartaDentroMazo";
+			}
 			elemento.GetComponent<BoxCollider2D> ().size = gridLayoutGroup.cellSize;
 			IDHolder id = elemento.AddComponent<IDHolder>();
 			id.UniqueID = carta.ID;
@@ -75,7 +154,7 @@ public class Elementos : MonoBehaviour {
 	}
 
 	private void RellenarConItems(){
-		if(consumible)
+		if(tipoTag.Equals(TIPO_TAG.CONSUMIR))
 			gridLayoutGroup.cellSize = new Vector2 (200f, 200f);
 		else
 			gridLayoutGroup.cellSize = new Vector2 (300f, 300f);
@@ -83,9 +162,8 @@ public class Elementos : MonoBehaviour {
 		GameObject elemento;
 		foreach(Item item in listaCartas)
 		{
-			//elemento = Instantiate(DatosGenerales.Instance.CardInventario, transform.position, Quaternion.identity) as GameObject;
 			elemento = Instantiate(DatosGenerales.Instance.ItemInventario, transform);
-			if(consumible)
+			if(tipoTag.Equals(TIPO_TAG.CONSUMIR))
 				elemento.tag = "ItemConsumible";
 			elemento.GetComponent<BoxCollider2D> ().size = gridLayoutGroup.cellSize;
 			IDHolder id = elemento.AddComponent<IDHolder>();
@@ -96,8 +174,6 @@ public class Elementos : MonoBehaviour {
 
 			ListaElementos.Add(elemento);
 			elemento.transform.SetParent (gridLayoutGroup.gameObject.transform);
-
-
 		}
 	}
 	

@@ -43,7 +43,7 @@ public class DragCreatureAttack : DraggingActions {
             try
             {
 
-                return base.SePuedeArrastrar && manager.PuedeAtacar && Controlador.Instance.EstaEnPosicionAtaque(GetComponentInParent<IDHolder
+				return base.SePuedeControlar && manager.PuedeAtacar && Controlador.Instance.EstaEnPosicionAtaque(GetComponentInParent<IDHolder
                     >().UniqueID);
             }
             catch (System.Exception e)
@@ -101,12 +101,17 @@ public class DragCreatureAttack : DraggingActions {
         if (Target != null)
         {
             int targetID = Target.GetComponent<IDHolder>().UniqueID;
-            //Debug.Log("Target ID: " + targetID);
-            if (Recursos.EntesCreadosEnElJuego[targetID] != null)
-            {
-                Controlador.Instance.AtacarEnte(GetComponentInParent<IDHolder>().UniqueID, targetID);
-            }
-
+			if (targetID == Controlador.Instance.Local.ID || targetID == Controlador.Instance.Enemigo.ID) {
+				if (Controlador.Instance.SePuedeAtacarJugadorDeCara (targetID)) {
+					Controlador.Instance.AtacarJugador(GetComponentInParent<IDHolder>().UniqueID, targetID);
+				}
+			} else {
+				//Debug.Log("Target ID: " + targetID);
+				if (Recursos.EntesCreadosEnElJuego[targetID] != null)
+				{
+					Controlador.Instance.AtacarEnte(GetComponentInParent<IDHolder>().UniqueID, targetID);
+				}
+			}
         }
 		resetDragg ();
     }

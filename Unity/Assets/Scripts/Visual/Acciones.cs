@@ -33,8 +33,6 @@ public class Acciones : MonoBehaviour {
 			//accionesItem.GetComponent<AccionesItem> ().MostrarAccionesItem ();
 		}
 	}
-
-
 		
 	public void CerrarMenu(){
 		if (accionesCarta.activeSelf) {

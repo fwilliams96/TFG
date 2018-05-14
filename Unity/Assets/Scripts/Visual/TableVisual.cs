@@ -51,9 +51,11 @@ public class TableVisual : MonoBehaviour
     // CURSOR/MOUSE DETECTION
     void Update()
     {
+		if (Input.touchCount <= 0)
+			return;
         // we need to Raycast because OnMouseEnter, etc reacts to colliders on cards and cards "cover" the table
         RaycastHit[] hits;
-        hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition), 30f);
+		hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.GetTouch(0).position), 30f);
         bool haPasadoPorColider = false;
         foreach (RaycastHit h in hits)
         {

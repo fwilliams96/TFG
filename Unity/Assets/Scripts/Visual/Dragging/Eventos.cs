@@ -77,7 +77,7 @@ public class Eventos : MonoBehaviour {
     {
 		if (!dragging) {
             //Mostrar previsualizacion y menu
-			if(da.SePuedeArrastrar)
+			if(da.SePuedeControlar)
             	GetComponent<OpcionesObjeto>().MostrarOpciones();
         }
         else

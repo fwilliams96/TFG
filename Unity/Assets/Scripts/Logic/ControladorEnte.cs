@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ControladorEnte
 {
@@ -42,7 +43,7 @@ public class ControladorEnte
     public void AtacarCriatura(Criatura atacante,  Criatura objetivo)
     {
         atacante.AtaquesRestantesEnTurno--;
-        new CreatureAttackCommand(objetivo.ID, atacante.ID, objetivo.Ataque,objetivo.Defensa).AñadirAlaCola();
+		new CreatureAttackCommand(objetivo.ID, atacante.ID, atacante.Ataque,objetivo.Defensa).AñadirAlaCola();
 		objetivo.Defensa -= atacante.Ataque;
 		if(CriaturaMuerta(objetivo))
             MuerteEnte(objetivo.ID);
@@ -96,7 +97,7 @@ public class ControladorEnte
 
 	public void DamageAllCreatures(Jugador jugador, int daño)
 	{
-		Ente[] CreaturesToDamage = jugador.EntesEnLaMesa();
+		List<Ente> CreaturesToDamage = jugador.EntesEnLaMesa();
 		foreach (Ente cl in CreaturesToDamage)
 		{
 			if (cl.GetType () == typeof(Criatura)) {

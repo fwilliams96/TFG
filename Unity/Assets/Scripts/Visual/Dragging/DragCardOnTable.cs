@@ -19,7 +19,7 @@ public class DragCardOnTable : DraggingActions
         {
             //return true;
             //manage es si está con glow
-            return base.SePuedeArrastrar && manager.PuedeSerJugada;
+			return base.SePuedeControlar && manager.PuedeSerJugada;
         }
     }
 

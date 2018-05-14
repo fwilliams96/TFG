@@ -331,6 +331,10 @@ public class Controlador : MonoBehaviour
         controladorJugador.MostrarManoJugadorActual();
     }
 
+	public bool SePuedeAtacarJugadorDeCara(int idJugador){
+		return controladorJugador.SePuedeAtacarJugadorDeCara (idJugador);
+	}
+
     /***************************************** CARTA ****************************************************/
 
     /*public bool PuedeSerJugada
@@ -392,6 +396,14 @@ public class Controlador : MonoBehaviour
 
 	public void DañarCriatura(Criatura criaturaAtacante, Criatura criaturaObjetivo){
 		DañarCriatura (criaturaObjetivo,criaturaAtacante.Ataque);
+	}
+
+	public void AtacarJugador(int idCriaturaAtacante, int idJugadorObjetivo){
+		Criatura atacante = (Criatura)Recursos.EntesCreadosEnElJuego[idCriaturaAtacante];
+		Jugador jugador = Controlador.Instance.Local.ID == idJugadorObjetivo ? Controlador.Instance.Local : Controlador.Instance.Enemigo;
+		atacante.HaAtacado = true;
+		controladorJugador.AtacarJugador (atacante, jugador);
+		
 	}
 
 	public void AtacarCriatura(Criatura criaturaAtacante, Criatura criaturaObjetivo){

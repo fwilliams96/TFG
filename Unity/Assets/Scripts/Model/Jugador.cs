@@ -13,9 +13,10 @@ public class Jugador : ICharacter
 
     // REFERENCES TO LOGICAL STUFF THAT BELONGS TO THIS PLAYER
     //private Dictionary<string, System.Object> cartas = new Dictionary<string, System.Object>();
-    private List<System.Object> cartas = new List<System.Object>();
-	private List<System.Object> items = new List<System.Object>();
-    private Mazo mazo;
+	private List<int> idCartasMazo;
+	private List<System.Object> cartas;
+	private List<System.Object> items;
+	private Mazo mazo;
     private Mano mano;
     private Mesa mesa;
     private int nivel;
@@ -113,6 +114,10 @@ public class Jugador : ICharacter
 	public Jugador(string area)
     {
         PlayerID = IDFactory.GetUniqueID();
+		this.mazo = new Mazo ();
+		this.idCartasMazo = new List<int>();
+		this.cartas = new List<System.Object>();
+		this.items = new List<System.Object>();
 		this.nivel = 0;
 		this.experiencia = 0;
 		this.area = area;
@@ -126,6 +131,15 @@ public class Jugador : ICharacter
     }
 
     public void Morir() { }
+
+	public void ClearMazo(){
+		mazo.CartasEnMazo.Clear ();
+	}
+
+	public void AñadirIDCartaMazo(int id)
+	{
+		idCartasMazo.Add(id);
+	}
 
     public void AñadirCarta(Carta carta)
     {
@@ -203,6 +217,11 @@ public class Jugador : ICharacter
         mazo.CartasEnMazo.RemoveAt(pos);
     }
 
+	public List<int> IDCartasMazo()
+	{
+		return idCartasMazo;
+	}
+
     public List<System.Object> Cartas()
     {
         return cartas;
@@ -213,19 +232,19 @@ public class Jugador : ICharacter
 		return items;
 	}
 
-    public Ente[] EntesEnLaMesa()
+    public List<Ente> EntesEnLaMesa()
     {
-        return mesa.EntesEnTablero.ToArray();
+        return mesa.EntesEnTablero;
     }
 
-    public Carta[] CartasEnLaMano()
+	public List<Carta> CartasEnLaMano()
     {
-        return mano.CartasEnMano.ToArray();
+        return mano.CartasEnMano;
     }
 
-    public Carta[] CartasEnElMazo()
+	public List<Carta> CartasEnElMazo()
     {
-        return mazo.CartasEnMazo.ToArray();
+        return mazo.CartasEnMazo;
     }
 
 	public Carta CartaActual(){
@@ -270,10 +289,21 @@ public class Jugador : ICharacter
     {
         Dictionary <string, System.Object> result = new Dictionary<string, System.Object>();
         result["nivel"] = nivel;
-		result ["cartas"] = CartasToDictionary ();
+		result["experiencia"] = experiencia;
+		result["cartas"] = CartasToDictionary ();
+		result["mazo"] = MazoToDictionary ();
 		result["items"] = ItemsToDictionary();
         return result;
     }
+
+	public string MazoToDictionary(){
+		string idCartas = "";
+		foreach (int idCartaMazo in idCartasMazo)
+		{
+			idCartas += idCartaMazo.ToString()+",";
+		}
+		return idCartas.Substring (0, idCartas.Length - 1);
+	}
 
 	public Dictionary<string, System.Object> CartasToDictionary(){
 		int i = 0;
@@ -298,16 +328,16 @@ public class Jugador : ICharacter
 	}
 
 	public void InicializarMazo(){
-		foreach (System.Object carta in cartas) {
-			AñadirCartaMazo ((Carta)carta);
+		foreach (int indiceCarta in idCartasMazo) {
+			AñadirCartaMazo ((Carta)cartas[indiceCarta]);
 		}
 	}
 
 	public void Reset(){
 		this.mano = new Mano();
-		this.mazo = new Mazo();
 		this.mesa = new Mesa();
 		this.defensa = 3000;
 		this.posCartaActual = 0;
 	}
+		
 }

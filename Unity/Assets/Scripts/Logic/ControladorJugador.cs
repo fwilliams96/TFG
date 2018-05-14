@@ -96,7 +96,6 @@ public class ControladorJugador
         jugador.ManaRestante = 0;
         //LeerInformacionPersonajeAsset();
         TransmitirInformacionVisualJugador(jugador);
-		jugador.InicializarMazo ();
         areaJugador.mazoVisual.CartasEnMazo = jugador.NumCartasMazo();//mazo.CartasEnMazo.Count;
         // move both portraits to the center
         areaJugador.Personaje.transform.position = areaJugador.PosicionInicialPersonaje.position;
@@ -236,6 +235,20 @@ public class ControladorJugador
     {
         return _jugadorActual.Area.Substring(0,3).Equals(tagCartaOCriatura.Substring(0, 3));
     }
+
+	public bool SePuedeAtacarJugadorDeCara(int idJugador){
+		Jugador jugador = Controlador.Instance.Local.ID == idJugador ? Controlador.Instance.Local : Controlador.Instance.Enemigo;
+		return jugador.NumEntesEnLaMesa () == 0;
+	}
+
+	public void AtacarJugador(Criatura atacante,  Jugador jugadorObjetivo)
+	{
+		atacante.AtaquesRestantesEnTurno--;
+		new CreatureAttackCommand(jugadorObjetivo.ID, atacante.ID, atacante.Ataque,jugadorObjetivo.Defensa).AñadirAlaCola();
+		jugadorObjetivo.Defensa -= atacante.Ataque;
+		if(JugadorMuerto(jugadorObjetivo))
+			MuerteJugador(jugadorObjetivo);
+	}
 
     public Jugador OtroJugador(Jugador jugador)
     {
