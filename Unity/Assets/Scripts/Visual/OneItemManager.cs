@@ -31,8 +31,12 @@ public class OneItemManager : MonoBehaviour {
 		Settings settings = Settings.Instance;
 		if (settings.Items.Equals (Settings.TIPO_NUMERO.ENTERO))
 			CantidadText.text = Item.Cantidad.ToString ();
-		else
+		else if (settings.Items.Equals (Settings.TIPO_NUMERO.FRACCION)) {
 			CantidadText.text = Settings.ObtenerFraccion (Item.Cantidad, 100);
+		} else {
+			CantidadText.text = Settings.ObtenerPorcentaje (Item.Cantidad, 100);
+		}
+			
 		ItemImage.sprite = Resources.Load<Sprite>(Item.RutaImagen);
 	}
 }

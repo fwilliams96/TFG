@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Settings : MonoBehaviour {
 
@@ -10,7 +11,8 @@ public class Settings : MonoBehaviour {
 	public enum TIPO_NUMERO
 	{
 		ENTERO,
-		RACIONAL
+		FRACCION,
+		PORCENTAJE
 	}
 
 	[Header("Colors")]
@@ -35,6 +37,12 @@ public class Settings : MonoBehaviour {
 			Instance = this;
 		}
 			
+	}
+
+	public static string ObtenerPorcentaje(int numerador, int denominador){
+		Decimal division = Convert.ToDecimal((double)numerador / (double)denominador);
+		division = Decimal.Round (division, 2);
+		return (Convert.ToInt32 (division*100)).ToString()+"%";
 	}
 
 	public static string ObtenerFraccion(int numerador, int denominador){

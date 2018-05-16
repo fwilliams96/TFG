@@ -24,12 +24,17 @@ public class AccionesCarta : MonoBehaviour {
 	}
 
 	public void OcultarAccionesCarta(){
-		if(visualizar.activeSelf)
+		if (visualizar.activeSelf) {
 			visualizar.SetActive (false);
-		if(añadirItem.activeSelf)
+		}
+
+		if (añadirItem.activeSelf) {
 			añadirItem.SetActive (false);
-		if(evolucionar.activeSelf)
+		}
+			
+		if (evolucionar.activeSelf) {
 			evolucionar.SetActive (false);
+		}
 		if(opciones.activeSelf)
 			opciones.SetActive (false);
 	}
@@ -45,7 +50,7 @@ public class AccionesCarta : MonoBehaviour {
 	}
 
 	public void Evolucionar(){
-		ControladorMenu.Instance.EvolucionarCarta (TouchManager2.Instance.ObjetoActual);
+		ControladorMenu.Instance.EvolucionarCarta (Acciones.Instance.ElementoActual);
 		opciones.SetActive (false);
 		evolucionar.SetActive (true);
 	}

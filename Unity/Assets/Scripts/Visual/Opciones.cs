@@ -10,7 +10,7 @@ public class Opciones : MonoBehaviour {
 	public Button BotonEvolucionar;
 
 	void OnEnable(){
-		BotonEvolucionar.interactable = ControladorMenu.Instance.SePuedeEvolucionar (TouchManager2.Instance.ObjetoActual.GetComponent<IDHolder>().UniqueID);
+		BotonEvolucionar.interactable = ControladorMenu.Instance.SePuedeEvolucionar (Acciones.Instance.ElementoActual.GetComponent<IDHolder>().UniqueID);
 	}
 
 	void OnDisable(){

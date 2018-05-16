@@ -75,36 +75,38 @@ public class Recursos  {
             {
                 foreach(KeyValuePair<string, SimpleJSON.JSONNode> entrada in cartas[familia])
                 {
-                    //Leer todos los datos comunes, si la carta es ancestral no hay evolucion, si tiene ataque y defensa no es magica. En caso de no cumplirse estas cosas se lanzara una excepcion y no se creara el asset
-                    //Modelo:
-                    //extraerDatosComunes(entrada);
-                    //extraerDatosNoComunes(entrada);
+					CartaAsset asset = new CartaAsset();
                     string carpetaCarta = obtenerFormatoNombreCorrectoDirectorio(entrada.Key);
-                    //Debug.Log(entrada.Value);
                     string nombre = entrada.Value["carta"]["delante"]["titulo"];
-                    Familia tipoCarta = obtenerTipoCarta(entrada.Value["carta"]["delante"]["tipo"]);
-                    string descripcion = entrada.Value["carta"]["delante"]["descripcion"];
-                    int mana = System.Int32.Parse(entrada.Value["carta"]["delante"]["mana"]);
-                    string rutaImagen = obtenerRutaImagen(familia, carpetaCarta, entrada.Value["carta"]["delante"]["nombreImagen"]);
-                    int defensa = System.Int32.Parse(entrada.Value["carta"]["delante"]["defensa"]);
-                    int ataque = System.Int32.Parse(entrada.Value["carta"]["delante"]["ataque"]);
-                    string fondo = entrada.Value["carta"]["delante"]["fondo"];
-                    int evolucion = -1;
-                    if(!tipoCarta.Equals(TipoCarta.Ancestral))
-                        evolucion = System.Int32.Parse(entrada.Value["carta"]["delante"]["evolucion"]);
+					asset.Nombre = nombre;
 
-                    CartaAsset asset = new CartaAsset();
-                    asset.Nombre = nombre;
-                    asset.Descripcion = descripcion;
-                    asset.Familia = tipoCarta;
+                    Familia tipoCarta = obtenerTipoCarta(entrada.Value["carta"]["delante"]["tipo"]);
+					asset.Familia = tipoCarta;
+
 					if (asset.Familia.Equals (Familia.Magica))
 						asset.Efecto = obtenerEfecto (entrada.Value ["carta"] ["delante"] ["efecto"]);
+
+                    string descripcion = entrada.Value["carta"]["delante"]["descripcion"];
+					asset.Descripcion = descripcion;
+
+                    int mana = System.Int32.Parse(entrada.Value["carta"]["delante"]["mana"]);
+					asset.CosteMana = mana;
+
+                    string rutaImagen = obtenerRutaImagen(familia, carpetaCarta, entrada.Value["carta"]["delante"]["nombreImagen"]);
 					asset.RutaImagenCarta = rutaImagen;
-                    asset.CosteMana = mana;
-                    asset.Defensa = defensa;
-                    asset.Ataque = ataque;
-                    if (evolucion != -1)
-                        asset.Evolucion = evolucion;
+
+					int defensa = 0;
+					int ataque = 0;
+					if (!asset.Familia.Equals (Familia.Magica)) {
+						defensa = System.Int32.Parse(entrada.Value["carta"]["delante"]["defensa"]);
+						ataque = System.Int32.Parse(entrada.Value["carta"]["delante"]["ataque"]);
+					}
+					asset.Defensa = defensa;
+					asset.Ataque = ataque;
+
+					int evolucion = System.Int32.Parse(entrada.Value["carta"]["delante"]["evolucion"]);
+					asset.Evolucion = evolucion;
+
                     GuardarAssetBaseDatos(familia, asset);
                     //GuardarJSONApartirCartaAsset(asset, obtenerRutaJSON(familia, carpetaCarta),nombre+".json");
                     AssetsCreadosCartas.Add(asset);
@@ -150,6 +152,9 @@ public class Recursos  {
             case Global.CARTAS.TIPO_CARTA.AGUA:
                 carpetaFamilia = "Agua/";
                 break;
+			case Global.CARTAS.TIPO_CARTA.AIRE:
+				carpetaFamilia = "Aire/";
+				break;
             case Global.CARTAS.TIPO_CARTA.FUEGO:
                 carpetaFamilia = "Fuego/";
                 break;
@@ -204,6 +209,9 @@ public class Recursos  {
         Familia tipo = Familia.Magica;
         switch (familia.ToLower())
         {
+			case Global.CARTAS.TIPO_CARTA.AIRE:
+				tipo = Familia.Aire;
+				break;
             case Global.CARTAS.TIPO_CARTA.AGUA:
                 tipo = Familia.Agua;
                 break;
@@ -226,7 +234,7 @@ public class Recursos  {
                 tipo = Familia.Ancestral;
                 break;
             default:
-                tipo = Familia.Magica;
+				tipo = Familia.Ancestral;
                 break;
         }
         return tipo;

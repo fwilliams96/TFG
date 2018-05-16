@@ -16,6 +16,10 @@ public class MenuInventario : MonoBehaviour {
 		
 	}
 
+	void OnDisable(){
+		ControladorMenu.Instance.CerrarAccion ();
+	}
+
 	public void MostrarSeccionCartas(){
 		elementos.GetComponent<Elementos> ().tipoElementos = Elementos.TIPO_ELEMENTOS.CARTAS;
 		elementos.GetComponent<Elementos> ().MostrarElementos ();
@@ -24,5 +28,6 @@ public class MenuInventario : MonoBehaviour {
 	public void MostrarSeccionItems(){
 		elementos.GetComponent<Elementos> ().tipoElementos = Elementos.TIPO_ELEMENTOS.ITEMS;
 		elementos.GetComponent<Elementos> ().MostrarElementos ();
+		ControladorMenu.Instance.CerrarAccion ();
 	}
 }

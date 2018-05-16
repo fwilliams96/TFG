@@ -13,6 +13,8 @@ public class ProgresoVisual : MonoBehaviour
 			ProgresoMaterial.value += cantidad > 100? 1f: cantidad/100f;
 		else
 			ProgresoPocion.value += cantidad > 100? 1f: cantidad/100f;
+		if(ProgresoMaterial.value == 100 && ProgresoPocion.value == 100)
+			GetComponent<OneCardManager> ().PuedeSerJugada = true;
 		Comandas.Instance.CompletarEjecucionComanda();
 	}
 

@@ -60,11 +60,17 @@ public class DamageEffect : MonoBehaviour {
         // Change the amount text to reflect the amount of damage dealt
 		Settings settings = Settings.Instance;
 
-		if(settings.Batalla.Equals(Settings.TIPO_NUMERO.ENTERO))
-			de.AmountText.text = "-"+amount.ToString();
-			//de.AmountText.text = health.ToString()+"-"+amount.ToString();
-		else
+		if (settings.Batalla.Equals (Settings.TIPO_NUMERO.ENTERO))
+			de.AmountText.text = "-" + amount.ToString ();
+		//de.AmountText.text = health.ToString()+"-"+amount.ToString();
+		else if (settings.Batalla.Equals (Settings.TIPO_NUMERO.FRACCION)) {
 			de.AmountText.text = "-"+Settings.ObtenerFraccion(amount,health)+"x"+health.ToString();
+		} else {
+			de.AmountText.text = "-" + Settings.ObtenerPorcentaje (amount, health);
+		}
+
+
+
 			//de.AmountText.text = health.ToString()+"-"+Settings.ObtenerFraccion(amount,health)+"x"+health.ToString();
         // start a coroutine to fade away and delete this effect after a certain time
         de.StartCoroutine(de.ShowDamageEffect());

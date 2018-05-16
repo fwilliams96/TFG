@@ -17,37 +17,37 @@ public class Menu : MonoBehaviour {
 
     public void Inventario()
     {
-		ControladorMenu.Instance.PantallaActual = PANTALLA_MENU.INVENTARIO;
         inventario.SetActive(true);
         batalla.SetActive(false);
 		perfil.SetActive(false);
 		mazo.SetActive (false);
+		ControladorMenu.Instance.PantallaActual = PANTALLA_MENU.INVENTARIO;
     }
 
     public void Batalla()
     {
-		ControladorMenu.Instance.PantallaActual = PANTALLA_MENU.BATALLA;
         batalla.SetActive(true);
         inventario.SetActive(false);
 		perfil.SetActive(false);
 		mazo.SetActive(false);
+		ControladorMenu.Instance.PantallaActual = PANTALLA_MENU.BATALLA;
     }
 
 	public void Perfil()
 	{
-		ControladorMenu.Instance.PantallaActual = PANTALLA_MENU.PERFIL;
 		perfil.SetActive(true);
 		batalla.SetActive(false);
 		inventario.SetActive(false);
 		mazo.SetActive(false);
+		ControladorMenu.Instance.PantallaActual = PANTALLA_MENU.PERFIL;
 	}
 
 	public void  Mazo()
 	{
-		ControladorMenu.Instance.PantallaActual = PANTALLA_MENU.MAZO;
 		mazo.SetActive(true);
 		batalla.SetActive(false);
 		inventario.SetActive(false);
 		perfil.SetActive(false);
+		ControladorMenu.Instance.PantallaActual = PANTALLA_MENU.MAZO;
 	}
 }

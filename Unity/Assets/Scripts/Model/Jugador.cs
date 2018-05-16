@@ -118,7 +118,7 @@ public class Jugador : ICharacter
 		this.idCartasMazo = new List<int>();
 		this.cartas = new List<System.Object>();
 		this.items = new List<System.Object>();
-		this.nivel = 0;
+		this.nivel = 1;
 		this.experiencia = 0;
 		this.area = area;
 		Reset ();

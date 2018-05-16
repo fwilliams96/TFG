@@ -16,11 +16,15 @@ public class CargarCarta : MonoBehaviour {
 
 	// Use this for initialization
 
-	void OnEnable(){
+	void Awake(){
+	}
+
+	public void MostrarCarta(){
 		Debug.Log ("On enable");
-		elemento = Instantiate (TouchManager2.Instance.ObjetoActual, transform);
-		elemento.transform.parent = gridLayoutGroup.gameObject.transform;
+		elemento = Instantiate (Acciones.Instance.ElementoActual, transform);
+		elemento.transform.SetParent (gridLayoutGroup.gameObject.transform);
 		elemento.tag = "CartaPrevisualizada";
+		IDHolder.EliminarElemento (elemento.GetComponent<IDHolder>());
 		Destroy (elemento.GetComponent<IDHolder> ());
 		elemento.GetComponent<BoxCollider2D> ().enabled = false; 
 		if (posicion.Equals (Posicion.DELANTE)) {
@@ -31,7 +35,7 @@ public class CargarCarta : MonoBehaviour {
 			
 	}
 
-	void OnDisable(){
+	public void EliminarCarta(){
 		Debug.Log ("On disable");
 		Destroy (elemento);
 	}

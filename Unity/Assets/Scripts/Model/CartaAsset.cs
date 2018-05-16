@@ -6,6 +6,7 @@ public enum Familia
     Fuego,
     Tierra,
     Electrica,
+	Aire,
     Agua,
     Magica,
     Fusion,

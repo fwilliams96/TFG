@@ -9,6 +9,17 @@ public class Acciones : MonoBehaviour {
 	public GameObject accionesItem;
 	public static Acciones Instance;
 	public GameObject Elementos;
+	private GameObject elementoActual;
+
+	public GameObject ElementoActual {
+		get {
+			return elementoActual;
+		}set {
+			elementoActual = value;
+		}
+	}
+
+
 	void Awake(){
 		Instance = this;
 		PanelAcciones.SetActive (false);
@@ -24,7 +35,8 @@ public class Acciones : MonoBehaviour {
 		
 	}
 
-	public void MostrarAcciones(bool cartas){
+	public void MostrarAcciones(bool cartas,GameObject actual){
+		this.ElementoActual = actual;
 		PanelAcciones.SetActive (true);
 		Elementos.GetComponent<Elementos>().DeshabilitarColliderElementos ();
 		if (cartas) {
@@ -41,6 +53,7 @@ public class Acciones : MonoBehaviour {
 			//accionesItem.GetComponent<AccionesItem> ().OcultarAccionesItem();
 		}
 		Elementos.GetComponent<Elementos>().HabilitarColliderElementos ();
+		ElementoActual = null;
 		PanelAcciones.SetActive (false);
 	}
 

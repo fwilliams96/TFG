@@ -66,14 +66,14 @@ public class TouchManager2 : MonoBehaviour {
 					case PANTALLA_MENU.INVENTARIO:
 						if (hit.transform.gameObject.tag.Equals ("CartaInventario")) {
 							gObj = hit.transform.gameObject;
-							Acciones.Instance.MostrarAcciones (true);
+							Acciones.Instance.MostrarAcciones (true,gObj);
 						} else if (hit.transform.gameObject.tag.Equals ("ItemInventario")) {
 							gObj = hit.transform.gameObject; 
 							//Acciones.Instance.MostrarAcciones (false);
 						} else if (hit.transform.gameObject.tag.Equals ("ItemConsumible")) {
-							ControladorMenu.Instance.AgregarItemCarta (gObj.GetComponent<IDHolder> ().UniqueID, hit.transform.gameObject.GetComponent<IDHolder> ().UniqueID);
+							ControladorMenu.Instance.AgregarItemCarta (Acciones.Instance.ElementoActual.GetComponent<IDHolder> ().UniqueID, hit.transform.gameObject.GetComponent<IDHolder> ().UniqueID);
 						} else if (hit.transform.gameObject.tag.Equals ("CartaConsumible")) {
-							ControladorMenu.Instance.AgregarItemCarta (hit.transform.gameObject.GetComponent<IDHolder> ().UniqueID, gObj.GetComponent<IDHolder> ().UniqueID);
+							ControladorMenu.Instance.AgregarItemCarta (hit.transform.gameObject.GetComponent<IDHolder> ().UniqueID, Acciones.Instance.ElementoActual.GetComponent<IDHolder> ().UniqueID);
 						}
 						break;
 					case PANTALLA_MENU.MAZO:

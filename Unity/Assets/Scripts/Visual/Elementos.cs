@@ -22,7 +22,7 @@ public class Elementos : MonoBehaviour {
 	public TIPO_TAG tipoTag;
     // Use this for initialization
 	void Start () {
-		MostrarElementos ();
+		
 	}
 
 	void OnEnable(){
