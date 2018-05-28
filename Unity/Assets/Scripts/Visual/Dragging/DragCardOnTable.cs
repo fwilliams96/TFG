@@ -103,7 +103,7 @@ public class DragCardOnTable : DraggingActions
 
     protected override bool DragSuccessful()
     {
-        bool TableNotFull = (playerOwner.NumEntesEnLaMesa() < 6);
+        bool TableNotFull = (playerOwner.NumEntesEnLaMesa() < 5);
 
         return TableVisual.CursorSobreAlgunaMesa && TableNotFull;
     }

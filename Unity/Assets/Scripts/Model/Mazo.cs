@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Mazo {
-    public List<Carta> CartasEnMazo;
+	public List<System.Object> CartasEnMazo;
 
     public Mazo()
     {
-        CartasEnMazo = new List<Carta>();
+		CartasEnMazo = new List<System.Object>();
     }
 
     public void Mezclar()

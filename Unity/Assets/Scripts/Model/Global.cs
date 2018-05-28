@@ -8,18 +8,17 @@ public class Global {
 
     public static class CARTAS
     {
-        public static string[] FAMILIAS = { "Agua", "Fuego", "Tierra", "Aire","Electricidad", "Magica", "Fusion", "Ancestral" };
+        public static string[] FAMILIAS = { "Agua", "Fuego", "Tierra", "Aire", "Magica", "Fusion", "Ancestral" };
 
         public static class FAMILIA
         {
-			public static string[] AIRE = { "Hipogrifo", "Arpia"};
-            public static string[] AGUA = { "Basilisco", "Sirenita"};
-            public static string[] FUEGO = { "Dragon1" };
+			public static string[] AIRE = { "Hipogrifo", "Arpia","Tengu"};
+            public static string[] AGUA = { "Basilisco", "Sirenita","Triton"};
+			public static string[] FUEGO = { "Furaibi" ,"Khalkotauroi"};
             public static string[] TIERRA = { "Ciclope", "Enano", "Elfo"};
-            public static string[] ELECTRICIDAD = { };
-            public static string[] MAGICA = { "Destructor" };
+            public static string[] MAGICA = { "Destructor", "Espejo" };
             public static string[] FUSION = {  };
-            public static string[] ANCESTRAL = { };
+            public static string[] ANCESTRAL = { "Dragon"};
         }
 
         public static class TIPO_CARTA

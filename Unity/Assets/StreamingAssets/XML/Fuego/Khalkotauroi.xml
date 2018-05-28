@@ -1,0 +1,18 @@
+<carta>
+  <delante>
+    <tipo>Fuego</tipo>
+    <titulo>Khalkotauroi</titulo>
+    <efecto></efecto>
+    <nombreImagen>khalkotauroi</nombreImagen>
+    <descripcion>Capaz de romper cualquier muro</descripcion>
+    <evolucion>1</evolucion>
+    <mana>2</mana>
+    <ataque>650</ataque>
+    <defensa>780</defensa>
+  </delante>
+  <detras>
+    <simbolo>cuadrado.png</simbolo>
+    <elemento>trebol.png</elemento>
+    <elemento2>pocion.png</elemento2>
+  </detras>
+</carta>

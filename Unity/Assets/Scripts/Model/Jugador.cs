@@ -242,12 +242,12 @@ public class Jugador : ICharacter
         return mano.CartasEnMano;
     }
 
-	public List<Carta> CartasEnElMazo()
+	public List<System.Object> CartasEnElMazo()
     {
         return mazo.CartasEnMazo;
     }
 
-	public Carta CartaActual(){
+	public System.Object CartaActual(){
 		return mazo.CartasEnMazo [PosCartaActual];
 	}
 

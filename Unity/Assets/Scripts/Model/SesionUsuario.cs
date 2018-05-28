@@ -75,12 +75,13 @@ public class SesionUsuario
         auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
             if (task.IsCanceled)
             {
-                Debug.LogError("SignInWithEmailAndPasswordAsync was canceled.");
+                Debug.Log("SignInWithEmailAndPasswordAsync was canceled.");
                 return;
             }
             if (task.IsFaulted)
             {
-                Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+				MessageManager.Instance.ShowMessage("El usuario o la contraseña son incorrectos",1.5f);
+                Debug.Log("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
                 return;
             }
 
@@ -103,6 +104,7 @@ public class SesionUsuario
             }
             if (task.IsFaulted)
             {
+				MessageManager.Instance.ShowMessage("El usuario ya se encuentra registrado",1.5f);
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
                 return;
             }

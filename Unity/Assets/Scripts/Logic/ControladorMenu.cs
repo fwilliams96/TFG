@@ -45,14 +45,34 @@ public class ControladorMenu : MonoBehaviour {
 
 		Carta carta = BuscarCarta (idCarta);
 		Item item = BuscarItem (idItem);
+		bool progresoLleno = false;
 		if (item.Tipo.Equals (TipoItem.Material))
+		if (carta.Progreso.Material >= 100) {
+			progresoLleno = true;
+		} else {
 			carta.AñadirMaterial (item.Cantidad);
-		//else if(item.Tipo.Equals (TipoItem.Pocion))
-		else
-			carta.AñadirPocion (item.Cantidad);
-		new AñadirItemCartaPrevisualizadaCommand (item).AñadirAlaCola ();
-		new AñadirItemCartaCommand (carta,item).AñadirAlaCola ();
-		BaseDatos.Instance.ActualizarItemCarta (carta,item);
+		}
+		else {
+			if (carta.Progreso.Pocion >= 100) {
+				progresoLleno = true;
+			} else {
+				carta.AñadirPocion (item.Cantidad);
+			}
+		}
+		if (!progresoLleno) {
+			new AñadirItemCartaPrevisualizadaCommand (item).AñadirAlaCola ();
+			new AñadirItemCartaCommand (carta, item).AñadirAlaCola ();
+			BaseDatos.Instance.ActualizarItemCarta (carta, item);
+			if (carta.Progreso.Material >= 100 && carta.Progreso.Pocion >= 100) {
+				MessageManager.Instance.SendMessage ("¡Progreso de la carta completado!", 2f);
+			} else {
+				MessageManager.Instance.SendMessage ("Item añadido con éxito", 2f);
+			}
+
+		} else {
+			MessageManager.Instance.SendMessage ("¡El progreso de este item está lleno!", 2f);
+		}
+
 	}
 
 	private Carta BuscarCarta(int idCarta){
@@ -202,5 +222,41 @@ public class ControladorMenu : MonoBehaviour {
 
 	public string ObtenerNivelJugador(){
 		return BaseDatos.Instance.Local.Nivel.ToString ();
+	}
+
+	public List<System.Object> RecogerElemento(Elementos.TIPO_ELEMENTOS tipoElementos){
+		List<System.Object> elementos;
+		switch (tipoElementos) {
+		case Elementos.TIPO_ELEMENTOS.CARTAS:
+			elementos = BaseDatos.Instance.Local.Cartas ();
+				if (elementos.Count == 0)
+					MessageManager.Instance.ShowMessage ("Al parecer no tienes cartas... ¡Combate para ganar premios!", 2f);
+				break;
+			case Elementos.TIPO_ELEMENTOS.CARTAS_FUERAMAZO:
+				elementos = BuscarCartasFueraMazo ();
+				break;
+			case Elementos.TIPO_ELEMENTOS.ITEMS:
+				elementos = BaseDatos.Instance.Local.Items ();
+				if (elementos.Count == 0)
+					MessageManager.Instance.ShowMessage ("Al parecer no tienes items... ¡Combate para ganar premios!", 2f);
+				break;
+			case Elementos.TIPO_ELEMENTOS.MAZO:
+				elementos = BaseDatos.Instance.Local.CartasEnElMazo ();
+				break;
+		default:
+			elementos = null;
+			break;
+		}
+		return elementos;
+	}
+
+	private List<System.Object> BuscarCartasFueraMazo(){
+		List<System.Object> cartasFueraMazo = new List<System.Object> ();
+		foreach (Carta carta in BaseDatos.Instance.Local.Cartas()) {
+			if (ControladorMenu.Instance.CartaFueraMazo (carta)) {
+				cartasFueraMazo.Add (carta);
+			}
+		}
+		return cartasFueraMazo;
 	}
 }

@@ -193,7 +193,7 @@ public class Controlador : MonoBehaviour
             {
                 //Carta newCard = new Carta(jugador.CartasEnElMazo()[0]);
 				//Esto nos devuelve la carta actual del mazo que se recorre infinitamente
-				Carta newCard = jugador.CartaActual();
+				Carta newCard = (Carta)jugador.CartaActual();
                 jugador.AñadirCartaMano(0, newCard);
                 // Debug.Log(hand.CardsInHand.Count);
                 new DrawACardCommand(jugador.CartasEnLaMano()[0], jugador, fast, fromDeck: true).AñadirAlaCola();
