@@ -9,7 +9,23 @@ public abstract class DraggingActions : MonoBehaviour {
 
     public abstract void OnDraggingInUpdate();
 
-    public virtual bool SePuedeArrastrar
+	public abstract void resetDragg();
+
+	protected bool reset;
+
+	public bool Reset {
+		get {
+			return reset;
+		}
+	}
+
+	public virtual bool SePuedeArrastrar{
+		get{
+			return SePuedeControlar;
+		}
+	}
+
+	public virtual bool SePuedeControlar
     {
         get
         {
@@ -22,11 +38,11 @@ public abstract class DraggingActions : MonoBehaviour {
     protected virtual Jugador playerOwner
     {
         get{
-            
+
             if (tag.Contains("Low"))
-                return DatosGenerales.Instance.LowPlayer;
+                return Controlador.Instance.Local;
             else if (tag.Contains("Top"))
-                return DatosGenerales.Instance.TopPlayer;
+                return Controlador.Instance.Enemigo;
             else
             {
                 Debug.LogError("Untagged Card or creature " + transform.parent.name);
@@ -49,13 +65,17 @@ public abstract class DraggingActions : MonoBehaviour {
         //OPTIONAL quitar el for y hacer una busqueda
         foreach (RaycastHit h in hits)
         {
-            //TODO El tag this.tag == "LowEnte" o "TopEnte" debe cambiar a "LowCreature/TopCreature" nuevamente porque una magica no atacara de esta manera
-            if ((h.transform.tag == "TopEnte" && this.tag == "LowEnte") ||
-                    (h.transform.tag == "LowEnte" && this.tag == "TopEnte"))
-            {
-                // hit a creature, save parent transform
-                Target = h.transform.parent.gameObject;
-            }
+			if ((h.transform.tag.Equals ("TopCriatura") || h.transform.tag.Equals ("TopMagica")) && (this.tag.Equals ("LowCriatura") || this.tag.Equals ("LowMagica")) ||
+			    ((h.transform.tag.Equals ("LowCriatura") || h.transform.tag.Equals ("LowMagica")) && (this.tag.Equals ("TopCriatura") || this.tag.Equals ("TopMagica")))) {
+				// hit a creature or magica, save parent transform
+				if (h.transform.tag.Contains ("Criatura"))
+					Target = h.transform.parent.gameObject;
+				else
+					Target = h.transform.parent.gameObject.transform.parent.gameObject;
+			} else if((h.transform.tag.Equals("TopPlayer") && (this.tag.Equals("LowCriatura"))) || 
+				(h.transform.tag.Equals("LowPlayer") && (this.tag.Equals("TopCriatura")))){
+				Target = h.transform.gameObject;
+			}
 
         }
         return Target;

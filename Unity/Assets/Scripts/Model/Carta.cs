@@ -10,23 +10,18 @@ public class Carta : IIdentifiable
     // an ID of this card
     private int idCarta;
     // a reference to the card asset that stores all the info about this card
-    public CardAsset assetCarta;
-    // a script of type spell effect that will be attached to this card when it`s created
-    public SpellEffect efecto;
+	private string idAsset;
+	private CartaAsset assetCarta;
+    private Progreso progreso;
     #endregion
-    #region Getters/Setters
-    // PROPERTIES
-    public int ID
+
+    public Carta()
     {
-        get { return idCarta; }
+        idCarta = IDFactory.GetUniqueID();
+        progreso = new Progreso();
     }
 
-    public int CosteManaActual { get; set; }
-
-    #endregion
-
-    // CONSTRUCTOR
-    public Carta(CardAsset ca)
+    public Carta(CartaAsset ca)
     {
         // set the CardAsset reference
         this.assetCarta = ca;
@@ -34,14 +29,20 @@ public class Carta : IIdentifiable
         idCarta = IDFactory.GetUniqueID();
         //UniqueCardID = IDFactory.GetUniqueID();
         ResetCosteMana();
-        // create an instance of SpellEffect with a name from our CardAsset
-        // and attach it to 
-        if (ca.SpellScriptName != null && ca.SpellScriptName != "")
-        {
-            efecto = System.Activator.CreateInstance(System.Type.GetType(ca.SpellScriptName)) as SpellEffect;
-        }
         // add this card to a dictionary with its ID as a key
-        Recursos.CartasCreadasEnElJuego.Add(idCarta, this);
+        //Recursos.CartasCreadasEnElJuego.Add(idCarta, this);
+        progreso = new Progreso();
+    }
+
+    public Carta(string idAsset,CartaAsset ca)
+    {
+        // set the CardAsset reference
+        this.idAsset = idAsset;
+        this.assetCarta = ca;
+        // get unique int ID
+        idCarta = IDFactory.GetUniqueID();
+        ResetCosteMana();
+        progreso = new Progreso();
     }
 
     // method to set or reset mana cost
@@ -49,5 +50,62 @@ public class Carta : IIdentifiable
     {
         CosteManaActual = assetCarta.CosteMana;
     }
+
+    public Dictionary<string, System.Object> ToDictionary()
+    {
+        Dictionary<string, System.Object> result = new Dictionary<string, System.Object>();
+        result["asset"] = idAsset;
+        result["progreso"] = progreso.ToDictionary();
+        return result;
+    }
+
+    #region Getters/Setters
+
+    // PROPERTIES
+	public string IdAsset{
+		get{
+			return idAsset;
+		}
+		set{
+			idAsset = value;
+		}
+	}
+
+	public CartaAsset AssetCarta{
+		get{
+			return assetCarta;
+		}
+		set{
+			assetCarta = value;
+		}
+	}
+    public int ID
+    {
+        get { return idCarta; }
+    }
+
+    public int CosteManaActual { get; set; }
+
+    public Progreso Progreso
+    {
+        get
+        {
+            return progreso;
+        }
+
+        set
+        {
+            progreso = value;
+        }
+    }
+
+	public void AñadirMaterial(int cantidad){
+		progreso.Material += cantidad;
+	}
+	public void AñadirPocion(int cantidad){
+		progreso.Pocion += cantidad;
+	}
+
+    #endregion
 
 }

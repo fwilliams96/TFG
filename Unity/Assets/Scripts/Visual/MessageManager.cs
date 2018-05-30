@@ -38,11 +38,4 @@ public class MessageManager : MonoBehaviour
         Comandas.Instance.CompletarEjecucionComanda();
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Y))
-            ShowMessage("Your turn", 3f);
-        if (Input.GetKeyDown(KeyCode.E))
-            ShowMessage("Enemy turn", 3f);
-    }
 }

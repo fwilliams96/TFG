@@ -4,6 +4,12 @@ using UnityEngine.SceneManagement;
 
 public class SceneReloader: MonoBehaviour {
 
+	public static SceneReloader Instance;
+
+	void Awake(){
+		Instance = this;
+	}
+
     public void ReloadScene()
     {
         // Command has some static members, so let`s make sure that there are no commands in the Queue
@@ -13,6 +19,7 @@ public class SceneReloader: MonoBehaviour {
         IDHolder.ClearIDHoldersList();
         Comandas.Instance.Clear();
         Comandas.Instance.CompletarEjecucionComanda();
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+		Controlador.Instance.Clear();
+		SceneManager.LoadSceneAsync("Menu");
     }
 }

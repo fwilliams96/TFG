@@ -42,7 +42,6 @@ public class PosicionCriaturaPopUp : MonoBehaviour {
     /// <param name="valor"></param>
     public void PosicionCriaturaElegida(int valor)
     {
-        Debug.Log("Valor popup +" + valor);
         bool resultOK = valor != -1 ? true : false;
         if(resultOK)
         {

@@ -73,4 +73,8 @@ public class AccionesPopUp : MonoBehaviour {
         //Llamar a metodo registrado
         metodo.Invoke(idEnte);
     }
+
+	public bool EstaActivo(){
+		return PanelAcciones.activeSelf;
+	}
 }

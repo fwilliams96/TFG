@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ControladorJugador
 {
@@ -45,7 +46,7 @@ public class ControladorJugador
         if (jugador == _jugadorActual)
             return areaJugadorActual;
         PlayerArea areaJugador;
-        AreaPosition area = jugador.gameObject.tag == "TopPlayer" ? AreaPosition.Top : AreaPosition.Low;
+        AreaPosition area = jugador.Area.Equals("Top") ? AreaPosition.Top : AreaPosition.Low;
         switch (area)
         {
             case AreaPosition.Low:
@@ -75,7 +76,8 @@ public class ControladorJugador
         PlayerArea areaJugador = AreaJugador(jugador);
         //TODO cuando el jugador muere esta dando un pete aqui por acceder a algo destruido
         areaJugador.Personaje.gameObject.AddComponent<IDHolder>().UniqueID = jugador.ID;
-        if (jugador.GetComponent<TurnMaker>() is AITurnMaker)
+        areaJugador.PermitirControlJugador = true;
+        /*if (jugador.GetComponent<TurnMaker>() is AITurnMaker)
         {
             // turn off turn making for this character
             areaJugador.PermitirControlJugador = false;
@@ -84,7 +86,7 @@ public class ControladorJugador
         {
             // allow turn making for this character
             areaJugador.PermitirControlJugador = true;
-        }
+        }*/
     }
 
     public void InicializarValoresJugador(Jugador jugador)
@@ -94,7 +96,6 @@ public class ControladorJugador
         jugador.ManaRestante = 0;
         //LeerInformacionPersonajeAsset();
         TransmitirInformacionVisualJugador(jugador);
-        //TO
         areaJugador.mazoVisual.CartasEnMazo = jugador.NumCartasMazo();//mazo.CartasEnMazo.Count;
         // move both portraits to the center
         areaJugador.Personaje.transform.position = areaJugador.PosicionInicialPersonaje.position;
@@ -102,41 +103,50 @@ public class ControladorJugador
 
     public void ActualizarValoresJugador()
     {
-        TurnMaker tm = JugadorActual.GetComponent<TurnMaker>();
+        //TurnMaker tm = JugadorActual.GetComponent<TurnMaker>();
         // player`s method OnTurnStart() will be called in tm.OnTurnStart();
         //Aqui se crea la comanda para dar la carta al jugador
-        tm.OnTurnStart();
-        if (tm is PlayerTurnMaker)
-        {
+        OnTurnStart();
+        //tm.OnTurnStart();
+        //if (tm is PlayerTurnMaker)
+        //{
             ActualizarManaJugador(JugadorActual);
-            MostrarCartasJugablesJugador(JugadorActual);
-        }
-        OcultarCartasJugablesJugadorContrario(JugadorActual);
+            ActualizarEstadoCartasJugadorActual(JugadorActual);
+        //}
+        ActualizarEstadoCartasJugadorEnemigo(JugadorActual);
+    }
+
+    private void OnTurnStart()
+    {
+        JugadorActual.OnTurnStart();
+        if (JugadorActual.Area.Equals("Top"))
+            new ShowMessageCommand("¡Turno enemigo!", 2.0f).AñadirAlaCola();
+        else
+            new ShowMessageCommand("¡Tu Turno!", 2.0f).AñadirAlaCola();
+        Controlador.Instance.DibujarCartaMazo(JugadorActual);
     }
 
     public void ActualizarManaJugador(Jugador jugador)
     {
         new UpdateManaCrystalsCommand(jugador, jugador.ManaEnEsteTurno, jugador.ManaRestante).AñadirAlaCola();
-        //MostrarCartasJugablesJugador(jugador);
     }
 
     // Muestra cartas jugables de la mano del jugador
-    public void MostrarCartasJugablesJugador(Jugador jugador)
+    public void ActualizarEstadoCartasJugadorActual(Jugador jugador)
     {
         if (jugador == JugadorActual)
-            MostrarUOcultarCartas(jugador, false);
+            ActualizarEstadoCartasJugador(jugador, false);
 
     }
 
-    private void OcultarCartasJugablesJugadorContrario(Jugador jugador)
+    private void ActualizarEstadoCartasJugadorEnemigo(Jugador jugador)
     {
         if (jugador == JugadorActual)
-            MostrarUOcultarCartas(OtroJugador(jugador), true);
+            ActualizarEstadoCartasJugador(OtroJugador(jugador), true);
             }
 
-    private void MostrarUOcultarCartas(Jugador jugador, bool quitarTodasRemarcadas = false)
+    private void ActualizarEstadoCartasJugador(Jugador jugador, bool quitarTodasRemarcadas = false)
     {
-        //Debug.Log("HighlightPlayable remove: "+ removeAllHighlights);
         foreach (Carta cl in jugador.CartasEnLaMano())
         {
             GameObject g = IDHolder.GetGameObjectWithID(cl.ID);
@@ -146,9 +156,14 @@ public class ControladorJugador
 
         foreach (Ente crl in jugador.EntesEnLaMesa())
         {
+			if (crl.GetType () == typeof(Criatura)) 
+				((Criatura)crl).HaAtacado = false;
             GameObject g = IDHolder.GetGameObjectWithID(crl.ID);
-            if (g != null)
-                g.GetComponent<OneCreatureManager>().PuedeAtacar = (crl.AtaquesRestantesEnTurno > 0) && !quitarTodasRemarcadas;
+
+			if (g != null) {
+				g.GetComponent<OneEnteManager>().PuedeAtacar = (crl.AtaquesRestantesEnTurno > 0) && !quitarTodasRemarcadas;
+			}
+                
         }
     }
 
@@ -159,12 +174,58 @@ public class ControladorJugador
     {
         PararControlJugadores();
         Controlador.Instance.StopTheTimer();
-        new GameOverCommand(jugador).AñadirAlaCola();
+		new MuerteJugadorCommand (jugador).AñadirAlaCola ();
+		if (jugador.Area.Equals ("Low"))
+			new GameOverCommand (jugador).AñadirAlaCola ();
+		else {
+			Jugador ganador = OtroJugador (jugador);
+			Carta carta = ObtenerCartaPremio ();
+			List<Item> items = ObtenerItemsPremio ();
+			AñadirPremioJugador (ganador,carta,items);
+			int exp = AñadirExperienciaJugador (ganador);
+			BaseDatos.Instance.ActualizarJugadorBaseDatos (carta != null);
+			new PremioPartidaCommand (jugador,carta,items,exp).AñadirAlaCola ();
+		}
+			
     }
+
+	private Carta ObtenerCartaPremio(){
+		
+		Carta carta = null;
+		System.Random rnd = new System.Random ();
+		if(rnd.Next(0,2) == 0)
+			carta = BaseDatos.Instance.GenerarCartasAleatorias (1)[0];
+		return carta;
+	}
+
+	private List<Item> ObtenerItemsPremio(){
+
+		List<Item> items = BaseDatos.Instance.GenerarItemsAleatorios (3);
+		return items;
+	}
+
+	private void AñadirPremioJugador(Jugador jugador,Carta carta, List<Item> items){
+		if (carta != null)
+			jugador.AñadirCarta (carta);
+		foreach (Item item in items) {
+			jugador.AñadirItem (item);
+		}
+	}
+
+	private int AñadirExperienciaJugador(Jugador jugador){
+		System.Random rnd = new System.Random ();
+		int exp = rnd.Next (5, 15);
+		jugador.Experiencia += exp; 
+		if (jugador.Experiencia >= 100) {
+			jugador.Experiencia -= 100;
+			jugador.Nivel += 1;
+		}
+		return exp;
+	}
 
     public void PararControlJugadores()
     {
-        foreach (Jugador player in Players.Instance.GetPlayers())
+		foreach (Jugador player in BaseDatos.Instance.GetPlayers())
         {
             AreaJugador(player).ControlActivado = false;
         }
@@ -172,12 +233,26 @@ public class ControladorJugador
 
     public bool CartaOCriaturaDelJugador(string tagCartaOCriatura)
     {
-        return _jugadorActual.gameObject.tag.Substring(0,3).Equals(tagCartaOCriatura.Substring(0, 3));
+        return _jugadorActual.Area.Substring(0,3).Equals(tagCartaOCriatura.Substring(0, 3));
     }
+
+	public bool SePuedeAtacarJugadorDeCara(int idJugador){
+		Jugador jugador = Controlador.Instance.Local.ID == idJugador ? Controlador.Instance.Local : Controlador.Instance.Enemigo;
+		return jugador.NumEntesEnLaMesa () == 0;
+	}
+
+	public void AtacarJugador(Criatura atacante,  Jugador jugadorObjetivo)
+	{
+		atacante.AtaquesRestantesEnTurno--;
+		new CreatureAttackCommand(jugadorObjetivo.ID, atacante.ID, atacante.Ataque,jugadorObjetivo.Defensa).AñadirAlaCola();
+		jugadorObjetivo.Defensa -= atacante.Ataque;
+		if(JugadorMuerto(jugadorObjetivo))
+			MuerteJugador(jugadorObjetivo);
+	}
 
     public Jugador OtroJugador(Jugador jugador)
     {
-        return Players.Instance.GetPlayers()[0] == jugador ? Players.Instance.GetPlayers()[1] : Players.Instance.GetPlayers()[0];
+		return BaseDatos.Instance.Local == jugador ? BaseDatos.Instance.Enemigo : BaseDatos.Instance.Local;
     }
 
     /// <summary>
@@ -187,16 +262,15 @@ public class ControladorJugador
     /// <param name="carta"></param>
     public void RestarManaCarta(Jugador jugador, Carta carta)
     {
-        jugador.ManaRestante -= carta.CosteManaActual;
-        //ActualizarManaJugador(jugador);
+		jugador.ManaRestante -= carta.CosteManaActual;
+		//jugador.ManaEnEsteTurno -= carta.CosteManaActual;
+		//jugador.ManaRestante = jugador.ManaEnEsteTurno;
     }
 
-   public void QuitarVidaJugador(int valorAtaque)
+	public void QuitarVidaJugador(Jugador jugadorObjetivo,int valorAtaque)
     {
-        //TODO quitar vida al jugador, se haria jugadorObjetivo.Defensa -= objetivo.Defensa
-        Jugador jugadorObjetivo = OtroJugador(JugadorActual);
+		new DealDamageCommand(jugadorObjetivo.ID, valorAtaque, jugadorObjetivo.Defensa).AñadirAlaCola();
         jugadorObjetivo.Defensa -= valorAtaque;
-        new DealDamageCommand(jugadorObjetivo.ID, valorAtaque, jugadorObjetivo.Defensa).AñadirAlaCola();
         if (JugadorMuerto(jugadorObjetivo))
             MuerteJugador(jugadorObjetivo);
     }
@@ -217,5 +291,9 @@ public class ControladorJugador
         //Mostramos la mano del nuevo jugador actual
         AreaJugador(JugadorActual).manoVisual.MostrarMano();
     }
+
+	public void Clear(){
+		instance = null;
+	}
 
 }

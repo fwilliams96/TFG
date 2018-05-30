@@ -6,8 +6,6 @@ using UnityEngine.EventSystems;
 
 public class RopeTimer : MonoBehaviour, IEventSystemHandler
 {
-    public GameObject RopeGameObject;
-    public Slider RopeSlider;
 	public float TimeForOneTurn;
     public float RopeBurnTime;
     public Text TimerText;
@@ -21,12 +19,6 @@ public class RopeTimer : MonoBehaviour, IEventSystemHandler
 
     void Awake()
     {
-        if (RopeGameObject != null)
-        {
-            RopeSlider.minValue = 0;
-            RopeSlider.maxValue = RopeBurnTime;
-            RopeGameObject.SetActive(false);
-        }
     }
 
     public void StartTimer()
@@ -34,8 +26,6 @@ public class RopeTimer : MonoBehaviour, IEventSystemHandler
         timeTillZero = TimeForOneTurn;
 		counting = true;
         ropeIsBurning = false;
-        if (RopeGameObject!=null)
-            RopeGameObject.SetActive(false);
 	} 
 
 	public void StopTimer()
@@ -52,26 +42,16 @@ public class RopeTimer : MonoBehaviour, IEventSystemHandler
             if (TimerText!=null)
                 TimerText.text = ToString();
 
-            if (RopeGameObject != null)
+            // check for rope
+            if (timeTillZero <= RopeBurnTime && !ropeIsBurning)
             {
-                // check for rope
-                if (timeTillZero <= RopeBurnTime && !ropeIsBurning)
-                {
-                    ropeIsBurning = true;
-                    RopeGameObject.SetActive(true);
-                }
-                // rope update
-                if (ropeIsBurning)
-                {
-                    RopeSlider.value = timeTillZero;
-                }
+                ropeIsBurning = true;
             }
 
             // check for TimeExpired
 			if(timeTillZero<=0)
 			{
 				counting = false;
-                RopeGameObject.SetActive(false);
                 TimerExpired.Invoke();
 			}
 		}

@@ -7,13 +7,22 @@ public class Ente : ICharacter
 {
     #region Atributos
     // PUBLIC FIELDS
-    public CardAsset assetCarta;
+    private CartaAsset assetCarta;
+	private string area;
     public EfectoEnte efecto;
     private int idCriatura;
     public bool Frozen = false;
     #endregion
     #region Getters/Setters
     // property from ICharacter interface
+	public CartaAsset AssetCarta{
+		get{
+			return assetCarta;
+		}
+		set{
+			assetCarta = value;
+		}
+	}
     public int ID
     {
         get { return idCriatura; }
@@ -58,26 +67,35 @@ public class Ente : ICharacter
         set;
     }
 
+	public string Area
+	{
+		get
+		{
+			return area;
+		}
+	}
+
     #endregion
 
     // CONSTRUCTOR
-    public Ente(CardAsset ca)
+    public Ente(string area,CartaAsset ca)
     {
+		this.area = area;
         this.assetCarta = ca;
         defensaBase = ca.Defensa;
         Defensa = ca.Defensa;
         ataqueBasico = ca.Ataque;
-        attacksForOneTurn = ca.AtaquesPorTurno;
+        //attacksForOneTurn = ca.AtaquesPorTurno;
         // AttacksLeftThisTurn is now equal to 0
-        if (ca.Charge)
-            AtaquesRestantesEnTurno = attacksForOneTurn;
+        //if (ca.Charge)
+            //AtaquesRestantesEnTurno = attacksForOneTurn;
         idCriatura = IDFactory.GetUniqueID();
-        if (ca.CreatureScriptName != null && ca.CreatureScriptName != "")
+        /*if (ca.CreatureScriptName != null && ca.CreatureScriptName != "")
         {
             //TODO le estamos pasando null de momento, este null referencia al jugador dueño de la criatura
             efecto = System.Activator.CreateInstance(System.Type.GetType(ca.CreatureScriptName), new System.Object[] { null, this, ca.specialCreatureAmount }) as EfectoEnte;
             efecto.RegisterEventEffect();
-        }
+        }*/
         Recursos.EntesCreadosEnElJuego.Add(idCriatura, this);
     }
 

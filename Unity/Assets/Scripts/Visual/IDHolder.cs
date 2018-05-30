@@ -26,4 +26,8 @@ public class IDHolder : MonoBehaviour {
     {
         allIDHolders.Clear();
     }
+
+	public static void EliminarElemento(IDHolder elemento){
+		allIDHolders.Remove (elemento);
+	}
 }

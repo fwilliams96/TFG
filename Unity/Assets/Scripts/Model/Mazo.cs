@@ -2,13 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Mazo : MonoBehaviour {
+public class Mazo {
+	public List<System.Object> CartasEnMazo;
 
-    public List<CardAsset> CartasEnMazo = new List<CardAsset>();
+    public Mazo()
+    {
+		CartasEnMazo = new List<System.Object>();
+    }
 
-    void Awake()
+    public void Mezclar()
     {
         CartasEnMazo.Shuffle();
     }
-	
+
+
+
 }

@@ -1,0 +1,18 @@
+<carta>
+  <delante>
+    <tipo>Agua</tipo>
+    <titulo>Sirenita</titulo>
+    <efecto></efecto>
+    <nombreImagen>sirenita</nombreImagen>
+    <descripcion>Sirena con sed de venganza</descripcion>
+    <evolucion>1</evolucion>
+    <mana>2</mana>
+    <ataque>650</ataque>
+    <defensa>420</defensa>
+  </delante>
+  <detras>
+    <simbolo>cuadrado.png</simbolo>
+    <elemento>trebol.png</elemento>
+    <elemento2>pocion.png</elemento2>
+  </detras>
+</carta>

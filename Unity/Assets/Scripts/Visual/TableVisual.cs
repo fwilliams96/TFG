@@ -51,9 +51,11 @@ public class TableVisual : MonoBehaviour
     // CURSOR/MOUSE DETECTION
     void Update()
     {
+		if (Input.touchCount <= 0)
+			return;
         // we need to Raycast because OnMouseEnter, etc reacts to colliders on cards and cards "cover" the table
         RaycastHit[] hits;
-        hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition), 30f);
+		hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.GetTouch(0).position), 30f);
         bool haPasadoPorColider = false;
         foreach (RaycastHit h in hits)
         {
@@ -62,62 +64,61 @@ public class TableVisual : MonoBehaviour
         }
         cursorSobreEstaMesa = haPasadoPorColider;
     }
-    public void AñadirMagica(CardAsset ca, int idUnico, int indiceSlot)
+    public void AñadirMagica(CartaAsset ca, int idUnico, int indiceSlot)
     {
-        Debug.Log("Añadir ente magica");
-        //Quaternion.Euler(new Vector3(0f, -179f, 0f))
+        //Debug.Log("Añadir ente magica");
         GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.MagicaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
-        creature.GetComponent<MagicEffectVisual>().ColocarMagicaBocaAbajo(0f);
+		creature.GetComponent<MagicEffectVisual>().ColocarMagicaBocaAbajo(0f);
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
-    //TODO mejorar codigo
-    public void AñadirCriaturaDefensa(CardAsset ca, int idUnico, int indiceSlot)
+		
+    public void AñadirCriaturaDefensa(CartaAsset ca, int idUnico, int indiceSlot)
     {
-        Debug.Log("Añadir ente criatura como defensa");
-        //TODO cuando sea una carta magica no entrara en esta funcion
-        // create a new creature from prefab
+        //Debug.Log("Añadir ente criatura como defensa");
         GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
-        creature.GetComponent<CreatureAttackVisual>().ColocarCriaturaEnDefensa(DatosGenerales.Instance.CardTransitionTimeFast);
-        /*float x = creature.transform.eulerAngles.x;
-        float y = creature.transform.eulerAngles.y;
-        float z = creature.transform.eulerAngles.z + 90;
-        creature.transform.DORotate(new Vector3(x, y, z), 0.1f);*/
-        // apply the look from CardAsset
+		creature.GetComponent<CreatureAttackVisual>().ColocarCriaturaEnDefensa(Settings.Instance.CardTransitionTimeFast);
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 
-    public void AñadirCriaturaAtaque(CardAsset ca, int idUnico, int indiceSlot)
+    public void AñadirCriaturaAtaque(CartaAsset ca, int idUnico, int indiceSlot)
     {
-        Debug.Log("Añadir ente criatura como ataque");
+        //Debug.Log("Añadir ente criatura como ataque");
         // create a new creature from prefab
         GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
         // apply the look from CardAsset
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 
-    private void ConfigurarEnte(GameObject criaturaOMagica, CardAsset ca, int idUnico, int indiceSlot)
+	private void ConfigurarEnte(GameObject ente, CartaAsset ca, int idUnico, int indiceSlot)
     {
-        OneCreatureManager manager = criaturaOMagica.GetComponent<OneCreatureManager>();
-        manager.cardAsset = ca;
+		string tagEnte ="";
+		OneEnteManager manager = null;
+		if (ente.name.Contains ("Magica")) {
+			tagEnte = "Magica";
+			manager = ente.GetComponent<OneMagicaManager> ();
+		}else{
+			tagEnte = "Criatura";
+			manager = ente.GetComponent<OneCreatureManager>();
+		}
+        manager.CartaAsset = ca;
         manager.LeerDatosAsset();
-        // add tag according to owner
-        foreach (Transform t in criaturaOMagica.GetComponentsInChildren<Transform>())
-            t.tag = owner.ToString() + "Ente";
+        foreach (Transform t in ente.GetComponentsInChildren<Transform>())
+			t.tag = owner.ToString() + tagEnte;
         // parent a new creature gameObject to table slots
-        criaturaOMagica.transform.SetParent(slots.transform);
+        ente.transform.SetParent(slots.transform);
         // add a new creature to the list
         // Debug.Log ("insert index: " + index.ToString());
-        CreaturesOnTable.Insert(indiceSlot, criaturaOMagica);
+        CreaturesOnTable.Insert(indiceSlot, ente);
         // let this creature know about its position
-        WhereIsTheCardOrEntity w = criaturaOMagica.GetComponent<WhereIsTheCardOrEntity>();
+        WhereIsTheCardOrEntity w = ente.GetComponent<WhereIsTheCardOrEntity>();
         w.Slot = indiceSlot;
-        if (criaturaOMagica.tag.Contains("Low"))
+        if (ente.tag.Contains("Low"))
             //PETA
             w.EstadoVisual = VisualStates.MesaJugadorAbajo;
         else
             w.EstadoVisual = VisualStates.MesaJugadorArriba;
         // add our unique ID to this creature
-        IDHolder id = criaturaOMagica.AddComponent<IDHolder>();
+        IDHolder id = ente.AddComponent<IDHolder>();
         id.UniqueID = idUnico;
 
         ActualizarSlots();
@@ -170,6 +171,7 @@ public class TableVisual : MonoBehaviour
     {
         float posX;
         if (CreaturesOnTable.Count > 0)
+			//posX = (slots.Children[CreaturesOnTable.Count - 1].transform.localPosition.x - slots.Children[0].transform.localPosition.x) / 2f;
             posX = (slots.Children[0].transform.localPosition.x - slots.Children[CreaturesOnTable.Count - 1].transform.localPosition.x) / 2f;
         else
             posX = 0f;
@@ -184,7 +186,9 @@ public class TableVisual : MonoBehaviour
     void MoverSlotCartas()
     {
         foreach (GameObject g in CreaturesOnTable)
+		//for (int i = CreaturesOnTable.Count; i > 0;i--)
         {
+			//GameObject g = CreaturesOnTable [i];
             g.transform.DOLocalMoveX(slots.Children[CreaturesOnTable.IndexOf(g)].transform.localPosition.x, 0.3f);
             // apply correct sorting order and HandSlot value for later 
             // TODO: figure out if I need to do something here:

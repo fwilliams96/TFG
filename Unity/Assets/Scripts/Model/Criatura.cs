@@ -7,6 +7,7 @@ public class Criatura : Ente, ICharacter
 {
     #region Atributos
     private PosicionCriatura posicionCriatura;
+	private bool haAtacado;
     #endregion
     #region Getters/Setters
     public PosicionCriatura PosicionCriatura
@@ -20,12 +21,24 @@ public class Criatura : Ente, ICharacter
             posicionCriatura = value;
         }
     }
+	public bool HaAtacado
+	{
+		get
+		{
+			return haAtacado;
+		}
+		set
+		{
+			haAtacado = value;
+		}
+	}
     #endregion
 
     // CONSTRUCTOR
-    public Criatura(CardAsset ca, PosicionCriatura posicionCriatura) : base(ca)
+    public Criatura(string area,CartaAsset ca, PosicionCriatura posicionCriatura) : base(area,ca)
     {
         this.posicionCriatura = posicionCriatura;
+		this.haAtacado = false;
     }
 
 }

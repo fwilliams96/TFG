@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "242513813512",
+    "firebase_url": "https://battle-galaxy-cda70.firebaseio.com",
+    "project_id": "battle-galaxy-cda70",
+    "storage_bucket": "battle-galaxy-cda70.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:242513813512:android:8741255f00ae85ac",
+        "android_client_info": {
+          "package_name": "com.BattleGalaxy.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "242513813512-l0dcl3ib2gmmi55l1n052622gmie1ji1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxsZfdgr_h9zQE1yrfD7a-REnq_pNv3mg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

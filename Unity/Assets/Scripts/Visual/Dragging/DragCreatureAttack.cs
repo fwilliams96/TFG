@@ -43,7 +43,7 @@ public class DragCreatureAttack : DraggingActions {
             try
             {
 
-                return base.SePuedeArrastrar && manager.PuedeAtacar && Controlador.Instance.EstaEnPosicionAtaque(GetComponentInParent<IDHolder
+				return base.SePuedeControlar && manager.PuedeAtacar && Controlador.Instance.EstaEnPosicionAtaque(GetComponentInParent<IDHolder
                     >().UniqueID);
             }
             catch (System.Exception e)
@@ -62,6 +62,7 @@ public class DragCreatureAttack : DraggingActions {
         sr.enabled = true;
         // enable line renderer to start drawing the line.
         lr.enabled = true;
+		reset = false;
     }
 
     public override void OnDraggingInUpdate()
@@ -100,29 +101,37 @@ public class DragCreatureAttack : DraggingActions {
         if (Target != null)
         {
             int targetID = Target.GetComponent<IDHolder>().UniqueID;
-            Debug.Log("Target ID: " + targetID);
-            if (Recursos.EntesCreadosEnElJuego[targetID] != null)
-            {
-                // if targeted creature is still alive, attack creature
-                Controlador.Instance.AtacarCriatura(GetComponentInParent<IDHolder>().UniqueID, targetID);
-                Debug.Log("Attacking " + Target);
-            }
-
+			if (targetID == Controlador.Instance.Local.ID || targetID == Controlador.Instance.Enemigo.ID) {
+				if (Controlador.Instance.SePuedeAtacarJugadorDeCara (targetID)) {
+					Controlador.Instance.AtacarJugador (GetComponentInParent<IDHolder> ().UniqueID, targetID);
+				} else {
+					new ShowMessageCommand ("Todavía tienes enemigos cerca...", 2.0f).AñadirAlaCola ();
+				}
+			} else {
+				//Debug.Log("Target ID: " + targetID);
+				if (Recursos.EntesCreadosEnElJuego[targetID] != null)
+				{
+					Controlador.Instance.AtacarEnte(GetComponentInParent<IDHolder>().UniqueID, targetID);
+				}
+			}
         }
-        // not a valid target, return
-        if (tag.Contains("Low"))
-            dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorAbajo;
-        else
-            dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorArriba;
-        dondeEstaCartaOCriatura.SetearOrdenCriatura();
-
-        // return target and arrow to original position
-        transform.localPosition = Vector3.zero;
-        sr.enabled = false;
-        lr.enabled = false;
-        triangleSR.enabled = false;
-        
+		resetDragg ();
     }
+
+	public override void resetDragg(){
+		if (tag.Contains("Low"))
+			dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorAbajo;
+		else
+			dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorArriba;
+		dondeEstaCartaOCriatura.SetearOrdenCriatura();
+
+		// return target and arrow to original position
+		transform.localPosition = Vector3.zero;
+		sr.enabled = false;
+		lr.enabled = false;
+		triangleSR.enabled = false;
+		reset = true;
+	}
 
     // NOT USED IN THIS SCRIPT
     protected override bool DragSuccessful()

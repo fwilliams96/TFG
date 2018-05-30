@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ControladorEnte
 {
@@ -26,26 +27,97 @@ public class ControladorEnte
         }
     }
 
+	public void QuitarVidaCriatura(Criatura objetivo,int daño)
+	{
+		new DealDamageCommand(objetivo.ID, daño,objetivo.Defensa).AñadirAlaCola();
+		objetivo.Defensa -= daño;
+		if(CriaturaMuerta(objetivo))
+			MuerteEnte(objetivo.ID);
+	}
+
     /// <summary>
-    /// Permite atacar un ente a partir de otro ente
+    /// Permite atacar a una criatura a partir de otro ente
     /// </summary>
     /// <param name="idAtacante"></param>
     /// <param name="idObjetivo"></param>
-    public void QuitarVidaEnte(Ente atacante,  Criatura objetivo)
+    public void AtacarCriatura(Criatura atacante,  Criatura objetivo)
     {
         atacante.AtaquesRestantesEnTurno--;
-        objetivo.Defensa -= objetivo.Ataque;
-        new CreatureAttackCommand(objetivo.ID, atacante.ID, objetivo.Ataque, atacante.Ataque, atacante.Defensa, objetivo.Defensa).AñadirAlaCola();
-        if(EnteMuerto(objetivo))
+		new CreatureAttackCommand(objetivo.ID, atacante.ID, atacante.Ataque,objetivo.Defensa).AñadirAlaCola();
+		objetivo.Defensa -= atacante.Ataque;
+		if(CriaturaMuerta(objetivo))
             MuerteEnte(objetivo.ID);
     }
 
-    public void ActivarEfectoMagica(int idMagica)
+	public void AtacarMagica(Criatura atacante,  Magica objetivo)
+	{
+		atacante.AtaquesRestantesEnTurno--;
+		new CreatureAttackCommand(objetivo.ID, atacante.ID, atacante.Ataque, objetivo.Defensa).AñadirAlaCola();
+		//MuerteEnte(objetivo.ID);
+	}
+
+	public void ActivarEfectoMagica(int idMagica){
+		ActivarEfectoMagica (idMagica, -1);
+	}
+
+	public void ActivarEfectoMagica(int idMagica, int idAtacante)
     {
-        Magica magica = (Magica)Recursos.EntesCreadosEnElJuego[idMagica];
-        magica.EfectoActivado = true;
+		Criatura criaturaAtacante = null;
+		Jugador jugador = null;
+		Magica magica = (Magica)Recursos.EntesCreadosEnElJuego[idMagica];
+		if (idAtacante != -1) {
+			criaturaAtacante = (Criatura)Recursos.EntesCreadosEnElJuego [idAtacante];
+			AtacarMagica (criaturaAtacante, magica);
+		}
+        
         new ActivateEffectCommand(idMagica).AñadirAlaCola();
+		switch (magica.AssetCarta.Efecto) {
+			case Efecto.Destructor:
+				jugador = Controlador.Instance.ObtenerDueñoEnte (magica);
+				DamageAllCreatures(Controlador.Instance.OtroJugador(jugador),100);
+				break;
+			case Efecto.Espejo:
+				DealDamageToTarget(criaturaAtacante,criaturaAtacante.AssetCarta.Ataque);
+				break;
+			case Efecto.Mana:
+				jugador = Controlador.Instance.ObtenerDueñoEnte (magica);
+				GiveManaBonus(jugador,2);
+				break;
+			case Efecto.Vida:
+				//TODO por implementar, dar vida a todas las criaturas
+				jugador = Controlador.Instance.ObtenerDueñoEnte (magica);
+				GiveHealth (jugador, 100);
+				break;
+			default:
+				break;
+		}
+
+		//MuerteEnte(magica.ID);
     }
+
+	public void DamageAllCreatures(Jugador jugador, int daño)
+	{
+		List<Ente> CreaturesToDamage = jugador.EntesEnLaMesa();
+		foreach (Ente cl in CreaturesToDamage)
+		{
+			if (cl.GetType () == typeof(Criatura)) {
+				Controlador.Instance.DañarCriatura ((Criatura)cl,daño);
+			}
+		}
+	}
+
+	public  void GiveHealth(Jugador jugador, int vida){
+		
+	}
+	public void GiveManaBonus(Jugador jugador, int mana)
+	{
+		jugador.ConseguirManaExtra(mana);
+	}
+
+	public void DealDamageToTarget(Criatura criatura, int daño)
+	{
+		Controlador.Instance.DañarCriatura (criatura, daño);
+	}
 
     public void CambiarPosicionCriatura(int idCriatura)
     {
@@ -67,8 +139,8 @@ public class ControladorEnte
         Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
         if (ente.GetType() == typeof(Magica))
         {
-            //Solo mostraremos la opcion activar efecto si no lo ha activado aun
-            if (!((Magica)ente).EfectoActivado)
+			//Si la magica es de tipo trampa no debe salir la opcion de activar voluntariamente
+			if (CartaPreparada(ente) && !EsMagicaTrampa(ente))
             {
                 AccionesPopUp.Instance.MostrarAccionEfecto();
                 AccionesPopUp.Instance.RegistrarCallBack(ActivarEfectoMagica, idEnte);
@@ -77,9 +149,10 @@ public class ControladorEnte
         else
         {
             Criatura criatura = (Criatura)ente;
-            if (criatura.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
+			if (criatura.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
             {
-                AccionesPopUp.Instance.MostrarAccionDefensa();
+				if(!CriaturaHaAtacado(criatura))
+                	AccionesPopUp.Instance.MostrarAccionDefensa();
             }
             else
             {
@@ -89,17 +162,31 @@ public class ControladorEnte
         }
     }
 
-    public void MuerteEnte(int idCriatura)
+	public bool EsMagicaTrampa(Ente ente){
+		Magica magica = (Magica)ente;
+		//TODO aqui añadire mas magicas de tipo trampa
+		return magica.AssetCarta.Efecto.Equals (Efecto.Espejo);
+	}
+
+	public bool CartaPreparada(Ente ente){
+		GameObject g = IDHolder.GetGameObjectWithID(ente.ID);
+		return g.GetComponent<OneEnteManager> ().PuedeAtacar;
+	}
+
+	public bool CriaturaHaAtacado(Criatura criatura){
+		return criatura.HaAtacado;
+	}
+
+    public void MuerteEnte(int idEnte)
     {
-        //TODO mejorar estas lineas que vuelven a coger la criatura a partir de su id
-        Ente ente = Recursos.EntesCreadosEnElJuego[idCriatura];
-        Jugador jugadorObjetivo = Controlador.Instance.OtroJugador(Controlador.Instance.JugadorActual);
+        Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
+		Jugador jugadorObjetivo = Controlador.Instance.ObtenerDueñoEnte (ente);
         jugadorObjetivo.EliminarEnteMesa(ente);
         ente.Morir();
-        new CreatureDieCommand(idCriatura, jugadorObjetivo).AñadirAlaCola();
+        new CreatureDieCommand(idEnte, jugadorObjetivo).AñadirAlaCola();
     }
-
-    public bool EnteMuerto(Criatura objetivo)
+		
+    public bool CriaturaMuerta(Criatura objetivo)
     {
         return objetivo.Defensa <= 0;
     }
@@ -122,5 +209,9 @@ public class ControladorEnte
         Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
         return ente.GetType() == typeof(Magica);
     }
+
+	public void Clear(){
+		instance = null;
+	}
 
 }

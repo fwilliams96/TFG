@@ -34,23 +34,22 @@ public class PlayerPortraitVisual : MonoBehaviour {
 
     }
 
-    public void HacerDaño(int amount, int healthAfter)
+    public void HacerDaño(int daño, int vida)
     {
-        if (amount > 0)
+        if (daño > 0)
         {
-            DamageEffect.CreateDamageEffect(transform.position, amount);
-            HealthText.text = healthAfter.ToString();
+            DamageEffect.CreateDamageEffect(transform.position, vida,daño);
+			HealthText.text = (vida-daño).ToString();
         }
     }
 
     public void Explotar()
     {
         Instantiate(DatosGenerales.Instance.ExplosionPrefab, transform.position, Quaternion.identity);
-        Sequence s = DOTween.Sequence();
-        s.PrependInterval(2f);
-        s.OnComplete(() => DatosGenerales.Instance.GameOverPanel.SetActive(true));
-
-    }
+		Sequence s = DOTween.Sequence();
+		s.PrependInterval(2f);
+		s.OnComplete(() => Comandas.Instance.CompletarEjecucionComanda ());
+	}
 
     // Use this for initialization
     void Start()

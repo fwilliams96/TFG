@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 using DG.Tweening;
+using System.Collections.Generic;
+using UnityEngine.UI;
+
+
 public enum PosicionCriatura { ATAQUE, DEFENSA };
 
 // this class will take care of switching turns and counting down time until the turn expires
@@ -33,12 +37,29 @@ public class Controlador : MonoBehaviour
             controladorJugador.JugadorActual = value;
         }
     }
+
+    public Jugador Local
+    {
+        get
+        {
+            return BaseDatos.Instance.Local;
+        }
+    }
+
+    public Jugador Enemigo
+    {
+        get
+        {
+            return BaseDatos.Instance.Enemigo;
+        }
+    }
     #endregion
 
     // METHODS
     void Awake()
     {
         Instance = this;
+		BaseDatos.Instance.CrearJugadorEnemigo ();
         timer = GetComponent<RopeTimer>();
         controladorJugador = ControladorJugador.Instance;
         controladorEnte = ControladorEnte.Instance;
@@ -49,7 +70,6 @@ public class Controlador : MonoBehaviour
 
     void Start()
     {
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
         InicializacionJuego();
     }
 
@@ -57,7 +77,7 @@ public class Controlador : MonoBehaviour
     {
         //Debug.Log("In TurnManager.OnGameStart()");
 
-        foreach (Jugador p in Players.Instance.GetPlayers())
+        foreach (Jugador p in BaseDatos.Instance.GetPlayers())
         {
             controladorJugador.InicializarValoresJugador(p);
             controladorJugador.ActualizarManaJugador(p);
@@ -65,8 +85,8 @@ public class Controlador : MonoBehaviour
 
         Sequence s = DOTween.Sequence();
         //mueve los jugadores del centro a su posición
-        PlayerArea areaJugador = controladorJugador.AreaJugador(Players.Instance.GetPlayers()[0]);
-        PlayerArea areaJugador2 = controladorJugador.AreaJugador(Players.Instance.GetPlayers()[1]);
+		PlayerArea areaJugador = controladorJugador.AreaJugador(BaseDatos.Instance.Local);
+		PlayerArea areaJugador2 = controladorJugador.AreaJugador(BaseDatos.Instance.Enemigo);
         s.Append(areaJugador.Personaje.transform.DOMove(areaJugador.PosicionPersonaje.position, 1f).SetEase(Ease.InQuad));
         s.Insert(0f, areaJugador2.Personaje.transform.DOMove(areaJugador2.PosicionPersonaje.position, 1f).SetEase(Ease.InQuad));
         //espera 3 segundos antes de ejecutar el onComplete
@@ -77,7 +97,7 @@ public class Controlador : MonoBehaviour
             //int rnd = Random.Range(0,2);  // 2 is exclusive boundary
             int rnd = 1;
             // Debug.Log(Player.Players.Length);
-            Jugador whoGoesFirst = Players.Instance.GetPlayers()[rnd];
+			Jugador whoGoesFirst = BaseDatos.Instance.Local;
             // Debug.Log(whoGoesFirst);
             Jugador whoGoesSecond = OtroJugador(whoGoesFirst);
             // Debug.Log(whoGoesSecond);
@@ -99,15 +119,13 @@ public class Controlador : MonoBehaviour
         //if (Input.GetKeyDown(KeyCode.Space))
         //EndTurn();
     }
-
-    public void EndTurnTest()
-    {
-        timer.StopTimer();
-        timer.StartTimer();
-    }
-
+		
     public void EndTurn()
     {
+		if (OpcionesObjeto.PrevisualizandoAlgunaCarta())
+			OpcionesObjeto.PararTodasPrevisualizaciones();
+		if (AccionesPopUp.Instance.EstaActivo())
+			AccionesPopUp.Instance.OcultarPopup ();
         // stop timer
         timer.StopTimer();
         // send all commands in the end of current player`s turn
@@ -137,10 +155,11 @@ public class Controlador : MonoBehaviour
 
     public void ActivarBotonFinDeTurno(Jugador P)
     {
-        if (SePermiteControlarElJugador(P))
-            DatosGenerales.Instance.EndTurnButton.interactable = true;
-        else
-            DatosGenerales.Instance.EndTurnButton.interactable = false;
+		
+		if (SePermiteControlarElJugador (P))
+			GameObject.FindGameObjectWithTag ("BotonFinTurno").GetComponent<Button> ().interactable = true;
+		else
+			GameObject.FindGameObjectWithTag ("BotonFinTurno").GetComponent<Button> ().interactable = false;
 
     }
 
@@ -170,21 +189,15 @@ public class Controlador : MonoBehaviour
     {
         if (jugador.NumCartasMazo() > 0)
         {
-            if (jugador.NumCartasMano() < controladorJugador.AreaJugador(jugador).manoVisual.slots.Children.Length)
+            if (jugador.NumCartasMano() < 4)
             {
-                // 1) logic: add card to hand
-                Carta newCard = new Carta(jugador.CartasEnElMazo()[0]);
+                //Carta newCard = new Carta(jugador.CartasEnElMazo()[0]);
+				//Esto nos devuelve la carta actual del mazo que se recorre infinitamente
+				Carta newCard = (Carta)jugador.CartaActual();
                 jugador.AñadirCartaMano(0, newCard);
                 // Debug.Log(hand.CardsInHand.Count);
-                // 2) logic: remove the card from the deck
-                jugador.EliminarCartaMazo(0);
-                // 2) create a command
                 new DrawACardCommand(jugador.CartasEnLaMano()[0], jugador, fast, fromDeck: true).AñadirAlaCola();
             }
-        }
-        else
-        {
-            // there are no cards in the deck, take fatigue damage.
         }
 
     }
@@ -199,7 +212,8 @@ public class Controlador : MonoBehaviour
         if (jugador.NumCartasMano() < controladorJugador.AreaJugador(jugador).manoVisual.slots.Children.Length)
         {
             // 1) logic: add card to hand
-            Carta newCard = new Carta(assetCarta);
+            //ELIMINATE
+            Carta newCard = new Carta(null);
             jugador.AñadirCartaMano(0, newCard);
             // 2) send message to the visual Deck
             new DrawACardCommand(jugador.CartasEnLaMano()[0], jugador, fast: true, fromDeck: false).AñadirAlaCola();
@@ -212,9 +226,9 @@ public class Controlador : MonoBehaviour
     /// </summary>
     /// <param name="UniqueID"></param>
     /// <param name="tablePos"></param>
-    public void JugarMagicaMano(int UniqueID, int tablePos)
+    public void JugarMagicaMano(Jugador jugador,int UniqueID, int tablePos)
     {
-        JugarMagicaMano(Recursos.CartasCreadasEnElJuego[UniqueID], tablePos);
+		JugarMagicaMano(jugador,BaseDatos.Instance.Cartas[UniqueID], tablePos);
     }
 
     /// <summary>
@@ -222,11 +236,11 @@ public class Controlador : MonoBehaviour
     /// </summary>
     /// <param name="magicaJugada"></param>
     /// <param name="tablePos"></param>
-    public void JugarMagicaMano(Carta magicaJugada, int tablePos)
+    public void JugarMagicaMano(Jugador jugador,Carta magicaJugada, int tablePos)
     {
-        RestarManaCarta(JugadorActual, magicaJugada);
-        Magica nuevaMagica = new Magica(magicaJugada.assetCarta);
-        JugarCarta(magicaJugada, nuevaMagica, tablePos);
+		RestarManaCarta(jugador, magicaJugada);
+		Magica nuevaMagica = new Magica(jugador.Area,magicaJugada.AssetCarta);
+		JugarCarta(jugador,magicaJugada, nuevaMagica, tablePos);
     }
 
     /// <summary>
@@ -235,9 +249,10 @@ public class Controlador : MonoBehaviour
     /// <param name="UniqueID"></param>
     /// <param name="tablePos"></param>
     /// <param name="posicionAtaque"></param>
-    public void JugarCartaMano(int UniqueID, int tablePos, bool posicionAtaque)
+    public void JugarCartaMano(Jugador jugador,int UniqueID, int tablePos, bool posicionAtaque)
     {
-        JugarCartaMano(Recursos.CartasCreadasEnElJuego[UniqueID], tablePos, posicionAtaque);
+        Debug.Log("Jugar carta mano: " + UniqueID);
+		JugarCartaMano(jugador,BaseDatos.Instance.Cartas[UniqueID], tablePos, posicionAtaque);
     }
 
     /// <summary>
@@ -246,12 +261,12 @@ public class Controlador : MonoBehaviour
     /// <param name="cartaJugada"></param>
     /// <param name="tablePos"></param>
     /// <param name="posicionAtaque"></param>
-    public void JugarCartaMano(Carta cartaJugada, int tablePos, bool posicionAtaque)
+    public void JugarCartaMano(Jugador jugador,Carta cartaJugada, int tablePos, bool posicionAtaque)
     {
         //ELIMINATE
-        RestarManaCarta(JugadorActual, cartaJugada);
-        Criatura newCreature = new Criatura(cartaJugada.assetCarta, posicionAtaque == true ? PosicionCriatura.ATAQUE : PosicionCriatura.DEFENSA);
-        JugarCarta(cartaJugada,newCreature, tablePos);
+		RestarManaCarta(jugador, cartaJugada);
+		Criatura newCreature = new Criatura(jugador.Area,cartaJugada.AssetCarta, posicionAtaque == true ? PosicionCriatura.ATAQUE : PosicionCriatura.DEFENSA);
+        JugarCarta(jugador,cartaJugada,newCreature, tablePos);
         
     }
 
@@ -261,19 +276,18 @@ public class Controlador : MonoBehaviour
     /// <param name="cartaJugada"></param>
     /// <param name="ente"></param>
     /// <param name="tablePos"></param>
-    private void JugarCarta(Carta cartaJugada,Ente ente, int tablePos)
+    private void JugarCarta(Jugador jugador,Carta cartaJugada,Ente ente, int tablePos)
     {
-        JugadorActual.AñadirEnteMesa(tablePos, ente);
+		jugador.AñadirEnteMesa(tablePos, ente);
         // no matter what happens, move this card to PlayACardSpot
-        new PlayAEntityCommand(cartaJugada, JugadorActual, tablePos, ente).AñadirAlaCola();
+		new PlayAEntityCommand(cartaJugada, jugador, tablePos, ente).AñadirAlaCola();
         //causa battlecry effect
         if (ente.efecto != null)
             ente.efecto.WhenACreatureIsPlayed();
         // remove this card from hand
-        JugadorActual.EliminarCartaMano(cartaJugada);
-        //ELIMINATE o sobra esto
-        //controladorJugador.ActualizarManaJugador(JugadorActual);
-        //MostrarCartasJugablesJugadorActual();
+		jugador.EliminarCartaMano(cartaJugada);
+		MostrarCartasJugablesJugador(jugador);
+
     }
 
     public void ActualizarManaJugador(Jugador jugador)
@@ -289,7 +303,7 @@ public class Controlador : MonoBehaviour
     // Muestra cartas jugables de la mano del jugador
     public void MostrarCartasJugablesJugador(Jugador jugador)
     {
-        controladorJugador.MostrarCartasJugablesJugador(jugador);
+		controladorJugador.ActualizarEstadoCartasJugadorActual(jugador);
     }
 
     public PlayerArea AreaJugador(Jugador jugador)
@@ -317,6 +331,10 @@ public class Controlador : MonoBehaviour
         controladorJugador.MostrarManoJugadorActual();
     }
 
+	public bool SePuedeAtacarJugadorDeCara(int idJugador){
+		return controladorJugador.SePuedeAtacarJugadorDeCara (idJugador);
+	}
+
     /***************************************** CARTA ****************************************************/
 
     /*public bool PuedeSerJugada
@@ -328,7 +346,7 @@ public class Controlador : MonoBehaviour
             bool fieldNotFull = true;
             // but if this is a creature, we have to check if there is room on board (table)
             //TODO Esto de momento sobrará porque todas las cartas ocuparan sitio en la mesa
-            if (assetCarta.Defensa > 0)
+            if (AssetCarta.Defensa > 0)
                 fieldNotFull = (jugador.NumCriaturasEnLaMesa() < DatosGenerales.Instance.NumMaximoCriaturasMesa);
             //Debug.Log("Card: " + ca.name + " has params: ownersTurn=" + ownersTurn + "fieldNotFull=" + fieldNotFull + " hasMana=" + (CurrentManaCost <= owner.ManaLeft));
             return nuestroTurno && fieldNotFull && (CosteManaActual <= jugador.ManaRestante);
@@ -358,35 +376,73 @@ public class Controlador : MonoBehaviour
         return controladorEnte.EsMagica(idEnte);
     }
 
-    public void AtacarCriatura(int idAtacante, int idObjetivo)
+	public Jugador ObtenerDueñoEnte(Ente ente){
+		Jugador jugador = null;
+		if (ente.Area.Equals ("Low"))
+			jugador = BaseDatos.Instance.Local;
+		else
+			jugador = BaseDatos.Instance.Enemigo;
+		return jugador;
+	}	
+
+	public void DañarCriatura(Criatura criaturaObjetivo,int daño){
+		Jugador objetivo = ObtenerDueñoEnte (criaturaObjetivo);
+		controladorEnte.QuitarVidaCriatura(criaturaObjetivo,daño);
+		if (criaturaObjetivo.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
+			controladorJugador.QuitarVidaJugador(objetivo,daño);
+		else if (criaturaObjetivo.PosicionCriatura.Equals(PosicionCriatura.DEFENSA) && controladorEnte.CriaturaMuerta(criaturaObjetivo))
+			controladorJugador.QuitarVidaJugador(objetivo,criaturaObjetivo.Defensa);
+	}
+
+	public void DañarCriatura(Criatura criaturaAtacante, Criatura criaturaObjetivo){
+		DañarCriatura (criaturaObjetivo,criaturaAtacante.Ataque);
+	}
+
+	public void AtacarJugador(int idCriaturaAtacante, int idJugadorObjetivo){
+		Criatura atacante = (Criatura)Recursos.EntesCreadosEnElJuego[idCriaturaAtacante];
+		Jugador jugador = Controlador.Instance.Local.ID == idJugadorObjetivo ? Controlador.Instance.Local : Controlador.Instance.Enemigo;
+		atacante.HaAtacado = true;
+		controladorJugador.AtacarJugador (atacante, jugador);
+		
+	}
+
+	public void AtacarCriatura(Criatura criaturaAtacante, Criatura criaturaObjetivo){
+		Jugador objetivo = ObtenerDueñoEnte (criaturaObjetivo);
+		controladorEnte.AtacarCriatura(criaturaAtacante, criaturaObjetivo);
+		if (criaturaObjetivo.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
+			controladorJugador.QuitarVidaJugador(objetivo,criaturaAtacante.Ataque);
+		else if (criaturaObjetivo.PosicionCriatura.Equals(PosicionCriatura.DEFENSA) && controladorEnte.CriaturaMuerta(criaturaObjetivo))
+			controladorJugador.QuitarVidaJugador(objetivo,criaturaObjetivo.Defensa);
+	}
+
+	public void AtacarMagica(Criatura criaturaAtacante, Magica magicaObjetivo){
+		Jugador objetivo = ObtenerDueñoEnte (magicaObjetivo);
+		controladorEnte.AtacarMagica(criaturaAtacante, magicaObjetivo);
+		controladorJugador.QuitarVidaJugador(objetivo,criaturaAtacante.Ataque);
+	}
+
+	public void AtacarEnte(int idAtacante, int idObjetivo)
     {
-        //TODO ver quien ataca, si magica o criatura
         Ente atacante = Recursos.EntesCreadosEnElJuego[idAtacante];
         Ente objetivo = Recursos.EntesCreadosEnElJuego[idObjetivo];
+		if (atacante.GetType () == typeof(Criatura)) 
+			((Criatura)atacante).HaAtacado = true;
+			
         if(objetivo.GetType() == typeof(Criatura))
         {
-            Criatura criaturaObjetivo = (Criatura)objetivo;
-            controladorEnte.QuitarVidaEnte(atacante, criaturaObjetivo);
-            if (criaturaObjetivo.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
-                controladorJugador.QuitarVidaJugador(atacante.Ataque);
-            else if (criaturaObjetivo.PosicionCriatura.Equals(PosicionCriatura.DEFENSA) && controladorEnte.EnteMuerto(criaturaObjetivo))
-                controladorJugador.QuitarVidaJugador(objetivo.Defensa);
+			Criatura criaturaObjetivo = (Criatura)objetivo;
+			AtacarCriatura ((Criatura)atacante, criaturaObjetivo);
         }
-        //En caso de una magica, activamos su efecto al atacarla
         else
         {
-            //Criatura magicaObjetivo = (Magica)objetivo;
-            Controlador.Instance.ActivarEfectoMagica(idObjetivo);
+			ActivarEfectoMagica (idObjetivo, idAtacante);
         }
-        
-        
-        //else
-        //controladorJugador.QuitarVidaJugador(objetivo.Defensa);
+
     }
 
-    public void ActivarEfectoMagica(int idMagica)
+	public void ActivarEfectoMagica(int idMagica, int idAtacante)
     {
-        controladorEnte.ActivarEfectoMagica(idMagica);
+		controladorEnte.ActivarEfectoMagica(idMagica,idAtacante);
     }
 
     public void CambiarPosicionCriatura(int idCriatura)
@@ -399,7 +455,15 @@ public class Controlador : MonoBehaviour
         controladorEnte.MostrarAccion(idEnte);
     }
 
+	public void Clear(){
+		BaseDatos.Instance.Clear ();
+		controladorJugador.Clear ();
+		controladorEnte.Clear ();
+	}
 
+	public void MuerteEnte(int idEnte){
+		controladorEnte.MuerteEnte (idEnte);
+	}
 
 }
 

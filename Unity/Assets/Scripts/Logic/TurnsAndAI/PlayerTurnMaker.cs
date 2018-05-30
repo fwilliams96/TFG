@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerTurnMaker : TurnMaker
 {
-    public override void OnTurnStart()
+    /*public override void OnTurnStart()
     {
         base.OnTurnStart();
         // dispay a message that it is player`s turn
@@ -12,5 +12,5 @@ public class PlayerTurnMaker : TurnMaker
         else
             new ShowMessageCommand("Your Turn!", 2.0f).AñadirAlaCola();
         Controlador.Instance.DibujarCartaMazo(p);
-    }
+    }*/
 }

@@ -2,60 +2,30 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class OneCreatureManager : MonoBehaviour 
+public class OneCreatureManager : OneEnteManager 
 {
-    public CardAsset cardAsset;
-    public OneCardManager PreviewManager;
-    [Header("Text Component References")]
-    public Text HealthText;
-    public Text AttackText;
-    [Header("Image References")]
-    public Image CreatureGraphicImage;
-    public Image CreatureGlowImage;
-
-    void Awake()
-    {
-        if (cardAsset != null)
-            LeerDatosAsset();
-    }
-
-    private bool puedeAtacar = false;
-    public bool PuedeAtacar
-    {
-        get
-        {
-            return puedeAtacar;
-        }
-
-        set
-        {
-            puedeAtacar = value;
-
-            CreatureGlowImage.enabled = value;
-        }
-    }
-
-    public void LeerDatosAsset()
+    
+    public override void LeerDatosAsset()
     {
         // Change the card graphic sprite
-        CreatureGraphicImage.sprite = cardAsset.ImagenCarta;
+		CreatureGraphicImage.sprite = Resources.Load<Sprite>(CartaAsset.RutaImagenCarta);
 
-        AttackText.text = cardAsset.Ataque.ToString();
-        HealthText.text = cardAsset.Defensa.ToString();
+		AttackText.text = CartaAsset.Ataque.ToString();
+		HealthText.text = CartaAsset.Defensa.ToString();
 
         if (PreviewManager != null)
         {
-            PreviewManager.cardAsset = cardAsset;
+            PreviewManager.CartaAsset = CartaAsset;
             PreviewManager.LeerDatosAsset();
         }
     }	
 
-    public void HacerDaño(int daño, int healthAfter)
+	public void HacerDaño(int daño, int vida)
     {
-        if (daño > 0)
+		if (vida > 0)
         {
-            DamageEffect.CreateDamageEffect(transform.position, daño);
-            HealthText.text = healthAfter.ToString();
+			DamageEffect.CreateDamageEffect (transform.position, vida, daño);
+			HealthText.text = (vida - daño).ToString ();
         }
     }
 }

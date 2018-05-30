@@ -19,7 +19,7 @@ public class DragCardOnTable : DraggingActions
         {
             //return true;
             //manage es si está con glow
-            return base.SePuedeArrastrar && manager.PuedeSerJugada;
+			return base.SePuedeControlar && manager.PuedeSerJugada;
         }
     }
 
@@ -35,6 +35,7 @@ public class DragCardOnTable : DraggingActions
         tempState = whereIsCard.EstadoVisual;
         whereIsCard.EstadoVisual = VisualStates.Arrastrando;
         whereIsCard.TraerAlFrente();
+		reset = false;
 
     }
 
@@ -65,10 +66,14 @@ public class DragCardOnTable : DraggingActions
         }
         else
         {
-            VolverALaMano();
+			bool TableFull = (playerOwner.NumEntesEnLaMesa() == 5);
+			if (TableFull) {
+				new ShowMessageCommand ("¡Tu campo de batalla está lleno!", 2.0f).AñadirAlaCola ();
+			} else {
+				new ShowMessageCommand ("No te alejes del campo de batalla...", 2.0f).AñadirAlaCola ();
+			}
+			resetDragg ();
         }
-        //whereIsCard.SetearOrdenCarta();
-       // whereIsCard.EstadoVisual = VisualStates.ManoJugadorAbajo;
     }
 
     public void ColocarCartaTablero(bool resultOK)
@@ -81,18 +86,15 @@ public class DragCardOnTable : DraggingActions
             // determine table position
             int tablePos = Controlador.Instance.AreaJugador(playerOwner).tableVisual.PosicionSlotNuevaCriatura(Camera.main.ScreenToWorldPoint(
                     new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, transform.position.z - Camera.main.transform.position.z)).x);
-            //new Vector3(Input.mousePosition.x, Input.mousePosition.y, transform.position.z - Camera.main.transform.position.z)).x);
-            // Debug.Log("Table Pos for new Creature: " + tablePos.ToString());
-            // play this card
             if (magica)
             {
-                Controlador.Instance.JugarMagicaMano(GetComponent<IDHolder>().UniqueID, tablePos);
+				Controlador.Instance.JugarMagicaMano(playerOwner,GetComponent<IDHolder>().UniqueID, tablePos);
             }
             else
             {
                 bool ataque = PosicionCriaturaPopUp.Instance.Ataque;
                 Debug.Log("ColocarCartaTablero ataque " + ataque);
-                Controlador.Instance.JugarCartaMano(GetComponent<IDHolder>().UniqueID, tablePos, ataque);
+				Controlador.Instance.JugarCartaMano(playerOwner,GetComponent<IDHolder>().UniqueID, tablePos, ataque);
             }
 
         }
@@ -100,20 +102,19 @@ public class DragCardOnTable : DraggingActions
         else
         {
             this.gameObject.SetActive(true);
-            VolverALaMano();
+			resetDragg ();
         }
 
     }
 
     protected override bool DragSuccessful()
     {
-        bool TableNotFull = (playerOwner.NumEntesEnLaMesa() < 8);
+        bool TableNotFull = (playerOwner.NumEntesEnLaMesa() < 5);
 
         return TableVisual.CursorSobreAlgunaMesa && TableNotFull;
     }
 
-    private void VolverALaMano()
-    {
+	public override void resetDragg(){
         // Set old sorting order 
         whereIsCard.SetearOrdenCarta();
         whereIsCard.EstadoVisual = tempState;
@@ -122,5 +123,6 @@ public class DragCardOnTable : DraggingActions
         Vector3 oldCardPos = PlayerHand.slots.Children[savedHandSlot].transform.localPosition;
         //Se usa local move porque a veces puede estar este script en target y alli si pillamos transform.position pillariamos la dl padre
         transform.DOLocalMove(oldCardPos, 1f);
+		reset = true;
     }
 }

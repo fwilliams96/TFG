@@ -2,6 +2,9 @@
 using System.IO;
 using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
+using Firebase;
+using Firebase.Unity.Editor;
+using Firebase.Database;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -18,12 +21,14 @@ public class Recursos  {
 
     public static void InicializarJugadores()
     {
-        Players.Instance.Add(DatosGenerales.Instance.TopPlayer);
-        Players.Instance.Add(DatosGenerales.Instance.LowPlayer);
+        //Players.Instance.Add(BaseDatos.Instance.Local);
+        //Players.Instance.Add(BaseDatos.Instance.Enemigo);
     }
 
     public static void InicializarCartas()
     {
+        //BaseDatos.Instance.RecuperarCarta();
+        //BaseDatos.Instance.Prueba();
         LeerInformacionCartas();
         CrearAssetsCartas();
         //var asset = LeerCartaAssetApartirJSON("Asset2.json");
@@ -43,16 +48,16 @@ public class Recursos  {
 
             string[] arrayFamilia = (string[])prop.GetValue(null);
             diccionarioTemp = new Dictionary<string, SimpleJSON.JSONNode>();
-
+			Debug.Log(">>>>>>>>>> FAMILIA: " + familia + " <<<<<<<<<<");
             foreach (string carta in arrayFamilia)
             {
                 //Vigilar que carta tambien es sensible a mayusculas y minisculas
                 cardPath = filePath + "/" + familia + "/" + carta + ".xml";
+
                 if (File.Exists(cardPath))
                 {
 
-                    var json = XMLToJSONUtils.XMLFileToJSON(cardPath);
-                    Debug.Log(">>>>>>>>>> FAMILIA: " + familia + " <<<<<<<<<<");
+                    var json = JSONUtils.XMLFileToJSON(cardPath);
                     Debug.Log("CARTA: " + carta);
                     Debug.Log(json.ToString());
                     diccionarioTemp.Add(carta, json);
@@ -70,48 +75,40 @@ public class Recursos  {
             {
                 foreach(KeyValuePair<string, SimpleJSON.JSONNode> entrada in cartas[familia])
                 {
-                    //Leer todos los datos comunes, si la carta es ancestral no hay evolucion, si tiene ataque y defensa no es magica. En caso de no cumplirse estas cosas se lanzara una excepcion y no se creara el asset
-                    //Modelo:
-                    //extraerDatosComunes(entrada);
-                    //extraerDatosNoComunes(entrada);
+					CartaAsset asset = new CartaAsset();
                     string carpetaCarta = obtenerFormatoNombreCorrectoDirectorio(entrada.Key);
-                    Debug.Log(entrada.Value);
                     string nombre = entrada.Value["carta"]["delante"]["titulo"];
+					asset.Nombre = nombre;
+
                     Familia tipoCarta = obtenerTipoCarta(entrada.Value["carta"]["delante"]["tipo"]);
+					asset.Familia = tipoCarta;
+
+					if (asset.Familia.Equals (Familia.Magica))
+						asset.Efecto = obtenerEfecto (entrada.Value ["carta"] ["delante"] ["efecto"]);
+
                     string descripcion = entrada.Value["carta"]["delante"]["descripcion"];
+					asset.Descripcion = descripcion;
+
                     int mana = System.Int32.Parse(entrada.Value["carta"]["delante"]["mana"]);
+					asset.CosteMana = mana;
+
                     string rutaImagen = obtenerRutaImagen(familia, carpetaCarta, entrada.Value["carta"]["delante"]["nombreImagen"]);
-                    int defensa = System.Int32.Parse(entrada.Value["carta"]["delante"]["defensa"]);
-                    int ataque = System.Int32.Parse(entrada.Value["carta"]["delante"]["ataque"]);
-                    string fondo = entrada.Value["carta"]["delante"]["fondo"];
-                    int evolucion = -1;
-                    if(!tipoCarta.Equals(TipoCarta.Ancestral))
-                        evolucion = System.Int32.Parse(entrada.Value["carta"]["delante"]["evolucion"]);
+					asset.RutaImagenCarta = rutaImagen;
 
-                    CartaAsset asset = ScriptableObject.CreateInstance<CartaAsset>();
-                    asset.Descripcion = descripcion;
-                    asset.Familia = tipoCarta;
-                    //Cargar imagen a partir de la rutaImagen y setearla en el Sprite de CardAsset
-                    /*if (File.Exists(rutaImagen))
-                    {
-                        asset.ImagenCarta = Resources.Load<Sprite>(rutaImagen);
-                    }*/
-                    asset.ImagenCarta = Resources.Load<Sprite>(rutaImagen);
-                    asset.CosteMana = mana;
-                    if (!"".Equals(fondo))
-                    {
-                        string rutaImagenFondo = obtenerRutaFamiliaImagen(familia) + fondo;
-                        if (File.Exists(rutaImagenFondo))
-                        {
-                            asset.Fondo = Resources.Load<Sprite>(rutaImagenFondo);
-                        }
+					int defensa = 0;
+					int ataque = 0;
+					if (!asset.Familia.Equals (Familia.Magica)) {
+						defensa = System.Int32.Parse(entrada.Value["carta"]["delante"]["defensa"]);
+						ataque = System.Int32.Parse(entrada.Value["carta"]["delante"]["ataque"]);
+					}
+					asset.Defensa = defensa;
+					asset.Ataque = ataque;
 
-                    }
-                    asset.Defensa = defensa;
-                    asset.Ataque = ataque;
-                    if (evolucion != -1)
-                        asset.Evolucion = evolucion;
-                    GuardarJSONApartirCartaAsset(asset, obtenerRutaJSON(familia, carpetaCarta),nombre+".json");
+					int evolucion = System.Int32.Parse(entrada.Value["carta"]["delante"]["evolucion"]);
+					asset.Evolucion = evolucion;
+
+                    GuardarAssetBaseDatos(familia, asset);
+                    //GuardarJSONApartirCartaAsset(asset, obtenerRutaJSON(familia, carpetaCarta),nombre+".json");
                     AssetsCreadosCartas.Add(asset);
 
                 }
@@ -123,7 +120,9 @@ public class Recursos  {
 
     private static string obtenerFormatoNombreCorrectoDirectorio(string carpeta)
     {
-        return carpeta.Substring(0,1).ToUpper() + carpeta.Substring(1, carpeta.Length-1) ;
+		if(carpeta.Length > 1)
+        	return carpeta.Substring(0,1).ToUpper() + carpeta.Substring(1, carpeta.Length-1) ;
+		return carpeta;
     }
 
     private static string obtenerRutaImagen(string familia, string carpetaCarta, string nombreImagen)
@@ -153,6 +152,9 @@ public class Recursos  {
             case Global.CARTAS.TIPO_CARTA.AGUA:
                 carpetaFamilia = "Agua/";
                 break;
+			case Global.CARTAS.TIPO_CARTA.AIRE:
+				carpetaFamilia = "Aire/";
+				break;
             case Global.CARTAS.TIPO_CARTA.FUEGO:
                 carpetaFamilia = "Fuego/";
                 break;
@@ -178,11 +180,38 @@ public class Recursos  {
         return carpetaFamilia;
     }
 
+	private static Efecto obtenerEfecto(string nombreEfecto){
+		nombreEfecto = nombreEfecto.Replace(nombreEfecto[0],nombreEfecto[0].ToString().ToLower()[0]);
+		Efecto efecto;
+		switch (nombreEfecto) {
+			case Global.MAGICA.TIPO_EFECTO.Destructor:
+				efecto = Efecto.Destructor;
+				break;
+			case Global.MAGICA.TIPO_EFECTO.Espejo:
+				efecto = Efecto.Espejo;
+				break;
+			case Global.MAGICA.TIPO_EFECTO.Mana:
+				efecto = Efecto.Mana;
+				break;
+			case Global.MAGICA.TIPO_EFECTO.Vida:
+				efecto = Efecto.Vida;
+				break;
+			default:
+				efecto = Efecto.Destructor;
+				break;
+		}
+
+		return efecto;
+	}
+
     private static Familia obtenerTipoCarta(string familia)
     {
         Familia tipo = Familia.Magica;
         switch (familia.ToLower())
         {
+			case Global.CARTAS.TIPO_CARTA.AIRE:
+				tipo = Familia.Aire;
+				break;
             case Global.CARTAS.TIPO_CARTA.AGUA:
                 tipo = Familia.Agua;
                 break;
@@ -205,39 +234,13 @@ public class Recursos  {
                 tipo = Familia.Ancestral;
                 break;
             default:
-                tipo = Familia.Magica;
+				tipo = Familia.Ancestral;
                 break;
         }
         return tipo;
     }
 
-    /*public static void Save(CartaAsset asset)
-    {
-        BinaryFormatter bf = new BinaryFormatter();
-        string path = Application.persistentDataPath;// + "/Asset2.asset";
-        bool dirExists = System.IO.Directory.Exists(path);
-        if (!dirExists)
-            System.IO.Directory.CreateDirectory(path);
-        FileStream file = File.Create(path+"/Asset2.asset");
-
-        bf.Serialize(file, asset);
-        Debug.Log("Asset guardado con exito");
-        file.Close();
-    }
-
-    public static void Load()
-    {
-        if (File.Exists(Application.persistentDataPath + "/Asset2.asset"))
-        {
-            BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/Asset2.asset", FileMode.Open);
-            CartaAsset asset = (CartaAsset)bf.Deserialize(file);
-            Debug.Log("Asset cargado con exito");
-            file.Close();
-        }
-    }*/
-
-    public static CartaAsset LeerCartaAssetApartirJSON(string rutaArchivo)
+    public static CartaAsset2 LeerCartaAssetApartirJSON(string rutaArchivo)
     {
         string path = (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer ? Application.persistentDataPath : Application.dataPath);
         string ruta = Path.Combine(path, rutaArchivo);
@@ -246,7 +249,7 @@ public class Recursos  {
         if (File.Exists(ruta))
         {
             var json = File.ReadAllText(ruta);
-            CartaAsset carta = ScriptableObject.CreateInstance<CartaAsset>();
+            CartaAsset2 carta = ScriptableObject.CreateInstance<CartaAsset2>();
             JsonUtility.FromJsonOverwrite(json, carta);
             Debug.Log("Asset cargado con exito");
             return carta;
@@ -266,8 +269,14 @@ public class Recursos  {
         Debug.Log("Guardar json");
         string json = JsonUtility.ToJson(asset);
         ruta = Path.Combine(ruta, nombreArchivo);
+        //BaseDatos.Instance.GuardarCartaJugador(SesionUsuario.Instance.UserID,json);
         Debug.Log("Ruta: " + ruta);
         File.WriteAllText(ruta, json);
         Debug.Log("Asset guardado con exito");
+    }
+
+    public static void GuardarAssetBaseDatos(string familia,CartaAsset asset)
+    {
+        BaseDatos.Instance.GuardarCarta(familia, asset);
     }
 }

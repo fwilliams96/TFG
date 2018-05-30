@@ -5,31 +5,26 @@ public class DealDamageCommand : Comanda {
 
     private int targetID;
     private int amount;
-    private int healthAfter;
+	private int health;
 
-    public DealDamageCommand( int targetID, int amount, int healthAfter)
+    public DealDamageCommand( int targetID, int amount, int health)
     {
         this.targetID = targetID;
         this.amount = amount;
-        this.healthAfter = healthAfter;
+        this.health = health;
     }
 
-    public override void EmpezarEjecucionComanda()
-    {
-        Debug.Log("In deal damage command!");
-
-        GameObject target = IDHolder.GetGameObjectWithID(targetID);
-        //TODO esta comprobacion se quitara puesto que no se podrá ir de cara
-        if (targetID == DatosGenerales.Instance.LowPlayer.ID || targetID == DatosGenerales.Instance.TopPlayer.ID)
-        {
-            // target is a hero
-            target.GetComponent<PlayerPortraitVisual>().HacerDaño(amount,healthAfter);
-        }
-        else
-        {
-            // target is a creature
-            target.GetComponent<OneCreatureManager>().HacerDaño(amount, healthAfter);
-        }
-        comandas.CompletarEjecucionComanda();
-    }
+	public override void EmpezarEjecucionComanda()
+	{
+		GameObject target = IDHolder.GetGameObjectWithID(targetID);
+		if (targetID == Controlador.Instance.Local.ID || targetID == Controlador.Instance.Enemigo.ID)
+		{
+			target.GetComponent<PlayerPortraitVisual>().HacerDaño(amount,health);
+		}
+		else
+		{
+			target.GetComponent<OneCreatureManager>().HacerDaño(amount, health);
+		}
+		comandas.CompletarEjecucionComanda();
+	}
 }
