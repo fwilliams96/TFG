@@ -21,21 +21,20 @@ public class Registro : MonoBehaviour {
 
     public void Registrarse()
     {
-        if(!camposVacios() && password.text.Equals(password2.text))
-        {
-            try
-            {
-                SesionUsuario.Instance.Registro(email.text, password.text, RegistroCompleto);
-            }catch(System.Exception e)
-            {
-                Debug.Log(e.Message);
-            }
+		if (!camposVacios () && password.text.Equals (password2.text)) {
+			try {
+				SesionUsuario.Instance.Registro (email.text, password.text, RegistroCompleto);
+			} catch (System.Exception e) {
+				Debug.Log (e.Message);
+			}
             
-        }
-        else
-        {
-            Debug.Log("Error de campos");
-        }
+		} else if (camposVacios ()) {
+			MessageManager.Instance.ShowMessage ("No pueden haber campos vacíos", 1.5f);
+			Debug.Log ("Error de campos");
+		} else {
+			MessageManager.Instance.ShowMessage ("Ambas contraseñas deben coincidir", 1.5f);
+			Debug.Log ("Error de contraseñas");
+		}
         
         
     }

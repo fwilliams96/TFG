@@ -66,6 +66,12 @@ public class DragCardOnTable : DraggingActions
         }
         else
         {
+			bool TableFull = (playerOwner.NumEntesEnLaMesa() == 5);
+			if (TableFull) {
+				new ShowMessageCommand ("¡Tu campo de batalla está lleno!", 2.0f).AñadirAlaCola ();
+			} else {
+				new ShowMessageCommand ("No te alejes del campo de batalla...", 2.0f).AñadirAlaCola ();
+			}
 			resetDragg ();
         }
     }

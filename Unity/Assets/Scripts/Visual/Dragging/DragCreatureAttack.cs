@@ -103,7 +103,9 @@ public class DragCreatureAttack : DraggingActions {
             int targetID = Target.GetComponent<IDHolder>().UniqueID;
 			if (targetID == Controlador.Instance.Local.ID || targetID == Controlador.Instance.Enemigo.ID) {
 				if (Controlador.Instance.SePuedeAtacarJugadorDeCara (targetID)) {
-					Controlador.Instance.AtacarJugador(GetComponentInParent<IDHolder>().UniqueID, targetID);
+					Controlador.Instance.AtacarJugador (GetComponentInParent<IDHolder> ().UniqueID, targetID);
+				} else {
+					new ShowMessageCommand ("Todavía tienes enemigos cerca...", 2.0f).AñadirAlaCola ();
 				}
 			} else {
 				//Debug.Log("Target ID: " + targetID);

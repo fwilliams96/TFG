@@ -150,9 +150,9 @@ public class BaseDatos
 			int cantidad = rnd.Next (50, 80);
 			string rutaImagen;
 			if (tipoItem.Equals (TipoItem.Material)) {
-				rutaImagen = "Sprites/Recursos/Componentes/trebol";
+				rutaImagen = "Sprites/Recursos/Componentes/item_piedra";
 			} else {
-				rutaImagen = "Sprites/Recursos/Componentes/Poción_azul";
+				rutaImagen = "Sprites/Recursos/Componentes/item_pocion";
 			}
 			itemsAleatorios.Add (new Item (tipoItem, rutaImagen, cantidad));
 		}

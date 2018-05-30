@@ -10,7 +10,7 @@ public class TouchManager2 : MonoBehaviour {
     GameObject gObj;
     Plane objPlane;
     Vector3 m0;
-
+	GameObject current;
 	public GameObject ObjetoActual {
 		get {
 			return gObj;
@@ -54,71 +54,64 @@ public class TouchManager2 : MonoBehaviour {
                 //A partir de la posición de pantalla del mouse generamos un rayo
                 Ray mouseRay = GenerateMouseRay(Input.GetTouch(0).position);
                 //Miramos con que objeto ha chocado el rayo
-				RaycastHit2D hit = Physics2D.GetRayIntersection(mouseRay);
-				GameObject current = EventSystem.current.currentSelectedGameObject;
-				RaycastHit hit2;
-				bool hola = Physics.Raycast (mouseRay.origin, mouseRay.direction, out hit2);
+				var layerMask = (1 << 8);
+				layerMask |= (1 << 9);
+				RaycastHit2D hit = Physics2D.GetRayIntersection(mouseRay, Mathf.Infinity, layerMask);
+				current = EventSystem.current.currentSelectedGameObject;
 				if (hit.collider != null) {
 					//TODO en funcion de la escena en la que nos encontremos haremos una cosa u otra
 					//switch(Settings.Instance.EscenaActual)
 					//TODO mejorar comprobación
-					switch (ControladorMenu.Instance.PantallaActual) {
-					case PANTALLA_MENU.INVENTARIO:
-						if (hit.transform.gameObject.tag.Equals ("CartaInventario")) {
-							gObj = hit.transform.gameObject;
-							Acciones.Instance.MostrarAcciones (true,gObj);
-						} else if (hit.transform.gameObject.tag.Equals ("ItemInventario")) {
-							gObj = hit.transform.gameObject; 
-							//Acciones.Instance.MostrarAcciones (false);
-						} else if (hit.transform.gameObject.tag.Equals ("ItemConsumible")) {
-							ControladorMenu.Instance.AgregarItemCarta (Acciones.Instance.ElementoActual.GetComponent<IDHolder> ().UniqueID, hit.transform.gameObject.GetComponent<IDHolder> ().UniqueID);
-						} else if (hit.transform.gameObject.tag.Equals ("CartaConsumible")) {
-							ControladorMenu.Instance.AgregarItemCarta (hit.transform.gameObject.GetComponent<IDHolder> ().UniqueID, Acciones.Instance.ElementoActual.GetComponent<IDHolder> ().UniqueID);
-						}
-						break;
-					case PANTALLA_MENU.MAZO:
-						
-						if (hit.transform.gameObject.tag.Equals ("CartaFueraMazo") || hit.transform.gameObject.tag.Equals ("CartaDentroMazo")) {
-							gObj = hit.transform.gameObject;
-							ControladorMenu.Instance.MostrarAccion (gObj);
-						}
-						break;
-					}
-  
-				} else {
-					
-					if (null != EventSystem.current.currentSelectedGameObject) {
-						Debug.Log ("Event system: " + EventSystem.current.currentSelectedGameObject);
-					} else {
-						switch (ControladorMenu.Instance.PantallaActual) {
-						case PANTALLA_MENU.INVENTARIO:
-							//Acciones.Instance.CerrarMenu();
-							break;
-						case PANTALLA_MENU.MAZO:
-							ControladorMenu.Instance.CerrarAccion ();
-							break;
-						}
-						gObj = null;
-					}
+					gObj = hit.collider.gameObject;
 				}
             }
             else if(Input.GetTouch(0).phase == TouchPhase.Moved && gObj)
             {
-				if (gObj.tag.Equals ("CartaFueraMazo") || gObj.tag.Equals ("CartaDentroMazo")) {
-				}
+				/*if (null != gObj) {
+				}*/
+				gObj = null;
             }
-			else if(Input.GetTouch(0).phase == TouchPhase.Stationary && gObj)
+			else if(Input.GetTouch(0).phase == TouchPhase.Stationary)
 			{
-				if (gObj.tag.Equals ("CartaFueraMazo") || gObj.tag.Equals ("CartaDentroMazo")) {
-					
-					//ControladorMenu.Instance.MostrarAccion (gObj);
+				if (null != gObj) {
 				}
+
 			}
-            else if(Input.GetTouch(0).phase == TouchPhase.Ended && gObj)
+            else if(Input.GetTouch(0).phase == TouchPhase.Ended)
             {
-				if (gObj.tag.Equals ("CartaFueraMazo") || gObj.tag.Equals ("CartaDentroMazo")) {
-					//gObj = null;
+				if (null != gObj) {
+					switch (ControladorMenu.Instance.PantallaActual) {
+					case PANTALLA_MENU.INVENTARIO:
+						if (gObj.transform.gameObject.tag.Equals ("CartaInventario")) {
+							Acciones.Instance.MostrarAcciones (true, gObj);
+						} else if (gObj.transform.gameObject.tag.Equals ("ItemInventario")) {
+							//Acciones.Instance.MostrarAcciones (false);
+						} else if (gObj.transform.gameObject.tag.Equals ("ItemConsumible")) {
+							ControladorMenu.Instance.AgregarItemCarta (Acciones.Instance.ElementoActual.GetComponent<IDHolder> ().UniqueID, gObj.transform.gameObject.GetComponent<IDHolder> ().UniqueID);
+						} else if (gObj.transform.gameObject.tag.Equals ("CartaConsumible")) {
+							ControladorMenu.Instance.AgregarItemCarta (gObj.transform.gameObject.GetComponent<IDHolder> ().UniqueID, Acciones.Instance.ElementoActual.GetComponent<IDHolder> ().UniqueID);
+						} else {
+							ControladorMenu.Instance.CerrarAccion ();
+						}
+							break;
+					case PANTALLA_MENU.MAZO:
+
+							if (gObj.transform.gameObject.tag.Equals ("CartaFueraMazo") || gObj.transform.gameObject.tag.Equals ("CartaDentroMazo")) {
+								ControladorMenu.Instance.MostrarAccion (gObj);
+							} else {
+								ControladorMenu.Instance.CerrarAccion ();
+							}
+							break;
+						}
+				} else {
+					if (null != EventSystem.current.currentSelectedGameObject) {
+						Debug.Log ("Event system");
+					} else {
+						
+					}
 				}
+				gObj = null;
+
             }
         }
     }
