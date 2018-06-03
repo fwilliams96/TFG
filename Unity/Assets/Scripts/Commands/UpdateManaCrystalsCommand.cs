@@ -3,11 +3,11 @@ using System.Collections;
 
 public class UpdateManaCrystalsCommand : Comanda {
 
-    private Jugador p;
+	private JugadorPartida p;
     private int TotalMana;
     private int AvailableMana;
 
-    public UpdateManaCrystalsCommand(Jugador p, int TotalMana, int AvailableMana)
+    public UpdateManaCrystalsCommand(JugadorPartida p, int TotalMana, int AvailableMana)
     {
         this.p = p;
         this.TotalMana = TotalMana;

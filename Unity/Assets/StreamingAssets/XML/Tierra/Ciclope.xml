@@ -6,6 +6,7 @@
     <nombreImagen>ciclope</nombreImagen>
     <descripcion>Es una bestia destructora</descripcion>
     <evolucion>1</evolucion>
+	<idEvolucion>1</idEvolucion>
     <mana>2</mana>
     <ataque>600</ataque>
     <defensa>500</defensa>

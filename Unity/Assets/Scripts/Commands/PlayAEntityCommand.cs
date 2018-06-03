@@ -5,10 +5,10 @@ public class PlayAEntityCommand : Comanda
 {
     private Carta cl;
     private int tablePos;
-    private Jugador p;
+	private JugadorPartida p;
     private Ente ente;
 
-    public PlayAEntityCommand(Carta cl, Jugador p, int tablePos, Ente ente)
+	public PlayAEntityCommand(Carta cl, JugadorPartida p, int tablePos, Ente ente)
     {
         this.p = p;
         this.cl = cl;
@@ -39,7 +39,5 @@ public class PlayAEntityCommand : Comanda
             else
                 areaJugador.tableVisual.AñadirCriaturaDefensa(cl.AssetCarta, ente.ID, tablePos);
         }
-        Controlador.Instance.ActualizarManaJugador(p);
-
     }
 }

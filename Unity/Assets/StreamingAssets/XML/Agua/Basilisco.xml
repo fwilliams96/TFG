@@ -6,6 +6,7 @@
     <nombreImagen>basilisco</nombreImagen>
     <descripcion>Basilisco ansioso de ahogar</descripcion>
     <evolucion>1</evolucion>
+	<idEvolucion>1</idEvolucion>
     <mana>1</mana>
     <ataque>300</ataque>
     <defensa>100</defensa>

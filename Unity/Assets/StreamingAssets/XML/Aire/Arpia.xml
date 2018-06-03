@@ -6,6 +6,7 @@
     <nombreImagen>arpia</nombreImagen>
     <descripcion>La vigilante del cielo</descripcion>
     <evolucion>1</evolucion>
+	<idEvolucion>2</idEvolucion>
     <mana>1</mana>
     <ataque>450</ataque>
     <defensa>400</defensa>

@@ -6,6 +6,7 @@
     <nombreImagen>destructor</nombreImagen>
     <descripcion>Imparable cuando se activa</descripcion>
     <evolucion>1</evolucion>
+	<idEvolucion>1</idEvolucion>
     <mana>2</mana>
     <ataque></ataque>
     <defensa></defensa>

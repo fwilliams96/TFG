@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 public class PremioPartidaCommand : Comanda{
 
-	private Jugador ganador;
+	private JugadorPartida ganador;
 	private Carta carta;
 	private int exp;
 	private List<Item> items;
 
-	public PremioPartidaCommand(Jugador ganador, Carta carta, List<Item> items,int exp)
+	public PremioPartidaCommand(JugadorPartida ganador, Carta carta, List<Item> items,int exp)
     {
 		this.ganador = ganador;
 		this.carta = carta;

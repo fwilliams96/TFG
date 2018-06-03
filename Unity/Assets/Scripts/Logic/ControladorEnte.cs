@@ -63,7 +63,7 @@ public class ControladorEnte
 	public void ActivarEfectoMagica(int idMagica, int idAtacante)
     {
 		Criatura criaturaAtacante = null;
-		Jugador jugador = null;
+		JugadorPartida jugador = null;
 		Magica magica = (Magica)Recursos.EntesCreadosEnElJuego[idMagica];
 		if (idAtacante != -1) {
 			criaturaAtacante = (Criatura)Recursos.EntesCreadosEnElJuego [idAtacante];
@@ -95,7 +95,7 @@ public class ControladorEnte
 		//MuerteEnte(magica.ID);
     }
 
-	public void DamageAllCreatures(Jugador jugador, int daño)
+	public void DamageAllCreatures(JugadorPartida jugador, int daño)
 	{
 		List<Ente> CreaturesToDamage = jugador.EntesEnLaMesa();
 		foreach (Ente cl in CreaturesToDamage)
@@ -106,10 +106,10 @@ public class ControladorEnte
 		}
 	}
 
-	public  void GiveHealth(Jugador jugador, int vida){
+	public  void GiveHealth(JugadorPartida jugador, int vida){
 		
 	}
-	public void GiveManaBonus(Jugador jugador, int mana)
+	public void GiveManaBonus(JugadorPartida jugador, int mana)
 	{
 		jugador.ConseguirManaExtra(mana);
 	}
@@ -140,7 +140,7 @@ public class ControladorEnte
         if (ente.GetType() == typeof(Magica))
         {
 			//Si la magica es de tipo trampa no debe salir la opcion de activar voluntariamente
-			if (CartaPreparada(ente) && !EsMagicaTrampa(ente))
+			if (EntePreparado(ente) && !EsMagicaTrampa(ente))
             {
                 AccionesPopUp.Instance.MostrarAccionEfecto();
                 AccionesPopUp.Instance.RegistrarCallBack(ActivarEfectoMagica, idEnte);
@@ -168,9 +168,8 @@ public class ControladorEnte
 		return magica.AssetCarta.Efecto.Equals (Efecto.Espejo);
 	}
 
-	public bool CartaPreparada(Ente ente){
-		GameObject g = IDHolder.GetGameObjectWithID(ente.ID);
-		return g.GetComponent<OneEnteManager> ().PuedeAtacar;
+	public bool EntePreparado(Ente ente){
+		return ente.AtaquesRestantesEnTurno > 0;
 	}
 
 	public bool CriaturaHaAtacado(Criatura criatura){
@@ -180,7 +179,7 @@ public class ControladorEnte
     public void MuerteEnte(int idEnte)
     {
         Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
-		Jugador jugadorObjetivo = Controlador.Instance.ObtenerDueñoEnte (ente);
+		JugadorPartida jugadorObjetivo = Controlador.Instance.ObtenerDueñoEnte (ente);
         jugadorObjetivo.EliminarEnteMesa(ente);
         ente.Morir();
         new CreatureDieCommand(idEnte, jugadorObjetivo).AñadirAlaCola();

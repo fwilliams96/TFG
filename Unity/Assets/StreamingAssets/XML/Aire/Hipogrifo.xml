@@ -6,6 +6,7 @@
     <nombreImagen>hipogrifo</nombreImagen>
     <descripcion>Hipogrifo con sed de venganza</descripcion>
     <evolucion>1</evolucion>
+	<idEvolucion>0</idEvolucion>
     <mana>1</mana>
     <ataque>400</ataque>
     <defensa>200</defensa>

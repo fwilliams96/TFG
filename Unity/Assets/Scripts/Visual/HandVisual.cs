@@ -81,8 +81,10 @@ public class HandVisual : MonoBehaviour
     }
 
     // CARD DRAW METHODS
-    public void DarCartaJugador(Carta c, int UniqueID, bool fast = false, bool fromDeck = true)
+	public void DarCartaJugador(Carta c, int UniqueID, bool fast = false, bool fromDeck = true, bool rotarDeCara = false)
     {
+		if (!rotarDeCara)
+			fast = true;
         GameObject card;
         if (fromDeck)
             card = CrearCartaPorPosicion(c, DeckTransform.position, new Vector3(0f, -179f, 0f));
@@ -120,10 +122,9 @@ public class HandVisual : MonoBehaviour
         {
             Debug.Log("Not fast!!!");
 			s.Append(card.transform.DOMove(DrawPreviewSpot.position, Settings.Instance.CardTransitionTime));
-            if (TakeCardsOpenly)
-				s.Insert(0f, card.transform.DORotate(Vector3.zero, Settings.Instance.CardTransitionTime));
-            else
-				s.Insert(0f, card.transform.DORotate(new Vector3(0f, 179f, 0f), Settings.Instance.CardTransitionTime));
+				
+			s.Insert (0f, card.transform.DORotate (Vector3.zero, Settings.Instance.CardTransitionTime));
+				
 			s.AppendInterval(Settings.Instance.CardPreviewTime);
             // displace the card so that we can select it in the scene easier.
 			s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, Settings.Instance.CardTransitionTime));
@@ -131,6 +132,9 @@ public class HandVisual : MonoBehaviour
         else
         {
             // displace the card so that we can select it in the scene easier.
+			if (rotarDeCara) {
+				s.Insert (0f, card.transform.DORotate (Vector3.zero, Settings.Instance.CardTransitionTime));
+			}
 			s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, Settings.Instance.CardTransitionTimeFast));
             //if (TakeCardsOpenly)
                 //s.Insert(0f, card.transform.DORotate(Vector3.zero, DatosGenerales.Instance.CardTransitionTimeFast));
@@ -148,7 +152,7 @@ public class HandVisual : MonoBehaviour
             w.EstadoVisual = VisualStates.ManoJugadorArriba;
 
         w.SetearOrdenCarta();
-        Comandas.Instance.CompletarEjecucionComanda();
+		Comandas.Instance.CompletarEjecucionComanda();
     }
 
     GameObject CrearCartaPorPosicion(Carta c, Vector3 position, Vector3 eulerAngles)

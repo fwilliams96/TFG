@@ -374,7 +374,7 @@ public class BaseDatos
         Debug.Log("Guardar carta ok");
     }
 
-	public KeyValuePair<string,CartaAsset> BuscarEvolucion(Familia familia, int evolucion){
+	public KeyValuePair<string,CartaAsset> BuscarEvolucion(Familia familia, int evolucion, int idEvolucion){
 		
 		var json = assets.Value as Dictionary<string, object>;
 		List<string> keyList = new List<string>(json.Keys);
@@ -383,7 +383,7 @@ public class BaseDatos
 		{
 			string assetJSON = assets.Child(idAsset).GetRawJsonValue();
 			CartaAsset asset = JsonUtility.FromJson<CartaAsset>(assetJSON);
-			if (asset.Evolucion == (evolucion+1) && asset.Familia.Equals (familia)) {
+			if   (asset.Familia.Equals (familia) && asset.IDEvolucion ==  idEvolucion && asset.Evolucion == (evolucion+1)) {
 				evolucionEncontrada = new KeyValuePair<string, CartaAsset> (idAsset,asset);
 			}
 
@@ -424,11 +424,12 @@ public class BaseDatos
 
 	public void CrearJugadorEnemigo(){
 		AñadirJugador(new Jugador("Top"));
+		Enemigo.TipoJugador = Jugador.TIPO_JUGADOR.AUTOMÁTICO;
 		AñadirWelcomePackJugador(Enemigo);
 	}
 
 	public void Clear(){
-		Local.Reset ();
+		//Local.Reset ();
 		EliminarEnemigo ();
 	}
 

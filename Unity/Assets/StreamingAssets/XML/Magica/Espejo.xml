@@ -6,6 +6,7 @@
     <nombreImagen>espejo</nombreImagen>
     <descripcion>Muy impredecible, muy determinante</descripcion>
     <evolucion>1</evolucion>
+	<idEvolucion>0</idEvolucion>
     <mana>2</mana>
     <ataque></ataque>
     <defensa></defensa>

@@ -6,6 +6,7 @@
     <nombreImagen>tengu</nombreImagen>
     <descripcion>Una de las criaturas más raras</descripcion>
     <evolucion>1</evolucion>
+	<idEvolucion>1</idEvolucion>
     <mana>1</mana>
     <ataque>600</ataque>
     <defensa>500</defensa>

@@ -3,88 +3,35 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class Jugador : ICharacter
+public class Jugador
 {
+	public enum TIPO_JUGADOR{
+		MANUAL,
+		AUTOMÁTICO
+	}
 
     #region Atributos
-    // PUBLIC FIELDS
-    // int ID that we get from ID factory
-    private int PlayerID;
-
-    // REFERENCES TO LOGICAL STUFF THAT BELONGS TO THIS PLAYER
-    //private Dictionary<string, System.Object> cartas = new Dictionary<string, System.Object>();
+	private string area;
+	private TIPO_JUGADOR tipoJugador;
 	private List<int> idCartasMazo;
 	private List<System.Object> cartas;
 	private List<System.Object> items;
 	private Mazo mazo;
-    private Mano mano;
-    private Mesa mesa;
-    private int nivel;
+	private int nivel;
 	private int experiencia;
-	private string area;
-	private int posCartaActual;
 
     #endregion Atributos
     #region Getters/Setters
-    // PROPERTIES 
-    // this property is a part of interface ICharacter
-    public int ID
-    {
-        get { return PlayerID; }
-    }
 
-    // total mana crystals that this player has this turn
-    private int manaEnEsteTurno;
-    public int ManaEnEsteTurno
-    {
-        get { return manaEnEsteTurno; }
-        set
-        {
-            manaEnEsteTurno = value;
-        }
-    }
-
-    // full mana crystals available right now to play cards / use hero power 
-    private int manaRestante;
-    public int ManaRestante
-    {
-        get
-        { return manaRestante; }
-        set
-        {
-            manaRestante = value;
-        }
-    }
-
-    private int defensa;
-    public int Defensa
-    {
-        get { return defensa; }
-        set
-        {
-            defensa = value;
-        }
-    }
-
-    public string Area
-    {
-        get
-        {
-            return area;
-        }
-    }
-	private int PosCartaActual {
-		get {
-			int cActual = posCartaActual;
-			if (cActual == NumCartasMazo() - 1) {
-				posCartaActual = 0;
-			} else {
-				posCartaActual++;
-			}
-			return cActual;
+	public TIPO_JUGADOR TipoJugador{
+		get{
+			return tipoJugador;
+		}
+		set{
+			tipoJugador = value;
 		}
 	}
-
+		
 	public int Nivel{
 		get{
 			return nivel;
@@ -102,36 +49,27 @@ public class Jugador : ICharacter
 			experiencia = value;
 		}
 	}
-    #endregion
+	public string Area
+	{
+		get
+		{
+			return area;
+		}
+	}
 
-    // CODE FOR EVENTS TO LET CREATURES KNOW WHEN TO CAUSE EFFECTS
-    public delegate void VoidWithNoArguments();
-    //public event VoidWithNoArguments CreaturePlayedEvent;
-    //public event VoidWithNoArguments SpellPlayedEvent;
-    //public event VoidWithNoArguments StartTurnEvent;
-    public event VoidWithNoArguments EndTurnEvent;
+    #endregion
 
 	public Jugador(string area)
     {
-        PlayerID = IDFactory.GetUniqueID();
 		this.mazo = new Mazo ();
 		this.idCartasMazo = new List<int>();
 		this.cartas = new List<System.Object>();
 		this.items = new List<System.Object>();
 		this.nivel = 1;
-		this.experiencia = 0;
 		this.area = area;
-		Reset ();
+		this.experiencia = 0;
     }
-
-    public void ConseguirManaExtra(int amount)
-    {
-        //ManaEnEsteTurno += amount;
-        ManaRestante += amount;
-    }
-
-    public void Morir() { }
-
+		
 	public void ClearMazo(){
 		mazo.CartasEnMazo.Clear ();
 	}
@@ -187,29 +125,9 @@ public class Jugador : ICharacter
 		items.Remove(item);
 	}
 
-    public void AñadirEnteMesa(int posicionMesa, Ente ente)
-    {
-        mesa.EntesEnTablero.Insert(posicionMesa, ente);
-    }
-
-    public void AñadirCartaMano(int posicionMano, Carta carta)
-    {
-        mano.CartasEnMano.Insert(posicionMano, carta);
-    }
-
     public void AñadirCartaMazo(Carta carta)
     {
         mazo.CartasEnMazo.Add(carta);
-    }
-
-    public void EliminarEnteMesa(Ente ente)
-    {
-        mesa.EntesEnTablero.Remove(ente);
-    }
-
-    public void EliminarCartaMano(Carta carta)
-    {
-        mano.CartasEnMano.Remove(carta);
     }
 
     public void EliminarCartaMazo(int pos)
@@ -231,60 +149,17 @@ public class Jugador : ICharacter
 	{
 		return items;
 	}
-
-    public List<Ente> EntesEnLaMesa()
-    {
-        return mesa.EntesEnTablero;
-    }
-
-	public List<Carta> CartasEnLaMano()
-    {
-        return mano.CartasEnMano;
-    }
-
+		
 	public List<System.Object> CartasEnElMazo()
     {
         return mazo.CartasEnMazo;
     }
-
-	public System.Object CartaActual(){
-		return mazo.CartasEnMazo [PosCartaActual];
-	}
-
-    public int NumEntesEnLaMesa()
-    {
-        return mesa.EntesEnTablero.Count;
-    }
-
-    public int NumCartasMano()
-    {
-        return mano.CartasEnMano.Count;
-    }
-
+		
     public int NumCartasMazo()
     {
         return mazo.CartasEnMazo.Count;
     }
-
-    public virtual void OnTurnStart()
-    {
-        // add one mana crystal to the pool;
-		ManaEnEsteTurno = 10;
-		ManaRestante++;
-        /*ManaEnEsteTurno++;
-        ManaRestante = ManaEnEsteTurno;*/
-        foreach (Ente cl in mesa.EntesEnTablero)
-            cl.OnTurnStart();
-    }
-
-    public void OnTurnEnd()
-    {
-        if (EndTurnEvent != null)
-            EndTurnEvent.Invoke();
-        //TODO Controlador.PararTurnMaker(this);
-        //GetComponent<TurnMaker>().StopAllCoroutines();
-    }
-
+		
     public Dictionary<string, System.Object> ToDictionary()
     {
         Dictionary <string, System.Object> result = new Dictionary<string, System.Object>();
@@ -333,11 +208,6 @@ public class Jugador : ICharacter
 		}
 	}
 
-	public void Reset(){
-		this.mano = new Mano();
-		this.mesa = new Mesa();
-		this.defensa = 3000;
-		this.posCartaActual = 0;
-	}
+
 		
 }

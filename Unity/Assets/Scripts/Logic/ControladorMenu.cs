@@ -113,18 +113,19 @@ public class ControladorMenu : MonoBehaviour {
 	private bool ExisteEvolucion(Carta carta){
 		Familia familia = carta.AssetCarta.Familia;
 		int evolucionActual = carta.AssetCarta.Evolucion;
-		KeyValuePair<string,CartaAsset> evolucion = BuscarEvolucion (familia, evolucionActual);
+		int idEvolucion = carta.AssetCarta.IDEvolucion;
+		KeyValuePair<string,CartaAsset> evolucion = BuscarEvolucion (familia, evolucionActual,idEvolucion);
 		return !"".Equals(evolucion.Key)  && null != evolucion.Value;
 	}
 
-	public KeyValuePair<string,CartaAsset> BuscarEvolucion(Familia familia, int evolucionActual){
-		return BaseDatos.Instance.BuscarEvolucion (familia, evolucionActual);
+	public KeyValuePair<string,CartaAsset> BuscarEvolucion(Familia familia, int evolucionActual, int idEvolucion){
+		return BaseDatos.Instance.BuscarEvolucion (familia, evolucionActual, idEvolucion);
 	}
 
 	public void EvolucionarCarta(GameObject cartaG){
 		Carta carta = BuscarCarta (cartaG.GetComponent<IDHolder>().UniqueID);
 		//Buscamos la evolución
-		KeyValuePair<string,CartaAsset> evolucion = BuscarEvolucion (carta.AssetCarta.Familia, carta.AssetCarta.Evolucion);
+		KeyValuePair<string,CartaAsset> evolucion = BuscarEvolucion (carta.AssetCarta.Familia, carta.AssetCarta.Evolucion,carta.AssetCarta.IDEvolucion);
 		//modificamos el progreso de la carta restando las 100 unidades necesarias para evolucionar
 		carta.Progreso.Material -= 100;
 		carta.Progreso.Pocion -= 100;

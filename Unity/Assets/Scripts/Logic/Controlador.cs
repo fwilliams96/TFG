@@ -17,6 +17,7 @@ public class Controlador : MonoBehaviour
     public static Controlador Instance;
     private ControladorJugador controladorJugador;
     private ControladorEnte controladorEnte;
+	private List<JugadorPartida> jugadores;
 
     // PRIVATE FIELDS
     // reference to a timer to measure 
@@ -25,7 +26,7 @@ public class Controlador : MonoBehaviour
     #region Getters/Setters
     // PROPERTIES
    
-    public Jugador JugadorActual
+    public JugadorPartida JugadorActual
     {
         get
         {
@@ -38,21 +39,29 @@ public class Controlador : MonoBehaviour
         }
     }
 
-    public Jugador Local
+    public JugadorPartida Local
     {
         get
         {
-            return BaseDatos.Instance.Local;
+            return jugadores[0];
         }
     }
 
-    public Jugador Enemigo
+	public JugadorPartida Enemigo
     {
         get
         {
-            return BaseDatos.Instance.Enemigo;
+			return jugadores[1];
         }
     }
+
+	public List<JugadorPartida> Jugadores{
+		get{
+			return jugadores;
+		}
+	}
+
+
     #endregion
 
     // METHODS
@@ -76,11 +85,20 @@ public class Controlador : MonoBehaviour
     public void InicializacionJuego()
     {
         //Debug.Log("In TurnManager.OnGameStart()");
-
+		jugadores = new List<JugadorPartida>();
+		JugadorPartida jugadorPartida;
         foreach (Jugador p in BaseDatos.Instance.GetPlayers())
         {
-            controladorJugador.InicializarValoresJugador(p);
-            controladorJugador.ActualizarManaJugador(p);
+			if (p.TipoJugador.Equals (Jugador.TIPO_JUGADOR.MANUAL)) {
+				jugadorPartida = new JugadorHumano (p);
+				controladorJugador.InicializarValoresJugador (jugadorPartida);
+				controladorJugador.ActualizarManaJugador (jugadorPartida);
+			} else {
+				jugadorPartida = new JugadorBot (p);
+				controladorJugador.InicializarValoresJugador (jugadorPartida);
+				controladorJugador.DeshabilitarMana (jugadorPartida);
+			}
+			jugadores.Add (jugadorPartida);
         }
 
         Sequence s = DOTween.Sequence();
@@ -93,45 +111,25 @@ public class Controlador : MonoBehaviour
         s.PrependInterval(3f);
         s.OnComplete(() =>
         {
-            // determine who starts the game.
-            //int rnd = Random.Range(0,2);  // 2 is exclusive boundary
-            int rnd = 1;
-            // Debug.Log(Player.Players.Length);
-			Jugador whoGoesFirst = BaseDatos.Instance.Local;
-            // Debug.Log(whoGoesFirst);
-            Jugador whoGoesSecond = OtroJugador(whoGoesFirst);
-            // Debug.Log(whoGoesSecond);
-            // draw 4 cards for first player and 5 for second player
-            // first player draws a card
+            int rnd = Random.Range(0,2);  
+			JugadorPartida whoGoesFirst = jugadores[rnd];
+			JugadorPartida whoGoesSecond = OtroJugador(whoGoesFirst);
             DibujarCartasMazo(whoGoesFirst, 4, true);
-            // second player draws a card
             DibujarCartasMazo(whoGoesSecond, 4, true);
-            // add one more card to second player`s hand
-            // whoGoesSecond.DibujarCartaMazo(true);
-            //new GivePlayerACoinCommand(null, whoGoesSecond).AddToQueue();
-            // whoGoesSecond.DibujarCartaFueraMazo(CoinCard);
             new StartATurnCommand(whoGoesFirst).AñadirAlaCola();
         });
     }
 
-    void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //EndTurn();
-    }
-		
     public void EndTurn()
     {
 		if (OpcionesObjeto.PrevisualizandoAlgunaCarta())
 			OpcionesObjeto.PararTodasPrevisualizaciones();
 		if (AccionesPopUp.Instance.EstaActivo())
 			AccionesPopUp.Instance.OcultarPopup ();
-        // stop timer
         timer.StopTimer();
-        // send all commands in the end of current player`s turn
         JugadorActual.OnTurnEnd();
-
-        new StartATurnCommand(OtroJugador(JugadorActual)).AñadirAlaCola();
+		if(AreaJugador(JugadorActual).ControlActivado)
+        	new StartATurnCommand(OtroJugador(JugadorActual)).AñadirAlaCola();
     }
 
     public void StopTheTimer()
@@ -139,21 +137,21 @@ public class Controlador : MonoBehaviour
         timer.StopTimer();
     }
 
-    public void ActualizarValoresJugador()
+	public void ActualizarValoresJugador(JugadorPartida jugador)
     {
-        timer.StartTimer();
+		timer.StartTimer();
 
-        ActivarBotonFinDeTurno(JugadorActual);
+		ActivarBotonFinDeTurno(jugador);
 
-        controladorJugador.ActualizarValoresJugador();
+		controladorJugador.ActualizarValoresJugador(jugador);
     }
     //TODO creo que falta añadir en que area se esta mirando
-    public bool SePermiteControlarElJugador(Jugador ownerPlayer)
+	public bool SePermiteControlarElJugador(JugadorPartida ownerPlayer)
     {
         return controladorJugador.SePermiteControlarElJugador(ownerPlayer);
     }
 
-    public void ActivarBotonFinDeTurno(Jugador P)
+	public void ActivarBotonFinDeTurno(JugadorPartida P)
     {
 		
 		if (SePermiteControlarElJugador (P))
@@ -171,7 +169,7 @@ public class Controlador : MonoBehaviour
     /// <param name="player"></param>
     /// <param name="numCartas"></param>
     /// <param name="fast"></param>
-    public void DibujarCartasMazo(Jugador player, int numCartas, bool fast = false)
+	public void DibujarCartasMazo(JugadorPartida player, int numCartas, bool fast = false)
     {
         for (int i = 0; i < numCartas; i++)
         {
@@ -185,9 +183,9 @@ public class Controlador : MonoBehaviour
     /// </summary>
     /// <param name="jugador"></param>
     /// <param name="fast"></param>
-    public void DibujarCartaMazo(Jugador jugador, bool fast = false)
+	public void DibujarCartaMazo(JugadorPartida jugador, bool fast = false)
     {
-        if (jugador.NumCartasMazo() > 0)
+		if (jugador.Jugador.NumCartasMazo() > 0)
         {
             if (jugador.NumCartasMano() < 4)
             {
@@ -197,28 +195,11 @@ public class Controlador : MonoBehaviour
                 jugador.AñadirCartaMano(0, newCard);
                 // Debug.Log(hand.CardsInHand.Count);
                 new DrawACardCommand(jugador.CartasEnLaMano()[0], jugador, fast, fromDeck: true).AñadirAlaCola();
+				if(jugador.GetType() == typeof(JugadorHumano))
+					Controlador.Instance.MostrarCartasJugablesJugador (jugador);
             }
         }
 
-    }
-
-    /// <summary>
-    /// Jugar una carta fuera de la mano en el tablero
-    /// </summary>
-    /// <param name="jugador"></param>
-    /// <param name="assetCarta"></param>
-    public void DibujarCartaFueraMazo(Jugador jugador, CardAsset assetCarta)
-    {
-        if (jugador.NumCartasMano() < controladorJugador.AreaJugador(jugador).manoVisual.slots.Children.Length)
-        {
-            // 1) logic: add card to hand
-            //ELIMINATE
-            Carta newCard = new Carta(null);
-            jugador.AñadirCartaMano(0, newCard);
-            // 2) send message to the visual Deck
-            new DrawACardCommand(jugador.CartasEnLaMano()[0], jugador, fast: true, fromDeck: false).AñadirAlaCola();
-        }
-        // no removal from deck because the card was not in the deck
     }
 
     /// <summary>
@@ -226,7 +207,7 @@ public class Controlador : MonoBehaviour
     /// </summary>
     /// <param name="UniqueID"></param>
     /// <param name="tablePos"></param>
-    public void JugarMagicaMano(Jugador jugador,int UniqueID, int tablePos)
+    public void JugarMagicaMano(JugadorPartida jugador,int UniqueID, int tablePos)
     {
 		JugarMagicaMano(jugador,BaseDatos.Instance.Cartas[UniqueID], tablePos);
     }
@@ -236,10 +217,10 @@ public class Controlador : MonoBehaviour
     /// </summary>
     /// <param name="magicaJugada"></param>
     /// <param name="tablePos"></param>
-    public void JugarMagicaMano(Jugador jugador,Carta magicaJugada, int tablePos)
+	public void JugarMagicaMano(JugadorPartida jugador,Carta magicaJugada, int tablePos)
     {
 		RestarManaCarta(jugador, magicaJugada);
-		Magica nuevaMagica = new Magica(jugador.Area,magicaJugada.AssetCarta);
+		Magica nuevaMagica = new Magica(jugador.Jugador.Area,magicaJugada.AssetCarta);
 		JugarCarta(jugador,magicaJugada, nuevaMagica, tablePos);
     }
 
@@ -249,7 +230,7 @@ public class Controlador : MonoBehaviour
     /// <param name="UniqueID"></param>
     /// <param name="tablePos"></param>
     /// <param name="posicionAtaque"></param>
-    public void JugarCartaMano(Jugador jugador,int UniqueID, int tablePos, bool posicionAtaque)
+	public void JugarCartaMano(JugadorPartida jugador,int UniqueID, int tablePos, bool posicionAtaque)
     {
         Debug.Log("Jugar carta mano: " + UniqueID);
 		JugarCartaMano(jugador,BaseDatos.Instance.Cartas[UniqueID], tablePos, posicionAtaque);
@@ -261,11 +242,11 @@ public class Controlador : MonoBehaviour
     /// <param name="cartaJugada"></param>
     /// <param name="tablePos"></param>
     /// <param name="posicionAtaque"></param>
-    public void JugarCartaMano(Jugador jugador,Carta cartaJugada, int tablePos, bool posicionAtaque)
+	public void JugarCartaMano(JugadorPartida jugador,Carta cartaJugada, int tablePos, bool posicionAtaque)
     {
         //ELIMINATE
 		RestarManaCarta(jugador, cartaJugada);
-		Criatura newCreature = new Criatura(jugador.Area,cartaJugada.AssetCarta, posicionAtaque == true ? PosicionCriatura.ATAQUE : PosicionCriatura.DEFENSA);
+		Criatura newCreature = new Criatura(jugador.Jugador.Area,cartaJugada.AssetCarta, posicionAtaque == true ? PosicionCriatura.ATAQUE : PosicionCriatura.DEFENSA);
         JugarCarta(jugador,cartaJugada,newCreature, tablePos);
         
     }
@@ -276,42 +257,45 @@ public class Controlador : MonoBehaviour
     /// <param name="cartaJugada"></param>
     /// <param name="ente"></param>
     /// <param name="tablePos"></param>
-    private void JugarCarta(Jugador jugador,Carta cartaJugada,Ente ente, int tablePos)
+	private void JugarCarta(JugadorPartida jugador,Carta cartaJugada,Ente ente, int tablePos)
     {
 		jugador.AñadirEnteMesa(tablePos, ente);
         // no matter what happens, move this card to PlayACardSpot
 		new PlayAEntityCommand(cartaJugada, jugador, tablePos, ente).AñadirAlaCola();
+		if(jugador.GetType() == typeof(JugadorHumano))
+			ActualizarManaJugador(jugador);
         //causa battlecry effect
         if (ente.efecto != null)
             ente.efecto.WhenACreatureIsPlayed();
         // remove this card from hand
 		jugador.EliminarCartaMano(cartaJugada);
-		MostrarCartasJugablesJugador(jugador);
+		if(jugador.GetType() == typeof(JugadorHumano))
+			MostrarCartasJugablesJugador(jugador);
 
     }
 
-    public void ActualizarManaJugador(Jugador jugador)
+	public void ActualizarManaJugador(JugadorPartida jugador)
     {
         controladorJugador.ActualizarManaJugador(jugador);
     }
 
-    private void RestarManaCarta(Jugador jugador, Carta carta)
+	private void RestarManaCarta(JugadorPartida jugador, Carta carta)
     {
         controladorJugador.RestarManaCarta(jugador, carta);
     }
 
     // Muestra cartas jugables de la mano del jugador
-    public void MostrarCartasJugablesJugador(Jugador jugador)
+    public void MostrarCartasJugablesJugador(JugadorPartida jugador)
     {
 		controladorJugador.ActualizarEstadoCartasJugadorActual(jugador);
     }
 
-    public PlayerArea AreaJugador(Jugador jugador)
+	public PlayerArea AreaJugador(JugadorPartida jugador)
     {
-        return controladorJugador.AreaJugador(jugador);
+		return controladorJugador.AreaJugador(jugador.Jugador);
     }
 
-    public Jugador OtroJugador(Jugador jugador)
+	public JugadorPartida OtroJugador(JugadorPartida jugador)
     {
         return controladorJugador.OtroJugador(jugador);
     }
@@ -334,37 +318,24 @@ public class Controlador : MonoBehaviour
 	public bool SePuedeAtacarJugadorDeCara(int idJugador){
 		return controladorJugador.SePuedeAtacarJugadorDeCara (idJugador);
 	}
-
     /***************************************** CARTA ****************************************************/
 
-    /*public bool PuedeSerJugada
-    {
-        get
-        {
-            bool nuestroTurno = (Controlador.Instance.jugadorActual == jugador);
-            // for spells the amount of characters on the field does not matter
-            bool fieldNotFull = true;
-            // but if this is a creature, we have to check if there is room on board (table)
-            //TODO Esto de momento sobrará porque todas las cartas ocuparan sitio en la mesa
-            if (AssetCarta.Defensa > 0)
-                fieldNotFull = (jugador.NumCriaturasEnLaMesa() < DatosGenerales.Instance.NumMaximoCriaturasMesa);
-            //Debug.Log("Card: " + ca.name + " has params: ownersTurn=" + ownersTurn + "fieldNotFull=" + fieldNotFull + " hasMana=" + (CurrentManaCost <= owner.ManaLeft));
-            return nuestroTurno && fieldNotFull && (CosteManaActual <= jugador.ManaRestante);
-        }
-    }*/
-
+	public bool CartaPuedeUsarse(JugadorPartida jugador,Carta carta){
+		return carta.CosteManaActual <= jugador.ManaRestante;
+	}
 
     /***************************************** ENTE ****************************************************/
+	public bool CriaturaHaAtacado(Criatura criatura){
+		return controladorEnte.CriaturaHaAtacado (criatura);
+	}
 
-    // returns true if we can attack with this creature now
-    /*public bool PuedeAtacar
-    {
-        get
-        {
-            bool nuestroTurno = (jugadorActual == jugador);
-            return (nuestroTurno && (AtaquesRestantesEnTurno > 0) && !Frozen);
-        }
-    }*/
+	public bool EsMagicaTrampa(Ente ente){
+		return controladorEnte.EsMagicaTrampa (ente);
+	}
+
+	public bool EntePuedeUsarse(Ente ente){
+		return controladorEnte.EntePreparado (ente);
+	}
 
     public bool EstaEnPosicionAtaque(int idEnte)
     {
@@ -376,17 +347,15 @@ public class Controlador : MonoBehaviour
         return controladorEnte.EsMagica(idEnte);
     }
 
-	public Jugador ObtenerDueñoEnte(Ente ente){
-		Jugador jugador = null;
-		if (ente.Area.Equals ("Low"))
-			jugador = BaseDatos.Instance.Local;
-		else
-			jugador = BaseDatos.Instance.Enemigo;
+	public JugadorPartida ObtenerDueñoEnte(Ente ente){
+
+		JugadorPartida jugador = Controlador.Instance.Local.Jugador.Area.Equals (ente.Area) ? Controlador.Instance.Local : Controlador.Instance.Enemigo;
+
 		return jugador;
 	}	
 
 	public void DañarCriatura(Criatura criaturaObjetivo,int daño){
-		Jugador objetivo = ObtenerDueñoEnte (criaturaObjetivo);
+		JugadorPartida objetivo = ObtenerDueñoEnte (criaturaObjetivo);
 		controladorEnte.QuitarVidaCriatura(criaturaObjetivo,daño);
 		if (criaturaObjetivo.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
 			controladorJugador.QuitarVidaJugador(objetivo,daño);
@@ -400,14 +369,14 @@ public class Controlador : MonoBehaviour
 
 	public void AtacarJugador(int idCriaturaAtacante, int idJugadorObjetivo){
 		Criatura atacante = (Criatura)Recursos.EntesCreadosEnElJuego[idCriaturaAtacante];
-		Jugador jugador = Controlador.Instance.Local.ID == idJugadorObjetivo ? Controlador.Instance.Local : Controlador.Instance.Enemigo;
+		JugadorPartida jugador = Controlador.Instance.Local.ID == idJugadorObjetivo ? Controlador.Instance.Local : Controlador.Instance.Enemigo;
 		atacante.HaAtacado = true;
 		controladorJugador.AtacarJugador (atacante, jugador);
 		
 	}
 
 	public void AtacarCriatura(Criatura criaturaAtacante, Criatura criaturaObjetivo){
-		Jugador objetivo = ObtenerDueñoEnte (criaturaObjetivo);
+		JugadorPartida objetivo = ObtenerDueñoEnte (criaturaObjetivo);
 		controladorEnte.AtacarCriatura(criaturaAtacante, criaturaObjetivo);
 		if (criaturaObjetivo.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
 			controladorJugador.QuitarVidaJugador(objetivo,criaturaAtacante.Ataque);
@@ -416,7 +385,7 @@ public class Controlador : MonoBehaviour
 	}
 
 	public void AtacarMagica(Criatura criaturaAtacante, Magica magicaObjetivo){
-		Jugador objetivo = ObtenerDueñoEnte (magicaObjetivo);
+		JugadorPartida objetivo = ObtenerDueñoEnte (magicaObjetivo);
 		controladorEnte.AtacarMagica(criaturaAtacante, magicaObjetivo);
 		controladorJugador.QuitarVidaJugador(objetivo,criaturaAtacante.Ataque);
 	}
@@ -440,6 +409,10 @@ public class Controlador : MonoBehaviour
 
     }
 
+	public void ActivarEfectoMagica(int idMagica){
+		controladorEnte.ActivarEfectoMagica(idMagica,-1);
+	}
+
 	public void ActivarEfectoMagica(int idMagica, int idAtacante)
     {
 		controladorEnte.ActivarEfectoMagica(idMagica,idAtacante);
@@ -457,6 +430,7 @@ public class Controlador : MonoBehaviour
 
 	public void Clear(){
 		BaseDatos.Instance.Clear ();
+		jugadores.Clear ();
 		controladorJugador.Clear ();
 		controladorEnte.Clear ();
 	}

@@ -3,10 +3,10 @@ using System.Collections;
 
 public class CreatureDieCommand : Comanda 
 {
-    private Jugador p;
+	private JugadorPartida p;
     private int DeadCreatureID;
 
-    public CreatureDieCommand(int CreatureID, Jugador p)
+	public CreatureDieCommand(int CreatureID, JugadorPartida p)
     {
         this.p = p;
         this.DeadCreatureID = CreatureID;

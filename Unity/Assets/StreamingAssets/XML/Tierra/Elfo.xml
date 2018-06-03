@@ -6,6 +6,7 @@
     <nombreImagen>elfo</nombreImagen>
     <descripcion>Tan ágil que parece invisible</descripcion>
     <evolucion>1</evolucion>
+	<idEvolucion>2</idEvolucion>
     <mana>0</mana>
     <ataque>250</ataque>
     <defensa>150</defensa>

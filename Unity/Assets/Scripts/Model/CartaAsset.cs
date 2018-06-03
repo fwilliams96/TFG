@@ -30,6 +30,7 @@ public class CartaAsset
     public int CosteMana;
     //Excepto si es ancestral
     public int Evolucion;
+	public int IDEvolucion;
 	public Efecto Efecto;
 
     public int Defensa;

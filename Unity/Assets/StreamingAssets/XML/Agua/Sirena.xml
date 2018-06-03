@@ -1,11 +1,12 @@
 <carta>
   <delante>
     <tipo>Agua</tipo>
-    <titulo>Sirenita</titulo>
+    <titulo>Sirena</titulo>
     <efecto></efecto>
     <nombreImagen>sirenita</nombreImagen>
     <descripcion>Sirena con sed de venganza</descripcion>
     <evolucion>1</evolucion>
+	<idEvolucion>2</idEvolucion>
     <mana>2</mana>
     <ataque>650</ataque>
     <defensa>420</defensa>

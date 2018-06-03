@@ -4,10 +4,10 @@ using System.Collections;
 public abstract class EfectoEnte 
 {
     protected Ente ente;
-    protected Jugador owner;
+	protected JugadorPartida owner;
     protected int specialAmount;
 
-    public EfectoEnte(Jugador owner,Ente ente, int specialAmount)
+	public EfectoEnte(JugadorPartida owner,Ente ente, int specialAmount)
     {
         this.owner = owner;
         this.ente = ente;

@@ -35,7 +35,7 @@ public abstract class DraggingActions : MonoBehaviour {
         }
     }
 
-    protected virtual Jugador playerOwner
+    protected virtual JugadorPartida playerOwner
     {
         get{
 

@@ -6,6 +6,7 @@
     <nombreImagen>triton</nombreImagen>
     <descripcion>De lo más profundo del mar</descripcion>
     <evolucion>1</evolucion>
+	<idEvolucion>0</idEvolucion>
     <mana>1</mana>
     <ataque>400</ataque>
     <defensa>260</defensa>

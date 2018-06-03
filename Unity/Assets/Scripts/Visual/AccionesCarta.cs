@@ -39,6 +39,21 @@ public class AccionesCarta : MonoBehaviour {
 			opciones.SetActive (false);
 	}
 
+	public void Opciones(int indiceOpcion){
+		switch (indiceOpcion) {
+		case 1:
+			visualizar.SetActive (false);
+			break;
+		case 2:
+			añadirItem.SetActive (false);
+			break;
+		case 3:
+			evolucionar.SetActive (false);
+			break;
+		}
+		opciones.SetActive (true);
+	}
+
 	public void Visualizar(){
 		opciones.SetActive (false);
 		visualizar.SetActive (true);

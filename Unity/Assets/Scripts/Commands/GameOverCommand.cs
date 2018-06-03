@@ -3,9 +3,9 @@ using System.Collections;
 
 public class GameOverCommand : Comanda{
 
-    private Jugador looser;
+	private JugadorPartida looser;
 
-    public GameOverCommand(Jugador looser)
+	public GameOverCommand(JugadorPartida looser)
     {
         this.looser = looser;
     }

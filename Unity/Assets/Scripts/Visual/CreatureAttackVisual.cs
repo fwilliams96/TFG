@@ -20,7 +20,7 @@ public class CreatureAttackVisual : EnteVisual
         transform.DOMove(target.transform.position, 0.5f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.InCubic).OnComplete(() =>
         {
 
-			if (targetUniqueID == Controlador.Instance.Local.ID || targetUniqueID == Controlador.Instance.Enemigo.ID)
+				if (targetUniqueID == Controlador.Instance.Local.ID || targetUniqueID == Controlador.Instance.Enemigo.ID)
 			{
 				target.GetComponent<PlayerPortraitVisual>().HacerDaño(damageTaken,targetHealthAfter);
 			}else{
@@ -29,8 +29,8 @@ public class CreatureAttackVisual : EnteVisual
 				else
 					target.GetComponent<OneMagicaManager>().HacerDaño();
 			}
-            /*w.SetearOrdenCriatura();
-            w.EstadoVisual = tempState;*/
+            w.SetearOrdenCriatura();
+            /*w.EstadoVisual = tempState;*/
 
             //manager.HealthText.text = attackerHealthAfter.ToString();
             Sequence s = DOTween.Sequence();

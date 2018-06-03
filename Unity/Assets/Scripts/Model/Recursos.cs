@@ -107,6 +107,9 @@ public class Recursos  {
 					int evolucion = System.Int32.Parse(entrada.Value["carta"]["delante"]["evolucion"]);
 					asset.Evolucion = evolucion;
 
+					int idEvolucion = System.Int32.Parse(entrada.Value["carta"]["delante"]["idEvolucion"]);
+					asset.IDEvolucion = idEvolucion;
+
                     GuardarAssetBaseDatos(familia, asset);
                     //GuardarJSONApartirCartaAsset(asset, obtenerRutaJSON(familia, carpetaCarta),nombre+".json");
                     AssetsCreadosCartas.Add(asset);

@@ -1,11 +1,12 @@
 <carta>
   <delante>
     <tipo>Fuego</tipo>
-    <titulo>Furaibi</titulo>
+    <titulo>Furaribi</titulo>
     <efecto></efecto>
-    <nombreImagen>furaibi</nombreImagen>
+    <nombreImagen>furaribi</nombreImagen>
     <descripcion>Pequeño dragón travieso</descripcion>
     <evolucion>1</evolucion>
+	<idEvolucion>1</idEvolucion>
     <mana>1</mana>
     <ataque>550</ataque>
     <defensa>280</defensa>

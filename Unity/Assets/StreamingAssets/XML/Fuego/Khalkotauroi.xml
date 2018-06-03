@@ -6,6 +6,7 @@
     <nombreImagen>khalkotauroi</nombreImagen>
     <descripcion>Capaz de romper cualquier muro</descripcion>
     <evolucion>1</evolucion>
+	<idEvolucion>0</idEvolucion>
     <mana>2</mana>
     <ataque>650</ataque>
     <defensa>780</defensa>

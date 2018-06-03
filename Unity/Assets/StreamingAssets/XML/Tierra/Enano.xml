@@ -6,6 +6,7 @@
     <nombreImagen>enano</nombreImagen>
     <descripcion>Pequeño pero matón allí donde está</descripcion>
     <evolucion>1</evolucion>
+	<idEvolucion>0</idEvolucion>
     <mana>0</mana>
     <ataque>400</ataque>
     <defensa>180</defensa>

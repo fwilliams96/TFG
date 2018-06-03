@@ -13,8 +13,8 @@ public class Global {
         public static class FAMILIA
         {
 			public static string[] AIRE = { "Hipogrifo", "Arpia","Tengu"};
-            public static string[] AGUA = { "Basilisco", "Sirenita","Triton"};
-			public static string[] FUEGO = { "Furaibi" ,"Khalkotauroi"};
+            public static string[] AGUA = { "Basilisco", "Sirena","Triton"};
+			public static string[] FUEGO = { "Furaribi" ,"Khalkotauroi"};
             public static string[] TIERRA = { "Ciclope", "Enano", "Elfo"};
             public static string[] MAGICA = { "Destructor", "Espejo" };
             public static string[] FUSION = {  };
