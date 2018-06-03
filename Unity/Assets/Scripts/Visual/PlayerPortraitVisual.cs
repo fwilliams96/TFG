@@ -5,16 +5,10 @@ using DG.Tweening;
 
 public class PlayerPortraitVisual : MonoBehaviour {
 
-    // TODO : get ID from players when game starts
-
-    //public GameObject Explosion;
     public CharacterAsset charAsset;
     [Header("Text Component References")]
-    //public Text NameText;
     public Text HealthText;
     [Header("Image References")]
-    //public Image HeroPowerIconImage;
-    //public Image HeroPowerBackgroundImage;
     public Image ImagenPersonaje;
     public Image ImagenFondoPersonaje;
 
@@ -26,7 +20,11 @@ public class PlayerPortraitVisual : MonoBehaviour {
 
     public void AplicarEstiloPersonajeAsset()
     {
-        HealthText.text = charAsset.MaxHealth.ToString();
+		if (Settings.Instance.Batalla.Equals (Settings.TIPO_NUMERO.ENTERO)) {
+			HealthText.text = charAsset.MaxHealth.ToString ();
+		} else {
+			HealthText.text = Settings.ObtenerPorcentaje (charAsset.MaxHealth, charAsset.MaxHealth);
+		}
         ImagenPersonaje.sprite = charAsset.AvatarImage;
         ImagenFondoPersonaje.sprite = charAsset.AvatarBGImage;
 
@@ -39,7 +37,12 @@ public class PlayerPortraitVisual : MonoBehaviour {
         if (daño > 0)
         {
             DamageEffect.CreateDamageEffect(transform.position, vida,daño);
-			HealthText.text = (vida-daño).ToString();
+			if (Settings.Instance.Batalla.Equals (Settings.TIPO_NUMERO.ENTERO)) {
+				HealthText.text = (vida-daño).ToString();
+			} else {
+				HealthText.text = Settings.ObtenerPorcentaje ((vida-daño),charAsset.MaxHealth);
+			}
+
         }
     }
 

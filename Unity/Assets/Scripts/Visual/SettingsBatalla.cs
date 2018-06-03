@@ -22,6 +22,16 @@ public class SettingsBatalla : MonoBehaviour {
 		}
 
 	}
+
+	public void CambiarBatalla(int valor){
+		Settings settings = Settings.Instance;
+		if (valor == 0)
+			settings.Batalla = Settings.TIPO_NUMERO.ENTERO;
+		else if(valor == 1)
+			settings.Batalla = Settings.TIPO_NUMERO.PORCENTAJE;
+		else 
+			settings.Batalla = Settings.TIPO_NUMERO.FRACCION;
+	}
 	
 	// Update is called once per frame
 	void Update () {

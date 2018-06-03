@@ -18,7 +18,17 @@ public class SettingsMusica : MonoBehaviour {
 			toggleOff.isOn = true;
 		}
 	}
-	
+
+	public void CambiarMusica(int valor){
+		Settings settings = Settings.Instance;
+		if (valor == 0) {
+			settings.Musica = true;
+		} else {
+			settings.Musica = false;
+		}
+		ControladorMenu.Instance.ActualizarMusica (settings.Musica);
+	}
+
 	// Update is called once per frame
 	void Update () {
 		

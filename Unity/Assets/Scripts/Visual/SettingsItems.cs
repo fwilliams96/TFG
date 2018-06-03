@@ -31,7 +31,17 @@ public class SettingsItems : MonoBehaviour {
 		}
 
 	}
-	
+
+	public void CambiarItems(int valor){
+		Settings settings = Settings.Instance;
+		if (valor == 0)
+			settings.Items = Settings.TIPO_NUMERO.ENTERO;
+		else if(valor == 1)
+			settings.Items = Settings.TIPO_NUMERO.PORCENTAJE;
+		else
+			settings.Items = Settings.TIPO_NUMERO.FRACCION;
+	}
+
 	// Update is called once per frame
 	void Update () {
 		
