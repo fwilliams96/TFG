@@ -10,6 +10,9 @@ public class Login : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+		/*TODO email.text = "fwmcomputer@gmail.com";
+		password.text = "monardez12";
+		Logearse ();*/
     }
 	
 	// Update is called once per frame

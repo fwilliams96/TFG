@@ -28,6 +28,8 @@ public class Settings : MonoBehaviour {
 	[Header("Opciones parametrizables")]
 	public TIPO_NUMERO Batalla;
 	public TIPO_NUMERO Items;
+	[Header("Configuración juego")]
+	public bool Musica;
 
 	private Settings(){	}
 
@@ -36,7 +38,9 @@ public class Settings : MonoBehaviour {
 			DontDestroyOnLoad(this.gameObject);
 			Instance = this;
 		}
-			
+		Musica = true;
+		Batalla = TIPO_NUMERO.ENTERO;
+		Items = TIPO_NUMERO.ENTERO;	
 	}
 
 	public static string ObtenerPorcentaje(int numerador, int denominador){

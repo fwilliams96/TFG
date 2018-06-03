@@ -68,14 +68,21 @@ public class Controlador : MonoBehaviour
     void Awake()
     {
         Instance = this;
+		IniciarMusica ();
 		BaseDatos.Instance.CrearJugadorEnemigo ();
         timer = GetComponent<RopeTimer>();
         controladorJugador = ControladorJugador.Instance;
         controladorEnte = ControladorEnte.Instance;
         Recursos.CartasCreadasEnElJuego.Clear();
-        
+
         //INICIALIZAR CONTROLS PLAYER,ENTE
     }
+
+	void IniciarMusica(){
+		if (!Settings.Instance.Musica) {
+			Camera.main.GetComponent<AudioSource> ().Pause ();
+		}
+	}
 
     void Start()
     {

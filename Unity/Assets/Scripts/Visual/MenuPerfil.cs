@@ -6,9 +6,11 @@ using UnityEngine.UI;
 public class MenuPerfil : MonoBehaviour {
 
 	public Text nivel;
+	public Slider experiencia;
 
 	void Awake(){
 		nivel.text = ControladorMenu.Instance.ObtenerNivelJugador ();
+		experiencia.value = ControladorMenu.Instance.ObtenerExperienciaJugador ();
 	}
 
 	public void CambiarBatalla(int valor){
@@ -29,5 +31,15 @@ public class MenuPerfil : MonoBehaviour {
 			settings.Items = Settings.TIPO_NUMERO.PORCENTAJE;
 		else
 			settings.Items = Settings.TIPO_NUMERO.FRACCION;
+	}
+
+	public void CambiarMusica(int valor){
+		Settings settings = Settings.Instance;
+		if (valor == 0) {
+			settings.Musica = true;
+		} else {
+			settings.Musica = false;
+		}
+		ControladorMenu.Instance.ActualizarMusica (settings.Musica);
 	}
 }

@@ -24,11 +24,18 @@ public class ControladorMenu : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		pantallaActual = PANTALLA_MENU.INVENTARIO;
+		IniciarMusica ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	void IniciarMusica(){
+		if (!Settings.Instance.Musica) {
+			Camera.main.GetComponent<AudioSource> ().Pause ();
+		}
 	}
 
 	public PANTALLA_MENU PantallaActual{
@@ -225,6 +232,10 @@ public class ControladorMenu : MonoBehaviour {
 		return BaseDatos.Instance.Local.Nivel.ToString ();
 	}
 
+	public float ObtenerExperienciaJugador(){
+		return BaseDatos.Instance.Local.Experiencia / 100f;
+	}
+
 	public List<System.Object> RecogerElemento(Elementos.TIPO_ELEMENTOS tipoElementos){
 		List<System.Object> elementos;
 		switch (tipoElementos) {
@@ -259,5 +270,15 @@ public class ControladorMenu : MonoBehaviour {
 			}
 		}
 		return cartasFueraMazo;
+	}
+
+	public void ActualizarMusica(bool musica){
+		if (musica) {
+			if(!Camera.main.GetComponent<AudioSource> ().isPlaying)
+				Camera.main.GetComponent<AudioSource> ().Play ();
+		} else {
+			if(Camera.main.GetComponent<AudioSource> ().isPlaying)
+				Camera.main.GetComponent<AudioSource> ().Pause ();
+		}
 	}
 }

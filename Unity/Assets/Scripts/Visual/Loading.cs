@@ -7,7 +7,6 @@ public class Loading : MonoBehaviour {
 
     void Awake()
     {
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
         if (!BaseDatos.Instance.BaseDatosInicializada)
              BaseDatos.Instance.InicializarBase(CargaCompleta);
         //Recursos.InicializarCartas();
