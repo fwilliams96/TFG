@@ -24,6 +24,7 @@ public class DrawACardCommand : Comanda {
 		if (p.GetType () == typeof(JugadorHumano))
 			rotarDeCara = true;
 		areaJugador.manoVisual.DarCartaJugador(cl, cl.ID, fast, fromDeck,rotarDeCara);
-
+		if(p.GetType() == typeof(JugadorHumano))
+			Controlador.Instance.MostrarCartasJugablesJugador (p);
     }
 }

@@ -10,8 +10,6 @@ public class PlayerPortraitVisual : MonoBehaviour {
     public Text HealthText;
     [Header("Image References")]
     public Image ImagenPersonaje;
-    public Image ImagenFondoPersonaje;
-
     void Awake()
     {
         if (charAsset != null)
@@ -26,9 +24,9 @@ public class PlayerPortraitVisual : MonoBehaviour {
 			HealthText.text = Settings.ObtenerPorcentaje (charAsset.MaxHealth, charAsset.MaxHealth);
 		}
         ImagenPersonaje.sprite = charAsset.AvatarImage;
-        ImagenFondoPersonaje.sprite = charAsset.AvatarBGImage;
+        //ImagenFondoPersonaje.sprite = charAsset.AvatarBGImage;
 
-        ImagenFondoPersonaje.color = charAsset.AvatarBGTint;
+        //ImagenFondoPersonaje.color = charAsset.AvatarBGTint;
 
     }
 

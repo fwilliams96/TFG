@@ -202,8 +202,6 @@ public class Controlador : MonoBehaviour
                 jugador.AñadirCartaMano(0, newCard);
                 // Debug.Log(hand.CardsInHand.Count);
                 new DrawACardCommand(jugador.CartasEnLaMano()[0], jugador, fast, fromDeck: true).AñadirAlaCola();
-				if(jugador.GetType() == typeof(JugadorHumano))
-					Controlador.Instance.MostrarCartasJugablesJugador (jugador);
             }
         }
 
@@ -385,10 +383,11 @@ public class Controlador : MonoBehaviour
 	public void AtacarCriatura(Criatura criaturaAtacante, Criatura criaturaObjetivo){
 		JugadorPartida objetivo = ObtenerDueñoEnte (criaturaObjetivo);
 		controladorEnte.AtacarCriatura(criaturaAtacante, criaturaObjetivo);
-		if (criaturaObjetivo.PosicionCriatura.Equals(PosicionCriatura.ATAQUE))
-			controladorJugador.QuitarVidaJugador(objetivo,criaturaAtacante.Ataque);
-		else if (criaturaObjetivo.PosicionCriatura.Equals(PosicionCriatura.DEFENSA) && controladorEnte.CriaturaMuerta(criaturaObjetivo))
-			controladorJugador.QuitarVidaJugador(objetivo,criaturaObjetivo.Defensa);
+		if (criaturaObjetivo.PosicionCriatura.Equals (PosicionCriatura.ATAQUE)) {
+			controladorJugador.QuitarVidaJugador (objetivo, criaturaAtacante.Ataque);
+			controladorEnte.QuitarVidaCriatura (criaturaAtacante, criaturaObjetivo.Ataque);
+		} else if (criaturaObjetivo.PosicionCriatura.Equals (PosicionCriatura.DEFENSA) && controladorEnte.CriaturaMuerta (criaturaObjetivo))
+			controladorJugador.QuitarVidaJugador (objetivo, System.Math.Abs (criaturaObjetivo.Defensa));
 	}
 
 	public void AtacarMagica(Criatura criaturaAtacante, Magica magicaObjetivo){
