@@ -103,8 +103,12 @@ public class Acciones : MonoBehaviour {
 	public void BuscarInfoCarta(){
 		if (!Familia.Ancestral.Equals (elementoActual.GetComponent<OneCardManager> ().CartaAsset.Familia) &&
 		    !Familia.Magica.Equals (elementoActual.GetComponent<OneCardManager> ().CartaAsset.Familia)) {
-			string nombreCarta = elementoActual.GetComponent<OneCardManager> ().CartaAsset.Nombre;
-			Application.OpenURL ("https://es.wikipedia.org/wiki/" + nombreCarta);
+
+			string urlInfoCarta = elementoActual.GetComponent<OneCardManager> ().CartaAsset.InfoCarta;
+			if(null != urlInfoCarta && !"".Equals(urlInfoCarta))
+				Application.OpenURL (urlInfoCarta);
+			else
+				MessageManager.Instance.ShowMessage ("Ha habido un error al buscar la información",1.5f);
 		} else {
 			MessageManager.Instance.ShowMessage ("No existe información al respecto",1.5f);
 		}

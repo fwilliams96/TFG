@@ -4,7 +4,8 @@
     <titulo>Enano</titulo>
     <efecto></efecto>
     <nombreImagen>enano</nombreImagen>
-    <descripcion>Pequeño pero matón allí donde está</descripcion>
+    <descripcion>Ser mágico del mundo subterráneo con grandes habilidades para la forja</descripcion>
+	<infoCarta>https://es.wikipedia.org/wiki/Enano_(mitolog%C3%ADa)</infoCarta>
     <evolucion>1</evolucion>
 	<idEvolucion>0</idEvolucion>
     <mana>0</mana>
@@ -13,7 +14,5 @@
   </delante>
   <detras>
     <simbolo>cuadrado.png</simbolo>
-    <elemento>trebol.png</elemento>
-    <elemento2>pocion.png</elemento2>
   </detras>
 </carta>

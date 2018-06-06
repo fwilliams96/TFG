@@ -8,16 +8,15 @@ public class Global {
 
     public static class CARTAS
     {
-        public static string[] FAMILIAS = { "Agua", "Fuego", "Tierra", "Aire", "Magica", "Fusion", "Ancestral" };
-
+        //public static string[] FAMILIAS = { "Agua", "Fuego", "Tierra", "Aire", "Magica", "Ancestral" };
+		public static string[] FAMILIAS = {"Magica" };
         public static class FAMILIA
         {
-			public static string[] AIRE = { "Hipogrifo", "Arpia","Tengu"};
-            public static string[] AGUA = { "Basilisco", "Sirena","Triton"};
+			public static string[] AIRE = { "Grifo", "Arpia","Arpia2","Tengu"};
+            public static string[] AGUA = { "Basilisco", "Sirena","Sirena2","Triton","Triton2"};
 			public static string[] FUEGO = { "Furaribi" ,"Khalkotauroi"};
-            public static string[] TIERRA = { "Ciclope", "Enano", "Elfo"};
-            public static string[] MAGICA = { "Destructor", "Espejo" };
-            public static string[] FUSION = {  };
+            public static string[] TIERRA = { "Ciclope", "Enano", "Elfo", "Elfo2"};
+            public static string[] MAGICA = { "Destructor", "Espejo" ,"Vida", "Mana" };
             public static string[] ANCESTRAL = { "Dragon"};
         }
 
@@ -27,15 +26,9 @@ public class Global {
             public const string TIERRA = "tierra";
 			public const string AIRE = "aire";
             public const string AGUA = "agua";
-            public const string ELECTRICIDAD = "electricidad";
-            public const string FUSION = "fusion";
             public const string MAGICA = "magica";
             public const string ANCESTRAL = "ancestral";
         }
-
-
-
-
     }
 
 	public static class MAGICA

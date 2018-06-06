@@ -5,7 +5,8 @@
     <efecto>espejo</efecto>
     <nombreImagen>espejo</nombreImagen>
     <descripcion>Muy impredecible, muy determinante</descripcion>
-    <evolucion>1</evolucion>
+    <infoCarta></infoCarta>
+	<evolucion>1</evolucion>
 	<idEvolucion>0</idEvolucion>
     <mana>2</mana>
     <ataque></ataque>
@@ -13,7 +14,5 @@
   </delante>
   <detras>
     <simbolo>cuadrado.png</simbolo>
-    <elemento>trebol.png</elemento>
-    <elemento2>pocion.png</elemento2>
   </detras>
 </carta>

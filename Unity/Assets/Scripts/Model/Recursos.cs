@@ -11,33 +11,31 @@ using UnityEditor;
 
 public class Recursos  {
 
-    private static Dictionary<string, Dictionary<string, SimpleJSON.JSONNode>> cartas;
-
     public static Dictionary<int, Carta> CartasCreadasEnElJuego = new Dictionary<int, Carta>();
 
     public static Dictionary<int, Ente> EntesCreadosEnElJuego = new Dictionary<int, Ente>();
 
     public static List<CartaAsset> AssetsCreadosCartas = new List<CartaAsset>();
 
-    public static void InicializarJugadores()
-    {
-        //Players.Instance.Add(BaseDatos.Instance.Local);
-        //Players.Instance.Add(BaseDatos.Instance.Enemigo);
-    }
-
     public static void InicializarCartas()
     {
-        //BaseDatos.Instance.RecuperarCarta();
-        //BaseDatos.Instance.Prueba();
-        LeerInformacionCartas();
-        CrearAssetsCartas();
-        //var asset = LeerCartaAssetApartirJSON("Asset2.json");
+		SubirTodasCartas();
 
     }
 
-    private static void LeerInformacionCartas()
+	public static void SubirCarta(string familia, string nombreCartaXML){
+		Dictionary<string, Dictionary<string, SimpleJSON.JSONNode>> cartas = new Dictionary<string, Dictionary<string, SimpleJSON.JSONNode>>();
+		string cardPath = Application.streamingAssetsPath + "/XML" + "/" + familia + "/" + nombreCartaXML + ".xml";
+		var json = JSONUtils.XMLFileToJSON(cardPath);
+		Dictionary<string, SimpleJSON.JSONNode> diccionarioTemp = new Dictionary<string, SimpleJSON.JSONNode>();
+		diccionarioTemp.Add(nombreCartaXML, json);
+		cartas.Add(familia, diccionarioTemp);
+		CrearAssetsCartas (cartas);
+	}
+
+    private static void SubirTodasCartas()
     {
-        cartas = new Dictionary<string, Dictionary<string, SimpleJSON.JSONNode>>();
+		Dictionary<string, Dictionary<string, SimpleJSON.JSONNode>> cartas = new Dictionary<string, Dictionary<string, SimpleJSON.JSONNode>>();
         Dictionary<string, SimpleJSON.JSONNode> diccionarioTemp;
 
         string filePath = Application.streamingAssetsPath + "/XML";
@@ -65,9 +63,10 @@ public class Recursos  {
             }
             cartas.Add(familia, diccionarioTemp);
         }
+		CrearAssetsCartas (cartas);
     }
 
-    private static void CrearAssetsCartas()
+	private static void CrearAssetsCartas(Dictionary<string, Dictionary<string, SimpleJSON.JSONNode>> cartas)
     {
         foreach(string familia in Global.CARTAS.FAMILIAS)
         {
@@ -88,6 +87,8 @@ public class Recursos  {
 
                     string descripcion = entrada.Value["carta"]["delante"]["descripcion"];
 					asset.Descripcion = descripcion;
+
+					asset.InfoCarta = entrada.Value["carta"]["delante"]["infoCarta"];
 
                     int mana = System.Int32.Parse(entrada.Value["carta"]["delante"]["mana"]);
 					asset.CosteMana = mana;
@@ -110,7 +111,7 @@ public class Recursos  {
 					int idEvolucion = System.Int32.Parse(entrada.Value["carta"]["delante"]["idEvolucion"]);
 					asset.IDEvolucion = idEvolucion;
 
-                    GuardarAssetBaseDatos(familia, asset);
+                    //GuardarAssetBaseDatos(familia, asset);
                     //GuardarJSONApartirCartaAsset(asset, obtenerRutaJSON(familia, carpetaCarta),nombre+".json");
                     AssetsCreadosCartas.Add(asset);
 
@@ -164,14 +165,8 @@ public class Recursos  {
             case Global.CARTAS.TIPO_CARTA.TIERRA:
                 carpetaFamilia = "Tierra/";
                 break;
-            case Global.CARTAS.TIPO_CARTA.ELECTRICIDAD:
-                carpetaFamilia = "Electricidad/";
-                break;
             case Global.CARTAS.TIPO_CARTA.MAGICA:
                 carpetaFamilia = "Magica/";
-                break;
-            case Global.CARTAS.TIPO_CARTA.FUSION:
-                carpetaFamilia = "Fusion/";
                 break;
             case Global.CARTAS.TIPO_CARTA.ANCESTRAL:
                 carpetaFamilia = "Ancestral/";
@@ -184,7 +179,8 @@ public class Recursos  {
     }
 
 	private static Efecto obtenerEfecto(string nombreEfecto){
-		nombreEfecto = nombreEfecto.Replace(nombreEfecto[0],nombreEfecto[0].ToString().ToLower()[0]);
+		nombreEfecto = nombreEfecto.ToLower ();
+		nombreEfecto = nombreEfecto.Replace(nombreEfecto[0],nombreEfecto[0].ToString().ToUpper()[0]);
 		Efecto efecto;
 		switch (nombreEfecto) {
 			case Global.MAGICA.TIPO_EFECTO.Destructor:
@@ -224,14 +220,8 @@ public class Recursos  {
             case Global.CARTAS.TIPO_CARTA.TIERRA:
                 tipo = Familia.Tierra;
                 break;
-            case Global.CARTAS.TIPO_CARTA.ELECTRICIDAD:
-                tipo = Familia.Electrica;
-                break;
             case Global.CARTAS.TIPO_CARTA.MAGICA:
                 tipo = Familia.Magica;
-                break;
-            case Global.CARTAS.TIPO_CARTA.FUSION:
-                tipo = Familia.Fusion;
                 break;
             case Global.CARTAS.TIPO_CARTA.ANCESTRAL:
                 tipo = Familia.Ancestral;

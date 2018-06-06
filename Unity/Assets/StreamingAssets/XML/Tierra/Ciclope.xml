@@ -5,6 +5,7 @@
     <efecto></efecto>
     <nombreImagen>ciclope</nombreImagen>
     <descripcion>Es una bestia destructora</descripcion>
+	<infoCarta>https://es.wikipedia.org/wiki/C%C3%ADclope</infoCarta>
     <evolucion>1</evolucion>
 	<idEvolucion>1</idEvolucion>
     <mana>2</mana>
@@ -13,7 +14,5 @@
   </delante>
   <detras>
     <simbolo>cuadrado.png</simbolo>
-    <elemento>trebol.png</elemento>
-    <elemento2>pocion.png</elemento2>
   </detras>
 </carta>

@@ -3,9 +3,10 @@
     <tipo>Agua</tipo>
     <titulo>Sirena</titulo>
     <efecto></efecto>
-    <nombreImagen>sirenita</nombreImagen>
-    <descripcion>Sirena con sed de venganza</descripcion>
-    <evolucion>1</evolucion>
+    <nombreImagen>sirena</nombreImagen>
+    <descripcion>Con su voz melodiosa e irresistible encanta a los marineros</descripcion>
+    <infoCarta>https://es.wikipedia.org/wiki/Sirena</infoCarta>
+	<evolucion>1</evolucion>
 	<idEvolucion>2</idEvolucion>
     <mana>2</mana>
     <ataque>650</ataque>
@@ -13,7 +14,5 @@
   </delante>
   <detras>
     <simbolo>cuadrado.png</simbolo>
-    <elemento>trebol.png</elemento>
-    <elemento2>pocion.png</elemento2>
   </detras>
 </carta>

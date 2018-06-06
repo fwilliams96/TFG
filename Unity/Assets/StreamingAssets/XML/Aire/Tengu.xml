@@ -5,6 +5,7 @@
     <efecto></efecto>
     <nombreImagen>tengu</nombreImagen>
     <descripcion>Una de las criaturas más raras</descripcion>
+	<infoCarta>https://es.wikipedia.org/wiki/Tengu</infoCarta>
     <evolucion>1</evolucion>
 	<idEvolucion>1</idEvolucion>
     <mana>1</mana>
@@ -13,7 +14,5 @@
   </delante>
   <detras>
     <simbolo>cuadrado.png</simbolo>
-    <elemento>trebol.png</elemento>
-    <elemento2>pocion.png</elemento2>
   </detras>
 </carta>

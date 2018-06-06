@@ -279,9 +279,15 @@ public class Controlador : MonoBehaviour
 
     }
 
+	public void ActualizarVidaJugador(JugadorPartida jugador){
+		controladorJugador.ActualizarVidaJugador(jugador);
+	}
+
 	public void ActualizarManaJugador(JugadorPartida jugador)
     {
         controladorJugador.ActualizarManaJugador(jugador);
+		if(jugador.GetType() == typeof(JugadorHumano))
+			MostrarCartasJugablesJugador(jugador);
     }
 
 	private void RestarManaCarta(JugadorPartida jugador, Carta carta)
@@ -323,6 +329,19 @@ public class Controlador : MonoBehaviour
 	public bool SePuedeAtacarJugadorDeCara(int idJugador){
 		return controladorJugador.SePuedeAtacarJugadorDeCara (idJugador);
 	}
+
+	public  void GiveHealth(JugadorPartida jugador, int vida){
+		jugador.Defensa += vida;
+		new ShowMessageCommand ("¡Obtienes "+vida+" de vida!", 1.0f).AñadirAlaCola ();
+		ActualizarVidaJugador (jugador);
+	}
+	public void GiveManaBonus(JugadorPartida jugador, int mana)
+	{
+		jugador.ConseguirManaExtra(mana);
+		new ShowMessageCommand ("¡Obtienes "+mana+" de maná!", 1.0f).AñadirAlaCola ();
+		ActualizarManaJugador (jugador);
+	}
+
     /***************************************** CARTA ****************************************************/
 
 	public bool CartaPuedeUsarse(JugadorPartida jugador,Carta carta){

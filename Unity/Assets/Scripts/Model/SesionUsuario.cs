@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using Firebase.Auth;
+using System;
 
 public class SesionUsuario
 {
@@ -75,12 +77,17 @@ public class SesionUsuario
         auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
             if (task.IsCanceled)
             {
-                Debug.Log("SignInWithEmailAndPasswordAsync was canceled.");
+				Debug.Log("Excepcion: "+task.Exception);
+				MessageManager.Instance.ShowMessage(GetErrorMessage(task.Exception),1.5f);
+				//MessageManager.Instance.ShowMessage("Ha habido algún error con el inicio de sesión",1.5f);
+				Debug.Log("SignInWithEmailAndPasswordAsync was canceled." +task.Exception);
                 return;
             }
             if (task.IsFaulted)
             {
-				MessageManager.Instance.ShowMessage("El usuario o la contraseña son incorrectos",1.5f);
+				Debug.Log("Excepcion: "+task.Exception);
+				MessageManager.Instance.ShowMessage(GetErrorMessage(task.Exception),1.5f);
+				//MessageManager.Instance.ShowMessage("El usuario o la contraseña son incorrectos",1.5f);
                 Debug.Log("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
                 return;
             }
@@ -99,16 +106,18 @@ public class SesionUsuario
         auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
             if (task.IsCanceled)
             {
+				Debug.Log("Excepcion: "+task.Exception);
+				MessageManager.Instance.ShowMessage(GetErrorMessage(task.Exception),1.5f);
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
                 return;
             }
             if (task.IsFaulted)
             {
-				MessageManager.Instance.ShowMessage("El usuario ya se encuentra registrado",1.5f);
+				Debug.Log("Excepcion: "+task.Exception);
+				MessageManager.Instance.ShowMessage(GetErrorMessage(task.Exception),1.5f);
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
                 return;
             }
-
             // Firebase user has been created.
             user = task.Result;
             registro = false;
@@ -118,6 +127,51 @@ public class SesionUsuario
            
         });
     }
+
+	public static string GetErrorMessage(Exception exception)
+	{
+		Debug.Log(exception.ToString());
+		Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
+		AggregateException ex = exception as AggregateException;
+		if (ex != null) {
+			Firebase.FirebaseException inner = ex.InnerExceptions[0] as Firebase.FirebaseException;
+			return GetCodeErrorMessage((AuthError)inner.ErrorCode);
+		}
+		return exception.Message.ToString();
+	}
+
+	private static string GetCodeErrorMessage(AuthError errorCode)
+	{
+		var message = "";
+		switch (errorCode)
+		{
+		case AuthError.AccountExistsWithDifferentCredentials:
+			message = "Ya existe la cuenta con credenciales diferentes";
+			break;
+		case AuthError.MissingPassword:
+			message = "Es necesario la contraseña";
+			break;
+		case AuthError.WeakPassword:
+			message = "La contraseña es débil";
+			break;
+		case AuthError.WrongPassword:
+			message = "La contraseña es incorrecta";
+			break;
+		case AuthError.EmailAlreadyInUse:
+			message = "Ya existe una cuenta con ese correo electrónico";
+			break;
+		case AuthError.InvalidEmail:
+			message = "Correo electrónico inválido";
+			break;
+		case AuthError.MissingEmail:
+			message = "Hace falta el correo electrónico";
+			break;
+		default:
+			message = "Ocurrió un error";
+			break;
+		}
+		return message;
+	}
 
 	public Firebase.Auth.FirebaseUser User
     {

@@ -28,7 +28,6 @@ public class ControladorJugador
 
     private ControladorJugador()
     {
-        Recursos.InicializarJugadores();
     }
 
     public static ControladorJugador Instance
@@ -126,6 +125,10 @@ public class ControladorJugador
 			
     }
 
+	public void ActualizarVidaJugador(JugadorPartida jugador){
+		new UpdatePlayerHealthCommand(jugador).AñadirAlaCola();
+	}
+
 	public void ActualizarManaJugador(JugadorPartida jugador)
     {
         new UpdateManaCrystalsCommand(jugador, jugador.ManaEnEsteTurno, jugador.ManaRestante).AñadirAlaCola();
@@ -175,16 +178,17 @@ public class ControladorJugador
         PararControlJugadores();
         Controlador.Instance.StopTheTimer();
 		new MuerteJugadorCommand (jugador).AñadirAlaCola ();
-		if (jugador.Jugador.Area.Equals ("Low"))
-			new GameOverCommand (jugador).AñadirAlaCola ();
-		else {
+		int exp = AñadirExperienciaJugador (jugador);	
+		if (jugador.GetType() == typeof(JugadorHumano)) {
+			new GameOverCommand (jugador,exp).AñadirAlaCola ();
+			BaseDatos.Instance.ActualizarExperienciaBaseDatos ();
+		}else {
 			JugadorPartida ganador = OtroJugador (jugador);
 			Carta carta = ObtenerCartaPremio ();
 			List<Item> items = ObtenerItemsPremio ();
 			AñadirPremioJugador (ganador,carta,items);
-			int exp = AñadirExperienciaJugador (ganador);
-			BaseDatos.Instance.ActualizarJugadorBaseDatos (carta != null);
 			new PremioPartidaCommand (jugador,carta,items,exp).AñadirAlaCola ();
+			BaseDatos.Instance.ActualizarJugadorBaseDatos (carta != null);
 		}
 			
     }

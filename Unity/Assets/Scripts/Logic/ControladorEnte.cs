@@ -71,6 +71,7 @@ public class ControladorEnte
 		}
         
         new ActivateEffectCommand(idMagica).AñadirAlaCola();
+		magica.EfectoActivado = true;
 		switch (magica.AssetCarta.Efecto) {
 			case Efecto.Destructor:
 				jugador = Controlador.Instance.ObtenerDueñoEnte (magica);
@@ -81,12 +82,11 @@ public class ControladorEnte
 				break;
 			case Efecto.Mana:
 				jugador = Controlador.Instance.ObtenerDueñoEnte (magica);
-				GiveManaBonus(jugador,2);
+				GiveManaBonus(jugador,Random.Range(1,3));
 				break;
 			case Efecto.Vida:
-				//TODO por implementar, dar vida a todas las criaturas
 				jugador = Controlador.Instance.ObtenerDueñoEnte (magica);
-				GiveHealth (jugador, 100);
+				GiveHealth (jugador, Random.Range(60,181));
 				break;
 			default:
 				break;
@@ -107,11 +107,12 @@ public class ControladorEnte
 	}
 
 	public  void GiveHealth(JugadorPartida jugador, int vida){
-		
+		Controlador.Instance.GiveHealth (jugador, vida);
 	}
+
 	public void GiveManaBonus(JugadorPartida jugador, int mana)
 	{
-		jugador.ConseguirManaExtra(mana);
+		Controlador.Instance.GiveManaBonus (jugador, mana);
 	}
 
 	public void DealDamageToTarget(Criatura criatura, int daño)

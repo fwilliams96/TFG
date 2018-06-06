@@ -1,0 +1,18 @@
+<carta>
+  <delante>
+    <tipo>Aire</tipo>
+    <titulo>Arpia</titulo>
+    <efecto></efecto>
+    <nombreImagen>arpia2</nombreImagen>
+    <descripcion>Mujer alada que castiga a los mortales</descripcion>
+    <infoCarta>https://es.wikipedia.org/wiki/Harp%C3%ADas</infoCarta>
+	<evolucion>2</evolucion>
+	<idEvolucion>2</idEvolucion>
+    <mana>2</mana>
+    <ataque>650</ataque>
+    <defensa>450</defensa>
+  </delante>
+  <detras>
+    <simbolo>cuadrado.png</simbolo>
+  </detras>
+</carta>

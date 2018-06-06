@@ -58,15 +58,21 @@ public class BaseDatos
         // Get the root reference location of the database.
         reference = FirebaseDatabase.DefaultInstance.RootReference;
     }
-
+		
     private void ObtenerAssets(CallBack callback)
     {
         reference.Child("assets").GetValueAsync().ContinueWith(task => {
             if (task.IsFaulted)
             {
-                Debug.Log("Error al recoger los assets");
+				Debug.Log("Excepcion: "+task.Exception);
+				MessageManager.Instance.ShowMessage(SesionUsuario.GetErrorMessage(task.Exception),1.5f);
                 assets = null;
             }
+			else if(task.IsCanceled){
+				Debug.Log("Excepcion: "+task.Exception);
+				MessageManager.Instance.ShowMessage(SesionUsuario.GetErrorMessage(task.Exception),1.5f);
+				assets = null;
+			}
             else if (task.IsCompleted)
             {
                 //Assigno los assets a una variable global
@@ -81,7 +87,12 @@ public class BaseDatos
 		reference.Child("users").Child(userId).GetValueAsync().ContinueWith(task => {
 			if (task.IsFaulted)
 			{
-				Debug.Log("Error al recoger el jugador");
+				Debug.Log("Excepcion: "+task.Exception);
+				MessageManager.Instance.ShowMessage(SesionUsuario.GetErrorMessage(task.Exception),1.5f);
+			}
+			else if(task.IsCanceled){
+				Debug.Log("Excepcion: "+task.Exception);
+				MessageManager.Instance.ShowMessage(SesionUsuario.GetErrorMessage(task.Exception),1.5f);
 			}
 			else if (task.IsCompleted)
 			{
@@ -343,7 +354,7 @@ public class BaseDatos
 		if(cambioCartas)
 			ActualizarCartasBaseDatos ();
 		ActualizarNivelBaseDatos ();
-		//ActualizarExperienciaBaseDatos ();
+		ActualizarExperienciaBaseDatos ();
 	}
 
 	private void ActualizarItemsBaseDatos(){
@@ -356,7 +367,7 @@ public class BaseDatos
 		ReferenciaCartas().SetValueAsync (Local.CartasToDictionary ());
 	}
 
-	private void ActualizarExperienciaBaseDatos(){
+	public void ActualizarExperienciaBaseDatos(){
 		ReferenciaExperiencia ().SetValueAsync (Local.Experiencia);
 	}
 

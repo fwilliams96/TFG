@@ -30,6 +30,22 @@ public class PlayerPortraitVisual : MonoBehaviour {
 
     }
 
+	public void AumentarVida(int vidaDespues){
+		StartCoroutine (AumentarVidaProgresivamente(vidaDespues));
+	}
+
+	IEnumerator AumentarVidaProgresivamente(int vidaDespues)
+	{
+		int vidaActual = System.Int32.Parse (HealthText.text);
+
+		while (vidaActual < vidaDespues) {
+			HealthText.text = (vidaActual + 1).ToString ();
+			yield return new WaitForSeconds(0.05f);
+		}
+
+		Comandas.Instance.CompletarEjecucionComanda();
+	}
+
     public void HacerDaño(int daño, int vida)
     {
         if (daño > 0)

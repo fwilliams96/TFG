@@ -25,6 +25,7 @@ public class CartaAsset
 {
     public string Nombre;
     public string Descripcion;
+	public string InfoCarta;
     public Familia Familia;
     public string RutaImagenCarta;
     public int CosteMana;

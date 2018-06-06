@@ -81,9 +81,11 @@ public class JugadorBot: JugadorPartida {
 			{
 				// attack a random target with a creature
 				if (cl.GetType () == typeof(Magica)) {
-					if (!Controlador.Instance.EsMagicaTrampa (cl)) {
-						Controlador.Instance.ActivarEfectoMagica (cl.ID);
-						movimientoHecho = true;
+					if (!((Magica)cl).EfectoActivado) {
+						if (!Controlador.Instance.EsMagicaTrampa (cl)) {
+							Controlador.Instance.ActivarEfectoMagica (cl.ID);
+							movimientoHecho = true;
+						}
 					}
 				} else {
 					Criatura criatura = (Criatura)cl;
@@ -93,10 +95,15 @@ public class JugadorBot: JugadorPartida {
 							if (enemigo.NumEntesEnLaMesa () > 0) {
 								int index = Random.Range (0, enemigo.NumEntesEnLaMesa ());
 								Ente enteObjetivo = enemigo.EntesEnLaMesa () [index];
-								Controlador.Instance.AtacarEnte (cl.ID, enteObjetivo.ID);
-							} else
+								if (enteObjetivo.GetType() == typeof(Criatura) || (enteObjetivo.GetType () == typeof(Magica) && !((Magica)enteObjetivo).EfectoActivado)) {
+									Controlador.Instance.AtacarEnte (cl.ID, enteObjetivo.ID);
+									movimientoHecho = true;
+								}
+							} else {
 								Controlador.Instance.AtacarJugador (cl.ID, enemigo.ID);
-							movimientoHecho = true;
+								movimientoHecho = true;
+							}
+							
 						}
 
 					} else {

@@ -5,7 +5,17 @@ using System.Collections.Generic;
 [System.Serializable]
 public class Magica: Ente,ICharacter 
 {
+	private bool efectoActivado;
+
+	public bool EfectoActivado{
+		get{
+			return efectoActivado;
+		}set{
+			efectoActivado = value;
+		}
+	}
+
     // CONSTRUCTOR
-    public Magica(string area,CartaAsset ca) : base(area,ca) { }
+	public Magica(string area,CartaAsset ca) : base(area,ca) { this.efectoActivado = false; }
 
 }

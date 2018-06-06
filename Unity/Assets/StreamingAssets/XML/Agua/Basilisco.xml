@@ -5,6 +5,7 @@
     <efecto></efecto>
     <nombreImagen>basilisco</nombreImagen>
     <descripcion>Basilisco ansioso de ahogar</descripcion>
+	<infoCarta>https://es.wikipedia.org/wiki/Basilisco_(criatura_mitol%C3%B3gica)</infoCarta>
     <evolucion>1</evolucion>
 	<idEvolucion>1</idEvolucion>
     <mana>1</mana>
@@ -13,7 +14,5 @@
   </delante>
   <detras>
     <simbolo>cuadrado.png</simbolo>
-    <elemento>trebol.png</elemento>
-    <elemento2>pocion.png</elemento2>
   </detras>
 </carta>
