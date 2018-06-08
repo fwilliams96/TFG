@@ -14,7 +14,7 @@ public class MagicEffectVisual : EnteVisual
 
 	private IEnumerator MuerteMagica()
 	{
-		yield return new WaitForSeconds(3f);
+		yield return new WaitForSeconds(1.5f);
 		/*for(int i=0; i < 5; i++)
 		{
 			yield return new WaitForSeconds(0.05f);

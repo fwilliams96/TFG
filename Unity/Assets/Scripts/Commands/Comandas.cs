@@ -66,4 +66,14 @@ public class Comandas
         }
         return false;
     }
+
+	public bool ComandasDeCambioTurnoPendientes()
+	{
+		foreach (Comanda c in CommandQueue)
+		{
+			if (c is StartATurnCommand)
+				return true;
+		}
+		return false;
+	}
 }

@@ -5,10 +5,24 @@ using UnityEngine.UI;
 
 public class ProgressBar : MonoBehaviour {
 
+	public GameObject PanelProgressBar;
 	public GameObject LoadingBar;
+	public static ProgressBar Instance;
 	public int speed = 5;
 	private float currentAmount;
 
+	void Awake(){
+		Instance = this;
+		PanelProgressBar.SetActive (false);
+	}
+
+	public void OcultarBarraProgreso(){
+		PanelProgressBar.SetActive (false);
+	}
+
+	public void MostrarBarraProgreso(){
+		PanelProgressBar.SetActive (true);
+	}
 
 	// Use this for initialization
 	void Start () {

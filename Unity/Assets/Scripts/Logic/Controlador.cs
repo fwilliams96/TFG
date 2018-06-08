@@ -129,6 +129,8 @@ public class Controlador : MonoBehaviour
 
     public void EndTurn()
     {
+		if (Comandas.Instance.ComandasDeCambioTurnoPendientes ())
+			return;
 		if (OpcionesObjeto.PrevisualizandoAlgunaCarta())
 			OpcionesObjeto.PararTodasPrevisualizaciones();
 		if (AccionesPopUp.Instance.EstaActivo())
@@ -267,12 +269,12 @@ public class Controlador : MonoBehaviour
 		jugador.AñadirEnteMesa(tablePos, ente);
         // no matter what happens, move this card to PlayACardSpot
 		new PlayAEntityCommand(cartaJugada, jugador, tablePos, ente).AñadirAlaCola();
-		if(jugador.GetType() == typeof(JugadorHumano))
+		if (jugador.GetType () == typeof(JugadorHumano)) {
 			ActualizarManaJugador(jugador);
-        //causa battlecry effect
+			MostrarCartasJugablesJugador(jugador);
+		}
         if (ente.efecto != null)
             ente.efecto.WhenACreatureIsPlayed();
-        // remove this card from hand
 		jugador.EliminarCartaMano(cartaJugada);
 		if(jugador.GetType() == typeof(JugadorHumano))
 			MostrarCartasJugablesJugador(jugador);
@@ -286,8 +288,6 @@ public class Controlador : MonoBehaviour
 	public void ActualizarManaJugador(JugadorPartida jugador)
     {
         controladorJugador.ActualizarManaJugador(jugador);
-		if(jugador.GetType() == typeof(JugadorHumano))
-			MostrarCartasJugablesJugador(jugador);
     }
 
 	private void RestarManaCarta(JugadorPartida jugador, Carta carta)
@@ -295,7 +295,10 @@ public class Controlador : MonoBehaviour
         controladorJugador.RestarManaCarta(jugador, carta);
     }
 
-    // Muestra cartas jugables de la mano del jugador
+    /// <summary>
+	/// Muestra cartas jugables de la mano del jugador
+    /// </summary>
+    /// <param name="jugador">Jugador.</param>
     public void MostrarCartasJugablesJugador(JugadorPartida jugador)
     {
 		controladorJugador.ActualizarEstadoCartasJugadorActual(jugador);
@@ -332,14 +335,18 @@ public class Controlador : MonoBehaviour
 
 	public  void GiveHealth(JugadorPartida jugador, int vida){
 		jugador.Defensa += vida;
-		new ShowMessageCommand ("¡Obtienes "+vida+" de vida!", 1.0f).AñadirAlaCola ();
+		if(jugador.GetType() == typeof(JugadorHumano))
+			new ShowMessageCommand ("¡Obtienes "+vida+" de vida!", 1.0f).AñadirAlaCola ();
 		ActualizarVidaJugador (jugador);
 	}
 	public void GiveManaBonus(JugadorPartida jugador, int mana)
 	{
 		jugador.ConseguirManaExtra(mana);
-		new ShowMessageCommand ("¡Obtienes "+mana+" de maná!", 1.0f).AñadirAlaCola ();
-		ActualizarManaJugador (jugador);
+		if (jugador.GetType () == typeof(JugadorHumano)) {
+			new ShowMessageCommand ("¡Obtienes " + mana + " de maná!", 1.0f).AñadirAlaCola ();
+			ActualizarManaJugador (jugador);
+			MostrarCartasJugablesJugador(jugador);
+		}
 	}
 
     /***************************************** CARTA ****************************************************/

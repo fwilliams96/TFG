@@ -159,8 +159,6 @@ public class ControladorJugador
 
         foreach (Ente crl in jugador.EntesEnLaMesa())
         {
-			if (crl.GetType () == typeof(Criatura)) 
-				((Criatura)crl).HaAtacado = false;
             GameObject g = IDHolder.GetGameObjectWithID(crl.ID);
 
 			if (g != null) {

@@ -24,7 +24,7 @@ public class OneCardManager : MonoBehaviour {
     public Image CardFaceFrameImage;
     public Image CardFaceGlowImage;
     [Header("Progress Card References")]
-    public Slider ProgresoTrebol;
+    public Slider ProgresoPiedra;
     public Slider ProgresoPocion;
 
     void Awake()
@@ -75,8 +75,10 @@ public class OneCardManager : MonoBehaviour {
 
     public void LeerProgreso()
     {
-        ProgresoTrebol.value = PorcentajeProgresoTrebol/100f;
-        ProgresoPocion.value = PorcentajeProgresoPocion/100f;
+		if(ProgresoPiedra != null)
+        	ProgresoPiedra.value = PorcentajeProgresoTrebol/100f;
+		if(ProgresoPocion != null)
+        	ProgresoPocion.value = PorcentajeProgresoPocion/100f;
             
     }
 

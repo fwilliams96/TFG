@@ -97,13 +97,20 @@ public class ControladorEnte
 
 	public void DamageAllCreatures(JugadorPartida jugador, int daño)
 	{
-		List<Ente> CreaturesToDamage = jugador.EntesEnLaMesa();
+		ArrayList array = new ArrayList(jugador.EntesEnLaMesa());
+		ArrayList CreaturesToDamage = (ArrayList)array.Clone ();
 		foreach (Ente cl in CreaturesToDamage)
 		{
 			if (cl.GetType () == typeof(Criatura)) {
 				Controlador.Instance.DañarCriatura ((Criatura)cl,daño);
 			}
 		}
+		/*Ente [] CreaturesToDamage = jugador.EntesEnLaMesa().ToArray();
+		foreach (Ente cl in CreaturesToDamage) {
+			if (cl.GetType () == typeof(Criatura)) {
+				Controlador.Instance.DañarCriatura ((Criatura)cl,daño);
+			}
+		}*/
 	}
 
 	public  void GiveHealth(JugadorPartida jugador, int vida){
@@ -163,16 +170,30 @@ public class ControladorEnte
         }
     }
 
+	/// <summary>
+	/// Una magica tipo trampa es aquella que no puede activarse voluntariamente, de momento solo se compara con la de espejo.
+	/// </summary>
+	/// <returns><c>true</c>, if magica trampa was esed, <c>false</c> otherwise.</returns>
+	/// <param name="ente">Ente.</param>
 	public bool EsMagicaTrampa(Ente ente){
 		Magica magica = (Magica)ente;
-		//TODO aqui añadire mas magicas de tipo trampa
 		return magica.AssetCarta.Efecto.Equals (Efecto.Espejo);
 	}
 
+	/// <summary>
+	/// Ente preparado para usarse
+	/// </summary>
+	/// <returns><c>true</c>, if preparado was ented, <c>false</c> otherwise.</returns>
+	/// <param name="ente">Ente.</param>
 	public bool EntePreparado(Ente ente){
 		return ente.AtaquesRestantesEnTurno > 0;
 	}
 
+	/// <summary>
+	/// Indica si la criatura ha atacado en este turno
+	/// </summary>
+	/// <returns><c>true</c>, if ha atacado was criaturaed, <c>false</c> otherwise.</returns>
+	/// <param name="criatura">Criatura.</param>
 	public bool CriaturaHaAtacado(Criatura criatura){
 		return criatura.HaAtacado;
 	}
@@ -193,19 +214,16 @@ public class ControladorEnte
 
     public bool EstaEnPosicionAtaque(int idEnte)
     {
-        //TODO crear excepcion si idEnte no existe en el diccionario
         Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
         if(ente.GetType() == typeof(Criatura))
         {
             return ((Criatura)ente).PosicionCriatura.Equals(PosicionCriatura.ATAQUE);
         }
-        //throw new EnteException();
-        throw new System.Exception();
+		return false;
     }
 
     public bool EsMagica(int idEnte)
     {
-        //TODO crear excepcion si idEnte no existe en el diccionario
         Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
         return ente.GetType() == typeof(Magica);
     }

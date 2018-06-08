@@ -12,21 +12,19 @@ public class BaseDatos
     private static BaseDatos instance;
     private DatabaseReference reference;
 	private List<Jugador> jugadores;
-    private int numJugadores;
     private string userIDActual;
     private DataSnapshot usuarioActual;
     private DataSnapshot assets;
-    public delegate void CallBack();
+	private bool existsConnection;
+	public delegate void CallBack(string message);
     //private SesionUsuario.CallBack callBack;
 	public Dictionary<int, Carta> Cartas;
     #endregion
 
     private BaseDatos()
     {
-        InitializeDataBase();
         this.assets = null;
         this.usuarioActual = null;
-        this.numJugadores = 0;
 		this.jugadores = new List<Jugador>();
 		Cartas = new Dictionary<int, Carta>();
     }
@@ -46,9 +44,10 @@ public class BaseDatos
 
     public void InicializarBase(CallBack callback)
     {
+		InitializeDataBase();
         ObtenerAssets(callback);
     }
-
+		
     private void InitializeDataBase()
     {
         //TODO quizas la parte de base de datos en el futuro la ponga en una clase aparte.
@@ -65,19 +64,19 @@ public class BaseDatos
             if (task.IsFaulted)
             {
 				Debug.Log("Excepcion: "+task.Exception);
-				MessageManager.Instance.ShowMessage(SesionUsuario.GetErrorMessage(task.Exception),1.5f);
+				callback.Invoke(SesionUsuario.GetErrorMessage(task.Exception));
                 assets = null;
             }
 			else if(task.IsCanceled){
 				Debug.Log("Excepcion: "+task.Exception);
-				MessageManager.Instance.ShowMessage(SesionUsuario.GetErrorMessage(task.Exception),1.5f);
+				callback.Invoke(SesionUsuario.GetErrorMessage(task.Exception));
 				assets = null;
 			}
             else if (task.IsCompleted)
             {
                 //Assigno los assets a una variable global
                 assets = task.Result;
-                callback.Invoke();
+                callback.Invoke("");
             }
         });
     }
@@ -88,11 +87,11 @@ public class BaseDatos
 			if (task.IsFaulted)
 			{
 				Debug.Log("Excepcion: "+task.Exception);
-				MessageManager.Instance.ShowMessage(SesionUsuario.GetErrorMessage(task.Exception),1.5f);
+				callback.Invoke("Ha habido algun error al recoger el usuario");
 			}
 			else if(task.IsCanceled){
 				Debug.Log("Excepcion: "+task.Exception);
-				MessageManager.Instance.ShowMessage(SesionUsuario.GetErrorMessage(task.Exception),1.5f);
+				callback.Invoke("Ha habido algun error al recoger el usuario");
 			}
 			else if (task.IsCompleted)
 			{
@@ -102,16 +101,7 @@ public class BaseDatos
 			}
 		});
     }
-
-
-    /*public void RecogerJugador(string userId, SesionUsuario.CallBack callback)
-    {
-        this.userIDActual = userId;
-        reference.Child("users").Child(userId)
-        .ValueChanged += RecogerUsuario;
-        callBack = callback;
-    }*/
-
+		
     public void AñadirWelcomePackJugador(Jugador jugador)
     {
         //List<Carta> cartasWelcomePack = GenerarCartasAleatorias(8);
@@ -119,7 +109,11 @@ public class BaseDatos
 		AñadirCartasJugador(jugador, cartasWelcomePack);
 		List<Item> itemsAleatorios = GenerarItemsAleatorios (8);
 		AñadirItemsJugador (jugador,itemsAleatorios);
-		List<int> idCartasMazo = GenerarIDCartasMazo ();
+		List<int> idCartasMazo;
+		if (jugador == Enemigo)
+			idCartasMazo = Local.IDCartasMazo ();
+		else
+			idCartasMazo = GenerarIDCartasMazo (cartasWelcomePack);
 		AñadirMazoJugador (jugador,idCartasMazo);
 
     }
@@ -178,7 +172,7 @@ public class BaseDatos
         AñadirJugador(new Jugador("Low"));
         AñadirWelcomePackJugador(Local);
         AñadirJugadorBaseDatos(userId,Local);
-        callBack.Invoke();
+        callBack.Invoke("");
     }
 
 	private void ObtenerDatosJugador(SesionUsuario.CallBack callBack,DataSnapshot usuario)
@@ -194,7 +188,7 @@ public class BaseDatos
 		AñadirMazoJugador (Local, idCartasMazo);
 		AñadirItemsJugador (Local, itemsJugador);
 		AñadirExperienciaNivelJugador (Local, nivel,experiencia);
-		callBack.Invoke();
+		callBack.Invoke("");
 	}
 
     private void AñadirCartasJugador(Jugador jugador, List<Carta> cartas)
@@ -307,10 +301,11 @@ public class BaseDatos
 		return idsCartasMazo;
 	}
 
-	private List<int> GenerarIDCartasMazo(){	
+	private List<int> GenerarIDCartasMazo(List<Carta> cartasWelcomePack){
+		;
 		List<int> idsCartasMazo = new List<int> ();
 		for (int i = 0; i < 8; i++) {
-			idsCartasMazo.Add (i);
+			idsCartasMazo.Add (UnityEngine.Random.Range (0,	cartasWelcomePack.Count));
 		}
 		return idsCartasMazo;
 	}

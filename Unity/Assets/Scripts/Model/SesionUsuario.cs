@@ -8,7 +8,7 @@ public class SesionUsuario
     private Firebase.Auth.FirebaseAuth auth;
     private Firebase.Auth.FirebaseUser user;
     private bool registro;
-    public delegate void CallBack();
+	public delegate void CallBack(string message);
     //private BaseDatos baseDatos;
 
     private SesionUsuario()
@@ -71,29 +71,27 @@ public class SesionUsuario
         return user != null;
     }
 
-    public void Login(string email, string password, CallBack callback)
+	public void Login(string email, string password, CallBack callBack)
     {
         registro = false;
         auth.SignInWithEmailAndPasswordAsync(email, password).ContinueWith(task => {
             if (task.IsCanceled)
             {
 				Debug.Log("Excepcion: "+task.Exception);
-				MessageManager.Instance.ShowMessage(GetErrorMessage(task.Exception),1.5f);
-				//MessageManager.Instance.ShowMessage("Ha habido algún error con el inicio de sesión",1.5f);
 				Debug.Log("SignInWithEmailAndPasswordAsync was canceled." +task.Exception);
-                return;
+				callBack.Invoke(GetErrorMessage(task.Exception));
+
             }
             if (task.IsFaulted)
             {
+				
 				Debug.Log("Excepcion: "+task.Exception);
-				MessageManager.Instance.ShowMessage(GetErrorMessage(task.Exception),1.5f);
-				//MessageManager.Instance.ShowMessage("El usuario o la contraseña son incorrectos",1.5f);
-                Debug.Log("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
-                return;
+				Debug.Log("SignInWithEmailAndPasswordAsync encountered an error: " + task.Exception);
+				callBack.Invoke(GetErrorMessage(task.Exception));               
             }
 
             user = task.Result;
-            BaseDatos.Instance.RecogerJugador(user.UserId, callback);
+			BaseDatos.Instance.RecogerJugador(user.UserId, callBack);
             Debug.LogFormat("User signed in successfully: {0} ({1})",
                 user.DisplayName, user.UserId);
 
@@ -107,18 +105,17 @@ public class SesionUsuario
             if (task.IsCanceled)
             {
 				Debug.Log("Excepcion: "+task.Exception);
-				MessageManager.Instance.ShowMessage(GetErrorMessage(task.Exception),1.5f);
-                Debug.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
-                return;
-            }
+				Debug.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
+				callBack.Invoke(GetErrorMessage(task.Exception));
+
+			}   
             if (task.IsFaulted)
             {
 				Debug.Log("Excepcion: "+task.Exception);
-				MessageManager.Instance.ShowMessage(GetErrorMessage(task.Exception),1.5f);
                 Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error: " + task.Exception);
-                return;
-            }
-            // Firebase user has been created.
+				callBack.Invoke(GetErrorMessage(task.Exception));
+			}
+
             user = task.Result;
             registro = false;
             Debug.LogFormat("Firebase user created successfully: {0} ({1})",
@@ -126,11 +123,12 @@ public class SesionUsuario
             BaseDatos.Instance.CrearJugador(user.UserId, callBack);
            
         });
+
+
     }
 
 	public static string GetErrorMessage(Exception exception)
 	{
-		Debug.Log(exception.ToString());
 		Firebase.FirebaseException firebaseEx = exception as Firebase.FirebaseException;
 		AggregateException ex = exception as AggregateException;
 		if (ex != null) {

@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class Login : MonoBehaviour {
     public InputField email;
     public InputField password;
+	public Button login;
+	public Button crearCuenta;
 
     // Use this for initialization
     void Start () {
@@ -22,20 +24,22 @@ public class Login : MonoBehaviour {
 
     public void Logearse()
     {
-        try
-        {
-            SesionUsuario.Instance.Login(email.text, password.text, LogeadoCompleto);
-        }
-        catch(System.Exception e)
-        {
-            Debug.Log(e.Message);
-        }
-        
+		ProgressBar.Instance.MostrarBarraProgreso();
+		login.interactable = false;
+		crearCuenta.interactable = false;
+        SesionUsuario.Instance.Login(email.text, password.text, Callback);
     }
 
-    public void LogeadoCompleto()
+	public void Callback(string message)
     {
-        SceneManager.LoadSceneAsync("Menu");
+		if("".Equals(message)){
+    		SceneManager.LoadSceneAsync("Menu");
+		}else{
+			ProgressBar.Instance.OcultarBarraProgreso ();
+			login.interactable = true;
+			crearCuenta.interactable = true;
+			MessageManager.Instance.ShowMessage(message,1.5f);
+		}
 
     }
 

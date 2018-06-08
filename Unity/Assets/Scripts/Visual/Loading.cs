@@ -10,6 +10,7 @@ public class Loading : MonoBehaviour {
     }
 
 	void Start(){
+		ProgressBar.Instance.MostrarBarraProgreso ();
 		CargarEscenaMenu ();
 	}
 		

@@ -79,7 +79,7 @@ public class TouchManager2 : MonoBehaviour {
 			}
             else if(Input.GetTouch(0).phase == TouchPhase.Ended)
             {
-				if (null != gObj) {
+				if (null != gObj && current == null) {
 					switch (ControladorMenu.Instance.PantallaActual) {
 					case PANTALLA_MENU.INVENTARIO:
 						if (gObj.transform.gameObject.tag.Equals ("CartaInventario")) {
@@ -104,7 +104,7 @@ public class TouchManager2 : MonoBehaviour {
 							break;
 						}
 				} else {
-					if (null != EventSystem.current.currentSelectedGameObject) {
+					if (null != current) {
 						Debug.Log ("Event system");
 					} else {
 						

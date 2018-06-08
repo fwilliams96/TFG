@@ -5,14 +5,11 @@ using DG.Tweening;
 public class CreatureAttackVisual : EnteVisual
 {
 
-    //void Awake() { base.Awake(); }
-
     public void AttackTarget(int targetUniqueID, int damageTaken,int targetHealthAfter)
     {
         manager.PuedeAtacar = false;
         GameObject target = IDHolder.GetGameObjectWithID(targetUniqueID);
 
-        // bring this creature to front sorting-wise.
         w.TraerAlFrente();
         /*VisualStates tempState = w.EstadoVisual;
         w.EstadoVisual = VisualStates.Transicion;*/
@@ -34,11 +31,9 @@ public class CreatureAttackVisual : EnteVisual
             w.SetearOrdenCriatura();
             /*w.EstadoVisual = tempState;*/
 
-            //manager.HealthText.text = attackerHealthAfter.ToString();
             Sequence s = DOTween.Sequence();
             s.AppendInterval(1f);
             s.OnComplete(Comandas.Instance.CompletarEjecucionComanda);
-            //Command.CommandExecutionComplete();
         });
     }
 
