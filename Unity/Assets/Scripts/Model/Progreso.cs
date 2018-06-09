@@ -5,27 +5,27 @@ using System.Collections.Generic;
 public class Progreso 
 {
     #region Atributos
-    private int material;
+    private int piedra;
     private int pocion;
     #endregion
     
     public Progreso()
     {
-        this.material = 0;
+		this.piedra = 0;
         this.pocion = 0;
     }
 
     #region Getters/Setters
-    public int Material
+    public int Piedra
     {
         get
         {
-            return material;
+            return piedra;
         }
 
         set
         {
-            material = value;
+            piedra = value;
         }
     }
 
@@ -45,7 +45,7 @@ public class Progreso
     public Dictionary<string, System.Object> ToDictionary()
     {
         Dictionary<string, System.Object> result = new Dictionary<string, System.Object>();
-        result["material"] = material;
+        result["material"] = piedra;
         result["pocion"] = pocion;
         return result;
     }

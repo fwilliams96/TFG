@@ -8,12 +8,16 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:242513813512:android:8741255f00ae85ac",
+        "mobilesdk_app_id": "1:242513813512:android:87f394bb7ae29f0b",
         "android_client_info": {
-          "package_name": "com.BattleGalaxy.android"
+          "package_name": "com.ClashOfMyths.android"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "242513813512-l0dcl3ib2gmmi55l1n052622gmie1ji1.apps.googleusercontent.com",
+          "client_type": 3
+        },
         {
           "client_id": "242513813512-l0dcl3ib2gmmi55l1n052622gmie1ji1.apps.googleusercontent.com",
           "client_type": 3

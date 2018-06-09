@@ -135,17 +135,21 @@ public class Elementos : MonoBehaviour {
 
 	private GameObject CrearCarta(Carta carta){
 		CartaAsset asset = carta.AssetCarta;
-		float progresoTrebol = carta.Progreso.Material;
+		float progresoPiedra = carta.Progreso.Piedra;
 		float progresoPocion = carta.Progreso.Pocion;
 		GameObject elemento = Instantiate(DatosGenerales.Instance.CardInventario, transform);
 		elemento.GetComponent<BoxCollider2D> ().size = gridLayoutGroup.cellSize;
 		IDHolder id = elemento.AddComponent<IDHolder>();
 		id.UniqueID = carta.ID;
 		OneCardManager manager = elemento.GetComponent<OneCardManager>();
+		ProgresoVisual progreso = elemento.GetComponent<ProgresoVisual>();
 		manager.CartaAsset = asset;
-		manager.PorcentajeProgresoTrebol = progresoTrebol;
-		manager.PorcentajeProgresoPocion = progresoPocion;
+
+		progreso.PorcentajeProgresoPiedra = progresoPiedra;
+		progreso.PorcentajeProgresoPocion = progresoPocion;
 		manager.LeerDatos();
+		progreso.LeerProgreso ();
+
 		elemento.transform.SetParent (gridLayoutGroup.gameObject.transform);
 		return elemento;
 	}

@@ -53,7 +53,6 @@ public class BaseDatos
         //TODO quizas la parte de base de datos en el futuro la ponga en una clase aparte.
         // Set up the Editor before calling into the realtime database.
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://battle-galaxy-cda70.firebaseio.com/");
-
         // Get the root reference location of the database.
         reference = FirebaseDatabase.DefaultInstance.RootReference;
     }
@@ -110,7 +109,7 @@ public class BaseDatos
 		List<Item> itemsAleatorios = GenerarItemsAleatorios (8);
 		AñadirItemsJugador (jugador,itemsAleatorios);
 		List<int> idCartasMazo;
-		if (jugador == Enemigo)
+		if (jugadores.Count == 2)
 			idCartasMazo = Local.IDCartasMazo ();
 		else
 			idCartasMazo = GenerarIDCartasMazo (cartasWelcomePack);
@@ -154,7 +153,7 @@ public class BaseDatos
 			TipoItem tipoItem = (TipoItem)rnd.Next(0, 2);
 			int cantidad = rnd.Next (50, 80);
 			string rutaImagen;
-			if (tipoItem.Equals (TipoItem.Material)) {
+			if (tipoItem.Equals (TipoItem.Piedra)) {
 				rutaImagen = "Sprites/Recursos/Componentes/item_piedra";
 			} else {
 				rutaImagen = "Sprites/Recursos/Componentes/item_pocion";
@@ -170,6 +169,7 @@ public class BaseDatos
         Debug.Log("Crear jugador");
         this.userIDActual = userId;
         AñadirJugador(new Jugador("Low"));
+		Local.TipoJugador = Jugador.TIPO_JUGADOR.MANUAL;
         AñadirWelcomePackJugador(Local);
         AñadirJugadorBaseDatos(userId,Local);
         callBack.Invoke("");
@@ -179,6 +179,7 @@ public class BaseDatos
 	{
 		Debug.Log("Obtener jugador");
 		AñadirJugador(new Jugador("Low"));
+		Local.TipoJugador = Jugador.TIPO_JUGADOR.MANUAL;
 		int nivel = ObtenerNivelJugador(usuario);
 		int experiencia = ObtenerExperienciaJugador(usuario);
 		List<Carta> cartasJugador = ObtenerCartasJugador(usuario);
@@ -266,7 +267,7 @@ public class BaseDatos
             string idAsset = (string)usuario.Child("cartas").Child(i.ToString()).Child("asset").GetValue(true);
 			var progresoJSON = JSONUtils.StringToJSON (usuario.Child ("cartas").Child (i.ToString ()).Child ("progreso").GetRawJsonValue ());
 			Progreso progreso = new Progreso ();
-			progreso.Material = Int32.Parse (progresoJSON ["material"]);
+			progreso.Piedra = Int32.Parse (progresoJSON ["material"]);
 			progreso.Pocion = Int32.Parse (progresoJSON ["pocion"]);
             cartasJugador.Add(CrearCartaJugador(idAsset, progreso));
         }

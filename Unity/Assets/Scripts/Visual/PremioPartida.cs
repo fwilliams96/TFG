@@ -20,14 +20,16 @@ public class PremioPartida : MonoBehaviour {
 		PremioPartidaPanel.SetActive(true);
 		if (carta != null) {
 			CartaAsset asset = carta.AssetCarta;
-			float progresoTrebol = carta.Progreso.Material;
+			float progresoTrebol = carta.Progreso.Piedra;
 			float progresoPocion = carta.Progreso.Pocion;
 			GameObject cartaGobj = Instantiate(DatosGenerales.Instance.CardInventario, transform);
 			OneCardManager manager = cartaGobj.GetComponent<OneCardManager>();
+			ProgresoVisual progreso = cartaGobj.GetComponent<ProgresoVisual>();
 			manager.CartaAsset = asset;
-			manager.PorcentajeProgresoTrebol = progresoTrebol;
-			manager.PorcentajeProgresoPocion = progresoPocion;
+			progreso.PorcentajeProgresoPiedra = progresoTrebol;
+			progreso.PorcentajeProgresoPocion = progresoPocion;
 			manager.LeerDatos();
+			progreso.LeerProgreso ();
 			cartaGobj.transform.SetParent (horizontalLayoutGroup.gameObject.transform);
 		}
 		GameObject itemGobj;

@@ -6,8 +6,6 @@ using UnityEngine.UI;
 public class OneCardManager : MonoBehaviour {
 
     public CartaAsset CartaAsset;
-    public float PorcentajeProgresoTrebol = 0;
-    public float PorcentajeProgresoPocion = 0;
     public OneCardManager PreviewManager;
     [Header("Text Component References")]
     public Text NameText;
@@ -23,9 +21,6 @@ public class OneCardManager : MonoBehaviour {
     public Image CardBodyImage;
     public Image CardFaceFrameImage;
     public Image CardFaceGlowImage;
-    [Header("Progress Card References")]
-    public Slider ProgresoPiedra;
-    public Slider ProgresoPocion;
 
     void Awake()
     {
@@ -52,7 +47,6 @@ public class OneCardManager : MonoBehaviour {
     public void LeerDatos()
     {
         LeerDatosAsset();
-        LeerProgreso();
     }
 
     public void LeerDatosAsset()
@@ -71,15 +65,6 @@ public class OneCardManager : MonoBehaviour {
             PreviewManager.CartaAsset = CartaAsset;
             PreviewManager.LeerDatosAsset();
         }
-    }
-
-    public void LeerProgreso()
-    {
-		if(ProgresoPiedra != null)
-        	ProgresoPiedra.value = PorcentajeProgresoTrebol/100f;
-		if(ProgresoPocion != null)
-        	ProgresoPocion.value = PorcentajeProgresoPocion/100f;
-            
     }
 
     private void LeerDatosCarta()
