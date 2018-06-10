@@ -122,21 +122,21 @@ public class HandVisual : MonoBehaviour
         if (!fast)
         {
             Debug.Log("Not fast!!!");
-			s.Append(card.transform.DOMove(DrawPreviewSpot.position, Settings.Instance.CardTransitionTime));
+			s.Append(card.transform.DOMove(DrawPreviewSpot.position, ConfiguracionUsuario.Instance.CardTransitionTime));
 				
-			s.Insert (0f, card.transform.DORotate (Vector3.zero, Settings.Instance.CardTransitionTime));
+			s.Insert (0f, card.transform.DORotate (Vector3.zero, ConfiguracionUsuario.Instance.CardTransitionTime));
 				
-			s.AppendInterval(Settings.Instance.CardPreviewTime);
+			s.AppendInterval(ConfiguracionUsuario.Instance.CardPreviewTime);
             // displace the card so that we can select it in the scene easier.
-			s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, Settings.Instance.CardTransitionTime));
+			s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, ConfiguracionUsuario.Instance.CardTransitionTime));
         }
         else
         {
             // displace the card so that we can select it in the scene easier.
 			if (rotarDeCara) {
-				s.Insert (0f, card.transform.DORotate (Vector3.zero, Settings.Instance.CardTransitionTime));
+				s.Insert (0f, card.transform.DORotate (Vector3.zero, ConfiguracionUsuario.Instance.CardTransitionTime));
 			}
-			s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, Settings.Instance.CardTransitionTimeFast));
+			s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, ConfiguracionUsuario.Instance.CardTransitionTimeFast));
             //if (TakeCardsOpenly)
                 //s.Insert(0f, card.transform.DORotate(Vector3.zero, DatosGenerales.Instance.CardTransitionTimeFast));
         }
@@ -161,7 +161,7 @@ public class HandVisual : MonoBehaviour
         // Instantiate a card depending on its type
         GameObject card;
         // this card is a creature card
-        card = GameObject.Instantiate(DatosGenerales.Instance.CardPrefab, position, Quaternion.Euler(eulerAngles)) as GameObject;
+        card = GameObject.Instantiate(ObjetosGenerales.Instance.CardPrefab, position, Quaternion.Euler(eulerAngles)) as GameObject;
 
 
         // apply the look of the card based on the info from CardAsset
@@ -188,7 +188,7 @@ public class HandVisual : MonoBehaviour
             float x = carta.transform.eulerAngles.x;
             float y = grado;
             float z = carta.transform.eulerAngles.z;
-            carta.transform.DORotate(new Vector3(x, y, z), Settings.Instance.CardTransitionTime);
+            carta.transform.DORotate(new Vector3(x, y, z), ConfiguracionUsuario.Instance.CardTransitionTime);
         }
     }
 

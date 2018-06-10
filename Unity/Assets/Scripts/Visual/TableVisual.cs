@@ -67,7 +67,7 @@ public class TableVisual : MonoBehaviour
     public void AñadirMagica(CartaAsset ca, int idUnico, int indiceSlot)
     {
         //Debug.Log("Añadir ente magica");
-        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.MagicaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
+        GameObject creature = GameObject.Instantiate(ObjetosGenerales.Instance.MagicaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
 		creature.GetComponent<MagicEffectVisual>().ColocarMagicaBocaAbajo(0f);
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
@@ -75,8 +75,8 @@ public class TableVisual : MonoBehaviour
     public void AñadirCriaturaDefensa(CartaAsset ca, int idUnico, int indiceSlot)
     {
         //Debug.Log("Añadir ente criatura como defensa");
-        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
-		creature.GetComponent<CreatureAttackVisual>().ColocarCriaturaEnDefensa(Settings.Instance.CardTransitionTimeFast);
+        GameObject creature = GameObject.Instantiate(ObjetosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
+		creature.GetComponent<CreatureAttackVisual>().ColocarCriaturaEnDefensa(ConfiguracionUsuario.Instance.CardTransitionTimeFast);
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 
@@ -84,7 +84,7 @@ public class TableVisual : MonoBehaviour
     {
         //Debug.Log("Añadir ente criatura como ataque");
         // create a new creature from prefab
-        GameObject creature = GameObject.Instantiate(DatosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
+        GameObject creature = GameObject.Instantiate(ObjetosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
         // apply the look from CardAsset
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }

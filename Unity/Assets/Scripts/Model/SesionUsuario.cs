@@ -164,11 +164,20 @@ public class SesionUsuario
 		case AuthError.MissingEmail:
 			message = "Hace falta el correo electrónico";
 			break;
+		case AuthError.UserNotFound:
+			message = "¡Aún no te encuentras registrado!";
+			break;
 		default:
 			message = "Ocurrió un error";
 			break;
 		}
 		return message;
+	}
+
+	public void CerrarSesión(){
+		auth.SignOut ();
+		user = null;
+		BaseDatos.Instance.CerrarSesión ();
 	}
 
 	public Firebase.Auth.FirebaseUser User

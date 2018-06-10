@@ -79,7 +79,7 @@ public class Controlador : MonoBehaviour
     }
 
 	void IniciarMusica(){
-		if (!Settings.Instance.Musica) {
+		if (!ConfiguracionUsuario.Instance.Musica) {
 			Camera.main.GetComponent<AudioSource> ().Pause ();
 		}
 	}
@@ -281,8 +281,8 @@ public class Controlador : MonoBehaviour
 
     }
 
-	public void ActualizarVidaJugador(JugadorPartida jugador){
-		controladorJugador.ActualizarVidaJugador(jugador);
+	public void ActualizarVidaJugador(JugadorPartida jugador, int vidaActual){
+		controladorJugador.ActualizarVidaJugador(jugador,vidaActual);
 	}
 
 	public void ActualizarManaJugador(JugadorPartida jugador)
@@ -337,7 +337,7 @@ public class Controlador : MonoBehaviour
 		jugador.Defensa += vida;
 		if(jugador.GetType() == typeof(JugadorHumano))
 			new ShowMessageCommand ("¡Obtienes "+vida+" de vida!", 1.0f).AñadirAlaCola ();
-		ActualizarVidaJugador (jugador);
+		ActualizarVidaJugador (jugador, jugador.Defensa - vida);
 	}
 	public void GiveManaBonus(JugadorPartida jugador, int mana)
 	{

@@ -11,10 +11,10 @@ public class OneCreatureManager : OneEnteManager
 		CreatureGraphicImage.sprite = Resources.Load<Sprite>(CartaAsset.RutaImagenCarta);
 
 		AttackText.text = CartaAsset.Ataque.ToString();
-		if (Settings.Instance.Batalla.Equals (Settings.TIPO_NUMERO.ENTERO)) {
+		if (ConfiguracionUsuario.Instance.Batalla.Equals (ConfiguracionUsuario.TIPO_NUMERO.ENTERO)) {
 			HealthText.text = CartaAsset.Defensa.ToString ();
 		}else {
-			HealthText.text = Settings.ObtenerPorcentaje (CartaAsset.Defensa, CartaAsset.Defensa);
+			HealthText.text = ConfiguracionUsuario.ObtenerPorcentaje (CartaAsset.Defensa, CartaAsset.Defensa);
 		}
 			
         if (PreviewManager != null)
@@ -29,10 +29,10 @@ public class OneCreatureManager : OneEnteManager
 		if (vida > 0)
         {
 			DamageEffect.CreateDamageEffect (transform.position, vida, daño);
-			if (Settings.Instance.Batalla.Equals (Settings.TIPO_NUMERO.ENTERO)) {
+			if (ConfiguracionUsuario.Instance.Batalla.Equals (ConfiguracionUsuario.TIPO_NUMERO.ENTERO)) {
 				HealthText.text = (vida - daño).ToString ();	
 			} else {
-				HealthText.text = Settings.ObtenerPorcentaje ((vida-daño),CartaAsset.Defensa);
+				HealthText.text = ConfiguracionUsuario.ObtenerPorcentaje ((vida-daño),CartaAsset.Defensa);
 			}
         }
     }

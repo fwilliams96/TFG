@@ -18,10 +18,10 @@ public class PlayerPortraitVisual : MonoBehaviour {
 
     public void AplicarEstiloPersonajeAsset()
     {
-		if (Settings.Instance.Batalla.Equals (Settings.TIPO_NUMERO.ENTERO)) {
+		if (ConfiguracionUsuario.Instance.Batalla.Equals (ConfiguracionUsuario.TIPO_NUMERO.ENTERO)) {
 			HealthText.text = charAsset.MaxHealth.ToString ();
 		} else {
-			HealthText.text = Settings.ObtenerPorcentaje (charAsset.MaxHealth, charAsset.MaxHealth);
+			HealthText.text = ConfiguracionUsuario.ObtenerPorcentaje (charAsset.MaxHealth, charAsset.MaxHealth);
 		}
         ImagenPersonaje.sprite = charAsset.AvatarImage;
         //ImagenFondoPersonaje.sprite = charAsset.AvatarBGImage;
@@ -30,16 +30,20 @@ public class PlayerPortraitVisual : MonoBehaviour {
 
     }
 
-	public void AumentarVida(int vidaDespues){
-		StartCoroutine (AumentarVidaProgresivamente(vidaDespues));
+	public void AumentarVida(int vidaActual, int vidaDespues){
+		StartCoroutine (AumentarVidaProgresivamente(vidaActual,vidaDespues));
 
 	}
 
-	IEnumerator AumentarVidaProgresivamente(int vidaDespues)
+	IEnumerator AumentarVidaProgresivamente(int vidaActual, int vidaDespues)
 	{
-		int vidaActual = System.Int32.Parse (HealthText.text) +1;
+		vidaActual += 1;
 		while (vidaActual <= vidaDespues) {
-			HealthText.text = vidaActual.ToString ();
+			if (ConfiguracionUsuario.Instance.Batalla.Equals (ConfiguracionUsuario.TIPO_NUMERO.ENTERO)) {
+				HealthText.text = vidaActual.ToString ();
+			} else {
+				HealthText.text = ConfiguracionUsuario.ObtenerPorcentaje (vidaActual, charAsset.MaxHealth);
+			}
 			yield return new WaitForSeconds(0.02f);
 			vidaActual += 1;
 		}
@@ -51,10 +55,10 @@ public class PlayerPortraitVisual : MonoBehaviour {
         if (daño > 0)
         {
             DamageEffect.CreateDamageEffect(transform.position, vida,daño);
-			if (Settings.Instance.Batalla.Equals (Settings.TIPO_NUMERO.ENTERO)) {
+			if (ConfiguracionUsuario.Instance.Batalla.Equals (ConfiguracionUsuario.TIPO_NUMERO.ENTERO)) {
 				HealthText.text = (vida-daño).ToString();
 			} else {
-				HealthText.text = Settings.ObtenerPorcentaje ((vida-daño),charAsset.MaxHealth);
+				HealthText.text = ConfiguracionUsuario.ObtenerPorcentaje ((vida-daño),charAsset.MaxHealth);
 			}
 
         }
@@ -62,7 +66,7 @@ public class PlayerPortraitVisual : MonoBehaviour {
 
     public void Explotar()
     {
-        Instantiate(DatosGenerales.Instance.ExplosionPrefab, transform.position, Quaternion.identity);
+        Instantiate(ObjetosGenerales.Instance.ExplosionPrefab, transform.position, Quaternion.identity);
 		Sequence s = DOTween.Sequence();
 		s.PrependInterval(2f);
 		s.OnComplete(() => Comandas.Instance.CompletarEjecucionComanda ());

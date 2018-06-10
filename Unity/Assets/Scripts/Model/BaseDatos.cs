@@ -435,6 +435,13 @@ public class BaseDatos
 		AñadirWelcomePackJugador(Enemigo);
 	}
 
+	public void CerrarSesión(){
+		jugadores.Clear ();
+		Cartas.Clear ();
+		userIDActual = "";
+		usuarioActual = null;
+	}
+
 	public void Clear(){
 		//Local.Reset ();
 		EliminarEnemigo ();

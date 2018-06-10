@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class DatosGenerales: MonoBehaviour 
+public class ObjetosGenerales: MonoBehaviour 
 {
     [Header("Prefabs and Assets")]
 	public GameObject ItemInventario;
@@ -14,7 +14,7 @@ public class DatosGenerales: MonoBehaviour
     public GameObject DamageEffectPrefab;
     public GameObject ExplosionPrefab;
     // SINGLETON
-    public static DatosGenerales Instance = null;
+    public static ObjetosGenerales Instance = null;
 
     void Awake()
     {

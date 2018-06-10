@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-public class TouchManager : MonoBehaviour {
+public class TouchManagerBatalla : MonoBehaviour {
 
     GameObject gObj;
     Plane objPlane;
@@ -40,17 +40,11 @@ public class TouchManager : MonoBehaviour {
                 Ray mouseRay = GenerateMouseRay(Input.GetTouch(0).position);
                 RaycastHit hit;
                 //Miramos con que objeto ha chocado el rayo
-                
-                
 				if (Physics.Raycast (mouseRay.origin, mouseRay.direction, out hit)) {
-					//TODO en funcion de la escena en la que nos encontremos haremos una cosa u otra
-					//switch(Settings.Instance.EscenaActual)
-
 					gObj = hit.transform.gameObject;
 					if (gObj.GetComponent<Eventos> () != null) {
 						gObj.GetComponent<Eventos> ().Click ();
 					} else {
-						//Debug.Log("Ningun gameobject con evento tocado "+gObj.name);
 						gObj = null;
 						if (null != EventSystem.current.currentSelectedGameObject) {
 							//Debug.Log ("Event system: " + EventSystem.current.currentSelectedGameObject);
@@ -61,13 +55,6 @@ public class TouchManager : MonoBehaviour {
 					}
                     
 				} else {
-					/*gObj = null;
-					if (null != EventSystem.current.currentSelectedGameObject) {
-						//Debug.Log ("Event system: " + EventSystem.current.currentSelectedGameObject);
-					} else {
-						if (OpcionesObjeto.PrevisualizandoAlgunaCarta ())
-							OpcionesObjeto.PararTodasPrevisualizaciones ();
-					}*/
 				}
             }
             else if(Input.GetTouch(0).phase == TouchPhase.Moved && gObj)

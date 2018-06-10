@@ -10,12 +10,12 @@ public class SettingsBatalla : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		switch (Settings.Instance.Batalla) {
-			case Settings.TIPO_NUMERO.ENTERO:
+		switch (ConfiguracionUsuario.Instance.Batalla) {
+			case ConfiguracionUsuario.TIPO_NUMERO.ENTERO:
 				toggleEntero.isOn = true;
 				togglePorcentaje.isOn = false;
 				break;
-			case Settings.TIPO_NUMERO.PORCENTAJE:
+			case ConfiguracionUsuario.TIPO_NUMERO.PORCENTAJE:
 				toggleEntero.isOn = false;
 				togglePorcentaje.isOn = true;
 				break;
@@ -24,13 +24,13 @@ public class SettingsBatalla : MonoBehaviour {
 	}
 
 	public void CambiarBatalla(int valor){
-		Settings settings = Settings.Instance;
+		ConfiguracionUsuario settings = ConfiguracionUsuario.Instance;
 		if (valor == 0)
-			settings.Batalla = Settings.TIPO_NUMERO.ENTERO;
+			settings.Batalla = ConfiguracionUsuario.TIPO_NUMERO.ENTERO;
 		else if(valor == 1)
-			settings.Batalla = Settings.TIPO_NUMERO.PORCENTAJE;
+			settings.Batalla = ConfiguracionUsuario.TIPO_NUMERO.PORCENTAJE;
 		else 
-			settings.Batalla = Settings.TIPO_NUMERO.FRACCION;
+			settings.Batalla = ConfiguracionUsuario.TIPO_NUMERO.FRACCION;
 	}
 	
 	// Update is called once per frame

@@ -125,8 +125,8 @@ public class ControladorJugador
 			
     }
 
-	public void ActualizarVidaJugador(JugadorPartida jugador){
-		new UpdatePlayerHealthCommand(jugador).AñadirAlaCola();
+	public void ActualizarVidaJugador(JugadorPartida jugador, int vidaActual){
+		new UpdatePlayerHealthCommand(jugador,vidaActual).AñadirAlaCola();
 	}
 
 	public void ActualizarManaJugador(JugadorPartida jugador)

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum PANTALLA_MENU
 {
@@ -33,7 +34,7 @@ public class ControladorMenu : MonoBehaviour {
 	}
 
 	void IniciarMusica(){
-		if (!Settings.Instance.Musica) {
+		if (!ConfiguracionUsuario.Instance.Musica) {
 			Camera.main.GetComponent<AudioSource> ().Pause ();
 		}
 	}
@@ -44,7 +45,7 @@ public class ControladorMenu : MonoBehaviour {
 		}
 		set{ 
 			pantallaActual = value;
-			TouchManager2.Instance.ObjetoActual = null;
+			TouchManagerMenu.Instance.ObjetoActual = null;
 		}
 	}
 
@@ -153,8 +154,17 @@ public class ControladorMenu : MonoBehaviour {
 	}
 
 	public void MostrarAccion(GameObject carta){
-		TablaCartas tabla = TablaActual (carta);
-		tabla.MostrarAccion (carta);
+		switch (pantallaActual) {
+			case PANTALLA_MENU.INVENTARIO:
+				Acciones.Instance.MostrarAcciones (carta);
+				break;
+			case PANTALLA_MENU.MAZO:
+				TablaCartas tabla = TablaActual (carta);
+				tabla.MostrarAccion (carta);
+				break;
+			default:
+				break;
+		}
 	}
 
 	public void CerrarAccion(){
@@ -283,5 +293,14 @@ public class ControladorMenu : MonoBehaviour {
 			if(Camera.main.GetComponent<AudioSource> ().isPlaying)
 				Camera.main.GetComponent<AudioSource> ().Pause ();
 		}
+	}
+
+	public void CerrarSesión(){
+		SesionUsuario.Instance.CerrarSesión ();
+		GameObject objetosGenerales = GameObject.FindGameObjectWithTag ("ObjetosGenerales");
+		GameObject confUsuario = GameObject.FindGameObjectWithTag ("ConfiguracionUsuario");
+		Destroy (objetosGenerales);
+		Destroy (confUsuario);
+		SceneManager.LoadScene("Login");
 	}
 }

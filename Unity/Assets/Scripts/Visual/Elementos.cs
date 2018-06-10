@@ -122,7 +122,7 @@ public class Elementos : MonoBehaviour {
 	}
 		
 	private GameObject CrearItem(Item item){
-		GameObject elemento = Instantiate(DatosGenerales.Instance.ItemInventario, transform);
+		GameObject elemento = Instantiate(ObjetosGenerales.Instance.ItemInventario, transform);
 		elemento.GetComponent<BoxCollider2D> ().size = gridLayoutGroup.cellSize;
 		IDHolder id = elemento.AddComponent<IDHolder>();
 		id.UniqueID = item.ID;
@@ -135,9 +135,9 @@ public class Elementos : MonoBehaviour {
 
 	private GameObject CrearCarta(Carta carta){
 		CartaAsset asset = carta.AssetCarta;
-		float progresoPiedra = carta.Progreso.Piedra;
-		float progresoPocion = carta.Progreso.Pocion;
-		GameObject elemento = Instantiate(DatosGenerales.Instance.CardInventario, transform);
+		int progresoPiedra = carta.Progreso.Piedra;
+		int progresoPocion = carta.Progreso.Pocion;
+		GameObject elemento = Instantiate(ObjetosGenerales.Instance.CardInventario, transform);
 		elemento.GetComponent<BoxCollider2D> ().size = gridLayoutGroup.cellSize;
 		IDHolder id = elemento.AddComponent<IDHolder>();
 		id.UniqueID = carta.ID;

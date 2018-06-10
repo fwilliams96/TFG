@@ -4,16 +4,18 @@ using System.Collections;
 public class UpdatePlayerHealthCommand : Comanda {
 
 	private JugadorPartida p;
+	private int vidaActual;
 
-	public UpdatePlayerHealthCommand(JugadorPartida p)
+	public UpdatePlayerHealthCommand(JugadorPartida p,int vidaActual)
     {
         this.p = p;
+		this.vidaActual = vidaActual;
     }
 
     public override void EmpezarEjecucionComanda()
     {
         PlayerArea areaJugador = Controlador.Instance.AreaJugador(p);
-		areaJugador.Personaje.AumentarVida (p.Defensa);
+		areaJugador.Personaje.AumentarVida (vidaActual,p.Defensa);
     }
 
 

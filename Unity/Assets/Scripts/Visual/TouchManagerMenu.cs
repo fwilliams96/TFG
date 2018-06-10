@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-public class TouchManager2 : MonoBehaviour {
+public class TouchManagerMenu : MonoBehaviour {
 
-	public static TouchManager2 Instance;
+	public static TouchManagerMenu Instance;
     GameObject gObj;
     Plane objPlane;
     Vector3 m0;
@@ -59,23 +59,15 @@ public class TouchManager2 : MonoBehaviour {
 				RaycastHit2D hit = Physics2D.GetRayIntersection(mouseRay, Mathf.Infinity, layerMask);
 				current = EventSystem.current.currentSelectedGameObject;
 				if (hit.collider != null) {
-					//TODO en funcion de la escena en la que nos encontremos haremos una cosa u otra
-					//switch(Settings.Instance.EscenaActual)
-					//TODO mejorar comprobación
 					gObj = hit.collider.gameObject;
 				}
             }
             else if(Input.GetTouch(0).phase == TouchPhase.Moved && gObj)
             {
-				/*if (null != gObj) {
-				}*/
 				gObj = null;
             }
 			else if(Input.GetTouch(0).phase == TouchPhase.Stationary)
 			{
-				if (null != gObj) {
-				}
-
 			}
             else if(Input.GetTouch(0).phase == TouchPhase.Ended)
             {
@@ -83,7 +75,7 @@ public class TouchManager2 : MonoBehaviour {
 					switch (ControladorMenu.Instance.PantallaActual) {
 					case PANTALLA_MENU.INVENTARIO:
 						if (gObj.transform.gameObject.tag.Equals ("CartaInventario")) {
-							Acciones.Instance.MostrarAcciones (true, gObj);
+							ControladorMenu.Instance.MostrarAccion (gObj);
 						} else if (gObj.transform.gameObject.tag.Equals ("ItemInventario")) {
 							//Acciones.Instance.MostrarAcciones (false);
 						} else if (gObj.transform.gameObject.tag.Equals ("ItemConsumible")) {
@@ -107,7 +99,8 @@ public class TouchManager2 : MonoBehaviour {
 					if (null != current) {
 						Debug.Log ("Event system");
 					} else {
-						
+						if(ControladorMenu.Instance.PantallaActual.Equals(PANTALLA_MENU.MAZO))
+							ControladorMenu.Instance.CerrarAccion ();
 					}
 				}
 				gObj = null;
