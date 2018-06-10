@@ -5,14 +5,14 @@
     <efecto></efecto>
     <nombreImagen>dragon</nombreImagen>
     <descripcion>Tiene la misma edad que el universo</descripcion>
-    <evolucion>1</evolucion>
+    <infoCarta></infoCarta>
+	<evolucion>1</evolucion>
+	<idEvolucion>0</idEvolucion>
     <mana>4</mana>
     <ataque>950</ataque>
     <defensa>700</defensa>
   </delante>
   <detras>
     <simbolo>cuadrado.png</simbolo>
-    <elemento>trebol.png</elemento>
-    <elemento2>pocion.png</elemento2>
   </detras>
 </carta>

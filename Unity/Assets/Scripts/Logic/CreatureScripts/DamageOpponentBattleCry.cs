@@ -4,14 +4,14 @@ using System.Collections;
 public abstract class DamageOpponentBattleCry : EfectoEnte
 {
 
-    public DamageOpponentBattleCry(Jugador owner, Criatura creature, int specialAmount) : base(owner, creature, specialAmount)
+	public DamageOpponentBattleCry(JugadorPartida owner, Criatura creature, int specialAmount) : base(owner, creature, specialAmount)
     { }
 
     //BattleCry
     public override void WhenACreatureIsPlayed()
     {
-        Jugador oponente = Controlador.Instance.OtroJugador(owner);
-        new DealDamageCommand(oponente.ID, specialAmount, oponente.Defensa - specialAmount).AñadirAlaCola();
+		JugadorPartida oponente = Controlador.Instance.OtroJugador(owner);
+		new DealDamageCommand(oponente.ID, specialAmount, oponente.Defensa - specialAmount).AñadirAlaCola();
         //TODO aqui se resta la vida del oponente, vigilar que hacer
         oponente.Defensa = oponente.Defensa - specialAmount;
     }

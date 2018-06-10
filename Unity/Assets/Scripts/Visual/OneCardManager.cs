@@ -6,28 +6,21 @@ using UnityEngine.UI;
 public class OneCardManager : MonoBehaviour {
 
     public CartaAsset CartaAsset;
-    public float PorcentajeProgresoTrebol = 0;
-    public float PorcentajeProgresoPocion = 0;
     public OneCardManager PreviewManager;
     [Header("Text Component References")]
     public Text NameText;
     public Text ManaCostText;
-    public Text EvolutionText;
     public Text DescriptionText;
     public Text TypeText;
     public Text AttackText;
     public Text DefenseText;
     [Header("Image References")]
-    public Image CardTopRibbonImage;
-    public Image CardLowRibbonImage;
+	public Image EvolutionImage;
+	public Image AncestralImage;
     public Image CardGraphicImage;
     public Image CardBodyImage;
     public Image CardFaceFrameImage;
     public Image CardFaceGlowImage;
-    public Image CardBackGlowImage;
-    [Header("Progress Card References")]
-    public Slider ProgresoTrebol;
-    public Slider ProgresoPocion;
 
     void Awake()
     {
@@ -54,7 +47,6 @@ public class OneCardManager : MonoBehaviour {
     public void LeerDatos()
     {
         LeerDatosAsset();
-        LeerProgreso();
     }
 
     public void LeerDatosAsset()
@@ -62,7 +54,7 @@ public class OneCardManager : MonoBehaviour {
         // universal actions for any Card
         LeerDatosCarta();
         AplicarColor();
-        LeerSpritesItem();
+		LeerSprites();
 
        
         if (PreviewManager != null)
@@ -73,13 +65,6 @@ public class OneCardManager : MonoBehaviour {
             PreviewManager.CartaAsset = CartaAsset;
             PreviewManager.LeerDatosAsset();
         }
-    }
-
-    public void LeerProgreso()
-    {
-        ProgresoTrebol.value = PorcentajeProgresoTrebol/100f;
-        ProgresoPocion.value = PorcentajeProgresoPocion/100f;
-            
     }
 
     private void LeerDatosCarta()
@@ -94,7 +79,6 @@ public class OneCardManager : MonoBehaviour {
 			AttackText.transform.parent.gameObject.SetActive (false);
 			DefenseText.transform.parent.gameObject.SetActive (false);
 		}
-		EvolutionText.text = CartaAsset.Evolucion.ToString();
         // 2) add card name
         NameText.text = CartaAsset.Nombre;
         // 3) add mana cost
@@ -110,12 +94,20 @@ public class OneCardManager : MonoBehaviour {
         CardFaceFrameImage.color = Color.white;
     }
 
-    private void LeerSpritesItem()
+    private void LeerSprites()
     {
-        // 6) Change the card graphic sprite
 		CardGraphicImage.sprite = Resources.Load<Sprite>(CartaAsset.RutaImagenCarta);
-        //TODO cuando use CartaAsset en vez de CardAsset
-        //if(cardAsset.Fondo != null)
-            //CardBodyImage.sprite = cardAsset.Fondo;
+		switch (CartaAsset.Evolucion) {
+			case 1:
+				EvolutionImage.sprite = Resources.Load<Sprite> ("Sprites/Recursos/Componentes/IconoEvolucion/evo1");
+				break;
+			case 2:
+				EvolutionImage.sprite = Resources.Load<Sprite> ("Sprites/Recursos/Componentes/IconoEvolucion/evo2");
+				break;
+			default:
+				break;
+		}
+		if (CartaAsset.Familia.Equals (Familia.Ancestral))
+			AncestralImage.enabled = true;
     }
 }

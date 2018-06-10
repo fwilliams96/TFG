@@ -7,43 +7,17 @@ public class Loading : MonoBehaviour {
 
     void Awake()
     {
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
-        if (!BaseDatos.Instance.BaseDatosInicializada)
-             BaseDatos.Instance.InicializarBase(CargaCompleta);
-        //Recursos.InicializarCartas();
     }
 
-    public void CargaCompleta()
-    {
-        if (SesionUsuario.Instance.ExisteSesion())
-        {
-			BaseDatos.Instance.RecogerJugador(SesionUsuario.Instance.User.UserId, CargaJugador);
-            
-        }
-        else
-        {
-            CargarEscenaLogin();
-        }
-    }
-
-	public void CargaJugador(){
-		CargarEscenaMenu();
+	void Start(){
+		ProgressBar.Instance.MostrarBarraProgreso ();
+		CargarEscenaMenu ();
 	}
-
+		
     public void CargarEscenaMenu()
     {
         SceneManager.LoadSceneAsync("Menu");
     }
-
-    public void CargarEscenaLogin()
-    {
-        SceneManager.LoadSceneAsync("Login");
-    }
-
-    // Use this for initialization
-    void Start () {
-		
-	}
 	
 	// Update is called once per frame
 	void Update () {

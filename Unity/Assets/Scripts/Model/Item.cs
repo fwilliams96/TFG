@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public enum TipoItem
 {
 	Pocion,
-	Material
+	Piedra
 }
 
 public class Item

@@ -4,15 +4,15 @@
     <titulo>Tritón</titulo>
     <efecto></efecto>
     <nombreImagen>triton</nombreImagen>
-    <descripcion>De lo más profundo del mar</descripcion>
-    <evolucion>1</evolucion>
+    <descripcion>Seres marinos ordinarios cercanos a las divinidades marinas</descripcion>
+    <infoCarta>https://es.wikipedia.org/wiki/Trit%C3%B3n_(mitolog%C3%ADa)</infoCarta>
+	<evolucion>1</evolucion>
+	<idEvolucion>0</idEvolucion>
     <mana>1</mana>
     <ataque>400</ataque>
     <defensa>260</defensa>
   </delante>
   <detras>
     <simbolo>cuadrado.png</simbolo>
-    <elemento>trebol.png</elemento>
-    <elemento2>pocion.png</elemento2>
   </detras>
 </carta>

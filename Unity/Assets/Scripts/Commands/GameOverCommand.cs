@@ -3,16 +3,18 @@ using System.Collections;
 
 public class GameOverCommand : Comanda{
 
-    private Jugador looser;
+	private JugadorPartida looser;
+	private int experiencia;
 
-    public GameOverCommand(Jugador looser)
+	public GameOverCommand(JugadorPartida looser, int experiencia)
     {
         this.looser = looser;
+		this.experiencia = experiencia;
     }
 
     public override void EmpezarEjecucionComanda()
     {
-		GameOver.Instance.MostrarGameOver();
+		GameOver.Instance.MostrarGameOver(experiencia);
 		Comandas.Instance.CompletarEjecucionComanda ();
 
     }

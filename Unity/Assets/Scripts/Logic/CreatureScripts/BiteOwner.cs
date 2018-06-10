@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BiteOwner : EfectoEnte
 {  
-    public BiteOwner(Jugador owner, Criatura creature, int specialAmount): base(owner, creature, specialAmount)
+	public BiteOwner(JugadorPartida owner, Criatura creature, int specialAmount): base(owner, creature, specialAmount)
     {}
 
     public override void RegisterEventEffect()
@@ -15,7 +15,7 @@ public class BiteOwner : EfectoEnte
     public override void CauseEventEffect()
     {
         Debug.Log("InCauseEffect: owner: "+ owner + " specialAmount: "+ specialAmount);
-        new DealDamageCommand(owner.ID, specialAmount, owner.Defensa - specialAmount).AñadirAlaCola();
+		new DealDamageCommand(owner.ID, specialAmount, owner.Defensa - specialAmount).AñadirAlaCola();
         owner.Defensa -= specialAmount;
     }
 }

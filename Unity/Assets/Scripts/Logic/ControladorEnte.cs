@@ -63,7 +63,7 @@ public class ControladorEnte
 	public void ActivarEfectoMagica(int idMagica, int idAtacante)
     {
 		Criatura criaturaAtacante = null;
-		Jugador jugador = null;
+		JugadorPartida jugador = null;
 		Magica magica = (Magica)Recursos.EntesCreadosEnElJuego[idMagica];
 		if (idAtacante != -1) {
 			criaturaAtacante = (Criatura)Recursos.EntesCreadosEnElJuego [idAtacante];
@@ -71,6 +71,7 @@ public class ControladorEnte
 		}
         
         new ActivateEffectCommand(idMagica).AñadirAlaCola();
+		magica.EfectoActivado = true;
 		switch (magica.AssetCarta.Efecto) {
 			case Efecto.Destructor:
 				jugador = Controlador.Instance.ObtenerDueñoEnte (magica);
@@ -81,12 +82,11 @@ public class ControladorEnte
 				break;
 			case Efecto.Mana:
 				jugador = Controlador.Instance.ObtenerDueñoEnte (magica);
-				GiveManaBonus(jugador,2);
+				GiveManaBonus(jugador,Random.Range(1,3));
 				break;
 			case Efecto.Vida:
-				//TODO por implementar, dar vida a todas las criaturas
 				jugador = Controlador.Instance.ObtenerDueñoEnte (magica);
-				GiveHealth (jugador, 100);
+				GiveHealth (jugador, Random.Range(60,181));
 				break;
 			default:
 				break;
@@ -95,23 +95,31 @@ public class ControladorEnte
 		//MuerteEnte(magica.ID);
     }
 
-	public void DamageAllCreatures(Jugador jugador, int daño)
+	public void DamageAllCreatures(JugadorPartida jugador, int daño)
 	{
-		List<Ente> CreaturesToDamage = jugador.EntesEnLaMesa();
+		ArrayList array = new ArrayList(jugador.EntesEnLaMesa());
+		ArrayList CreaturesToDamage = (ArrayList)array.Clone ();
 		foreach (Ente cl in CreaturesToDamage)
 		{
 			if (cl.GetType () == typeof(Criatura)) {
 				Controlador.Instance.DañarCriatura ((Criatura)cl,daño);
 			}
 		}
+		/*Ente [] CreaturesToDamage = jugador.EntesEnLaMesa().ToArray();
+		foreach (Ente cl in CreaturesToDamage) {
+			if (cl.GetType () == typeof(Criatura)) {
+				Controlador.Instance.DañarCriatura ((Criatura)cl,daño);
+			}
+		}*/
 	}
 
-	public  void GiveHealth(Jugador jugador, int vida){
-		
+	public  void GiveHealth(JugadorPartida jugador, int vida){
+		Controlador.Instance.GiveHealth (jugador, vida);
 	}
-	public void GiveManaBonus(Jugador jugador, int mana)
+
+	public void GiveManaBonus(JugadorPartida jugador, int mana)
 	{
-		jugador.ConseguirManaExtra(mana);
+		Controlador.Instance.GiveManaBonus (jugador, mana);
 	}
 
 	public void DealDamageToTarget(Criatura criatura, int daño)
@@ -140,7 +148,7 @@ public class ControladorEnte
         if (ente.GetType() == typeof(Magica))
         {
 			//Si la magica es de tipo trampa no debe salir la opcion de activar voluntariamente
-			if (CartaPreparada(ente) && !EsMagicaTrampa(ente))
+			if (EntePreparado(ente) && !EsMagicaTrampa(ente))
             {
                 AccionesPopUp.Instance.MostrarAccionEfecto();
                 AccionesPopUp.Instance.RegistrarCallBack(ActivarEfectoMagica, idEnte);
@@ -162,17 +170,30 @@ public class ControladorEnte
         }
     }
 
+	/// <summary>
+	/// Una magica tipo trampa es aquella que no puede activarse voluntariamente, de momento solo se compara con la de espejo.
+	/// </summary>
+	/// <returns><c>true</c>, if magica trampa was esed, <c>false</c> otherwise.</returns>
+	/// <param name="ente">Ente.</param>
 	public bool EsMagicaTrampa(Ente ente){
 		Magica magica = (Magica)ente;
-		//TODO aqui añadire mas magicas de tipo trampa
 		return magica.AssetCarta.Efecto.Equals (Efecto.Espejo);
 	}
 
-	public bool CartaPreparada(Ente ente){
-		GameObject g = IDHolder.GetGameObjectWithID(ente.ID);
-		return g.GetComponent<OneEnteManager> ().PuedeAtacar;
+	/// <summary>
+	/// Ente preparado para usarse
+	/// </summary>
+	/// <returns><c>true</c>, if preparado was ented, <c>false</c> otherwise.</returns>
+	/// <param name="ente">Ente.</param>
+	public bool EntePreparado(Ente ente){
+		return ente.AtaquesRestantesEnTurno > 0;
 	}
 
+	/// <summary>
+	/// Indica si la criatura ha atacado en este turno
+	/// </summary>
+	/// <returns><c>true</c>, if ha atacado was criaturaed, <c>false</c> otherwise.</returns>
+	/// <param name="criatura">Criatura.</param>
 	public bool CriaturaHaAtacado(Criatura criatura){
 		return criatura.HaAtacado;
 	}
@@ -180,7 +201,7 @@ public class ControladorEnte
     public void MuerteEnte(int idEnte)
     {
         Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
-		Jugador jugadorObjetivo = Controlador.Instance.ObtenerDueñoEnte (ente);
+		JugadorPartida jugadorObjetivo = Controlador.Instance.ObtenerDueñoEnte (ente);
         jugadorObjetivo.EliminarEnteMesa(ente);
         ente.Morir();
         new CreatureDieCommand(idEnte, jugadorObjetivo).AñadirAlaCola();
@@ -193,19 +214,16 @@ public class ControladorEnte
 
     public bool EstaEnPosicionAtaque(int idEnte)
     {
-        //TODO crear excepcion si idEnte no existe en el diccionario
         Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
         if(ente.GetType() == typeof(Criatura))
         {
             return ((Criatura)ente).PosicionCriatura.Equals(PosicionCriatura.ATAQUE);
         }
-        //throw new EnteException();
-        throw new System.Exception();
+		return false;
     }
 
     public bool EsMagica(int idEnte)
     {
-        //TODO crear excepcion si idEnte no existe en el diccionario
         Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
         return ente.GetType() == typeof(Magica);
     }

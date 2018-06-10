@@ -111,7 +111,9 @@ public class DragCardOnTable : DraggingActions
     {
         bool TableNotFull = (playerOwner.NumEntesEnLaMesa() < 5);
 
-        return TableVisual.CursorSobreAlgunaMesa && TableNotFull;
+		PlayerArea area = Controlador.Instance.AreaJugador (playerOwner);
+
+		return area.tableVisual.CursorSobreEstaMesa && TableNotFull;
     }
 
 	public override void resetDragg(){

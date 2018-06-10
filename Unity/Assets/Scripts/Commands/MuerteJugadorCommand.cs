@@ -3,9 +3,9 @@ using System.Collections;
 
 public class MuerteJugadorCommand : Comanda{
 
-    private Jugador looser;
+	private JugadorPartida looser;
 
-	public MuerteJugadorCommand(Jugador looser)
+	public MuerteJugadorCommand(JugadorPartida looser)
     {
         this.looser = looser;
     }

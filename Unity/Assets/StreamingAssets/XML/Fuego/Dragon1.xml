@@ -6,6 +6,7 @@
     <nombreImagen>Foto_bebe_dragon</nombreImagen>
     <descripcion>Dragon de fuego ansioso de quemar</descripcion>
     <evolucion>1</evolucion>
+	<idEvolucion>2</idEvolucion>
     <mana>1</mana>
     <ataque>350</ataque>
     <defensa>180</defensa>

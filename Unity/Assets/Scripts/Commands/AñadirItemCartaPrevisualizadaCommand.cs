@@ -15,5 +15,6 @@ public class AñadirItemCartaPrevisualizadaCommand : Comanda {
     {
 		GameObject cartaPrevisualizada = GameObject.FindGameObjectWithTag ("CartaPrevisualizada");
 		cartaPrevisualizada.GetComponent<ProgresoVisual> ().AñadirItem (item.Tipo, item.Cantidad);
+		Comandas.Instance.CompletarEjecucionComanda();
     }
 }

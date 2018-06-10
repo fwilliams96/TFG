@@ -3,12 +3,12 @@ using System.Collections;
 
 public class DrawACardCommand : Comanda {
 
-    private Jugador p;
+	private JugadorPartida p;
     private Carta cl;
     private bool fast;
     private bool fromDeck;
 
-    public DrawACardCommand(Carta cl, Jugador p, bool fast, bool fromDeck)
+	public DrawACardCommand(Carta cl, JugadorPartida p, bool fast, bool fromDeck)
     {        
         this.cl = cl;
         this.p = p;
@@ -20,8 +20,11 @@ public class DrawACardCommand : Comanda {
     {
         PlayerArea areaJugador = Controlador.Instance.AreaJugador(p);
         areaJugador.mazoVisual.CartasEnMazo--;
-        areaJugador.manoVisual.DarCartaJugador(cl, cl.ID, fast, fromDeck);
-        //TODO descomentar en caso de que MostrarCartasJugablesJugador de la funcion ActualizarValoresJugador falle
-        Controlador.Instance.MostrarCartasJugablesJugador(p);
+		bool rotarDeCara = false;
+		if (p.GetType () == typeof(JugadorHumano))
+			rotarDeCara = true;
+		areaJugador.manoVisual.DarCartaJugador(cl, cl.ID, fast, fromDeck,rotarDeCara);
+		if(p.GetType() == typeof(JugadorHumano))
+			Controlador.Instance.MostrarCartasJugablesJugador (p);
     }
 }

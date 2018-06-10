@@ -19,6 +19,6 @@ public class OneMagicaManager : OneEnteManager
 
 	public void HacerDaño()
     {
-		DamageEffect.CreateDamageEffect (transform.position);
+		//DamageEffect.CreateDamageEffect (transform.position);
     }
 }

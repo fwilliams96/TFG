@@ -5,8 +5,12 @@ using UnityEngine;
 public class Acciones : MonoBehaviour {
 
 	public GameObject PanelAcciones;
-	public GameObject accionesCarta;
-	public GameObject accionesItem;
+
+	public GameObject opciones;
+	public GameObject visualizar;
+	public GameObject añadirItem;
+	public GameObject evolucionar;
+
 	public static Acciones Instance;
 	public GameObject Elementos;
 	private GameObject elementoActual;
@@ -39,24 +43,76 @@ public class Acciones : MonoBehaviour {
 		this.ElementoActual = actual;
 		PanelAcciones.SetActive (true);
 		Elementos.GetComponent<Elementos>().DeshabilitarColliderElementos ();
-		if (cartas) {
-			accionesCarta.GetComponent<AccionesCarta> ().MostrarAccionesCarta ();
-		} else {
-			//accionesItem.GetComponent<AccionesItem> ().MostrarAccionesItem ();
-		}
 	}
 		
 	public void CerrarMenu(){
-		if (accionesCarta.activeSelf) {
-			accionesCarta.GetComponent<AccionesCarta> ().OcultarAccionesCarta ();
-		} else {
-			//accionesItem.GetComponent<AccionesItem> ().OcultarAccionesItem();
-		}
+
 		Elementos.GetComponent<Elementos>().HabilitarColliderElementos ();
 		ElementoActual = null;
 		PanelAcciones.SetActive (false);
+		OcultarAccionesCarta ();
 	}
 
+	public void OcultarAccionesCarta(){
+		if (visualizar.activeSelf) {
+			visualizar.SetActive (false);
+		}
 
+		if (añadirItem.activeSelf) {
+			añadirItem.SetActive (false);
+		}
+
+		if (evolucionar.activeSelf) {
+			evolucionar.SetActive (false);
+		}
+		if(!opciones.activeSelf)
+			opciones.SetActive (true);
+	}
+
+	public void Opciones(int indiceOpcion){
+		switch (indiceOpcion) {
+		case 1:
+			visualizar.SetActive (false);
+			break;
+		case 2:
+			añadirItem.SetActive (false);
+			break;
+		case 3:
+			evolucionar.SetActive (false);
+			break;
+		}
+		opciones.SetActive (true);
+	}
+
+	public void Visualizar(){
+		opciones.SetActive (false);
+		visualizar.SetActive (true);
+	}
+
+	public void AñadirItem(){
+		opciones.SetActive (false);
+		añadirItem.SetActive (true);
+	}
+
+	public void Evolucionar(){
+		ControladorMenu.Instance.EvolucionarCarta (Acciones.Instance.ElementoActual);
+		opciones.SetActive (false);
+		evolucionar.SetActive (true);
+	}
+
+	public void BuscarInfoCarta(){
+		if (!Familia.Ancestral.Equals (elementoActual.GetComponent<OneCardManager> ().CartaAsset.Familia) &&
+		    !Familia.Magica.Equals (elementoActual.GetComponent<OneCardManager> ().CartaAsset.Familia)) {
+
+			string urlInfoCarta = elementoActual.GetComponent<OneCardManager> ().CartaAsset.InfoCarta;
+			if(null != urlInfoCarta && !"".Equals(urlInfoCarta))
+				Application.OpenURL (urlInfoCarta);
+			else
+				MessageManager.Instance.ShowMessage ("Ha habido un error al buscar la información",1.5f);
+		} else {
+			MessageManager.Instance.ShowMessage ("No existe información al respecto",1.5f);
+		}
+
+	}
 
 }

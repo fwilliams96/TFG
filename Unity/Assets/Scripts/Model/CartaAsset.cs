@@ -25,11 +25,13 @@ public class CartaAsset
 {
     public string Nombre;
     public string Descripcion;
+	public string InfoCarta;
     public Familia Familia;
     public string RutaImagenCarta;
     public int CosteMana;
     //Excepto si es ancestral
     public int Evolucion;
+	public int IDEvolucion;
 	public Efecto Efecto;
 
     public int Defensa;

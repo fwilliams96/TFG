@@ -100,6 +100,13 @@ public class OpcionesObjeto : MonoBehaviour
         // 5) tween to target position
         objetoPrevisualizado.transform.localPosition = Vector3.zero;
         objetoPrevisualizado.transform.localScale = Vector3.one;
+		if (gameObject.tag.Contains ("Card")) {
+			if (gameObject.tag.Contains ("Low")) {
+				TargetPosition.y = 2.0f;
+			} else {
+				TargetPosition.y = -2.0f;
+			}
+		}
 
         objetoPrevisualizado.transform.DOLocalMove(TargetPosition, 1f).SetEase(Ease.OutQuint);
         objetoPrevisualizado.transform.DOScale(TargetScale, 1f).SetEase(Ease.OutQuint);

@@ -41,4 +41,10 @@ public class Criatura : Ente, ICharacter
 		this.haAtacado = false;
     }
 
+	public override void OnTurnStart()
+	{
+		base.OnTurnStart ();
+		haAtacado = false;
+	}
+
 }

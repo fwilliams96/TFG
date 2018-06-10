@@ -3,9 +3,9 @@ using System.Collections;
 
 public class StartATurnCommand : Comanda {
 
-    private Jugador p;
+	private JugadorPartida p;
 
-    public StartATurnCommand(Jugador p)
+	public StartATurnCommand(JugadorPartida p)
     {
         this.p = p;
     }
@@ -14,10 +14,9 @@ public class StartATurnCommand : Comanda {
     {
         //Cambiamos el jugador actual
         Controlador.Instance.JugadorActual = p;
-        Controlador.Instance.ActualizarValoresJugador();
-        //OPTIONAL la primera vez que inicia el juego esto podria sobrar
-        Controlador.Instance.OcultarManoJugadorAnterior();
-        Controlador.Instance.MostrarManoJugadorActual();
+		Controlador.Instance.ActualizarValoresJugador(p);
+        /*Controlador.Instance.OcultarManoJugadorAnterior();
+        Controlador.Instance.MostrarManoJugadorActual();*/
         // this command is completed instantly
         comandas.CompletarEjecucionComanda();
     }

@@ -4,15 +4,15 @@
     <titulo>Arpia</titulo>
     <efecto></efecto>
     <nombreImagen>arpia</nombreImagen>
-    <descripcion>La vigilante del cielo</descripcion>
-    <evolucion>1</evolucion>
+    <descripcion>Mujer alada que castiga a los mortales</descripcion>
+    <infoCarta>https://es.wikipedia.org/wiki/Harp%C3%ADas</infoCarta>
+	<evolucion>1</evolucion>
+	<idEvolucion>2</idEvolucion>
     <mana>1</mana>
     <ataque>450</ataque>
     <defensa>400</defensa>
   </delante>
   <detras>
     <simbolo>cuadrado.png</simbolo>
-    <elemento>trebol.png</elemento>
-    <elemento2>pocion.png</elemento2>
   </detras>
 </carta>

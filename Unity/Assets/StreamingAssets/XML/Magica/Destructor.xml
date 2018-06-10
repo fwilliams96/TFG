@@ -5,14 +5,14 @@
     <efecto>destructor</efecto>
     <nombreImagen>destructor</nombreImagen>
     <descripcion>Imparable cuando se activa</descripcion>
-    <evolucion>1</evolucion>
+    <infoCarta></infoCarta>
+	<evolucion>1</evolucion>
+	<idEvolucion>1</idEvolucion>
     <mana>2</mana>
     <ataque></ataque>
     <defensa></defensa>
   </delante>
   <detras>
     <simbolo>cuadrado.png</simbolo>
-    <elemento>trebol.png</elemento>
-    <elemento2>pocion.png</elemento2>
   </detras>
 </carta>

@@ -12,21 +12,19 @@ public class BaseDatos
     private static BaseDatos instance;
     private DatabaseReference reference;
 	private List<Jugador> jugadores;
-    private int numJugadores;
     private string userIDActual;
     private DataSnapshot usuarioActual;
     private DataSnapshot assets;
-    public delegate void CallBack();
+	private bool existsConnection;
+	public delegate void CallBack(string message);
     //private SesionUsuario.CallBack callBack;
 	public Dictionary<int, Carta> Cartas;
     #endregion
 
     private BaseDatos()
     {
-        InitializeDataBase();
         this.assets = null;
         this.usuarioActual = null;
-        this.numJugadores = 0;
 		this.jugadores = new List<Jugador>();
 		Cartas = new Dictionary<int, Carta>();
     }
@@ -46,32 +44,38 @@ public class BaseDatos
 
     public void InicializarBase(CallBack callback)
     {
+		InitializeDataBase();
         ObtenerAssets(callback);
     }
-
+		
     private void InitializeDataBase()
     {
         //TODO quizas la parte de base de datos en el futuro la ponga en una clase aparte.
         // Set up the Editor before calling into the realtime database.
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://battle-galaxy-cda70.firebaseio.com/");
-
         // Get the root reference location of the database.
         reference = FirebaseDatabase.DefaultInstance.RootReference;
     }
-
+		
     private void ObtenerAssets(CallBack callback)
     {
         reference.Child("assets").GetValueAsync().ContinueWith(task => {
             if (task.IsFaulted)
             {
-                Debug.Log("Error al recoger los assets");
+				Debug.Log("Excepcion: "+task.Exception);
+				callback.Invoke(SesionUsuario.GetErrorMessage(task.Exception));
                 assets = null;
             }
+			else if(task.IsCanceled){
+				Debug.Log("Excepcion: "+task.Exception);
+				callback.Invoke(SesionUsuario.GetErrorMessage(task.Exception));
+				assets = null;
+			}
             else if (task.IsCompleted)
             {
                 //Assigno los assets a una variable global
                 assets = task.Result;
-                callback.Invoke();
+                callback.Invoke("");
             }
         });
     }
@@ -81,7 +85,12 @@ public class BaseDatos
 		reference.Child("users").Child(userId).GetValueAsync().ContinueWith(task => {
 			if (task.IsFaulted)
 			{
-				Debug.Log("Error al recoger el jugador");
+				Debug.Log("Excepcion: "+task.Exception);
+				callback.Invoke("Ha habido algun error al recoger el usuario");
+			}
+			else if(task.IsCanceled){
+				Debug.Log("Excepcion: "+task.Exception);
+				callback.Invoke("Ha habido algun error al recoger el usuario");
 			}
 			else if (task.IsCompleted)
 			{
@@ -91,16 +100,7 @@ public class BaseDatos
 			}
 		});
     }
-
-
-    /*public void RecogerJugador(string userId, SesionUsuario.CallBack callback)
-    {
-        this.userIDActual = userId;
-        reference.Child("users").Child(userId)
-        .ValueChanged += RecogerUsuario;
-        callBack = callback;
-    }*/
-
+		
     public void AñadirWelcomePackJugador(Jugador jugador)
     {
         //List<Carta> cartasWelcomePack = GenerarCartasAleatorias(8);
@@ -108,7 +108,11 @@ public class BaseDatos
 		AñadirCartasJugador(jugador, cartasWelcomePack);
 		List<Item> itemsAleatorios = GenerarItemsAleatorios (8);
 		AñadirItemsJugador (jugador,itemsAleatorios);
-		List<int> idCartasMazo = GenerarIDCartasMazo ();
+		List<int> idCartasMazo;
+		if (jugadores.Count == 2)
+			idCartasMazo = Local.IDCartasMazo ();
+		else
+			idCartasMazo = GenerarIDCartasMazo (cartasWelcomePack);
 		AñadirMazoJugador (jugador,idCartasMazo);
 
     }
@@ -149,7 +153,7 @@ public class BaseDatos
 			TipoItem tipoItem = (TipoItem)rnd.Next(0, 2);
 			int cantidad = rnd.Next (50, 80);
 			string rutaImagen;
-			if (tipoItem.Equals (TipoItem.Material)) {
+			if (tipoItem.Equals (TipoItem.Piedra)) {
 				rutaImagen = "Sprites/Recursos/Componentes/item_piedra";
 			} else {
 				rutaImagen = "Sprites/Recursos/Componentes/item_pocion";
@@ -165,15 +169,17 @@ public class BaseDatos
         Debug.Log("Crear jugador");
         this.userIDActual = userId;
         AñadirJugador(new Jugador("Low"));
+		Local.TipoJugador = Jugador.TIPO_JUGADOR.MANUAL;
         AñadirWelcomePackJugador(Local);
         AñadirJugadorBaseDatos(userId,Local);
-        callBack.Invoke();
+        callBack.Invoke("");
     }
 
 	private void ObtenerDatosJugador(SesionUsuario.CallBack callBack,DataSnapshot usuario)
 	{
 		Debug.Log("Obtener jugador");
 		AñadirJugador(new Jugador("Low"));
+		Local.TipoJugador = Jugador.TIPO_JUGADOR.MANUAL;
 		int nivel = ObtenerNivelJugador(usuario);
 		int experiencia = ObtenerExperienciaJugador(usuario);
 		List<Carta> cartasJugador = ObtenerCartasJugador(usuario);
@@ -183,7 +189,7 @@ public class BaseDatos
 		AñadirMazoJugador (Local, idCartasMazo);
 		AñadirItemsJugador (Local, itemsJugador);
 		AñadirExperienciaNivelJugador (Local, nivel,experiencia);
-		callBack.Invoke();
+		callBack.Invoke("");
 	}
 
     private void AñadirCartasJugador(Jugador jugador, List<Carta> cartas)
@@ -261,7 +267,7 @@ public class BaseDatos
             string idAsset = (string)usuario.Child("cartas").Child(i.ToString()).Child("asset").GetValue(true);
 			var progresoJSON = JSONUtils.StringToJSON (usuario.Child ("cartas").Child (i.ToString ()).Child ("progreso").GetRawJsonValue ());
 			Progreso progreso = new Progreso ();
-			progreso.Material = Int32.Parse (progresoJSON ["material"]);
+			progreso.Piedra = Int32.Parse (progresoJSON ["material"]);
 			progreso.Pocion = Int32.Parse (progresoJSON ["pocion"]);
             cartasJugador.Add(CrearCartaJugador(idAsset, progreso));
         }
@@ -296,10 +302,11 @@ public class BaseDatos
 		return idsCartasMazo;
 	}
 
-	private List<int> GenerarIDCartasMazo(){	
+	private List<int> GenerarIDCartasMazo(List<Carta> cartasWelcomePack){
+		;
 		List<int> idsCartasMazo = new List<int> ();
 		for (int i = 0; i < 8; i++) {
-			idsCartasMazo.Add (i);
+			idsCartasMazo.Add (UnityEngine.Random.Range (0,	cartasWelcomePack.Count));
 		}
 		return idsCartasMazo;
 	}
@@ -343,7 +350,7 @@ public class BaseDatos
 		if(cambioCartas)
 			ActualizarCartasBaseDatos ();
 		ActualizarNivelBaseDatos ();
-		//ActualizarExperienciaBaseDatos ();
+		ActualizarExperienciaBaseDatos ();
 	}
 
 	private void ActualizarItemsBaseDatos(){
@@ -356,7 +363,7 @@ public class BaseDatos
 		ReferenciaCartas().SetValueAsync (Local.CartasToDictionary ());
 	}
 
-	private void ActualizarExperienciaBaseDatos(){
+	public void ActualizarExperienciaBaseDatos(){
 		ReferenciaExperiencia ().SetValueAsync (Local.Experiencia);
 	}
 
@@ -374,7 +381,7 @@ public class BaseDatos
         Debug.Log("Guardar carta ok");
     }
 
-	public KeyValuePair<string,CartaAsset> BuscarEvolucion(Familia familia, int evolucion){
+	public KeyValuePair<string,CartaAsset> BuscarEvolucion(Familia familia, int evolucion, int idEvolucion){
 		
 		var json = assets.Value as Dictionary<string, object>;
 		List<string> keyList = new List<string>(json.Keys);
@@ -383,7 +390,7 @@ public class BaseDatos
 		{
 			string assetJSON = assets.Child(idAsset).GetRawJsonValue();
 			CartaAsset asset = JsonUtility.FromJson<CartaAsset>(assetJSON);
-			if (asset.Evolucion == (evolucion+1) && asset.Familia.Equals (familia)) {
+			if   (asset.Familia.Equals (familia) && asset.IDEvolucion ==  idEvolucion && asset.Evolucion == (evolucion+1)) {
 				evolucionEncontrada = new KeyValuePair<string, CartaAsset> (idAsset,asset);
 			}
 
@@ -424,11 +431,12 @@ public class BaseDatos
 
 	public void CrearJugadorEnemigo(){
 		AñadirJugador(new Jugador("Top"));
+		Enemigo.TipoJugador = Jugador.TIPO_JUGADOR.AUTOMÁTICO;
 		AñadirWelcomePackJugador(Enemigo);
 	}
 
 	public void Clear(){
-		Local.Reset ();
+		//Local.Reset ();
 		EliminarEnemigo ();
 	}
 

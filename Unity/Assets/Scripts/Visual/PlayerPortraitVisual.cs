@@ -5,19 +5,11 @@ using DG.Tweening;
 
 public class PlayerPortraitVisual : MonoBehaviour {
 
-    // TODO : get ID from players when game starts
-
-    //public GameObject Explosion;
     public CharacterAsset charAsset;
     [Header("Text Component References")]
-    //public Text NameText;
     public Text HealthText;
     [Header("Image References")]
-    //public Image HeroPowerIconImage;
-    //public Image HeroPowerBackgroundImage;
     public Image ImagenPersonaje;
-    public Image ImagenFondoPersonaje;
-
     void Awake()
     {
         if (charAsset != null)
@@ -26,20 +18,45 @@ public class PlayerPortraitVisual : MonoBehaviour {
 
     public void AplicarEstiloPersonajeAsset()
     {
-        HealthText.text = charAsset.MaxHealth.ToString();
+		if (Settings.Instance.Batalla.Equals (Settings.TIPO_NUMERO.ENTERO)) {
+			HealthText.text = charAsset.MaxHealth.ToString ();
+		} else {
+			HealthText.text = Settings.ObtenerPorcentaje (charAsset.MaxHealth, charAsset.MaxHealth);
+		}
         ImagenPersonaje.sprite = charAsset.AvatarImage;
-        ImagenFondoPersonaje.sprite = charAsset.AvatarBGImage;
+        //ImagenFondoPersonaje.sprite = charAsset.AvatarBGImage;
 
-        ImagenFondoPersonaje.color = charAsset.AvatarBGTint;
+        //ImagenFondoPersonaje.color = charAsset.AvatarBGTint;
 
     }
+
+	public void AumentarVida(int vidaDespues){
+		StartCoroutine (AumentarVidaProgresivamente(vidaDespues));
+
+	}
+
+	IEnumerator AumentarVidaProgresivamente(int vidaDespues)
+	{
+		int vidaActual = System.Int32.Parse (HealthText.text) +1;
+		while (vidaActual <= vidaDespues) {
+			HealthText.text = vidaActual.ToString ();
+			yield return new WaitForSeconds(0.02f);
+			vidaActual += 1;
+		}
+		Comandas.Instance.CompletarEjecucionComanda();
+	}
 
     public void HacerDaño(int daño, int vida)
     {
         if (daño > 0)
         {
             DamageEffect.CreateDamageEffect(transform.position, vida,daño);
-			HealthText.text = (vida-daño).ToString();
+			if (Settings.Instance.Batalla.Equals (Settings.TIPO_NUMERO.ENTERO)) {
+				HealthText.text = (vida-daño).ToString();
+			} else {
+				HealthText.text = Settings.ObtenerPorcentaje ((vida-daño),charAsset.MaxHealth);
+			}
+
         }
     }
 

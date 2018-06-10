@@ -4,15 +4,15 @@
     <titulo>Elfo</titulo>
     <efecto></efecto>
     <nombreImagen>elfo</nombreImagen>
-    <descripcion>Tan ágil que parece invisible</descripcion>
+    <descripcion>Longevo ser màgico que vive en los bosques</descripcion>
+	<infoCarta>https://es.wikipedia.org/wiki/Elfo</infoCarta>
     <evolucion>1</evolucion>
+	<idEvolucion>2</idEvolucion>
     <mana>0</mana>
     <ataque>250</ataque>
     <defensa>150</defensa>
   </delante>
   <detras>
     <simbolo>cuadrado.png</simbolo>
-    <elemento>trebol.png</elemento>
-    <elemento2>pocion.png</elemento2>
   </detras>
 </carta>

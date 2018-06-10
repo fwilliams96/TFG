@@ -24,11 +24,18 @@ public class ControladorMenu : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		pantallaActual = PANTALLA_MENU.INVENTARIO;
+		IniciarMusica ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	void IniciarMusica(){
+		if (!Settings.Instance.Musica) {
+			Camera.main.GetComponent<AudioSource> ().Pause ();
+		}
 	}
 
 	public PANTALLA_MENU PantallaActual{
@@ -46,11 +53,12 @@ public class ControladorMenu : MonoBehaviour {
 		Carta carta = BuscarCarta (idCarta);
 		Item item = BuscarItem (idItem);
 		bool progresoLleno = false;
-		if (item.Tipo.Equals (TipoItem.Material))
-		if (carta.Progreso.Material >= 100) {
-			progresoLleno = true;
-		} else {
-			carta.AñadirMaterial (item.Cantidad);
+		if (item.Tipo.Equals (TipoItem.Piedra)) {
+			if (carta.Progreso.Piedra >= 100) {
+				progresoLleno = true;
+			} else {
+				carta.AñadirPiedra (item.Cantidad);
+			}
 		}
 		else {
 			if (carta.Progreso.Pocion >= 100) {
@@ -63,14 +71,14 @@ public class ControladorMenu : MonoBehaviour {
 			new AñadirItemCartaPrevisualizadaCommand (item).AñadirAlaCola ();
 			new AñadirItemCartaCommand (carta, item).AñadirAlaCola ();
 			BaseDatos.Instance.ActualizarItemCarta (carta, item);
-			if (carta.Progreso.Material >= 100 && carta.Progreso.Pocion >= 100) {
-				MessageManager.Instance.SendMessage ("¡Progreso de la carta completado!", 2f);
+			if (carta.Progreso.Piedra >= 100 && carta.Progreso.Pocion >= 100) {
+				MessageManager.Instance.ShowMessage ("¡Ya puedes evolucionar la carta!", 2f);
 			} else {
-				MessageManager.Instance.SendMessage ("Item añadido con éxito", 2f);
+				MessageManager.Instance.ShowMessage ("Item añadido con éxito", 1f);
 			}
 
 		} else {
-			MessageManager.Instance.SendMessage ("¡El progreso de este item está lleno!", 2f);
+			MessageManager.Instance.ShowMessage ("¡El progreso de este item está lleno!", 2f);
 		}
 
 	}
@@ -107,36 +115,39 @@ public class ControladorMenu : MonoBehaviour {
 
 	public bool SePuedeEvolucionar(int idCarta){
 		Carta carta = BuscarCarta (idCarta);
-		return ExisteEvolucion(carta) && carta.Progreso.Material >= 100f && carta.Progreso.Pocion >= 100f;
+		return ExisteEvolucion(carta) && carta.Progreso.Piedra >= 100f && carta.Progreso.Pocion >= 100f;
 	}
 
 	private bool ExisteEvolucion(Carta carta){
 		Familia familia = carta.AssetCarta.Familia;
 		int evolucionActual = carta.AssetCarta.Evolucion;
-		KeyValuePair<string,CartaAsset> evolucion = BuscarEvolucion (familia, evolucionActual);
+		int idEvolucion = carta.AssetCarta.IDEvolucion;
+		KeyValuePair<string,CartaAsset> evolucion = BuscarEvolucion (familia, evolucionActual,idEvolucion);
 		return !"".Equals(evolucion.Key)  && null != evolucion.Value;
 	}
 
-	public KeyValuePair<string,CartaAsset> BuscarEvolucion(Familia familia, int evolucionActual){
-		return BaseDatos.Instance.BuscarEvolucion (familia, evolucionActual);
+	public KeyValuePair<string,CartaAsset> BuscarEvolucion(Familia familia, int evolucionActual, int idEvolucion){
+		return BaseDatos.Instance.BuscarEvolucion (familia, evolucionActual, idEvolucion);
 	}
 
 	public void EvolucionarCarta(GameObject cartaG){
 		Carta carta = BuscarCarta (cartaG.GetComponent<IDHolder>().UniqueID);
 		//Buscamos la evolución
-		KeyValuePair<string,CartaAsset> evolucion = BuscarEvolucion (carta.AssetCarta.Familia, carta.AssetCarta.Evolucion);
+		KeyValuePair<string,CartaAsset> evolucion = BuscarEvolucion (carta.AssetCarta.Familia, carta.AssetCarta.Evolucion,carta.AssetCarta.IDEvolucion);
 		//modificamos el progreso de la carta restando las 100 unidades necesarias para evolucionar
-		carta.Progreso.Material -= 100;
+		carta.Progreso.Piedra -= 100;
 		carta.Progreso.Pocion -= 100;
 		carta.IdAsset = evolucion.Key;
 		carta.AssetCarta = evolucion.Value;
 		OneCardManager manager = cartaG.GetComponent<OneCardManager>();
+		ProgresoVisual progreso = cartaG.GetComponent<ProgresoVisual>();
 		//modificamos el asset de la carta seleccionada actual y lo cambiamos por la evolución
 		manager.CartaAsset = evolucion.Value;
 		//actualizamos en la carta visual el progreso
-		manager.PorcentajeProgresoTrebol = carta.Progreso.Material > 100 ? 100: carta.Progreso.Material;
-		manager.PorcentajeProgresoPocion = carta.Progreso.Pocion > 100 ? 100: carta.Progreso.Pocion;
+		progreso.PorcentajeProgresoPiedra = carta.Progreso.Piedra > 100 ? 100: carta.Progreso.Piedra;
+		progreso.PorcentajeProgresoPocion = carta.Progreso.Pocion > 100 ? 100: carta.Progreso.Pocion;
 		manager.LeerDatos();
+		progreso.LeerProgreso ();
 		MessageManager.Instance.ShowMessage ("¡Una nueva carta ha aparecido!", 2f);
 		BaseDatos.Instance.ActualizarCartaBaseDatos (carta);
 	}
@@ -224,6 +235,10 @@ public class ControladorMenu : MonoBehaviour {
 		return BaseDatos.Instance.Local.Nivel.ToString ();
 	}
 
+	public float ObtenerExperienciaJugador(){
+		return BaseDatos.Instance.Local.Experiencia / 100f;
+	}
+
 	public List<System.Object> RecogerElemento(Elementos.TIPO_ELEMENTOS tipoElementos){
 		List<System.Object> elementos;
 		switch (tipoElementos) {
@@ -258,5 +273,15 @@ public class ControladorMenu : MonoBehaviour {
 			}
 		}
 		return cartasFueraMazo;
+	}
+
+	public void ActualizarMusica(bool musica){
+		if (musica) {
+			if(!Camera.main.GetComponent<AudioSource> ().isPlaying)
+				Camera.main.GetComponent<AudioSource> ().Play ();
+		} else {
+			if(Camera.main.GetComponent<AudioSource> ().isPlaying)
+				Camera.main.GetComponent<AudioSource> ().Pause ();
+		}
 	}
 }
