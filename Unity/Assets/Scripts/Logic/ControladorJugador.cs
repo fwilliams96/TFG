@@ -148,23 +148,29 @@ public class ControladorJugador
 
 	private void ActualizarEstadoCartasJugador(JugadorPartida jugador, bool quitarTodasRemarcadas = false)
     {
-        foreach (Carta cl in jugador.CartasEnLaMano())
+		foreach (CartaPartida cl in jugador.CartasEnLaMano())
         {
-            List<GameObject> listG = IDHolder.GetGameObjectsWithID(cl.ID);
+            /*List<GameObject> listG = IDHolder.GetGameObjectsWithID(cl.ID);
 			foreach(GameObject g in listG){
 				if(g != null)
 					g.GetComponent<OneCardManager>().PuedeSerJugada = Controlador.Instance.CartaPuedeUsarse(jugador,cl) && !quitarTodasRemarcadas;
-			}
+			}*/
+			GameObject g = IDHolder.GetGameObjectWithID (cl.ID);
+			if(g != null)
+				g.GetComponent<OneCardManager>().PuedeSerJugada = Controlador.Instance.CartaPuedeUsarse(jugador,cl) && !quitarTodasRemarcadas;
 				
         }
 
         foreach (Ente crl in jugador.EntesEnLaMesa())
         {
-			List<GameObject> listG = IDHolder.GetGameObjectsWithID(crl.ID);
+			/*List<GameObject> listG = IDHolder.GetGameObjectsWithID(crl.ID);
 			foreach(GameObject g in listG){
 				if(g != null)
 					g.GetComponent<OneEnteManager>().PuedeAtacar = Controlador.Instance.EntePuedeUsarse(crl) && !quitarTodasRemarcadas;
-			}
+			}*/
+			GameObject g = IDHolder.GetGameObjectWithID (crl.ID);
+			if(g != null)
+				g.GetComponent<OneEnteManager>().PuedeAtacar = Controlador.Instance.EntePuedeUsarse(crl) && !quitarTodasRemarcadas;
                 
         }
     }
@@ -265,7 +271,7 @@ public class ControladorJugador
     /// </summary>
     /// <param name="jugador"></param>
     /// <param name="carta"></param>
-    public void RestarManaCarta(JugadorPartida jugador, Carta carta)
+	public void RestarManaCarta(JugadorPartida jugador, CartaPartida carta)
     {
 		jugador.ManaRestante -= carta.CosteManaActual;
     }

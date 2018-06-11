@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class JugadorPartida : MonoBehaviour,ICharacter
+public abstract class JugadorPartida : MonoBehaviour,ICharacter, IIdentifiable
 {
 	public delegate void VoidWithNoArguments();
 	public event VoidWithNoArguments EndTurnEvent;
@@ -45,7 +45,7 @@ public abstract class JugadorPartida : MonoBehaviour,ICharacter
 		mesa.EntesEnTablero.Insert(posicionMesa, ente);
 	}
 
-	public void AñadirCartaMano(int posicionMano, Carta carta)
+	public void AñadirCartaMano(int posicionMano, CartaPartida carta)
 	{
 		mano.CartasEnMano.Insert(posicionMano, carta);
 	}
@@ -59,7 +59,7 @@ public abstract class JugadorPartida : MonoBehaviour,ICharacter
 		mesa.EntesEnTablero.Remove(ente);
 	}
 
-	public void EliminarCartaMano(Carta carta)
+	public void EliminarCartaMano(CartaPartida carta)
 	{
 		mano.CartasEnMano.Remove(carta);
 	}
@@ -69,7 +69,7 @@ public abstract class JugadorPartida : MonoBehaviour,ICharacter
 		return mesa.EntesEnTablero;
 	}
 
-	public List<Carta> CartasEnLaMano()
+	public List<CartaPartida> CartasEnLaMano()
 	{
 		return mano.CartasEnMano;
 	}

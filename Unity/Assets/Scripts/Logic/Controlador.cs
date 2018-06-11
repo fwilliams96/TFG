@@ -207,11 +207,13 @@ public class Controlador : MonoBehaviour
                 //Carta newCard = new Carta(jugador.CartasEnElMazo()[0]);
 				//Esto nos devuelve la carta actual del mazo que se recorre infinitamente
 				Carta newCard = (Carta)jugador.CartaActual();
+				CartaPartida carta = new CartaPartida (newCard.AssetCarta);
+				//Recursos.CartasCreadasEnElJuego
 				//TODO ver si ya existe la carta en baraja, si existe volver a crear una instancia para cambiar el id
 				/*if (jugador.ContieneCarta (newCard)) {
 					newCard = newCard.
 				}*/
-                jugador.AñadirCartaMano(0, newCard);
+				jugador.AñadirCartaMano(0, carta);
                 // Debug.Log(hand.CardsInHand.Count);
                 new DrawACardCommand(jugador.CartasEnLaMano()[0], jugador, fast, fromDeck: true).AñadirAlaCola();
             }
@@ -226,7 +228,7 @@ public class Controlador : MonoBehaviour
     /// <param name="tablePos"></param>
     public void JugarMagicaMano(JugadorPartida jugador,int UniqueID, int tablePos)
     {
-		JugarMagicaMano(jugador,BaseDatos.Instance.Cartas[UniqueID], tablePos);
+		JugarMagicaMano(jugador,Recursos.CartasCreadasEnElJuego[UniqueID], tablePos);
     }
 
     /// <summary>
@@ -234,7 +236,7 @@ public class Controlador : MonoBehaviour
     /// </summary>
     /// <param name="magicaJugada"></param>
     /// <param name="tablePos"></param>
-	public void JugarMagicaMano(JugadorPartida jugador,Carta magicaJugada, int tablePos)
+	public void JugarMagicaMano(JugadorPartida jugador,CartaPartida magicaJugada, int tablePos)
     {
 		RestarManaCarta(jugador, magicaJugada);
 		Magica nuevaMagica = new Magica(jugador.Area,magicaJugada.AssetCarta);
@@ -250,7 +252,7 @@ public class Controlador : MonoBehaviour
 	public void JugarCartaMano(JugadorPartida jugador,int UniqueID, int tablePos, bool posicionAtaque)
     {
         Debug.Log("Jugar carta mano: " + UniqueID);
-		JugarCartaMano(jugador,BaseDatos.Instance.Cartas[UniqueID], tablePos, posicionAtaque);
+		JugarCartaMano(jugador,Recursos.CartasCreadasEnElJuego[UniqueID], tablePos, posicionAtaque);
     }
 
     /// <summary>
@@ -259,7 +261,7 @@ public class Controlador : MonoBehaviour
     /// <param name="cartaJugada"></param>
     /// <param name="tablePos"></param>
     /// <param name="posicionAtaque"></param>
-	public void JugarCartaMano(JugadorPartida jugador,Carta cartaJugada, int tablePos, bool posicionAtaque)
+	public void JugarCartaMano(JugadorPartida jugador,CartaPartida cartaJugada, int tablePos, bool posicionAtaque)
     {
         //ELIMINATE
 		RestarManaCarta(jugador, cartaJugada);
@@ -274,7 +276,7 @@ public class Controlador : MonoBehaviour
     /// <param name="cartaJugada"></param>
     /// <param name="ente"></param>
     /// <param name="tablePos"></param>
-	private void JugarCarta(JugadorPartida jugador,Carta cartaJugada,Ente ente, int tablePos)
+	private void JugarCarta(JugadorPartida jugador,CartaPartida cartaJugada,Ente ente, int tablePos)
     {
 		jugador.AñadirEnteMesa(tablePos, ente);
         // no matter what happens, move this card to PlayACardSpot
@@ -298,7 +300,7 @@ public class Controlador : MonoBehaviour
         controladorJugador.ActualizarManaJugador(jugador);
     }
 
-	private void RestarManaCarta(JugadorPartida jugador, Carta carta)
+	private void RestarManaCarta(JugadorPartida jugador, CartaPartida carta)
     {
         controladorJugador.RestarManaCarta(jugador, carta);
     }
@@ -359,7 +361,7 @@ public class Controlador : MonoBehaviour
 
     /***************************************** CARTA ****************************************************/
 
-	public bool CartaPuedeUsarse(JugadorPartida jugador,Carta carta){
+	public bool CartaPuedeUsarse(JugadorPartida jugador,CartaPartida carta){
 		return carta.CosteManaActual <= jugador.ManaRestante;
 	}
 

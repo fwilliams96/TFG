@@ -3,12 +3,12 @@ using System.Collections;
 
 public class PlayAEntityCommand : Comanda
 {
-    private Carta cl;
+	private CartaPartida cl;
     private int tablePos;
 	private JugadorPartida p;
     private Ente ente;
 
-	public PlayAEntityCommand(Carta cl, JugadorPartida p, int tablePos, Ente ente)
+	public PlayAEntityCommand(CartaPartida cl, JugadorPartida p, int tablePos, Ente ente)
     {
         this.p = p;
         this.cl = cl;

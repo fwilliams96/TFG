@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public class Mano 
 {
-    public List<Carta> CartasEnMano;
+	public List<CartaPartida> CartasEnMano;
 
     public Mano()
     {
-        CartasEnMano = new List<Carta>();
+		CartasEnMano = new List<CartaPartida>();
     }
 
 }

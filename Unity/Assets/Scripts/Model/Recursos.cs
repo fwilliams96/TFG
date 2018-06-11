@@ -8,7 +8,7 @@ using Firebase.Database;
 
 public class Recursos  {
 
-    public static Dictionary<int, Carta> CartasCreadasEnElJuego = new Dictionary<int, Carta>();
+	public static Dictionary<int, CartaPartida> CartasCreadasEnElJuego = new Dictionary<int, CartaPartida>();
 
     public static Dictionary<int, Ente> EntesCreadosEnElJuego = new Dictionary<int, Ente>();
 
