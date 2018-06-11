@@ -16,7 +16,7 @@ public class Magica: Ente,ICharacter
 	}
 
     // CONSTRUCTOR
-	public Magica(string area,CartaAsset ca) : base(area,ca) { this.efectoActivado = false; }
+	public Magica(AreaPosition area,CartaAsset ca) : base(area,ca) { this.efectoActivado = false; }
 
 	public override void OnTurnStart()
 	{

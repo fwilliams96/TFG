@@ -97,11 +97,15 @@ public class Controlador : MonoBehaviour
         foreach (Jugador p in BaseDatos.Instance.GetPlayers())
         {
 			if (p.TipoJugador.Equals (Jugador.TIPO_JUGADOR.MANUAL)) {
-				jugadorPartida = new JugadorHumano (p);
+				jugadorPartida = JugadorHumano.Instance;
+				jugadorPartida.Jugador = p;
+				//jugadorPartida = new JugadorHumano (p);
 				controladorJugador.InicializarValoresJugador (jugadorPartida);
 				controladorJugador.ActualizarManaJugador (jugadorPartida);
 			} else {
-				jugadorPartida = new JugadorBot (p);
+				jugadorPartida = JugadorBot.Instance;
+				jugadorPartida.Jugador = p;
+				//jugadorPartida = new JugadorBot (p);
 				controladorJugador.InicializarValoresJugador (jugadorPartida);
 				controladorJugador.DeshabilitarMana (jugadorPartida);
 			}
@@ -110,8 +114,8 @@ public class Controlador : MonoBehaviour
 
         Sequence s = DOTween.Sequence();
         //mueve los jugadores del centro a su posición
-		PlayerArea areaJugador = controladorJugador.AreaJugador(BaseDatos.Instance.Local);
-		PlayerArea areaJugador2 = controladorJugador.AreaJugador(BaseDatos.Instance.Enemigo);
+		PlayerArea areaJugador = controladorJugador.AreaJugador(jugadores[0]);
+		PlayerArea areaJugador2 = controladorJugador.AreaJugador(jugadores[1]);
         s.Append(areaJugador.Personaje.transform.DOMove(areaJugador.PosicionPersonaje.position, 1f).SetEase(Ease.InQuad));
         s.Insert(0f, areaJugador2.Personaje.transform.DOMove(areaJugador2.PosicionPersonaje.position, 1f).SetEase(Ease.InQuad));
         //espera 3 segundos antes de ejecutar el onComplete
@@ -135,6 +139,8 @@ public class Controlador : MonoBehaviour
 			OpcionesObjeto.PararTodasPrevisualizaciones();
 		if (AccionesPopUp.Instance.EstaActivo())
 			AccionesPopUp.Instance.OcultarPopup ();
+		if(PosicionCriaturaPopUp.Instance.EstaActivo())
+			PosicionCriaturaPopUp.Instance.PosicionCriaturaElegida (-1);
         timer.StopTimer();
         JugadorActual.OnTurnEnd();
 		if(AreaJugador(JugadorActual).ControlActivado)
@@ -154,7 +160,7 @@ public class Controlador : MonoBehaviour
 
 		controladorJugador.ActualizarValoresJugador(jugador);
     }
-    //TODO creo que falta añadir en que area se esta mirando
+
 	public bool SePermiteControlarElJugador(JugadorPartida ownerPlayer)
     {
         return controladorJugador.SePermiteControlarElJugador(ownerPlayer);
@@ -201,6 +207,10 @@ public class Controlador : MonoBehaviour
                 //Carta newCard = new Carta(jugador.CartasEnElMazo()[0]);
 				//Esto nos devuelve la carta actual del mazo que se recorre infinitamente
 				Carta newCard = (Carta)jugador.CartaActual();
+				//TODO ver si ya existe la carta en baraja, si existe volver a crear una instancia para cambiar el id
+				/*if (jugador.ContieneCarta (newCard)) {
+					newCard = newCard.
+				}*/
                 jugador.AñadirCartaMano(0, newCard);
                 // Debug.Log(hand.CardsInHand.Count);
                 new DrawACardCommand(jugador.CartasEnLaMano()[0], jugador, fast, fromDeck: true).AñadirAlaCola();
@@ -227,7 +237,7 @@ public class Controlador : MonoBehaviour
 	public void JugarMagicaMano(JugadorPartida jugador,Carta magicaJugada, int tablePos)
     {
 		RestarManaCarta(jugador, magicaJugada);
-		Magica nuevaMagica = new Magica(jugador.Jugador.Area,magicaJugada.AssetCarta);
+		Magica nuevaMagica = new Magica(jugador.Area,magicaJugada.AssetCarta);
 		JugarCarta(jugador,magicaJugada, nuevaMagica, tablePos);
     }
 
@@ -253,7 +263,7 @@ public class Controlador : MonoBehaviour
     {
         //ELIMINATE
 		RestarManaCarta(jugador, cartaJugada);
-		Criatura newCreature = new Criatura(jugador.Jugador.Area,cartaJugada.AssetCarta, posicionAtaque == true ? PosicionCriatura.ATAQUE : PosicionCriatura.DEFENSA);
+		Criatura newCreature = new Criatura(jugador.Area,cartaJugada.AssetCarta, posicionAtaque == true ? PosicionCriatura.ATAQUE : PosicionCriatura.DEFENSA);
         JugarCarta(jugador,cartaJugada,newCreature, tablePos);
         
     }
@@ -273,8 +283,6 @@ public class Controlador : MonoBehaviour
 			ActualizarManaJugador(jugador);
 			MostrarCartasJugablesJugador(jugador);
 		}
-        if (ente.efecto != null)
-            ente.efecto.WhenACreatureIsPlayed();
 		jugador.EliminarCartaMano(cartaJugada);
 		if(jugador.GetType() == typeof(JugadorHumano))
 			MostrarCartasJugablesJugador(jugador);
@@ -306,7 +314,7 @@ public class Controlador : MonoBehaviour
 
 	public PlayerArea AreaJugador(JugadorPartida jugador)
     {
-		return controladorJugador.AreaJugador(jugador.Jugador);
+		return controladorJugador.AreaJugador(jugador);
     }
 
 	public JugadorPartida OtroJugador(JugadorPartida jugador)
@@ -380,7 +388,7 @@ public class Controlador : MonoBehaviour
 
 	public JugadorPartida ObtenerDueñoEnte(Ente ente){
 
-		JugadorPartida jugador = Controlador.Instance.Local.Jugador.Area.Equals (ente.Area) ? Controlador.Instance.Local : Controlador.Instance.Enemigo;
+		JugadorPartida jugador = Controlador.Instance.Local.Area.Equals (ente.Area) ? Controlador.Instance.Local : Controlador.Instance.Enemigo;
 
 		return jugador;
 	}	

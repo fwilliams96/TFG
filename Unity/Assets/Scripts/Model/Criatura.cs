@@ -35,7 +35,7 @@ public class Criatura : Ente, ICharacter
     #endregion
 
     // CONSTRUCTOR
-    public Criatura(string area,CartaAsset ca, PosicionCriatura posicionCriatura) : base(area,ca)
+	public Criatura(AreaPosition area,CartaAsset ca, PosicionCriatura posicionCriatura) : base(area,ca)
     {
         this.posicionCriatura = posicionCriatura;
 		this.haAtacado = false;

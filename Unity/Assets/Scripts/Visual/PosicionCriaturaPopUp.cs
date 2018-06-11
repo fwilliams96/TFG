@@ -53,4 +53,8 @@ public class PosicionCriaturaPopUp : MonoBehaviour {
         //metodo = null;
 
     }
+
+	public bool EstaActivo(){
+		return PosicionCriaturaPanel.activeSelf;
+	}
 }

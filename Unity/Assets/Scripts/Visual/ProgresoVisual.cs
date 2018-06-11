@@ -41,8 +41,8 @@ public class ProgresoVisual : MonoBehaviour
 		}
 	}
 
-	public void AñadirItem(TipoItem tipoItem, int cantidad){
-		if (tipoItem.Equals (TipoItem.Piedra))
+	public void AñadirItem(int tipoItem, int cantidad){
+		if (tipoItem == 1)
 			PorcentajeProgresoPiedra += cantidad;
 		else
 			PorcentajeProgresoPocion += cantidad;

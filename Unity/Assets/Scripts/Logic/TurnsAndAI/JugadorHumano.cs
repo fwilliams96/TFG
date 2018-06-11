@@ -4,7 +4,11 @@ using System.Collections.Generic;
 
 public class JugadorHumano : JugadorPartida
 {
+	public static JugadorHumano Instance;
 
-	public JugadorHumano(Jugador p) : base(p){	}
-
+	protected override void Awake(){
+		Instance = this;
+		area = AreaPosition.Low;
+		base.Awake ();
+	}
 }

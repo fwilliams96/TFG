@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class ControladorJugador
 {
@@ -20,7 +21,7 @@ public class ControladorJugador
 
         set
         {
-			areaJugadorActual = AreaJugador(value.Jugador);
+			areaJugadorActual = AreaJugador(value);
             _jugadorActual = value;
         }
     }
@@ -40,13 +41,12 @@ public class ControladorJugador
         }
     }
 
-	public PlayerArea AreaJugador(Jugador jugador)
+	public PlayerArea AreaJugador(JugadorPartida jugador)
     {
-		if (null != _jugadorActual && jugador == _jugadorActual.Jugador)
+		if (null != _jugadorActual && jugador == _jugadorActual)
             return areaJugadorActual;
         PlayerArea areaJugador;
-        AreaPosition area = jugador.Area.Equals("Top") ? AreaPosition.Top : AreaPosition.Low;
-        switch (area)
+		switch (jugador.Area)
         {
             case AreaPosition.Low:
                 areaJugador = GameObject.FindGameObjectWithTag("AreaBaja").GetComponent<PlayerArea>();
@@ -63,16 +63,15 @@ public class ControladorJugador
 
 	public bool SePermiteControlarElJugador(JugadorPartida jugador)
     {
-		PlayerArea areaJugador = AreaJugador(jugador.Jugador);
+		PlayerArea areaJugador = AreaJugador(jugador);
         bool TurnoDelJugador = (_jugadorActual == jugador);
         bool NoCartasPendientesPorMostrar = !Comandas.Instance.ComandasDeDibujoCartaPendientes();
         return areaJugador.PermitirControlJugador && areaJugador.ControlActivado && TurnoDelJugador && NoCartasPendientesPorMostrar;
     }
 
-    //TODO ver si esta funcion seguira aqui
 	public void TransmitirInformacionVisualJugador(JugadorPartida jugador)
     {
-		PlayerArea areaJugador = AreaJugador(jugador.Jugador);
+		PlayerArea areaJugador = AreaJugador(jugador);
 		areaJugador.Personaje.gameObject.AddComponent<IDHolder>().UniqueID = jugador.ID;
         areaJugador.PermitirControlJugador = true;
 		if (jugador.GetType() == typeof(JugadorBot))
@@ -87,12 +86,11 @@ public class ControladorJugador
 
 	public void InicializarValoresJugador(JugadorPartida jugador)
     {
-		PlayerArea areaJugador = AreaJugador(jugador.Jugador);
+		PlayerArea areaJugador = AreaJugador(jugador);
         jugador.ManaEnEsteTurno = 0;
         jugador.ManaRestante = 0;
-        //LeerInformacionPersonajeAsset();
         TransmitirInformacionVisualJugador(jugador);
-		areaJugador.mazoVisual.CartasEnMazo = jugador.Jugador.NumCartasMazo();//mazo.CartasEnMazo.Count;
+		areaJugador.mazoVisual.CartasEnMazo = jugador.Jugador.NumCartasMazo();
         // move both portraits to the center
         areaJugador.Personaje.transform.position = areaJugador.PosicionInicialPersonaje.position;
     }
@@ -108,13 +106,13 @@ public class ControladorJugador
 	private void OnTurnStart(JugadorPartida jugador)
     {
 		jugador.OnTurnStart();
-		if (jugador.Jugador.Area.Equals("Top"))
+		if (jugador.Jugador.TipoJugador.Equals(Jugador.TIPO_JUGADOR.AUTOMÁTICO))
             new ShowMessageCommand("¡Turno enemigo!", 2.0f).AñadirAlaCola();
         else
             new ShowMessageCommand("¡Tu Turno!", 2.0f).AñadirAlaCola();
 		Controlador.Instance.DibujarCartaMazo(jugador);
 		if (jugador.GetType() == typeof(JugadorBot)) {
-			Controlador.Instance.StartCoroutine(((JugadorBot)jugador).RealizarTurno());
+			((JugadorBot)jugador).EmpezarTurnoBot ();
 		} else {
 			ActualizarManaJugador(jugador);
 			ActualizarEstadoCartasJugadorActual(jugador);
@@ -152,17 +150,20 @@ public class ControladorJugador
     {
         foreach (Carta cl in jugador.CartasEnLaMano())
         {
-            GameObject g = IDHolder.GetGameObjectWithID(cl.ID);
-            if (g != null)
-				g.GetComponent<OneCardManager>().PuedeSerJugada = Controlador.Instance.CartaPuedeUsarse(jugador,cl) && !quitarTodasRemarcadas;
+            List<GameObject> listG = IDHolder.GetGameObjectsWithID(cl.ID);
+			foreach(GameObject g in listG){
+				if(g != null)
+					g.GetComponent<OneCardManager>().PuedeSerJugada = Controlador.Instance.CartaPuedeUsarse(jugador,cl) && !quitarTodasRemarcadas;
+			}
+				
         }
 
         foreach (Ente crl in jugador.EntesEnLaMesa())
         {
-            GameObject g = IDHolder.GetGameObjectWithID(crl.ID);
-
-			if (g != null) {
-				g.GetComponent<OneEnteManager>().PuedeAtacar = Controlador.Instance.EntePuedeUsarse(crl) && !quitarTodasRemarcadas;
+			List<GameObject> listG = IDHolder.GetGameObjectsWithID(crl.ID);
+			foreach(GameObject g in listG){
+				if(g != null)
+					g.GetComponent<OneEnteManager>().PuedeAtacar = Controlador.Instance.EntePuedeUsarse(crl) && !quitarTodasRemarcadas;
 			}
                 
         }
@@ -174,6 +175,8 @@ public class ControladorJugador
 	public void MuerteJugador(JugadorPartida jugador)
     {
         PararControlJugadores();
+		Button salirPartida = GameObject.FindGameObjectWithTag ("SalirPartida").GetComponent<Button> ();
+		salirPartida.interactable = false;
         Controlador.Instance.StopTheTimer();
 		new MuerteJugadorCommand (jugador).AñadirAlaCola ();
 		int exp = AñadirExperienciaJugador (jugador);	
@@ -229,13 +232,13 @@ public class ControladorJugador
     {
 		foreach (JugadorPartida player in Controlador.Instance.Jugadores)
         {
-			AreaJugador(player.Jugador).ControlActivado = false;
+			AreaJugador(player).ControlActivado = false;
         }
     }
 
     public bool CartaOCriaturaDelJugador(string tagCartaOCriatura)
     {
-		return _jugadorActual.Jugador.Area.Substring(0,3).Equals(tagCartaOCriatura.Substring(0, 3));
+		return _jugadorActual.Area.ToString().Equals(tagCartaOCriatura.Substring(0, 3));
     }
 
 	public bool SePuedeAtacarJugadorDeCara(int idJugador){
@@ -265,8 +268,6 @@ public class ControladorJugador
     public void RestarManaCarta(JugadorPartida jugador, Carta carta)
     {
 		jugador.ManaRestante -= carta.CosteManaActual;
-		//jugador.ManaEnEsteTurno -= carta.CosteManaActual;
-		//jugador.ManaRestante = jugador.ManaEnEsteTurno;
     }
 
 	public void QuitarVidaJugador(JugadorPartida jugadorObjetivo,int valorAtaque)
@@ -285,13 +286,13 @@ public class ControladorJugador
     public void OcultarManoJugadorAnterior()
     {
         //Ocultamos la mano del jugador anterior 
-		AreaJugador(OtroJugador(JugadorActual).Jugador).manoVisual.OcultarMano();
+		AreaJugador(OtroJugador(JugadorActual)).manoVisual.OcultarMano();
     }
 
     public void MostrarManoJugadorActual()
     {
         //Mostramos la mano del nuevo jugador actual
-		AreaJugador(JugadorActual.Jugador).manoVisual.MostrarMano();
+		AreaJugador(JugadorActual).manoVisual.MostrarMano();
     }
 
 	public void Clear(){

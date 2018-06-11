@@ -16,7 +16,7 @@ public class TableVisual : MonoBehaviour
     // PRIVATE FIELDS
 
     // list of all the creature cards on the table as GameObjects
-    private List<GameObject> CreaturesOnTable = new List<GameObject>();
+	private List<GameObject> EntesOnTable = new List<GameObject>();
 
     // are we hovering over this table`s collider with a mouse
     private bool cursorSobreEstaMesa = false;
@@ -108,7 +108,7 @@ public class TableVisual : MonoBehaviour
         ente.transform.SetParent(slots.transform);
         // add a new creature to the list
         // Debug.Log ("insert index: " + index.ToString());
-        CreaturesOnTable.Insert(indiceSlot, ente);
+        EntesOnTable.Insert(indiceSlot, ente);
         // let this creature know about its position
         WhereIsTheCardOrEntity w = ente.GetComponent<WhereIsTheCardOrEntity>();
         w.Slot = indiceSlot;
@@ -131,11 +131,11 @@ public class TableVisual : MonoBehaviour
     {
         // if there are no creatures or if we are pointing to the right of all creatures with a mouse.
         // right - because the table slots are flipped and 0 is on the right side.
-        if (CreaturesOnTable.Count == 0 || MouseX > slots.Children[0].transform.position.x)
+        if (EntesOnTable.Count == 0 || MouseX > slots.Children[0].transform.position.x)
             return 0;
-        else if (MouseX < slots.Children[CreaturesOnTable.Count - 1].transform.position.x) // cursor on the left relative to all creatures on the table
-            return CreaturesOnTable.Count;
-        for (int i = 0; i < CreaturesOnTable.Count; i++)
+        else if (MouseX < slots.Children[EntesOnTable.Count - 1].transform.position.x) // cursor on the left relative to all creatures on the table
+            return EntesOnTable.Count;
+        for (int i = 0; i < EntesOnTable.Count; i++)
         {
             if (MouseX < slots.Children[i].transform.position.x && MouseX > slots.Children[i + 1].transform.position.x)
                 return i + 1;
@@ -156,7 +156,8 @@ public class TableVisual : MonoBehaviour
 
         //    });
         GameObject creatureToRemove = IDHolder.GetGameObjectWithID(IDToRemove);
-        CreaturesOnTable.Remove(creatureToRemove);
+		EntesOnTable.Remove(creatureToRemove);
+		IDHolder.EliminarElemento (creatureToRemove.GetComponent<IDHolder>());
         Destroy(creatureToRemove);
 
         ActualizarSlots();
@@ -170,9 +171,9 @@ public class TableVisual : MonoBehaviour
     void ActualizarSlots()
     {
         float posX;
-        if (CreaturesOnTable.Count > 0)
+        if (EntesOnTable.Count > 0)
 			//posX = (slots.Children[CreaturesOnTable.Count - 1].transform.localPosition.x - slots.Children[0].transform.localPosition.x) / 2f;
-            posX = (slots.Children[0].transform.localPosition.x - slots.Children[CreaturesOnTable.Count - 1].transform.localPosition.x) / 2f;
+            posX = (slots.Children[0].transform.localPosition.x - slots.Children[EntesOnTable.Count - 1].transform.localPosition.x) / 2f;
         else
             posX = 0f;
 
@@ -185,11 +186,11 @@ public class TableVisual : MonoBehaviour
     /// </summary>
     void MoverSlotCartas()
     {
-        foreach (GameObject g in CreaturesOnTable)
+        foreach (GameObject g in EntesOnTable)
 		//for (int i = CreaturesOnTable.Count; i > 0;i--)
         {
 			//GameObject g = CreaturesOnTable [i];
-            g.transform.DOLocalMoveX(slots.Children[CreaturesOnTable.IndexOf(g)].transform.localPosition.x, 0.3f);
+            g.transform.DOLocalMoveX(slots.Children[EntesOnTable.IndexOf(g)].transform.localPosition.x, 0.3f);
             // apply correct sorting order and HandSlot value for later 
             // TODO: figure out if I need to do something here:
             // g.GetComponent<WhereIsTheCardOrCreature>().SetTableSortingOrder() = CreaturesOnTable.IndexOf(g);

@@ -136,7 +136,7 @@ public class HandVisual : MonoBehaviour
 			if (rotarDeCara) {
 				s.Insert (0f, card.transform.DORotate (Vector3.zero, ConfiguracionUsuario.Instance.CardTransitionTime));
 			}
-			s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, ConfiguracionUsuario.Instance.CardTransitionTimeFast));
+			s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, ConfiguracionUsuario.Instance.CardTransitionTime));
             //if (TakeCardsOpenly)
                 //s.Insert(0f, card.transform.DORotate(Vector3.zero, DatosGenerales.Instance.CardTransitionTimeFast));
         }

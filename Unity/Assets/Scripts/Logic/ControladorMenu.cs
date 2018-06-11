@@ -54,7 +54,7 @@ public class ControladorMenu : MonoBehaviour {
 		Carta carta = BuscarCarta (idCarta);
 		Item item = BuscarItem (idItem);
 		bool progresoLleno = false;
-		if (item.Tipo.Equals (TipoItem.Piedra)) {
+		if (item.GetType() == typeof(Piedra)) {
 			if (carta.Progreso.Piedra >= 100) {
 				progresoLleno = true;
 			} else {

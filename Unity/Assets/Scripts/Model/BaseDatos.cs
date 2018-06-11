@@ -109,7 +109,7 @@ public class BaseDatos
 		List<Item> itemsAleatorios = GenerarItemsAleatorios (8);
 		AñadirItemsJugador (jugador,itemsAleatorios);
 		List<int> idCartasMazo;
-		if (jugadores.Count == 2)
+		if (jugador.TipoJugador.Equals(Jugador.TIPO_JUGADOR.AUTOMÁTICO))
 			idCartasMazo = Local.IDCartasMazo ();
 		else
 			idCartasMazo = GenerarIDCartasMazo (cartasWelcomePack);
@@ -150,7 +150,7 @@ public class BaseDatos
 		System.Random rnd = new System.Random();
 		List<Item> itemsAleatorios = new List<Item> ();
 		for (int i = 0; i < numItems; i++) {
-			TipoItem tipoItem = (TipoItem)rnd.Next(0, 2);
+			int tipoItem = rnd.Next(0, 2);
 			int cantidad = rnd.Next (50, 80);
 			string rutaImagen;
 			if (tipoItem.Equals (TipoItem.Piedra)) {
@@ -158,7 +158,13 @@ public class BaseDatos
 			} else {
 				rutaImagen = "Sprites/Recursos/Componentes/item_pocion";
 			}
-			itemsAleatorios.Add (new Item (tipoItem, rutaImagen, cantidad));
+			Item item = null;
+			if (tipoItem == 0) {
+				item = new Pocion (rutaImagen, cantidad);
+			} else {
+				item = new Piedra (rutaImagen, cantidad);
+			}
+			itemsAleatorios.Add (item);
 		}
 
 		return itemsAleatorios;
@@ -168,8 +174,7 @@ public class BaseDatos
     {
         Debug.Log("Crear jugador");
         this.userIDActual = userId;
-        AñadirJugador(new Jugador("Low"));
-		Local.TipoJugador = Jugador.TIPO_JUGADOR.MANUAL;
+		AñadirJugador(new Jugador(Jugador.TIPO_JUGADOR.MANUAL));
         AñadirWelcomePackJugador(Local);
         AñadirJugadorBaseDatos(userId,Local);
         callBack.Invoke("");
@@ -178,8 +183,7 @@ public class BaseDatos
 	private void ObtenerDatosJugador(SesionUsuario.CallBack callBack,DataSnapshot usuario)
 	{
 		Debug.Log("Obtener jugador");
-		AñadirJugador(new Jugador("Low"));
-		Local.TipoJugador = Jugador.TIPO_JUGADOR.MANUAL;
+		AñadirJugador(new Jugador(Jugador.TIPO_JUGADOR.MANUAL));
 		int nivel = ObtenerNivelJugador(usuario);
 		int experiencia = ObtenerExperienciaJugador(usuario);
 		List<Carta> cartasJugador = ObtenerCartasJugador(usuario);
@@ -236,8 +240,12 @@ public class BaseDatos
 
 	private Item CrearItemJugador(int tipoItem, string rutaImagen, int cantidad)
 	{
-		TipoItem tipo = (TipoItem)tipoItem;
-		Item item = new Item (tipo,rutaImagen,cantidad);
+		Item item = null;
+		if (tipoItem == 0) {
+			item = new Pocion (rutaImagen, cantidad);
+		} else {
+			item = new Piedra (rutaImagen, cantidad);
+		}
 		return item;
 	}
 
@@ -430,8 +438,7 @@ public class BaseDatos
     }
 
 	public void CrearJugadorEnemigo(){
-		AñadirJugador(new Jugador("Top"));
-		Enemigo.TipoJugador = Jugador.TIPO_JUGADOR.AUTOMÁTICO;
+		AñadirJugador(new Jugador(Jugador.TIPO_JUGADOR.AUTOMÁTICO));
 		AñadirWelcomePackJugador(Enemigo);
 	}
 
