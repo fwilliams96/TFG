@@ -50,8 +50,9 @@ public class DragCardOnTable : DraggingActions
         // 1) Check if we are holding a card over the table
         if (DragSuccessful())
         {
+			bool magica = manager.CartaAsset.Familia.Equals (Familia.Magica);
             //Activar pop-up de tipo de posicion
-            if (!manager.TypeText.text.Equals("Magica"))
+			if (!magica)
             {
                 this.gameObject.SetActive(false);
                 PosicionCriaturaPopUp.Instance.MostrarPopupEleccionPosicion();
@@ -81,8 +82,7 @@ public class DragCardOnTable : DraggingActions
         //Se ha seleccionado ataque o defensa en el popup
         if (resultOK)
         {
-            bool magica = manager.TypeText.text.Equals("Magica");
-
+			bool magica = manager.CartaAsset.Familia.Equals (Familia.Magica);
             // determine table position
             int tablePos = Controlador.Instance.AreaJugador(playerOwner).tableVisual.PosicionSlotNuevaCriatura(Camera.main.ScreenToWorldPoint(
                     new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, transform.position.z - Camera.main.transform.position.z)).x);

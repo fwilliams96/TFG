@@ -17,7 +17,8 @@ public class AñadirItemCartaCommand : Comanda {
     {
 		GameObject cartaG = IDHolder.GetGameObjectWithID (carta.ID);
 		GameObject itemG = IDHolder.GetGameObjectWithID (item.ID);
-		cartaG.GetComponent<ProgresoVisual> ().AñadirItem (item.Tipo, item.Cantidad);
+		int tipoItem = item.GetType () == typeof(Piedra) ? 1 : 0;
+		cartaG.GetComponent<ProgresoVisual> ().AñadirItem (tipoItem, item.Cantidad);
 		IDHolder.EliminarElemento (itemG.GetComponent<IDHolder> ());
 		GameObject.Destroy (itemG);
 		Comandas.Instance.CompletarEjecucionComanda();

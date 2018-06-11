@@ -2,14 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class JugadorPartida : ICharacter
+public abstract class JugadorPartida : MonoBehaviour,ICharacter
 {
-	// CODE FOR EVENTS TO LET CREATURES KNOW WHEN TO CAUSE EFFECTS
 	public delegate void VoidWithNoArguments();
-	//public event VoidWithNoArguments CreaturePlayedEvent;
-	//public event VoidWithNoArguments SpellPlayedEvent;
-	//public event VoidWithNoArguments StartTurnEvent;
 	public event VoidWithNoArguments EndTurnEvent;
+
 	private int PlayerID;
 	private Mano mano;
 	private Mesa mesa;
@@ -19,23 +16,27 @@ public abstract class JugadorPartida : ICharacter
 	private int defensa;
 
 	protected Jugador p;
+	protected AreaPosition area;
 
-	public JugadorPartida(Jugador p){
+	protected virtual void Awake(){
 		PlayerID = IDFactory.GetUniqueID();
-		this.p = p;
 		Reset ();
+	}
+
+	void Start(){
+		
 	}
 
 	public void Reset(){
 		this.mano = new Mano();
 		this.mesa = new Mesa();
 		this.defensa = 3000;
+		this.manaRestante = 0;
 		this.posCartaActual = 0;
 	}
 
 	public void ConseguirManaExtra(int amount)
 	{
-		//ManaEnEsteTurno += amount;
 		ManaRestante += amount;
 	}
 
@@ -83,21 +84,16 @@ public abstract class JugadorPartida : ICharacter
 		return mano.CartasEnMano.Count;
 	}
 
-	public void OnTurnEnd()
+	public virtual void OnTurnEnd()
 	{
 		if (EndTurnEvent != null)
 			EndTurnEvent.Invoke();
-		//TODO Controlador.PararTurnMaker(this);
-		//GetComponent<TurnMaker>().StopAllCoroutines();
 	}
 
 	public virtual void OnTurnStart()
 	{
-		// add one mana crystal to the pool;
 		ManaEnEsteTurno = 10;
 		ManaRestante++;
-		/*ManaEnEsteTurno++;
-        ManaRestante = ManaEnEsteTurno;*/
 		foreach (Ente cl in mesa.EntesEnTablero)
 			cl.OnTurnStart();
 	}
@@ -156,6 +152,12 @@ public abstract class JugadorPartida : ICharacter
 		}
 		set{ 
 			this.p = value;
+		}
+	}
+
+	public AreaPosition Area{
+		get{
+			return area;
 		}
 	}
 

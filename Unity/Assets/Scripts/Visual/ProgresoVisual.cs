@@ -5,26 +5,48 @@ using UnityEngine.UI;
 
 public class ProgresoVisual : MonoBehaviour
 {
-	public float PorcentajeProgresoPiedra = 0;
-	public float PorcentajeProgresoPocion = 0;
+	public int PorcentajeProgresoPiedra = 0;
+	public int PorcentajeProgresoPocion = 0;
 	public Slider ProgresoPiedra;
+	public Text ProgresoPiedraText;
 	public Slider ProgresoPocion;
+	public Text ProgresoPocionText;
 
 	public void LeerProgreso()
 	{
-		if(ProgresoPiedra != null)
-			ProgresoPiedra.value = PorcentajeProgresoPiedra/100f;
-		if(ProgresoPocion != null)
-			ProgresoPocion.value = PorcentajeProgresoPocion/100f;
+		if (ProgresoPiedra != null) {
+			ProgresoPiedra.value = PorcentajeProgresoPiedra > 100? 1f : PorcentajeProgresoPiedra/100f;
+			AñadirCantidad (ProgresoPiedraText,PorcentajeProgresoPiedra);
+		}
+			
+		if (ProgresoPocion != null) {
+			ProgresoPocion.value = PorcentajeProgresoPocion > 100? 1f : PorcentajeProgresoPocion/100f;
+			AñadirCantidad (ProgresoPocionText,PorcentajeProgresoPocion);
+		}
+			
 	}
 
-	public void AñadirItem(TipoItem tipoItem, int cantidad){
-		if(tipoItem.Equals(TipoItem.Piedra))
-			ProgresoPiedra.value += cantidad > 100? 1f: cantidad/100f;
+	private void AñadirCantidad(Text cantidadText, int cantidad){
+		ConfiguracionUsuario settings = ConfiguracionUsuario.Instance;
+		switch (settings.Items) {
+		case ConfiguracionUsuario.TIPO_NUMERO.ENTERO:
+			cantidadText.text = ConfiguracionUsuario.ObtenerEntero (cantidad);
+			break;
+		case ConfiguracionUsuario.TIPO_NUMERO.FRACCION:
+			cantidadText.text = ConfiguracionUsuario.ObtenerFraccion (cantidad, 100);
+			break;
+		case ConfiguracionUsuario.TIPO_NUMERO.PORCENTAJE:
+			cantidadText.text = ConfiguracionUsuario.ObtenerPorcentaje (cantidad, 100);
+			break;
+		}
+	}
+
+	public void AñadirItem(int tipoItem, int cantidad){
+		if (tipoItem == 1)
+			PorcentajeProgresoPiedra += cantidad;
 		else
-			ProgresoPocion.value += cantidad > 100? 1f: cantidad/100f;
-		//if(ProgresoMaterial.value == 1f && ProgresoPocion.value == 1f)
-			//GetComponent<OneCardManager> ().PuedeSerJugada = true;
+			PorcentajeProgresoPocion += cantidad;
+		LeerProgreso();
 	}
 
 }

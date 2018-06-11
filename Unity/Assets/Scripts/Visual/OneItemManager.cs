@@ -28,13 +28,13 @@ public class OneItemManager : MonoBehaviour {
 	}
 
 	public void LeerDatosItem(){
-		Settings settings = Settings.Instance;
-		if (settings.Items.Equals (Settings.TIPO_NUMERO.ENTERO))
-			CantidadText.text = Item.Cantidad.ToString ();
-		else if (settings.Items.Equals (Settings.TIPO_NUMERO.FRACCION)) {
-			CantidadText.text = Settings.ObtenerFraccion (Item.Cantidad, 100);
+		ConfiguracionUsuario settings = ConfiguracionUsuario.Instance;
+		if (settings.Items.Equals (ConfiguracionUsuario.TIPO_NUMERO.ENTERO))
+			CantidadText.text = ConfiguracionUsuario.ObtenerEntero (Item.Cantidad);
+		else if (settings.Items.Equals (ConfiguracionUsuario.TIPO_NUMERO.FRACCION)) {
+			CantidadText.text = ConfiguracionUsuario.ObtenerFraccion (Item.Cantidad, 100);
 		} else {
-			CantidadText.text = Settings.ObtenerPorcentaje (Item.Cantidad, 100);
+			CantidadText.text = ConfiguracionUsuario.ObtenerPorcentaje (Item.Cantidad, 100);
 		}
 			
 		ItemImage.sprite = Resources.Load<Sprite>(Item.RutaImagen);

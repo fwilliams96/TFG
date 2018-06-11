@@ -22,6 +22,17 @@ public class IDHolder : MonoBehaviour {
         return null;
     }
 
+	public static List<GameObject> GetGameObjectsWithID(int ID)
+	{
+		List<GameObject> listGameObjects = new List<GameObject> ();
+		foreach (IDHolder i in allIDHolders)
+		{
+			if (i.UniqueID == ID)
+				listGameObjects.Add (i.gameObject);
+		}
+		return listGameObjects;
+	}
+
     public static void ClearIDHoldersList()
     {
         allIDHolders.Clear();

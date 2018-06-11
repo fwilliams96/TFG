@@ -7,18 +7,14 @@ public class MagicEffectVisual : EnteVisual
 
     public void ColocarMagicaBocaArriba()
     {
-		RotarObjetoEjeY(gameObject.transform.Find("Cuerpo").gameObject, 0, Settings.Instance.CardTransitionTime);
+		RotarObjetoEjeY(gameObject.transform.Find("Cuerpo").gameObject, 0, ConfiguracionUsuario.Instance.CardTransitionTime);
 		this.GetComponents<AudioSource>()[1].Play();
-		StartCoroutine (MuerteMagica ());
+		StartCoroutine (TiempoVisible ());
     }
 
-	private IEnumerator MuerteMagica()
+	private IEnumerator TiempoVisible()
 	{
-		yield return new WaitForSeconds(1.5f);
-		/*for(int i=0; i < 5; i++)
-		{
-			yield return new WaitForSeconds(0.05f);
-		}*/
+		yield return new WaitForSeconds(1f);
 		Controlador.Instance.MuerteEnte (GetComponent<IDHolder> ().UniqueID);
 	}
 

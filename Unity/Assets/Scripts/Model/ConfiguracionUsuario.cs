@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Settings : MonoBehaviour {
+public class ConfiguracionUsuario : MonoBehaviour {
 
-	public static Settings Instance = null;
+	public static ConfiguracionUsuario Instance = null;
 	//private static bool created = false;
 
 	public enum TIPO_NUMERO
@@ -31,7 +31,7 @@ public class Settings : MonoBehaviour {
 	[Header("Configuración juego")]
 	public bool Musica;
 
-	private Settings(){	}
+	private ConfiguracionUsuario(){	}
 
 	void Awake(){
 		if (Instance == null) {
@@ -41,6 +41,10 @@ public class Settings : MonoBehaviour {
 		Musica = true;
 		Batalla = TIPO_NUMERO.ENTERO;
 		Items = TIPO_NUMERO.ENTERO;	
+	}
+
+	public static string ObtenerEntero(int numero){
+		return numero.ToString () + "u";
 	}
 
 	public static string ObtenerPorcentaje(int numerador, int denominador){

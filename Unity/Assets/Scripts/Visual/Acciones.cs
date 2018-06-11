@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Acciones : MonoBehaviour {
 
@@ -14,6 +15,7 @@ public class Acciones : MonoBehaviour {
 	public static Acciones Instance;
 	public GameObject Elementos;
 	private GameObject elementoActual;
+	private Button botonEvolucionar;
 
 	public GameObject ElementoActual {
 		get {
@@ -26,6 +28,7 @@ public class Acciones : MonoBehaviour {
 
 	void Awake(){
 		Instance = this;
+		botonEvolucionar = GameObject.FindGameObjectWithTag ("BotonEvolucionar").GetComponent<Button> ();
 		PanelAcciones.SetActive (false);
 	}
 
@@ -39,16 +42,20 @@ public class Acciones : MonoBehaviour {
 		
 	}
 
-	public void MostrarAcciones(bool cartas,GameObject actual){
-		this.ElementoActual = actual;
+	public void MostrarAcciones(GameObject actual){
+		this.elementoActual = actual;
+		this.elementoActual.GetComponent<OneCardManager> ().PuedeSerJugada = true;
 		PanelAcciones.SetActive (true);
 		Elementos.GetComponent<Elementos>().DeshabilitarColliderElementos ();
+		botonEvolucionar.interactable = ControladorMenu.Instance.SePuedeEvolucionar (ElementoActual.GetComponent<IDHolder>().UniqueID);
 	}
 		
 	public void CerrarMenu(){
-
 		Elementos.GetComponent<Elementos>().HabilitarColliderElementos ();
-		ElementoActual = null;
+		if (elementoActual != null) {
+			this.elementoActual.GetComponent<OneCardManager> ().PuedeSerJugada = false;
+			elementoActual = null;
+		}
 		PanelAcciones.SetActive (false);
 		OcultarAccionesCarta ();
 	}
@@ -82,6 +89,7 @@ public class Acciones : MonoBehaviour {
 			break;
 		}
 		opciones.SetActive (true);
+		botonEvolucionar.interactable = ControladorMenu.Instance.SePuedeEvolucionar (ElementoActual.GetComponent<IDHolder>().UniqueID);
 	}
 
 	public void Visualizar(){

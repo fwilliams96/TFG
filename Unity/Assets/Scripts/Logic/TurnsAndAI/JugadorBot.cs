@@ -1,14 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-//this class will take all decisions for AI. 
-
 public class JugadorBot: JugadorPartida {
 
+	public static JugadorBot Instance;
 
-	public JugadorBot(Jugador p) : base(p){	}
+	protected override void Awake(){
+		Instance = this;
+		area = AreaPosition.Top;
+		base.Awake ();
+	}
 
-	// THE LOGIC FOR AI
+	public void EmpezarTurnoBot(){
+		StartCoroutine (RealizarTurno ());
+	}
+
 	public IEnumerator RealizarTurno()
 	{
 		bool strategyAttackFirst = false;
@@ -23,6 +29,12 @@ public class JugadorBot: JugadorPartida {
 		InsertDelay(1f);
 
 		Controlador.Instance.EndTurn();
+	}
+
+	public override void OnTurnEnd ()
+	{
+		this.StopAllCoroutines ();
+		base.OnTurnEnd ();
 	}
 
 	bool MakeOneAIMove(bool attackFirst)
@@ -57,7 +69,6 @@ public class JugadorBot: JugadorPartida {
 				}
 				else
 				{
-					// it is a creature card
 					int rnd = Random.Range(0,2);
 					Controlador.Instance.JugarCartaMano(this,c.ID, 0, rnd == 0);
 					InsertDelay(1.5f);
@@ -73,7 +84,6 @@ public class JugadorBot: JugadorPartida {
 	bool AtacarConCriatura()
 	{
 		bool movimientoHecho = false;
-		//cl in EntesEnLaMesa() && !movimientoHecho)
 		for(int i=0; i < NumEntesEnLaMesa() && !movimientoHecho;i++)
 		{
 			Ente cl = EntesEnLaMesa () [i];

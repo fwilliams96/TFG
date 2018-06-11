@@ -41,11 +41,11 @@ public class CreatureAttackVisual : EnteVisual
     {
         if(pos.Equals(PosicionCriatura.ATAQUE))
         {
-            ColocarCriaturaEnAtaque(Settings.Instance.CardTransitionTimeFast);
+            ColocarCriaturaEnAtaque(ConfiguracionUsuario.Instance.CardTransitionTimeFast);
         }
         else
         {
-			ColocarCriaturaEnDefensa(Settings.Instance.CardTransitionTimeFast);
+			ColocarCriaturaEnDefensa(ConfiguracionUsuario.Instance.CardTransitionTimeFast);
         }
         Comandas.Instance.CompletarEjecucionComanda();
     }

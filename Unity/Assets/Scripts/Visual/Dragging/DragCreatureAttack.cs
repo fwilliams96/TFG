@@ -36,10 +36,6 @@ public class DragCreatureAttack : DraggingActions {
     {
         get
         {
-            // we can drag this card if 
-            // a) we can control this our player (this is checked in base.canDrag)
-            // b) creature "CanAttackNow" - this info comes from logic part of our code into each creature`s manager script
-            //return base.SePuedeArrastrar && manager.PuedeAtacar;
             try
             {
 

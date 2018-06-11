@@ -6,7 +6,7 @@ public class OpcionesObjeto : MonoBehaviour
 {
     #region Atributos
     // PUBLIC FIELDS
-    public GameObject TurnThisOffWhenPreviewing;  // if this is null, will not turn off anything 
+    public GameObject TurnThisOffWhenPreviewing;  
     public Vector3 TargetPosition;
     public float TargetScale;
     public GameObject objetoPrevisualizado;
@@ -15,7 +15,6 @@ public class OpcionesObjeto : MonoBehaviour
     // PRIVATE FIELDS
     private static OpcionesObjeto previsualizacionActual = null;
 
-    // PROPERTIES WITH UNDERLYING PRIVATE FIELDS
     private static bool _PrevisualizacionesPermitidas = true;
     #endregion
     #region Getters/Setters
@@ -48,7 +47,6 @@ public class OpcionesObjeto : MonoBehaviour
     public bool OverCollider { get; set; }
     #endregion
 
-    // MONOBEHVIOUR METHODS
     void Awake()
     {
         PrevisualizacionActivada = ActivateInAwake;
@@ -71,33 +69,22 @@ public class OpcionesObjeto : MonoBehaviour
     {
         if(PrevisualizandoAlgunaCarta())
             PararTodasPrevisualizaciones();
-        //OverCollider = true;
         if (PrevisualizacionesPermitidas && PrevisualizacionActivada && Controlador.Instance.CartaOCriaturaDelJugador(gameObject.tag))
             PrevisualizarObjeto();
     }
 
     void QuitarPrevisualizacion()
     {
-        //OverCollider = false;
-
         if (!PrevisualizandoAlgunaCarta())
             PararTodasPrevisualizaciones();
     }
 
-    // OTHER METHODS
     void PrevisualizarObjeto()
     {
-        // 1) clone this card 
-        // first disable the previous preview if there is one already
-        //PararTodasPrevisualizaciones();
-        // 2) save this HoverPreview as curent
         previsualizacionActual = this;
-        // 3) enable Preview game object
         objetoPrevisualizado.SetActive(true);
-        // 4) disable if we have what to disable
         if (TurnThisOffWhenPreviewing != null)
             TurnThisOffWhenPreviewing.SetActive(false);
-        // 5) tween to target position
         objetoPrevisualizado.transform.localPosition = Vector3.zero;
         objetoPrevisualizado.transform.localScale = Vector3.one;
 		if (gameObject.tag.Contains ("Card")) {
@@ -130,8 +117,6 @@ public class OpcionesObjeto : MonoBehaviour
             previsualizacionActual.objetoPrevisualizado.SetActive(false);
             previsualizacionActual.objetoPrevisualizado.transform.localScale = Vector3.one;
             previsualizacionActual.objetoPrevisualizado.transform.localPosition = Vector3.zero;
-            //previsualizacionActual.OverCollider = false;
-            //TODO quitar visibilidad del menu si es una criatura o magica
             if (previsualizacionActual.TurnThisOffWhenPreviewing != null)
                 previsualizacionActual.TurnThisOffWhenPreviewing.SetActive(true);
         }
@@ -147,8 +132,6 @@ public class OpcionesObjeto : MonoBehaviour
 
         foreach (OpcionesObjeto hb in allHoverBlowups)
         {
-            //TODO eliminar variable overCollider si no sirve de nada
-            //if (hb.OverCollider && hb.PrevisualizacionActivada)
             if (hb.PrevisualizacionActivada)
                 return true;
         }

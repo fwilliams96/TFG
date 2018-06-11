@@ -5,9 +5,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Firebase;
 using Firebase.Unity.Editor;
 using Firebase.Database;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 public class Recursos  {
 
@@ -15,12 +12,9 @@ public class Recursos  {
 
     public static Dictionary<int, Ente> EntesCreadosEnElJuego = new Dictionary<int, Ente>();
 
-    public static List<CartaAsset> AssetsCreadosCartas = new List<CartaAsset>();
-
     public static void InicializarCartas()
     {
 		SubirTodasCartas();
-
     }
 
 	public static void SubirCarta(string familia, string nombreCartaXML){
@@ -111,9 +105,8 @@ public class Recursos  {
 					int idEvolucion = System.Int32.Parse(entrada.Value["carta"]["delante"]["idEvolucion"]);
 					asset.IDEvolucion = idEvolucion;
 
-                    //GuardarAssetBaseDatos(familia, asset);
+                    GuardarAssetBaseDatos(familia, asset);
                     //GuardarJSONApartirCartaAsset(asset, obtenerRutaJSON(familia, carpetaCarta),nombre+".json");
-                    AssetsCreadosCartas.Add(asset);
 
                 }
             }
@@ -231,24 +224,6 @@ public class Recursos  {
                 break;
         }
         return tipo;
-    }
-
-    public static CartaAsset2 LeerCartaAssetApartirJSON(string rutaArchivo)
-    {
-        string path = (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer ? Application.persistentDataPath : Application.dataPath);
-        string ruta = Path.Combine(path, rutaArchivo);
-        Debug.Log("Leer json");
-        Debug.Log("Ruta: " + ruta);
-        if (File.Exists(ruta))
-        {
-            var json = File.ReadAllText(ruta);
-            CartaAsset2 carta = ScriptableObject.CreateInstance<CartaAsset2>();
-            JsonUtility.FromJsonOverwrite(json, carta);
-            Debug.Log("Asset cargado con exito");
-            return carta;
-        }
-        throw new System.Exception();
-        
     }
 
     public static void GuardarJSONApartirCartaAsset(CartaAsset asset, string rutaArchivo, string nombreArchivo)

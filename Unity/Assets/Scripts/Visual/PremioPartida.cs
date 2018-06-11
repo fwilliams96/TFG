@@ -20,9 +20,9 @@ public class PremioPartida : MonoBehaviour {
 		PremioPartidaPanel.SetActive(true);
 		if (carta != null) {
 			CartaAsset asset = carta.AssetCarta;
-			float progresoTrebol = carta.Progreso.Piedra;
-			float progresoPocion = carta.Progreso.Pocion;
-			GameObject cartaGobj = Instantiate(DatosGenerales.Instance.CardInventario, transform);
+			int progresoTrebol = carta.Progreso.Piedra;
+			int progresoPocion = carta.Progreso.Pocion;
+			GameObject cartaGobj = Instantiate(ObjetosGenerales.Instance.CardInventario, transform);
 			OneCardManager manager = cartaGobj.GetComponent<OneCardManager>();
 			ProgresoVisual progreso = cartaGobj.GetComponent<ProgresoVisual>();
 			manager.CartaAsset = asset;
@@ -34,7 +34,7 @@ public class PremioPartida : MonoBehaviour {
 		}
 		GameObject itemGobj;
 		foreach(Item item in items){
-			itemGobj = Instantiate(DatosGenerales.Instance.ItemInventario, transform);
+			itemGobj = Instantiate(ObjetosGenerales.Instance.ItemInventario, transform);
 			OneItemManager manager = itemGobj.GetComponent<OneItemManager>();
 			manager.Item = item;
 			manager.LeerDatosItem();

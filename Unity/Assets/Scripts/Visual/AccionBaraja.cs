@@ -52,8 +52,10 @@ public class AccionBaraja : MonoBehaviour {
 
 	public void CerrarAccion(){
 		if (BotonAccion.activeSelf) {
-			this.elementoActual.GetComponent<OneCardManager> ().PuedeSerJugada = false;
-			this.elementoActual = null;
+			if (elementoActual != null) {
+				this.elementoActual.GetComponent<OneCardManager> ().PuedeSerJugada = false;
+				this.elementoActual = null;
+			}
 			BotonAccion.SetActive (false);
 		}
 	}

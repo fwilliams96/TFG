@@ -22,6 +22,7 @@ public class CargarCarta : MonoBehaviour {
 	public void MostrarCarta(){
 		Debug.Log ("On enable");
 		elemento = Instantiate (Acciones.Instance.ElementoActual, transform);
+		elemento.GetComponent<OneCardManager> ().PuedeSerJugada = false;
 		elemento.transform.SetParent (gridLayoutGroup.gameObject.transform);
 		elemento.tag = "CartaPrevisualizada";
 		IDHolder.EliminarElemento (elemento.GetComponent<IDHolder>());

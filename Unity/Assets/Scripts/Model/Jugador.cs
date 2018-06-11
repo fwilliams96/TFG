@@ -11,7 +11,6 @@ public class Jugador
 	}
 
     #region Atributos
-	private string area;
 	private TIPO_JUGADOR tipoJugador;
 	private List<int> idCartasMazo;
 	private List<System.Object> cartas;
@@ -49,25 +48,18 @@ public class Jugador
 			experiencia = value;
 		}
 	}
-	public string Area
-	{
-		get
-		{
-			return area;
-		}
-	}
 
     #endregion
 
-	public Jugador(string area)
+	public Jugador(TIPO_JUGADOR tipoJugador)
     {
 		this.mazo = new Mazo ();
 		this.idCartasMazo = new List<int>();
 		this.cartas = new List<System.Object>();
 		this.items = new List<System.Object>();
 		this.nivel = 1;
-		this.area = area;
 		this.experiencia = 0;
+		this.tipoJugador = tipoJugador;
     }
 		
 	public void ClearMazo(){

@@ -8,8 +8,7 @@ public class Ente : ICharacter
     #region Atributos
     // PUBLIC FIELDS
     private CartaAsset assetCarta;
-	private string area;
-    public EfectoEnte efecto;
+	private AreaPosition area;
     private int idCriatura;
 	private int defensa;
 	private int ataque;
@@ -56,7 +55,7 @@ public class Ente : ICharacter
         set;
     }
 
-	public string Area
+	public AreaPosition Area
 	{
 		get
 		{
@@ -67,7 +66,7 @@ public class Ente : ICharacter
     #endregion
 
     // CONSTRUCTOR
-    public Ente(string area,CartaAsset ca)
+	public Ente(AreaPosition area,CartaAsset ca)
     {
 		this.area = area;
         this.assetCarta = ca;
@@ -79,8 +78,6 @@ public class Ente : ICharacter
 
     public virtual void Morir()
     {
-        if (efecto != null)
-            efecto.WhenACreatureDies();
     }
 
     public virtual void OnTurnStart()

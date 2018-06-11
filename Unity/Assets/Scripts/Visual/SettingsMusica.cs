@@ -10,7 +10,7 @@ public class SettingsMusica : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		if (Settings.Instance.Musica) {
+		if (ConfiguracionUsuario.Instance.Musica) {
 			toggleOn.isOn = true;
 			toggleOff.isOn = false;
 		} else {
@@ -20,7 +20,7 @@ public class SettingsMusica : MonoBehaviour {
 	}
 
 	public void CambiarMusica(int valor){
-		Settings settings = Settings.Instance;
+		ConfiguracionUsuario settings = ConfiguracionUsuario.Instance;
 		if (valor == 0) {
 			settings.Musica = true;
 		} else {

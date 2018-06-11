@@ -58,15 +58,15 @@ public class DamageEffect : MonoBehaviour {
         // Get DamageEffect component in this new game object
         DamageEffect de = newDamageEffect.GetComponent<DamageEffect>();
         // Change the amount text to reflect the amount of damage dealt
-		Settings settings = Settings.Instance;
+		ConfiguracionUsuario settings = ConfiguracionUsuario.Instance;
 
-		if (settings.Batalla.Equals (Settings.TIPO_NUMERO.ENTERO))
+		if (settings.Batalla.Equals (ConfiguracionUsuario.TIPO_NUMERO.ENTERO))
 			de.AmountText.text = "-" + amount.ToString ();
 		//de.AmountText.text = health.ToString()+"-"+amount.ToString();
-		else if (settings.Batalla.Equals (Settings.TIPO_NUMERO.FRACCION)) {
-			de.AmountText.text = "-"+Settings.ObtenerFraccion(amount,health)+"x"+health.ToString();
+		else if (settings.Batalla.Equals (ConfiguracionUsuario.TIPO_NUMERO.FRACCION)) {
+			de.AmountText.text = "-"+ConfiguracionUsuario.ObtenerFraccion(amount,health)+"x"+health.ToString();
 		} else {
-			de.AmountText.text = "-" + Settings.ObtenerPorcentaje (amount, health);
+			de.AmountText.text = "-" + ConfiguracionUsuario.ObtenerPorcentaje (amount, health);
 		}
 
 
@@ -93,7 +93,7 @@ public class DamageEffect : MonoBehaviour {
 		// Instantiate a DamageEffect from prefab
 		GameObject newDamageEffect = new GameObject();
 		//TODO = GameObject.Instantiate(GlobalSettings.Instance.DamageEffectPrefab, position, Quaternion.identity) as GameObject;
-		newDamageEffect = GameObject.Instantiate(DatosGenerales.Instance.DamageEffectPrefab, position, Quaternion.identity) as GameObject;
+		newDamageEffect = GameObject.Instantiate(ObjetosGenerales.Instance.DamageEffectPrefab, position, Quaternion.identity) as GameObject;
 		return newDamageEffect;
 	}
 }

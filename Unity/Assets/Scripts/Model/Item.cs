@@ -8,41 +8,47 @@ public enum TipoItem
 	Piedra
 }
 
-public class Item
+public abstract class Item
 {
-    public string RutaImagen;
-	public int Cantidad;
-	public TipoItem Tipo;
-	private int idItem;
+    protected string rutaImagen;
+	protected int cantidad;
+	protected int idItem;
 
 	public Item()
     {
 		idItem = IDFactory.GetUniqueID();
-		Cantidad = 0;
-		RutaImagen = "";
+		cantidad = 0;
+		rutaImagen = "";
     }
 
-	public Item(TipoItem tipo, string rutaImagen, int cantidad)
+	public Item(string rutaImagen, int cantidad)
 	{
 		idItem = IDFactory.GetUniqueID();
-		Tipo = tipo;
-		RutaImagen = rutaImagen;
-		Cantidad = cantidad;
+		rutaImagen = rutaImagen;
+		cantidad = cantidad;
 	}
 
-
-	public Dictionary<string, System.Object> ToDictionary()
-	{
-		Dictionary<string, System.Object> result = new Dictionary<string, System.Object>();
-		result["tipoItem"] = (int)Tipo;
-		result["rutaImagen"] = RutaImagen;
-		result["cantidad"] = Cantidad;
-		return result;
-	}
+	public abstract Dictionary<string, System.Object> ToDictionary ();
 
 	public int ID
 	{
 		get { return idItem; }
+	}
+
+	public string RutaImagen {
+		get {
+			return rutaImagen;
+		}set { 
+			rutaImagen = value;
+		}
+	}
+
+	public int Cantidad{
+		get{ 
+			return cantidad;
+		}set{ 
+			cantidad = cantidad;
+		}
 	}
 }
 

@@ -14,7 +14,8 @@ public class AñadirItemCartaPrevisualizadaCommand : Comanda {
     public override void EmpezarEjecucionComanda()
     {
 		GameObject cartaPrevisualizada = GameObject.FindGameObjectWithTag ("CartaPrevisualizada");
-		cartaPrevisualizada.GetComponent<ProgresoVisual> ().AñadirItem (item.Tipo, item.Cantidad);
+		int tipoItem = item.GetType () == typeof(Piedra) ? 1 : 0;
+		cartaPrevisualizada.GetComponent<ProgresoVisual> ().AñadirItem (tipoItem, item.Cantidad);
 		Comandas.Instance.CompletarEjecucionComanda();
     }
 }
