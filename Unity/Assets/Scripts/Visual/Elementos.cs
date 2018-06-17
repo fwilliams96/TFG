@@ -134,7 +134,7 @@ public class Elementos : MonoBehaviour {
 	}
 
 	private GameObject CrearCarta(Carta carta){
-		CartaAsset asset = carta.AssetCarta;
+		CartaBase asset = carta.AssetCarta;
 		int progresoPiedra = carta.Progreso.Piedra;
 		int progresoPocion = carta.Progreso.Pocion;
 		GameObject elemento = Instantiate(ObjetosGenerales.Instance.CardInventario, transform);

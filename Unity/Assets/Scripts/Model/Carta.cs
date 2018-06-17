@@ -10,11 +10,11 @@ public class Carta : IIdentifiable
     private int idCarta;
     // a reference to the card asset that stores all the info about this card
 	private string idAsset;
-	private CartaAsset assetCarta;
+	private CartaBase assetCarta;
     private Progreso progreso;
     #endregion
 
-    public Carta(string idAsset,CartaAsset ca)
+    public Carta(string idAsset,CartaBase ca)
     {
         // set the CardAsset reference
         this.idAsset = idAsset;
@@ -44,7 +44,7 @@ public class Carta : IIdentifiable
 		}
 	}
 
-	public CartaAsset AssetCarta{
+	public CartaBase AssetCarta{
 		get{
 			return assetCarta;
 		}

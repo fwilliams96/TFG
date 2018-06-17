@@ -1,24 +1,23 @@
 ﻿using UnityEngine;
 
-public class CardAsset : ScriptableObject 
+public class CartaAsset : ScriptableObject 
 {
     // this object will hold the info about the most general card
     [Header("General info")]
-	public string Nombre;
+	public Familia Tipo;
+	public string Título;
+	public Efecto Efecto;
+	public string NombreImagen;
 	[TextArea(2,3)]
 	public string Descripcion;
-	public Familia Familia;
-	public string RutaImagenCarta;
-	public int CosteMana;
-	//Excepto si es ancestral
+	public string InfoCarta;
 	public int Evolucion;
 	public int IDEvolucion;
-	public Efecto Efecto;
-
-	public int Defensa;
+	public int Mana;
 	public int Ataque;
+	public int Defensa;
 
-    public CardAsset()
+    public CartaAsset()
     {
     }
 }

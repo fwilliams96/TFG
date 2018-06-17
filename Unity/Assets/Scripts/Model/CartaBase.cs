@@ -5,23 +5,22 @@ public enum Familia
 {
     Fuego,
     Tierra,
-    Electrica,
 	Aire,
     Agua,
     Magica,
-    Fusion,
     Ancestral
 }
 
 public enum Efecto
 {
+	Ninguno,
 	Destructor,
 	Espejo,
 	Mana,
 	Vida
 }
 
-public class CartaAsset
+public class CartaBase
 {
     public string Nombre;
     public string Descripcion;
@@ -29,7 +28,6 @@ public class CartaAsset
     public Familia Familia;
     public string RutaImagenCarta;
     public int CosteMana;
-    //Excepto si es ancestral
     public int Evolucion;
 	public int IDEvolucion;
 	public Efecto Efecto;
@@ -37,7 +35,7 @@ public class CartaAsset
     public int Defensa;
     public int Ataque;
 
-    public CartaAsset()
+    public CartaBase()
     {
     }
 }

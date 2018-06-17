@@ -44,9 +44,9 @@ public class JugadorBot: JugadorPartida {
 		if (Comandas.Instance.ComandasDeDibujoCartaPendientes())
 			return true;
 		else if (attackFirst)
-			return AtacarConCriatura() || JugarCarta();
+			return JugarEnte() || JugarCarta();
 		else 
-			return JugarCarta() || AtacarConCriatura();
+			return JugarCarta() || JugarEnte();
 	}
 
 	bool JugarCarta()
@@ -81,7 +81,7 @@ public class JugadorBot: JugadorPartida {
 		return false;
 	}
 
-	bool AtacarConCriatura()
+	bool JugarEnte()
 	{
 		bool movimientoHecho = false;
 		for(int i=0; i < NumEntesEnLaMesa() && !movimientoHecho;i++)

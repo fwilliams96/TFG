@@ -5,7 +5,7 @@ using UnityEngine.UI;
 // holds the refs to all the Text, Images on the card
 public class OneCardManager : MonoBehaviour {
 
-    public CartaAsset CartaAsset;
+    public CartaBase CartaAsset;
     public OneCardManager PreviewManager;
     [Header("Text Component References")]
     public Text NameText;

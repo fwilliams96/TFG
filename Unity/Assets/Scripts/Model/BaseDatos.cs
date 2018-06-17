@@ -103,16 +103,17 @@ public class BaseDatos
 		
     public void AñadirWelcomePackJugador(Jugador jugador)
     {
-        //List<Carta> cartasWelcomePack = GenerarCartasAleatorias(8);
-		List<Carta> cartasWelcomePack = GenerarTodasCartas();
+        List<Carta> cartasWelcomePack = GenerarCartasAleatorias(8);
+		//List<Carta> cartasWelcomePack = GenerarTodasCartas();
 		AñadirCartasJugador(jugador, cartasWelcomePack);
 		List<Item> itemsAleatorios = GenerarItemsAleatorios (8);
 		AñadirItemsJugador (jugador,itemsAleatorios);
 		List<int> idCartasMazo;
-		if (jugador.TipoJugador.Equals(Jugador.TIPO_JUGADOR.AUTOMÁTICO))
+		/*if (jugador.TipoJugador.Equals(Jugador.TIPO_JUGADOR.AUTOMÁTICO))
 			idCartasMazo = Local.IDCartasMazo ();
 		else
-			idCartasMazo = GenerarIDCartasMazo (cartasWelcomePack);
+			idCartasMazo = GenerarIDCartasMazo ();*/
+		idCartasMazo = GenerarIDCartasMazo ();
 		AñadirMazoJugador (jugador,idCartasMazo);
 
     }
@@ -153,7 +154,7 @@ public class BaseDatos
 			int tipoItem = rnd.Next(0, 2);
 			int cantidad = rnd.Next (50, 80);
 			string rutaImagen;
-			if (tipoItem.Equals (TipoItem.Piedra)) {
+			if (tipoItem == 1) {
 				rutaImagen = "Sprites/Recursos/Componentes/item_piedra";
 			} else {
 				rutaImagen = "Sprites/Recursos/Componentes/item_pocion";
@@ -230,7 +231,7 @@ public class BaseDatos
     private Carta CrearCartaJugador(string idAsset, Progreso progreso)
     {
         string assetJSON = assets.Child(idAsset).GetRawJsonValue();
-        CartaAsset asset = JsonUtility.FromJson<CartaAsset>(assetJSON);
+        CartaBase asset = JsonUtility.FromJson<CartaBase>(assetJSON);
         Carta carta = new Carta(idAsset, asset);
 		Cartas.Add (carta.ID, carta);
         if(progreso != null)
@@ -310,11 +311,10 @@ public class BaseDatos
 		return idsCartasMazo;
 	}
 
-	private List<int> GenerarIDCartasMazo(List<Carta> cartasWelcomePack){
-		;
+	private List<int> GenerarIDCartasMazo(){
 		List<int> idsCartasMazo = new List<int> ();
 		for (int i = 0; i < 8; i++) {
-			idsCartasMazo.Add (UnityEngine.Random.Range (0,	cartasWelcomePack.Count));
+			idsCartasMazo.Add (i);
 		}
 		return idsCartasMazo;
 	}
@@ -371,7 +371,12 @@ public class BaseDatos
 		ReferenciaCartas().SetValueAsync (Local.CartasToDictionary ());
 	}
 
-	public void ActualizarExperienciaBaseDatos(){
+	public void ActualizarNivelYExperienciaBaseDatos(){
+		ActualizarExperienciaBaseDatos ();
+		ActualizarNivelBaseDatos ();
+	}
+
+	private void ActualizarExperienciaBaseDatos(){
 		ReferenciaExperiencia ().SetValueAsync (Local.Experiencia);
 	}
 
@@ -383,23 +388,23 @@ public class BaseDatos
 		ReferenciaMazo().SetValueAsync (Local.MazoToDictionary());
 	}
 
-    public void GuardarCarta(string familia,CartaAsset asset)
+    public void GuardarCarta(string familia,CartaBase asset)
     {
 		ReferenciaAssets().Push().SetRawJsonValueAsync(JsonUtility.ToJson(asset));
         Debug.Log("Guardar carta ok");
     }
 
-	public KeyValuePair<string,CartaAsset> BuscarEvolucion(Familia familia, int evolucion, int idEvolucion){
+	public KeyValuePair<string,CartaBase> BuscarEvolucion(Familia familia, int evolucion, int idEvolucion){
 		
 		var json = assets.Value as Dictionary<string, object>;
 		List<string> keyList = new List<string>(json.Keys);
-		KeyValuePair<string,CartaAsset> evolucionEncontrada = new KeyValuePair<string, CartaAsset> ("",null);
+		KeyValuePair<string,CartaBase> evolucionEncontrada = new KeyValuePair<string, CartaBase> ("",null);
 		foreach(string idAsset in keyList)
 		{
 			string assetJSON = assets.Child(idAsset).GetRawJsonValue();
-			CartaAsset asset = JsonUtility.FromJson<CartaAsset>(assetJSON);
+			CartaBase asset = JsonUtility.FromJson<CartaBase>(assetJSON);
 			if   (asset.Familia.Equals (familia) && asset.IDEvolucion ==  idEvolucion && asset.Evolucion == (evolucion+1)) {
-				evolucionEncontrada = new KeyValuePair<string, CartaAsset> (idAsset,asset);
+				evolucionEncontrada = new KeyValuePair<string, CartaBase> (idAsset,asset);
 			}
 
 		}

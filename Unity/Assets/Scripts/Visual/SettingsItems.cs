@@ -11,19 +11,19 @@ public class SettingsItems : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		switch (ConfiguracionUsuario.Instance.Items) {
-			case ConfiguracionUsuario.TIPO_NUMERO.ENTERO:
+		switch (ConfiguracionUsuario.Instance.ConfiguracionItems) {
+			case ConfiguracionUsuario.TIPO_CONFIGURACION.ENTERO:
 				toggleEntero.isOn = true;
 				toggleFracciones.isOn = false;
 				togglePorcentaje.isOn = false;
 			break;
 		
-		case ConfiguracionUsuario.TIPO_NUMERO.FRACCION:
+		case ConfiguracionUsuario.TIPO_CONFIGURACION.FRACCION:
 				toggleEntero.isOn = false;
 				toggleFracciones.isOn = true;
 				togglePorcentaje.isOn = false;
 			break;
-		case ConfiguracionUsuario.TIPO_NUMERO.PORCENTAJE:
+		case ConfiguracionUsuario.TIPO_CONFIGURACION.PORCENTAJE:
 				toggleEntero.isOn = false;
 				toggleFracciones.isOn = false;
 				togglePorcentaje.isOn = true;
@@ -35,11 +35,11 @@ public class SettingsItems : MonoBehaviour {
 	public void CambiarItems(int valor){
 		ConfiguracionUsuario settings = ConfiguracionUsuario.Instance;
 		if (valor == 0)
-			settings.Items = ConfiguracionUsuario.TIPO_NUMERO.ENTERO;
+			settings.ConfiguracionItems = ConfiguracionUsuario.TIPO_CONFIGURACION.ENTERO;
 		else if(valor == 1)
-			settings.Items = ConfiguracionUsuario.TIPO_NUMERO.PORCENTAJE;
+			settings.ConfiguracionItems = ConfiguracionUsuario.TIPO_CONFIGURACION.PORCENTAJE;
 		else
-			settings.Items = ConfiguracionUsuario.TIPO_NUMERO.FRACCION;
+			settings.ConfiguracionItems = ConfiguracionUsuario.TIPO_CONFIGURACION.FRACCION;
 	}
 
 	// Update is called once per frame

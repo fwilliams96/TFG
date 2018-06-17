@@ -7,7 +7,7 @@ public class Ente : ICharacter
 {
     #region Atributos
     // PUBLIC FIELDS
-    private CartaAsset assetCarta;
+    private CartaBase assetCarta;
 	private AreaPosition area;
     private int idCriatura;
 	private int defensa;
@@ -15,7 +15,7 @@ public class Ente : ICharacter
 	private int attacksForOneTurn = 1;
     #endregion
     #region Getters/Setters
-	public CartaAsset AssetCarta{
+	public CartaBase AssetCarta{
 		get{
 			return assetCarta;
 		}
@@ -66,7 +66,7 @@ public class Ente : ICharacter
     #endregion
 
     // CONSTRUCTOR
-	public Ente(AreaPosition area,CartaAsset ca)
+	public Ente(AreaPosition area,CartaBase ca)
     {
 		this.area = area;
         this.assetCarta = ca;

@@ -17,7 +17,11 @@ public class MenuBatalla : MonoBehaviour {
 
     public void Jugar()
     {
-		IDHolder.ClearIDHoldersList ();
-        SceneManager.LoadScene("BattleGalaxy");
+		if (ControladorMenu.Instance.JugadorPuedeJugarBatalla ()) {
+			IDHolder.ClearIDHoldersList ();
+			SceneManager.LoadScene ("BattleGalaxy");
+		} else {
+			MessageManager.Instance.ShowMessage ("Tu mazo de batalla no contiene 8 cartas", 1.5f);
+		}
     }
 }

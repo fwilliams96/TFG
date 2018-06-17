@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class OneEnteManager : MonoBehaviour 
 {
-    public CartaAsset CartaAsset;
+    public CartaBase CartaAsset;
     public OneCardManager PreviewManager;
     [Header("Text Component References")]
     public Text HealthText;
