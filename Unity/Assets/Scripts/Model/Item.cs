@@ -8,7 +8,7 @@ public enum TipoItem
 	Piedra
 }
 
-public abstract class Item
+public abstract class Item : IIdentifiable
 {
     protected string rutaImagen;
 	protected int cantidad;

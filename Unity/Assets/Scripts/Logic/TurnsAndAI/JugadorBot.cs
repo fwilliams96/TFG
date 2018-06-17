@@ -53,7 +53,7 @@ public class JugadorBot: JugadorPartida {
 	{
 		if (NumEntesEnLaMesa () == 5)
 			return false;
-		foreach (Carta c in CartasEnLaMano())
+		foreach (CartaPartida c in CartasEnLaMano())
 		{
 			if (Controlador.Instance.CartaPuedeUsarse(this,c))
 			{

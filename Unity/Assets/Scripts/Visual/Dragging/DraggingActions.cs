@@ -29,25 +29,29 @@ public abstract class DraggingActions : MonoBehaviour {
     {
         get
         {
-
-            return Controlador.Instance.SePermiteControlarElJugador(playerOwner);
-            
+			if(playerOwner != null)
+				return Controlador.Instance.SePermiteControlarElJugador(playerOwner);
+			return false;
         }
     }
 
     protected virtual JugadorPartida playerOwner
     {
         get{
-
-            if (tag.Contains("Low"))
-                return Controlador.Instance.Local;
-            else if (tag.Contains("Top"))
-                return Controlador.Instance.Enemigo;
-            else
-            {
-                Debug.LogError("Untagged Card or creature " + transform.parent.name);
-                return null;
-            }
+			try{
+				
+	            if (tag.Contains("Low"))
+	                return Controlador.Instance.Local;
+	            else if (tag.Contains("Top"))
+	                return Controlador.Instance.Enemigo;
+	            else
+	            {
+	                Debug.LogError("Untagged Card or creature " + transform.parent.name);
+	                return null;
+	            }
+			}catch{
+				return null;
+			}
         }
     }
 

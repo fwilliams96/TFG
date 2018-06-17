@@ -81,7 +81,7 @@ public class HandVisual : MonoBehaviour
     }
 
     // CARD DRAW METHODS
-	public void DarCartaJugador(Carta c, int UniqueID, bool fast = false, bool fromDeck = true, bool rotarDeCara = false)
+	public void DarCartaJugador(CartaPartida c, int UniqueID, bool fast = false, bool fromDeck = true, bool rotarDeCara = false)
     {
 		if (!rotarDeCara)
 			fast = true;
@@ -156,7 +156,7 @@ public class HandVisual : MonoBehaviour
 		Comandas.Instance.CompletarEjecucionComanda();
     }
 
-    GameObject CrearCartaPorPosicion(Carta c, Vector3 position, Vector3 eulerAngles)
+	GameObject CrearCartaPorPosicion(CartaPartida c, Vector3 position, Vector3 eulerAngles)
     {
         // Instantiate a card depending on its type
         GameObject card;
