@@ -148,6 +148,11 @@ public class ControladorMenu : MonoBehaviour {
 		return ExisteEvolucion(carta) && carta.Progreso.Piedra >= 100f && carta.Progreso.Pocion >= 100f;
 	}
 
+	public bool ExisteEvolucion(int idCarta){
+		Carta carta = BuscarCarta (idCarta);
+		return ExisteEvolucion (carta);
+	}
+
 	private bool ExisteEvolucion(Carta carta){
 		Familia familia = carta.AssetCarta.Familia;
 		int evolucionActual = carta.AssetCarta.Evolucion;

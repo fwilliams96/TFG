@@ -115,7 +115,7 @@ public class HandVisual : MonoBehaviour
 
         // save this card to change its state to "Hand" when it arrives to the hand.
         LastDealtCard = card;
-		if(card.GetComponent<AudioSource>() != null)
+		if(card.GetComponent<AudioSource>() != null && ConfiguracionUsuario.Instance.Musica)
 			card.GetComponent<AudioSource>().Play();
         // move card to the hand;
         Sequence s = DOTween.Sequence();

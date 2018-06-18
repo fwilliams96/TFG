@@ -173,7 +173,6 @@ public class Recursos  {
 
 	private static Efecto obtenerEfecto(string nombreEfecto){
 		nombreEfecto = nombreEfecto.ToLower ();
-		nombreEfecto = nombreEfecto.Replace(nombreEfecto[0],nombreEfecto[0].ToString().ToUpper()[0]);
 		Efecto efecto;
 		switch (nombreEfecto) {
 			case Global.MAGICA.TIPO_EFECTO.Destructor:

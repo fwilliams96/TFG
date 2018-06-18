@@ -26,7 +26,7 @@ public class CreatureAttackVisual : EnteVisual
 				else
 					target.GetComponent<OneMagicaManager>().HacerDaño();
 			}
-			if(target.GetComponent<AudioSource>() != null)
+			if(target.GetComponent<AudioSource>() != null && ConfiguracionUsuario.Instance.Musica)
 				target.GetComponent<AudioSource>().Play();
             w.SetearOrdenCriatura();
             /*w.EstadoVisual = tempState;*/

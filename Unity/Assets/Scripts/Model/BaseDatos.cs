@@ -50,7 +50,6 @@ public class BaseDatos
 		
     private void InitializeDataBase()
     {
-        //TODO quizas la parte de base de datos en el futuro la ponga en una clase aparte.
         // Set up the Editor before calling into the realtime database.
         FirebaseApp.DefaultInstance.SetEditorDatabaseUrl("https://battle-galaxy-cda70.firebaseio.com/");
         // Get the root reference location of the database.
