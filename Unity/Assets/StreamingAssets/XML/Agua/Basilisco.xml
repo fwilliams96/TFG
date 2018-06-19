@@ -1,0 +1,18 @@
+<carta>
+  <delante>
+    <tipo>Agua</tipo>
+    <titulo>Basilisco</titulo>
+    <efecto></efecto>
+    <nombreImagen>basilisco</nombreImagen>
+    <descripcion>Basilisco ansioso de ahogar</descripcion>
+	<infoCarta>https://es.wikipedia.org/wiki/Basilisco_(criatura_mitol%C3%B3gica)</infoCarta>
+    <evolucion>1</evolucion>
+	<idEvolucion>1</idEvolucion>
+    <mana>1</mana>
+    <ataque>300</ataque>
+    <defensa>100</defensa>
+  </delante>
+  <detras>
+    <simbolo>cuadrado.png</simbolo>
+  </detras>
+</carta>
