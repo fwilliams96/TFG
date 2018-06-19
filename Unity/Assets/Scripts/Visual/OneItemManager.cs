@@ -29,9 +29,9 @@ public class OneItemManager : MonoBehaviour {
 
 	public void LeerDatosItem(){
 		ConfiguracionUsuario settings = ConfiguracionUsuario.Instance;
-		if (settings.Items.Equals (ConfiguracionUsuario.TIPO_NUMERO.ENTERO))
+		if (settings.ConfiguracionItems.Equals (ConfiguracionUsuario.TIPO_CONFIGURACION.ENTERO))
 			CantidadText.text = ConfiguracionUsuario.ObtenerEntero (Item.Cantidad);
-		else if (settings.Items.Equals (ConfiguracionUsuario.TIPO_NUMERO.FRACCION)) {
+		else if (settings.ConfiguracionItems.Equals (ConfiguracionUsuario.TIPO_CONFIGURACION.FRACCION)) {
 			CantidadText.text = ConfiguracionUsuario.ObtenerFraccion (Item.Cantidad, 100);
 		} else {
 			CantidadText.text = ConfiguracionUsuario.ObtenerPorcentaje (Item.Cantidad, 100);

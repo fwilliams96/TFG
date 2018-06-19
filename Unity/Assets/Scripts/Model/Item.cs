@@ -2,12 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum TipoItem
-{
-	Pocion,
-	Piedra
-}
-
 public abstract class Item : IIdentifiable
 {
     protected string rutaImagen;
@@ -17,15 +11,15 @@ public abstract class Item : IIdentifiable
 	public Item()
     {
 		idItem = IDFactory.GetUniqueID();
-		cantidad = 0;
-		rutaImagen = "";
+		this.cantidad = 0;
+		this.rutaImagen = "";
     }
 
 	public Item(string rutaImagen, int cantidad)
 	{
 		idItem = IDFactory.GetUniqueID();
-		rutaImagen = rutaImagen;
-		cantidad = cantidad;
+		this.rutaImagen = rutaImagen;
+		this.cantidad = cantidad;
 	}
 
 	public abstract Dictionary<string, System.Object> ToDictionary ();

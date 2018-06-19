@@ -60,10 +60,10 @@ public class DamageEffect : MonoBehaviour {
         // Change the amount text to reflect the amount of damage dealt
 		ConfiguracionUsuario settings = ConfiguracionUsuario.Instance;
 
-		if (settings.Batalla.Equals (ConfiguracionUsuario.TIPO_NUMERO.ENTERO))
+		if (settings.ConfiguracionBatalla.Equals (ConfiguracionUsuario.TIPO_CONFIGURACION.ENTERO))
 			de.AmountText.text = "-" + amount.ToString ();
 		//de.AmountText.text = health.ToString()+"-"+amount.ToString();
-		else if (settings.Batalla.Equals (ConfiguracionUsuario.TIPO_NUMERO.FRACCION)) {
+		else if (settings.ConfiguracionBatalla.Equals (ConfiguracionUsuario.TIPO_CONFIGURACION.FRACCION)) {
 			de.AmountText.text = "-"+ConfiguracionUsuario.ObtenerFraccion(amount,health)+"x"+health.ToString();
 		} else {
 			de.AmountText.text = "-" + ConfiguracionUsuario.ObtenerPorcentaje (amount, health);

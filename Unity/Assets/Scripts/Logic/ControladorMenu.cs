@@ -54,6 +54,7 @@ public class ControladorMenu : MonoBehaviour {
 		Carta carta = BuscarCarta (idCarta);
 		Item item = BuscarItem (idItem);
 		bool progresoLleno = false;
+
 		if (item.GetType() == typeof(Piedra)) {
 			if (carta.Progreso.Piedra >= 100) {
 				progresoLleno = true;
@@ -69,19 +70,47 @@ public class ControladorMenu : MonoBehaviour {
 			}
 		}
 		if (!progresoLleno) {
+			int exp = AñadirExperienciaJugador ();
 			new AñadirItemCartaPrevisualizadaCommand (item).AñadirAlaCola ();
 			new AñadirItemCartaCommand (carta, item).AñadirAlaCola ();
-			BaseDatos.Instance.ActualizarItemCarta (carta, item);
+
+			new ShowMessageCommand ("¡Obtienes " + exp + " puntos de experiencia!", 1f).AñadirAlaCola ();
 			if (carta.Progreso.Piedra >= 100 && carta.Progreso.Pocion >= 100) {
-				MessageManager.Instance.ShowMessage ("¡Ya puedes evolucionar la carta!", 2f);
-			} else {
-				MessageManager.Instance.ShowMessage ("Item añadido con éxito", 1f);
+				if (ExisteEvolucion (carta)) {
+					new ShowMessageCommand ("¡Ya puedes evolucionar la carta!", 1f).AñadirAlaCola ();
+				}
 			}
+			BaseDatos.Instance.ActualizarItemCarta (carta, item);
+			BaseDatos.Instance.ActualizarNivelYExperienciaBaseDatos ();	
 
 		} else {
 			MessageManager.Instance.ShowMessage ("¡El progreso de este item está lleno!", 2f);
 		}
 
+	}
+
+	private int AñadirExperienciaJugador(){
+		ConfiguracionUsuario settings = ConfiguracionUsuario.Instance;
+		int min = 0;
+		int max = 0;
+		if (settings.ConfiguracionItems.Equals (ConfiguracionUsuario.TIPO_CONFIGURACION.FRACCION)) {
+			min = 20;
+			max = 40;
+		} else if (settings.ConfiguracionItems.Equals (ConfiguracionUsuario.TIPO_CONFIGURACION.PORCENTAJE)) {
+			min = 10;
+			max = 20;
+		} else {
+			min = 5;
+			max = 10;
+		}
+		int exp = Random.Range (min, max);
+		Jugador jugador = BaseDatos.Instance.Local;
+		jugador.Experiencia += exp; 
+		if (jugador.Experiencia >= 100) {
+			jugador.Experiencia -= 100;
+			jugador.Nivel += 1;
+		}
+		return exp;
 	}
 
 	private Carta BuscarCarta(int idCarta){
@@ -119,22 +148,27 @@ public class ControladorMenu : MonoBehaviour {
 		return ExisteEvolucion(carta) && carta.Progreso.Piedra >= 100f && carta.Progreso.Pocion >= 100f;
 	}
 
+	public bool ExisteEvolucion(int idCarta){
+		Carta carta = BuscarCarta (idCarta);
+		return ExisteEvolucion (carta);
+	}
+
 	private bool ExisteEvolucion(Carta carta){
 		Familia familia = carta.AssetCarta.Familia;
 		int evolucionActual = carta.AssetCarta.Evolucion;
 		int idEvolucion = carta.AssetCarta.IDEvolucion;
-		KeyValuePair<string,CartaAsset> evolucion = BuscarEvolucion (familia, evolucionActual,idEvolucion);
+		KeyValuePair<string,CartaBase> evolucion = BuscarEvolucion (familia, evolucionActual,idEvolucion);
 		return !"".Equals(evolucion.Key)  && null != evolucion.Value;
 	}
 
-	public KeyValuePair<string,CartaAsset> BuscarEvolucion(Familia familia, int evolucionActual, int idEvolucion){
+	public KeyValuePair<string,CartaBase> BuscarEvolucion(Familia familia, int evolucionActual, int idEvolucion){
 		return BaseDatos.Instance.BuscarEvolucion (familia, evolucionActual, idEvolucion);
 	}
 
 	public void EvolucionarCarta(GameObject cartaG){
 		Carta carta = BuscarCarta (cartaG.GetComponent<IDHolder>().UniqueID);
 		//Buscamos la evolución
-		KeyValuePair<string,CartaAsset> evolucion = BuscarEvolucion (carta.AssetCarta.Familia, carta.AssetCarta.Evolucion,carta.AssetCarta.IDEvolucion);
+		KeyValuePair<string,CartaBase> evolucion = BuscarEvolucion (carta.AssetCarta.Familia, carta.AssetCarta.Evolucion,carta.AssetCarta.IDEvolucion);
 		//modificamos el progreso de la carta restando las 100 unidades necesarias para evolucionar
 		carta.Progreso.Piedra -= 100;
 		carta.Progreso.Pocion -= 100;
@@ -302,5 +336,13 @@ public class ControladorMenu : MonoBehaviour {
 		Destroy (objetosGenerales);
 		Destroy (confUsuario);
 		SceneManager.LoadScene("Login");
+	}
+
+	public bool JugadorPuedeJugarBatalla(){
+		return NumCartasEnElMazo () == 8;
+	}
+
+	public int NumCartasEnElMazo(){
+		return BaseDatos.Instance.Local.CartasEnElMazo ().Count;
 	}
 }

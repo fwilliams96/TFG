@@ -19,7 +19,7 @@ public class PremioPartida : MonoBehaviour {
 		puntosExp.text = "ENHORABUENA, HAS OBTENIDO " + experiencia.ToString () + " PUNTOS DE EXP";
 		PremioPartidaPanel.SetActive(true);
 		if (carta != null) {
-			CartaAsset asset = carta.AssetCarta;
+			CartaBase asset = carta.AssetCarta;
 			int progresoTrebol = carta.Progreso.Piedra;
 			int progresoPocion = carta.Progreso.Pocion;
 			GameObject cartaGobj = Instantiate(ObjetosGenerales.Instance.CardInventario, transform);

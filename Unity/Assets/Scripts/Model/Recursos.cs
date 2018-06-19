@@ -68,7 +68,7 @@ public class Recursos  {
             {
                 foreach(KeyValuePair<string, SimpleJSON.JSONNode> entrada in cartas[familia])
                 {
-					CartaAsset asset = new CartaAsset();
+					CartaBase asset = new CartaBase();
                     string carpetaCarta = obtenerFormatoNombreCorrectoDirectorio(entrada.Key);
                     string nombre = entrada.Value["carta"]["delante"]["titulo"];
 					asset.Nombre = nombre;
@@ -173,7 +173,6 @@ public class Recursos  {
 
 	private static Efecto obtenerEfecto(string nombreEfecto){
 		nombreEfecto = nombreEfecto.ToLower ();
-		nombreEfecto = nombreEfecto.Replace(nombreEfecto[0],nombreEfecto[0].ToString().ToUpper()[0]);
 		Efecto efecto;
 		switch (nombreEfecto) {
 			case Global.MAGICA.TIPO_EFECTO.Destructor:
@@ -189,7 +188,7 @@ public class Recursos  {
 				efecto = Efecto.Vida;
 				break;
 			default:
-				efecto = Efecto.Destructor;
+				efecto = Efecto.Ninguno;
 				break;
 		}
 
@@ -226,7 +225,7 @@ public class Recursos  {
         return tipo;
     }
 
-    public static void GuardarJSONApartirCartaAsset(CartaAsset asset, string rutaArchivo, string nombreArchivo)
+    public static void GuardarJSONApartirCartaAsset(CartaBase asset, string rutaArchivo, string nombreArchivo)
     {
         //string path = Application.persistentDataPath;
         string path = (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer ? Application.persistentDataPath : Application.dataPath);
@@ -243,7 +242,7 @@ public class Recursos  {
         Debug.Log("Asset guardado con exito");
     }
 
-    public static void GuardarAssetBaseDatos(string familia,CartaAsset asset)
+    public static void GuardarAssetBaseDatos(string familia,CartaBase asset)
     {
         BaseDatos.Instance.GuardarCarta(familia, asset);
     }

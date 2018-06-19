@@ -18,7 +18,7 @@ public class PlayerPortraitVisual : MonoBehaviour {
 
     public void AplicarEstiloPersonajeAsset()
     {
-		if (ConfiguracionUsuario.Instance.Batalla.Equals (ConfiguracionUsuario.TIPO_NUMERO.ENTERO)) {
+		if (ConfiguracionUsuario.Instance.ConfiguracionBatalla.Equals (ConfiguracionUsuario.TIPO_CONFIGURACION.ENTERO)) {
 			HealthText.text = charAsset.MaxHealth.ToString ();
 		} else {
 			HealthText.text = ConfiguracionUsuario.ObtenerPorcentaje (charAsset.MaxHealth, charAsset.MaxHealth);
@@ -39,7 +39,7 @@ public class PlayerPortraitVisual : MonoBehaviour {
 	{
 		vidaActual += 1;
 		while (vidaActual <= vidaDespues) {
-			if (ConfiguracionUsuario.Instance.Batalla.Equals (ConfiguracionUsuario.TIPO_NUMERO.ENTERO)) {
+			if (ConfiguracionUsuario.Instance.ConfiguracionBatalla.Equals (ConfiguracionUsuario.TIPO_CONFIGURACION.ENTERO)) {
 				HealthText.text = vidaActual.ToString ();
 			} else {
 				HealthText.text = ConfiguracionUsuario.ObtenerPorcentaje (vidaActual, charAsset.MaxHealth);
@@ -55,7 +55,7 @@ public class PlayerPortraitVisual : MonoBehaviour {
         if (daño > 0)
         {
             DamageEffect.CreateDamageEffect(transform.position, vida,daño);
-			if (ConfiguracionUsuario.Instance.Batalla.Equals (ConfiguracionUsuario.TIPO_NUMERO.ENTERO)) {
+			if (ConfiguracionUsuario.Instance.ConfiguracionBatalla.Equals (ConfiguracionUsuario.TIPO_CONFIGURACION.ENTERO)) {
 				HealthText.text = (vida-daño).ToString();
 			} else {
 				HealthText.text = ConfiguracionUsuario.ObtenerPorcentaje ((vida-daño),charAsset.MaxHealth);

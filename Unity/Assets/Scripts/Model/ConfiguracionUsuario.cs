@@ -8,7 +8,7 @@ public class ConfiguracionUsuario : MonoBehaviour {
 	public static ConfiguracionUsuario Instance = null;
 	//private static bool created = false;
 
-	public enum TIPO_NUMERO
+	public enum TIPO_CONFIGURACION
 	{
 		ENTERO,
 		FRACCION,
@@ -26,8 +26,8 @@ public class ConfiguracionUsuario : MonoBehaviour {
 	public float CardTransitionTimeFast = 0.5f;
 	public int NumMaximoCriaturasMesa = 7;
 	[Header("Opciones parametrizables")]
-	public TIPO_NUMERO Batalla;
-	public TIPO_NUMERO Items;
+	public TIPO_CONFIGURACION ConfiguracionBatalla;
+	public TIPO_CONFIGURACION ConfiguracionItems;
 	[Header("Configuración juego")]
 	public bool Musica;
 
@@ -39,8 +39,8 @@ public class ConfiguracionUsuario : MonoBehaviour {
 			Instance = this;
 		}
 		Musica = true;
-		Batalla = TIPO_NUMERO.ENTERO;
-		Items = TIPO_NUMERO.ENTERO;	
+		ConfiguracionBatalla = TIPO_CONFIGURACION.ENTERO;
+		ConfiguracionItems = TIPO_CONFIGURACION.ENTERO;	
 	}
 
 	public static string ObtenerEntero(int numero){

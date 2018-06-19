@@ -64,7 +64,7 @@ public class TableVisual : MonoBehaviour
         }
         cursorSobreEstaMesa = haPasadoPorColider;
     }
-    public void AñadirMagica(CartaAsset ca, int idUnico, int indiceSlot)
+    public void AñadirMagica(CartaBase ca, int idUnico, int indiceSlot)
     {
         //Debug.Log("Añadir ente magica");
         GameObject creature = GameObject.Instantiate(ObjetosGenerales.Instance.MagicaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
@@ -72,7 +72,7 @@ public class TableVisual : MonoBehaviour
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 		
-    public void AñadirCriaturaDefensa(CartaAsset ca, int idUnico, int indiceSlot)
+    public void AñadirCriaturaDefensa(CartaBase ca, int idUnico, int indiceSlot)
     {
         //Debug.Log("Añadir ente criatura como defensa");
         GameObject creature = GameObject.Instantiate(ObjetosGenerales.Instance.CriaturaPrefab, slots.Children[indiceSlot].transform.position, Quaternion.identity) as GameObject;
@@ -80,7 +80,7 @@ public class TableVisual : MonoBehaviour
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 
-    public void AñadirCriaturaAtaque(CartaAsset ca, int idUnico, int indiceSlot)
+    public void AñadirCriaturaAtaque(CartaBase ca, int idUnico, int indiceSlot)
     {
         //Debug.Log("Añadir ente criatura como ataque");
         // create a new creature from prefab
@@ -89,7 +89,7 @@ public class TableVisual : MonoBehaviour
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 
-	private void ConfigurarEnte(GameObject ente, CartaAsset ca, int idUnico, int indiceSlot)
+	private void ConfigurarEnte(GameObject ente, CartaBase ca, int idUnico, int indiceSlot)
     {
 		string tagEnte ="";
 		OneEnteManager manager = null;

@@ -28,14 +28,14 @@ public class ProgresoVisual : MonoBehaviour
 
 	private void AñadirCantidad(Text cantidadText, int cantidad){
 		ConfiguracionUsuario settings = ConfiguracionUsuario.Instance;
-		switch (settings.Items) {
-		case ConfiguracionUsuario.TIPO_NUMERO.ENTERO:
+		switch (settings.ConfiguracionItems) {
+		case ConfiguracionUsuario.TIPO_CONFIGURACION.ENTERO:
 			cantidadText.text = ConfiguracionUsuario.ObtenerEntero (cantidad);
 			break;
-		case ConfiguracionUsuario.TIPO_NUMERO.FRACCION:
+		case ConfiguracionUsuario.TIPO_CONFIGURACION.FRACCION:
 			cantidadText.text = ConfiguracionUsuario.ObtenerFraccion (cantidad, 100);
 			break;
-		case ConfiguracionUsuario.TIPO_NUMERO.PORCENTAJE:
+		case ConfiguracionUsuario.TIPO_CONFIGURACION.PORCENTAJE:
 			cantidadText.text = ConfiguracionUsuario.ObtenerPorcentaje (cantidad, 100);
 			break;
 		}

@@ -9,10 +9,10 @@ public class CartaPartida : IIdentifiable
     // an ID of this card
     private int idCarta;
     // a reference to the card asset that stores all the info about this card
-	private CartaAsset assetCarta;
+	private CartaBase assetCarta;
     #endregion
 
-	public CartaPartida(CartaAsset ca)
+	public CartaPartida(CartaBase ca)
     {
         this.assetCarta = ca;
         // get unique int ID
@@ -29,7 +29,7 @@ public class CartaPartida : IIdentifiable
 
     #region Getters/Setters
 
-	public CartaAsset AssetCarta{
+	public CartaBase AssetCarta{
 		get{
 			return assetCarta;
 		}

@@ -47,7 +47,7 @@ public class Acciones : MonoBehaviour {
 		this.elementoActual.GetComponent<OneCardManager> ().PuedeSerJugada = true;
 		PanelAcciones.SetActive (true);
 		Elementos.GetComponent<Elementos>().DeshabilitarColliderElementos ();
-		botonEvolucionar.interactable = ControladorMenu.Instance.SePuedeEvolucionar (ElementoActual.GetComponent<IDHolder>().UniqueID);
+		botonEvolucionar.interactable = ControladorMenu.Instance.ExisteEvolucion (ElementoActual.GetComponent<IDHolder>().UniqueID);
 	}
 		
 	public void CerrarMenu(){
@@ -89,7 +89,7 @@ public class Acciones : MonoBehaviour {
 			break;
 		}
 		opciones.SetActive (true);
-		botonEvolucionar.interactable = ControladorMenu.Instance.SePuedeEvolucionar (ElementoActual.GetComponent<IDHolder>().UniqueID);
+		botonEvolucionar.interactable = ControladorMenu.Instance.ExisteEvolucion (ElementoActual.GetComponent<IDHolder>().UniqueID);
 	}
 
 	public void Visualizar(){
@@ -103,9 +103,14 @@ public class Acciones : MonoBehaviour {
 	}
 
 	public void Evolucionar(){
-		ControladorMenu.Instance.EvolucionarCarta (Acciones.Instance.ElementoActual);
-		opciones.SetActive (false);
-		evolucionar.SetActive (true);
+		if (ControladorMenu.Instance.SePuedeEvolucionar (elementoActual.GetComponent<IDHolder>().UniqueID)) {
+			ControladorMenu.Instance.EvolucionarCarta (elementoActual);
+			opciones.SetActive (false);
+			evolucionar.SetActive (true);
+		} else {
+			new ShowMessageCommand ("El progreso de la carta aún no se ha completado", 1.5f).AñadirAlaCola ();
+		}
+
 	}
 
 	public void BuscarInfoCarta(){

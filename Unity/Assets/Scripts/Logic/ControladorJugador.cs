@@ -150,11 +150,6 @@ public class ControladorJugador
     {
 		foreach (CartaPartida cl in jugador.CartasEnLaMano())
         {
-            /*List<GameObject> listG = IDHolder.GetGameObjectsWithID(cl.ID);
-			foreach(GameObject g in listG){
-				if(g != null)
-					g.GetComponent<OneCardManager>().PuedeSerJugada = Controlador.Instance.CartaPuedeUsarse(jugador,cl) && !quitarTodasRemarcadas;
-			}*/
 			GameObject g = IDHolder.GetGameObjectWithID (cl.ID);
 			if(g != null)
 				g.GetComponent<OneCardManager>().PuedeSerJugada = Controlador.Instance.CartaPuedeUsarse(jugador,cl) && !quitarTodasRemarcadas;
@@ -163,11 +158,6 @@ public class ControladorJugador
 
         foreach (Ente crl in jugador.EntesEnLaMesa())
         {
-			/*List<GameObject> listG = IDHolder.GetGameObjectsWithID(crl.ID);
-			foreach(GameObject g in listG){
-				if(g != null)
-					g.GetComponent<OneEnteManager>().PuedeAtacar = Controlador.Instance.EntePuedeUsarse(crl) && !quitarTodasRemarcadas;
-			}*/
 			GameObject g = IDHolder.GetGameObjectWithID (crl.ID);
 			if(g != null)
 				g.GetComponent<OneEnteManager>().PuedeAtacar = Controlador.Instance.EntePuedeUsarse(crl) && !quitarTodasRemarcadas;
@@ -188,7 +178,7 @@ public class ControladorJugador
 		int exp = AñadirExperienciaJugador (jugador);	
 		if (jugador.GetType() == typeof(JugadorHumano)) {
 			new GameOverCommand (jugador,exp).AñadirAlaCola ();
-			BaseDatos.Instance.ActualizarExperienciaBaseDatos ();
+			BaseDatos.Instance.ActualizarNivelYExperienciaBaseDatos ();
 		}else {
 			JugadorPartida ganador = OtroJugador (jugador);
 			Carta carta = ObtenerCartaPremio ();
@@ -224,8 +214,17 @@ public class ControladorJugador
 	}
 
 	private int AñadirExperienciaJugador(JugadorPartida jugador){
-		System.Random rnd = new System.Random ();
-		int exp = rnd.Next (5, 15);
+		ConfiguracionUsuario settings = ConfiguracionUsuario.Instance;
+		int min = 0;
+		int max = 0;
+		if (settings.ConfiguracionBatalla.Equals (ConfiguracionUsuario.TIPO_CONFIGURACION.PORCENTAJE)) {
+			min = 50;
+			max = 90;
+		} else {
+			min = 10;
+			max = 50;
+		}
+		int exp = Random.Range (min, max);
 		jugador.Jugador.Experiencia += exp; 
 		if (jugador.Jugador.Experiencia >= 100) {
 			jugador.Jugador.Experiencia -= 100;

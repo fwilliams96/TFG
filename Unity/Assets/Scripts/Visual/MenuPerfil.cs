@@ -9,8 +9,13 @@ public class MenuPerfil : MonoBehaviour {
 	public Slider experiencia;
 
 	void Awake(){
+		//nivel.text = ControladorMenu.Instance.ObtenerNivelJugador ();
+		//experiencia.value = ControladorMenu.Instance.ObtenerExperienciaJugador ();
+	}
+
+	void OnEnable(){
 		nivel.text = ControladorMenu.Instance.ObtenerNivelJugador ();
 		experiencia.value = ControladorMenu.Instance.ObtenerExperienciaJugador ();
 	}
-
+		
 }

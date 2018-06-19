@@ -8,8 +8,8 @@ public class Global {
 
     public static class CARTAS
     {
-        //public static string[] FAMILIAS = { "Agua", "Fuego", "Tierra", "Aire", "Magica", "Ancestral" };
-		public static string[] FAMILIAS = {"Magica" };
+        public static string[] FAMILIAS = { "Agua", "Fuego", "Tierra", "Aire", "Magica", "Ancestral" };
+		//public static string[] FAMILIAS = {"Magica" };
         public static class FAMILIA
         {
 			public static string[] AIRE = { "Grifo", "Arpia","Arpia2","Tengu"};
@@ -35,10 +35,10 @@ public class Global {
 	{
 		public static class TIPO_EFECTO
 		{
-			public const string Destructor = "Destructor";
-			public const string Espejo = "Espejo";
-			public const string Mana = "Mana";
-			public const string Vida = "Vida";
+			public const string Destructor = "destructor";
+			public const string Espejo = "espejo";
+			public const string Mana = "mana";
+			public const string Vida = "vida";
 		}
 	}
 }
