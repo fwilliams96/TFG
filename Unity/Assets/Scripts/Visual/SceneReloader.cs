@@ -10,13 +10,16 @@ public class SceneReloader: MonoBehaviour {
 		Instance = this;
 	}
 
+	/// <summary>
+	/// Resetea los valores y vuelve a la escena inventario mediante una escena de carga.
+	/// </summary>
     public void ReloadScene()
     {
         // Command has some static members, so let`s make sure that there are no commands in the Queue
         Debug.Log("Scene reloaded");
         // reset all card and creature IDs
 		//TODO mirar si esto no afecta a las cartas e items del inventario
-        IDFactory.ResetIDs();
+		IDFactory.EliminarIDsBatalla();
         IDHolder.ClearIDHoldersList();
         Comandas.Instance.Clear();
         Comandas.Instance.CompletarEjecucionComanda();

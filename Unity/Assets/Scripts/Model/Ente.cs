@@ -80,6 +80,9 @@ public class Ente : ICharacter
     {
     }
 
+	/// <summary>
+	/// Restablece los ataques o veces de uso disponibles
+	/// </summary>
     public virtual void OnTurnStart()
     {
         AtaquesRestantesEnTurno = attacksForOneTurn;

@@ -12,7 +12,10 @@ public class DragCardOnTable : DraggingActions
     private VisualStates tempState;
     private OneCardManager manager;
     #endregion
-
+	/// <summary>
+	/// Identifica si una carta se puede controlar (segun el jugador) y si la carta esta disponible para ser usada.
+	/// </summary>
+	/// <value><c>true</c> if se puede arrastrar; otherwise, <c>false</c>.</value>
     public override bool SePuedeArrastrar
     {
         get
@@ -29,6 +32,9 @@ public class DragCardOnTable : DraggingActions
         manager = GetComponent<OneCardManager>();
     }
 
+	/// <summary>
+	/// Comienza el drag de la carta.
+	/// </summary>
     public override void OnStartDrag()
     {
         savedHandSlot = whereIsCard.Slot;
@@ -44,6 +50,9 @@ public class DragCardOnTable : DraggingActions
 
     }
 
+	/// <summary>
+	/// Acaba el dragg de la carta, determinando si se ha soltado en el sitio correspondiente.
+	/// </summary>
     public override void OnEndDrag()
     {
 
@@ -77,6 +86,10 @@ public class DragCardOnTable : DraggingActions
         }
     }
 
+	/// <summary>
+	/// Coloca una carta en el territorio.
+	/// </summary>
+	/// <param name="resultOK">If set to <c>true</c> result O.</param>
     public void ColocarCartaTablero(bool resultOK)
     {
         //Se ha seleccionado ataque o defensa en el popup
@@ -84,7 +97,7 @@ public class DragCardOnTable : DraggingActions
         {
 			bool magica = manager.CartaAsset.Familia.Equals (Familia.Magica);
             // determine table position
-            int tablePos = Controlador.Instance.AreaJugador(playerOwner).tableVisual.PosicionSlotNuevaCriatura(Camera.main.ScreenToWorldPoint(
+            int tablePos = Controlador.Instance.AreaJugador(playerOwner).tableVisual.PosicionSlotNuevaEnte(Camera.main.ScreenToWorldPoint(
                     new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, transform.position.z - Camera.main.transform.position.z)).x);
             if (magica)
             {
@@ -107,6 +120,10 @@ public class DragCardOnTable : DraggingActions
 
     }
 
+	/// <summary>
+	/// Determina si la carta se ha soltado en el sitio correcto y que no se encuentre lleno.
+	/// </summary>
+	/// <returns><c>true</c>, if successful was draged, <c>false</c> otherwise.</returns>
     protected override bool DragSuccessful()
     {
         bool TableNotFull = (playerOwner.NumEntesEnLaMesa() < 5);
@@ -116,6 +133,9 @@ public class DragCardOnTable : DraggingActions
 		return area.tableVisual.CursorSobreEstaMesa && TableNotFull;
     }
 
+	/// <summary>
+	/// Mueve la carta a su sitio de origen.
+	/// </summary>
 	public override void resetDragg(){
         // Set old sorting order 
         whereIsCard.SetearOrdenCarta();

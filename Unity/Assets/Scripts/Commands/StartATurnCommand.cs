@@ -10,6 +10,9 @@ public class StartATurnCommand : Comanda {
         this.p = p;
     }
 
+	/// <summary>
+	/// Función que empieza un nuevo turno.
+	/// </summary>
     public override void EmpezarEjecucionComanda()
     {
         //Cambiamos el jugador actual

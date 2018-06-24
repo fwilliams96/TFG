@@ -41,6 +41,11 @@ public class ControladorJugador
         }
     }
 
+	/// <summary>
+	/// Determina el area visual a partir del jugador.
+	/// </summary>
+	/// <returns>The jugador.</returns>
+	/// <param name="jugador">Jugador.</param>
 	public PlayerArea AreaJugador(JugadorPartida jugador)
     {
 		if (null != _jugadorActual && jugador == _jugadorActual)
@@ -61,6 +66,11 @@ public class ControladorJugador
         return areaJugador;
     }
 
+	/// <summary>
+	/// Mira si el jugador tiene el turno, si no hay cartas pendientes por mostrar y si tiene el control activado.
+	/// </summary>
+	/// <returns><c>true</c>, if permite controlar el jugador was sed, <c>false</c> otherwise.</returns>
+	/// <param name="jugador">Jugador.</param>
 	public bool SePermiteControlarElJugador(JugadorPartida jugador)
     {
 		PlayerArea areaJugador = AreaJugador(jugador);
@@ -69,6 +79,10 @@ public class ControladorJugador
         return areaJugador.PermitirControlJugador && areaJugador.ControlActivado && TurnoDelJugador && NoCartasPendientesPorMostrar;
     }
 
+	/// <summary>
+	/// Determina si el control tiene control.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
 	public void TransmitirInformacionVisualJugador(JugadorPartida jugador)
     {
 		PlayerArea areaJugador = AreaJugador(jugador);
@@ -84,6 +98,10 @@ public class ControladorJugador
         }
     }
 
+	/// <summary>
+	/// Inicializars los valores del jugador.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
 	public void InicializarValoresJugador(JugadorPartida jugador)
     {
 		PlayerArea areaJugador = AreaJugador(jugador);
@@ -95,14 +113,23 @@ public class ControladorJugador
         areaJugador.Personaje.transform.position = areaJugador.PosicionInicialPersonaje.position;
     }
 
+	/// <summary>
+	/// Deshabilita el mana.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
 	public void DeshabilitarMana(JugadorPartida jugador){
 		new DeshabilitarManaCommand (jugador).AñadirAlaCola ();
 	}
+
 	public void ActualizarValoresJugador(JugadorPartida jugador)
     {
 		OnTurnStart(jugador);
     }
 
+	/// <summary>
+	/// Inicia el turno del jugador, muestra el mensaje de turno y actualiza el mana y las cartas.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
 	private void OnTurnStart(JugadorPartida jugador)
     {
 		jugador.OnTurnStart();
@@ -132,7 +159,10 @@ public class ControladorJugador
         new UpdateManaCrystalsCommand(jugador, jugador.ManaEnEsteTurno, jugador.ManaRestante).AñadirAlaCola();
     }
 
-    // Muestra cartas jugables de la mano del jugador
+	/// <summary>
+	/// Muestra cartas jugables de la mano del jugador
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
 	public void ActualizarEstadoCartasJugadorActual(JugadorPartida jugador)
     {
         if (jugador == JugadorActual)
@@ -140,12 +170,21 @@ public class ControladorJugador
 
     }
 
+	/// <summary>
+	/// Oculta las cartas del jugador que no tiene el turno.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
 	private void ActualizarEstadoCartasJugadorEnemigo(JugadorPartida jugador)
     {
         if (jugador == JugadorActual)
             ActualizarEstadoCartasJugador(OtroJugador(jugador), true);
             }
 
+	/// <summary>
+	/// Oculta o muestra la jugabilidad de las cartas en función del segundo parametro.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
+	/// <param name="quitarTodasRemarcadas">If set to <c>true</c> quitar todas remarcadas.</param>
 	private void ActualizarEstadoCartasJugador(JugadorPartida jugador, bool quitarTodasRemarcadas = false)
     {
 		foreach (CartaPartida cl in jugador.CartasEnLaMano())
@@ -190,6 +229,10 @@ public class ControladorJugador
 			
     }
 
+	/// <summary>
+	/// Genera una carta de premio al jugador.
+	/// </summary>
+	/// <returns>The carta premio.</returns>
 	private Carta ObtenerCartaPremio(){
 		
 		Carta carta = null;
@@ -199,12 +242,22 @@ public class ControladorJugador
 		return carta;
 	}
 
+	/// <summary>
+	/// Genera items de premio al jugador.
+	/// </summary>
+	/// <returns>The items premio.</returns>
 	private List<Item> ObtenerItemsPremio(){
 
 		List<Item> items = BaseDatos.Instance.GenerarItemsAleatorios (3);
 		return items;
 	}
 
+	/// <summary>
+	/// Añade al jugador los premios obtenidos.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
+	/// <param name="carta">Carta.</param>
+	/// <param name="items">Items.</param>
 	private void AñadirPremioJugador(JugadorPartida jugador,Carta carta, List<Item> items){
 		if (carta != null)
 			jugador.Jugador.AñadirCarta (carta);
@@ -213,6 +266,11 @@ public class ControladorJugador
 		}
 	}
 
+	/// <summary>
+	/// Añade la experiencia obtenida al jugador, según el tipo de configuración da mas o menos.
+	/// </summary>
+	/// <returns>The experiencia jugador.</returns>
+	/// <param name="jugador">Jugador.</param>
 	private int AñadirExperienciaJugador(JugadorPartida jugador){
 		ConfiguracionUsuario settings = ConfiguracionUsuario.Instance;
 		int min = 0;
@@ -233,6 +291,9 @@ public class ControladorJugador
 		return exp;
 	}
 
+	/// <summary>
+	/// Para el control de todos los jugadores.
+	/// </summary>
     public void PararControlJugadores()
     {
 		foreach (JugadorPartida player in Controlador.Instance.Jugadores)
@@ -241,16 +302,31 @@ public class ControladorJugador
         }
     }
 
+	/// <summary>
+	/// Determina si un ente o carta es del jugador actual.
+	/// </summary>
+	/// <returns><c>true</c>, if O criatura del jugador was cartaed, <c>false</c> otherwise.</returns>
+	/// <param name="tagCartaOCriatura">Tag carta O criatura.</param>
     public bool CartaOCriaturaDelJugador(string tagCartaOCriatura)
     {
 		return _jugadorActual.Area.ToString().Equals(tagCartaOCriatura.Substring(0, 3));
     }
 
+	/// <summary>
+	/// Indica si se puede atacar de cara al jugador.
+	/// </summary>
+	/// <returns><c>true</c>, if puede atacar jugador de cara was sed, <c>false</c> otherwise.</returns>
+	/// <param name="idJugador">Identifier jugador.</param>
 	public bool SePuedeAtacarJugadorDeCara(int idJugador){
 		JugadorPartida jugador = Controlador.Instance.Local.ID == idJugador ? Controlador.Instance.Local : Controlador.Instance.Enemigo;
 		return jugador.NumEntesEnLaMesa () == 0;
 	}
 
+	/// <summary>
+	/// Permite atacar de cara al jugador.
+	/// </summary>
+	/// <param name="atacante">Atacante.</param>
+	/// <param name="jugadorObjetivo">Jugador objetivo.</param>
 	public void AtacarJugador(Criatura atacante,  JugadorPartida jugadorObjetivo)
 	{
 		atacante.AtaquesRestantesEnTurno--;
@@ -260,6 +336,11 @@ public class ControladorJugador
 			MuerteJugador(jugadorObjetivo);
 	}
 
+	/// <summary>
+	/// Devuelve el jugador contrario al del parametro.
+	/// </summary>
+	/// <returns>The jugador.</returns>
+	/// <param name="jugador">Jugador.</param>
 	public JugadorPartida OtroJugador(JugadorPartida jugador)
     {
 		return Controlador.Instance.Local == jugador ? Controlador.Instance.Enemigo : Controlador.Instance.Local;
@@ -275,6 +356,11 @@ public class ControladorJugador
 		jugador.ManaRestante -= carta.CosteManaActual;
     }
 
+	/// <summary>
+	/// Quita vida al jugador sin un ataque visual.
+	/// </summary>
+	/// <param name="jugadorObjetivo">Jugador objetivo.</param>
+	/// <param name="valorAtaque">Valor ataque.</param>
 	public void QuitarVidaJugador(JugadorPartida jugadorObjetivo,int valorAtaque)
     {
 		new DealDamageCommand(jugadorObjetivo.ID, valorAtaque, jugadorObjetivo.Defensa).AñadirAlaCola();
@@ -283,23 +369,37 @@ public class ControladorJugador
             MuerteJugador(jugadorObjetivo);
     }
 
+	/// <summary>
+	/// Indica si el jugador ha muerto.
+	/// </summary>
+	/// <returns><c>true</c>, if muerto was jugadored, <c>false</c> otherwise.</returns>
+	/// <param name="jugador">Jugador.</param>
 	public bool JugadorMuerto(JugadorPartida jugador)
     {
         return jugador.Defensa <= 0;
     }
 
+	/// <summary>
+	/// Oculta la mano del jugador que no tiene el turno.
+	/// </summary>
     public void OcultarManoJugadorAnterior()
     {
         //Ocultamos la mano del jugador anterior 
 		AreaJugador(OtroJugador(JugadorActual)).manoVisual.OcultarMano();
     }
 
+	/// <summary>
+	/// Muestra la mano del jugador actual.
+	/// </summary>
     public void MostrarManoJugadorActual()
     {
         //Mostramos la mano del nuevo jugador actual
 		AreaJugador(JugadorActual).manoVisual.MostrarMano();
     }
 
+	/// <summary>
+	/// Elimina la instancia
+	/// </summary>
 	public void Clear(){
 		instance = null;
 	}

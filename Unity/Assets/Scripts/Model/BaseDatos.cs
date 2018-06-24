@@ -47,7 +47,10 @@ public class BaseDatos
 		InitializeDataBase();
         ObtenerAssets(callback);
     }
-		
+
+	/// <summary>
+	/// Inicializa la referencia a la base de datos.
+	/// </summary>
     private void InitializeDataBase()
     {
         // Set up the Editor before calling into the realtime database.
@@ -55,7 +58,11 @@ public class BaseDatos
         // Get the root reference location of the database.
         reference = FirebaseDatabase.DefaultInstance.RootReference;
     }
-		
+
+	/// <summary>
+	/// Obtiene todas las cartas de la base de datos y las almacena en assets.
+	/// </summary>
+	/// <param name="callback">Callback.</param>
     private void ObtenerAssets(CallBack callback)
     {
         reference.Child("assets").GetValueAsync().ContinueWith(task => {
@@ -78,6 +85,12 @@ public class BaseDatos
             }
         });
     }
+
+	/// <summary>
+	/// Recoge la información del jugador de base de datos.
+	/// </summary>
+	/// <param name="userId">User identifier.</param>
+	/// <param name="callback">Callback.</param>
 	public void RecogerJugador(string userId, SesionUsuario.CallBack callback)
     {
         this.userIDActual = userId;
@@ -99,7 +112,11 @@ public class BaseDatos
 			}
 		});
     }
-		
+
+	/// <summary>
+	/// Añade items y cartas como welcome pack al nuevo jugador.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
     public void AñadirWelcomePackJugador(Jugador jugador)
     {
         List<Carta> cartasWelcomePack = GenerarCartasAleatorias(8);
@@ -117,6 +134,10 @@ public class BaseDatos
 
     }
 
+	/// <summary>
+	/// Devuelve todas las cartas del juego.
+	/// </summary>
+	/// <returns>The todas cartas.</returns>
 	public List<Carta> GenerarTodasCartas()
 	{
 		var json = assets.Value as Dictionary<string, object>;
@@ -131,6 +152,11 @@ public class BaseDatos
 		return todasCartas;
 	}
 
+	/// <summary>
+	/// Permite generar cartas aleatorias.
+	/// </summary>
+	/// <returns>The cartas aleatorias.</returns>
+	/// <param name="numCartas">Number cartas.</param>
 	public List<Carta> GenerarCartasAleatorias(int numCartas)
     {
         var json = assets.Value as Dictionary<string, object>;
@@ -146,6 +172,11 @@ public class BaseDatos
 		return cartasAleatorias;
     }
 
+	/// <summary>
+	/// Permite generar items aleatorios.
+	/// </summary>
+	/// <returns>The items aleatorios.</returns>
+	/// <param name="numItems">Number items.</param>
 	public List<Item> GenerarItemsAleatorios(int numItems){
 		System.Random rnd = new System.Random();
 		List<Item> itemsAleatorios = new List<Item> ();
@@ -170,6 +201,11 @@ public class BaseDatos
 		return itemsAleatorios;
 	}
 
+	/// <summary>
+	/// Permite crear el jugador.
+	/// </summary>
+	/// <param name="userId">User identifier.</param>
+	/// <param name="callBack">Call back.</param>
     public void CrearJugador(string userId, SesionUsuario.CallBack callBack)
     {
         Debug.Log("Crear jugador");
@@ -180,6 +216,11 @@ public class BaseDatos
         callBack.Invoke("");
     }
 
+	/// <summary>
+	/// Permite obtener los datos del jugador.
+	/// </summary>
+	/// <param name="callBack">Call back.</param>
+	/// <param name="usuario">Usuario.</param>
 	private void ObtenerDatosJugador(SesionUsuario.CallBack callBack,DataSnapshot usuario)
 	{
 		Debug.Log("Obtener jugador");
@@ -196,6 +237,11 @@ public class BaseDatos
 		callBack.Invoke("");
 	}
 
+	/// <summary>
+	/// Añade las cartas al jugador.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
+	/// <param name="cartas">Cartas.</param>
     private void AñadirCartasJugador(Jugador jugador, List<Carta> cartas)
     {
 		foreach (Carta carta in cartas)
@@ -205,6 +251,11 @@ public class BaseDatos
         
     }
 
+	/// <summary>
+	/// Añade el mazo al jugador.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
+	/// <param name="idCartasMazo">Identifier cartas mazo.</param>
 	public void AñadirMazoJugador(Jugador jugador,List<int> idCartasMazo){
 		jugador.ClearMazo ();
 		jugador.IDCartasMazo ().Clear ();
@@ -214,6 +265,11 @@ public class BaseDatos
 		jugador.InicializarMazo ();
 	}
 
+	/// <summary>
+	/// Añade los items al jugador.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
+	/// <param name="items">Items.</param>
 	private void AñadirItemsJugador(Jugador jugador, List<Item> items)
 	{
 		foreach (Item item in items)
@@ -222,11 +278,23 @@ public class BaseDatos
 		}
 	}
 
+	/// <summary>
+	/// Añade experiencia y nuvel al jugador.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
+	/// <param name="nivel">Nivel.</param>
+	/// <param name="experiencia">Experiencia.</param>
 	private void AñadirExperienciaNivelJugador(Jugador jugador, int nivel, int experiencia){
 		jugador.Nivel = nivel;
 		jugador.Experiencia = experiencia;
 	}
 
+	/// <summary>
+	/// Instancia una carta, con o sin progreso.
+	/// </summary>
+	/// <returns>The carta jugador.</returns>
+	/// <param name="idAsset">Identifier asset.</param>
+	/// <param name="progreso">Progreso.</param>
     private Carta CrearCartaJugador(string idAsset, Progreso progreso)
     {
         string assetJSON = assets.Child(idAsset).GetRawJsonValue();
@@ -238,6 +306,13 @@ public class BaseDatos
         return carta;
     }
 
+	/// <summary>
+	/// Instancia un item piedra o poción.
+	/// </summary>
+	/// <returns>The item jugador.</returns>
+	/// <param name="tipoItem">Tipo item.</param>
+	/// <param name="rutaImagen">Ruta imagen.</param>
+	/// <param name="cantidad">Cantidad.</param>
 	private Item CrearItemJugador(int tipoItem, string rutaImagen, int cantidad)
 	{
 		Item item = null;
@@ -249,21 +324,41 @@ public class BaseDatos
 		return item;
 	}
 
+	/// <summary>
+	/// Añade una carta al jugador.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
+	/// <param name="carta">Carta.</param>
     private void AñadirCartaJugador(Jugador jugador, Carta carta)
     {
         jugador.AñadirCarta(carta);
     }
 
+	/// <summary>
+	/// Añade un item al jugador.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
+	/// <param name="item">Item.</param>
 	private void AñadirItemJugador(Jugador jugador, Item item)
 	{
 		jugador.AñadirItem(item);
 	}
 
+	/// <summary>
+	/// Añade el jugador a la base de datos.
+	/// </summary>
+	/// <param name="userID">User I.</param>
+	/// <param name="jugador">Jugador.</param>
     private void AñadirJugadorBaseDatos(string userID, Jugador jugador)
     {
         reference.Child("users").Child(userID).SetValueAsync(jugador.ToDictionary());
     }
 
+	/// <summary>
+	/// Obtiene las cartas del jugador.
+	/// </summary>
+	/// <returns>The cartas jugador.</returns>
+	/// <param name="usuario">Usuario.</param>
     private List<Carta> ObtenerCartasJugador(DataSnapshot usuario)
     {
 		List<Carta> cartasJugador = new List<Carta>();
@@ -282,6 +377,11 @@ public class BaseDatos
         return cartasJugador;
     }
 
+	/// <summary>
+	/// Obtiene los items del jugador.
+	/// </summary>
+	/// <returns>The items jugador.</returns>
+	/// <param name="usuario">Usuario.</param>
 	private List<Item> ObtenerItemsJugador(DataSnapshot usuario)
 	{
 		List<Item> itemsJugador = new List<Item>();
@@ -299,6 +399,11 @@ public class BaseDatos
 		return itemsJugador;
 	}
 
+	/// <summary>
+	/// Obtiene los identificadores de las cartas del mazo.
+	/// </summary>
+	/// <returns>The identifier cartas mazo.</returns>
+	/// <param name="usuario">Usuario.</param>
 	private List<int> ObtenerIDCartasMazo(DataSnapshot usuario){	
 		List<int> idsCartasMazo = new List<int> ();
 		if (!usuario.HasChild ("cartas"))
@@ -310,6 +415,10 @@ public class BaseDatos
 		return idsCartasMazo;
 	}
 
+	/// <summary>
+	/// Genera identificadores de las cartas para el mazo.
+	/// </summary>
+	/// <returns>The identifier cartas mazo.</returns>
 	private List<int> GenerarIDCartasMazo(){
 		List<int> idsCartasMazo = new List<int> ();
 		for (int i = 0; i < 8; i++) {
@@ -318,22 +427,38 @@ public class BaseDatos
 		return idsCartasMazo;
 	}
 
+	/// <summary>
+	/// Obtiene el nivel del jugador almacenado en Firebase.
+	/// </summary>
+	/// <returns>The nivel jugador.</returns>
+	/// <param name="usuario">Usuario.</param>
     private int ObtenerNivelJugador(DataSnapshot usuario)
     {
         return Convert.ToInt32(usuario.Child("nivel").GetValue(true));
     }
 
+	/// <summary>
+	/// Obtiene la experiencia del jugador en base de datos.
+	/// </summary>
+	/// <returns>The experiencia jugador.</returns>
+	/// <param name="usuario">Usuario.</param>
 	private int ObtenerExperienciaJugador(DataSnapshot usuario)
 	{
 		return Convert.ToInt32(usuario.Child("experiencia").GetValue(true));
 	}
 
-
+	/// <summary>
+	/// Añade el jugador a la lista de jugadores creados en esta instancia.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
     private void AñadirJugador(Jugador jugador)
     {
 		jugadores.Add (jugador);
     }
 
+	/// <summary>
+	/// Elimina el jugador enemigo de los jugadores de esta instancia.
+	/// </summary>
 	private void EliminarEnemigo(){
 		foreach (Carta carta in Enemigo.Cartas()) {
 			Cartas.Remove (carta.ID);
@@ -341,17 +466,30 @@ public class BaseDatos
 		jugadores.Remove (Enemigo);
 	}
 
+	/// <summary>
+	/// Actualiza los items del jugador alojado en base de datos.
+	/// </summary>
+	/// <param name="carta">Carta.</param>
+	/// <param name="item">Item.</param>
 	public void ActualizarItemCarta(Carta carta,Item item){
 		Local.EliminarItem (item);
 		ActualizarItemsBaseDatos ();
 		ActualizarCartaBaseDatos (carta);
 	}
 
+	/// <summary>
+	/// Actualiza la carta del jugador en base de datos.
+	/// </summary>
+	/// <param name="carta">Carta.</param>
 	public void ActualizarCartaBaseDatos(Carta carta){
 		int indiceCarta = Local.BuscarPosicionCarta (carta);
 		ReferenciaCartas().Child (indiceCarta.ToString ()).SetValueAsync (carta.ToDictionary ());
 	}
 
+	/// <summary>
+	/// Actualiza todo el jugador de base de datos.
+	/// </summary>
+	/// <param name="cambioCartas">If set to <c>true</c> cambio cartas.</param>
 	public void ActualizarJugadorBaseDatos(bool cambioCartas){
 		ActualizarItemsBaseDatos ();
 		if(cambioCartas)
@@ -360,39 +498,69 @@ public class BaseDatos
 		ActualizarExperienciaBaseDatos ();
 	}
 
+	/// <summary>
+	/// Actualiza los items del jugador en base de datos.
+	/// </summary>
 	private void ActualizarItemsBaseDatos(){
 		
 		ReferenciaItems().SetValueAsync (Local.ItemsToDictionary ());
 	}
 
+	/// <summary>
+	/// Actualiza las cartas del jugador en base de datos.
+	/// </summary>
 	private void ActualizarCartasBaseDatos(){
 
 		ReferenciaCartas().SetValueAsync (Local.CartasToDictionary ());
 	}
 
+	/// <summary>
+	/// Actualiza nivel y experiencia del jugador en base de datos.
+	/// </summary>
 	public void ActualizarNivelYExperienciaBaseDatos(){
 		ActualizarExperienciaBaseDatos ();
 		ActualizarNivelBaseDatos ();
 	}
 
+	/// <summary>
+	/// Actualiza solo experiencia en base de datos.
+	/// </summary>
 	private void ActualizarExperienciaBaseDatos(){
 		ReferenciaExperiencia ().SetValueAsync (Local.Experiencia);
 	}
 
+	/// <summary>
+	/// Actualiza solo nivel en base de datos.
+	/// </summary>
 	private void ActualizarNivelBaseDatos(){
 		ReferenciaNivel().SetValueAsync (Local.Nivel);
 	}
 
+	/// <summary>
+	/// Actualiza el mazo del jugador en base de datos.
+	/// </summary>
 	public void ActualizarMazoBaseDatos(){
 		ReferenciaMazo().SetValueAsync (Local.MazoToDictionary());
 	}
 
+	/// <summary>
+	/// Añade una carta al conjunto de cartas creadas en el juego en Firebase.
+	/// </summary>
+	/// <param name="familia">Familia.</param>
+	/// <param name="asset">Asset.</param>
     public void GuardarCarta(string familia,CartaBase asset)
     {
 		ReferenciaAssets().Push().SetRawJsonValueAsync(JsonUtility.ToJson(asset));
         Debug.Log("Guardar carta ok");
     }
 
+	/// <summary>
+	/// Busca en la base de datos Firebase si existe una evolucion con los parametros dados.
+	/// </summary>
+	/// <returns>The evolucion.</returns>
+	/// <param name="familia">Familia.</param>
+	/// <param name="evolucion">Evolucion.</param>
+	/// <param name="idEvolucion">Identifier evolucion.</param>
 	public KeyValuePair<string,CartaBase> BuscarEvolucion(Familia familia, int evolucion, int idEvolucion){
 		
 		var json = assets.Value as Dictionary<string, object>;
@@ -409,9 +577,8 @@ public class BaseDatos
 		}
 		return evolucionEncontrada;
 	}
-
-    //public bool Carga
-
+		
+	//Jugador enemigo solo existente en las batallas.
     public Jugador Enemigo
     {
         get
@@ -420,6 +587,7 @@ public class BaseDatos
         }
     }
 
+	//Jugador local, el que dispone de la sesión abierta.
     public Jugador Local
     {
         get
@@ -441,11 +609,17 @@ public class BaseDatos
         }
     }
 
+	/// <summary>
+	/// Crea el jugador enemigo de la batalla.
+	/// </summary>
 	public void CrearJugadorEnemigo(){
 		AñadirJugador(new Jugador(Jugador.TIPO_JUGADOR.AUTOMÁTICO));
 		AñadirWelcomePackJugador(Enemigo);
 	}
 
+	/// <summary>
+	/// Cierra la sesión del usuario, eliminando los datos necesarios en esta instancia.
+	/// </summary>
 	public void CerrarSesión(){
 		jugadores.Clear ();
 		Cartas.Clear ();

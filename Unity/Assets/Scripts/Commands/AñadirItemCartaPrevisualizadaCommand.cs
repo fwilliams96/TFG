@@ -11,6 +11,9 @@ public class AñadirItemCartaPrevisualizadaCommand : Comanda {
 		this.item = item;
     }
 
+	/// <summary>
+	/// Se añade el item a la carta previsualizada en el menú.
+	/// </summary>
     public override void EmpezarEjecucionComanda()
     {
 		GameObject cartaPrevisualizada = GameObject.FindGameObjectWithTag ("CartaPrevisualizada");

@@ -32,6 +32,10 @@ public class DragCreatureAttack : DraggingActions {
         dondeEstaCartaOCriatura = GetComponentInParent<WhereIsTheCardOrEntity>();
     }
 
+	/// <summary>
+	/// Determina si la carta puede controlarse por el jugador, si está disponible para moverse y si no se encuentra en defensa.
+	/// </summary>
+	/// <value><c>true</c> if se puede arrastrar; otherwise, <c>false</c>.</value>
     public override bool SePuedeArrastrar
     {
         get
@@ -50,7 +54,9 @@ public class DragCreatureAttack : DraggingActions {
            
         }
     }
-
+	/// <summary>
+	/// Empieza el dragg de la criatura.
+	/// </summary>
     public override void OnStartDrag()
     {
         dondeEstaCartaOCriatura.EstadoVisual = VisualStates.Arrastrando;
@@ -61,6 +67,9 @@ public class DragCreatureAttack : DraggingActions {
 		reset = false;
     }
 
+	/// <summary>
+	/// Se muestra la flecha roja que permite apuntar al objetivo.
+	/// </summary>
     public override void OnDraggingInUpdate()
     {
        
@@ -90,6 +99,9 @@ public class DragCreatureAttack : DraggingActions {
             
     }
 
+	/// <summary>
+	/// Determina si se ha apuntado a un enemigo correcto.
+	/// </summary>
     public override void OnEndDrag()
     {
         Target = FindTarget();
@@ -114,6 +126,9 @@ public class DragCreatureAttack : DraggingActions {
 		resetDragg ();
     }
 
+	/// <summary>
+	/// Retorna la flecha a su origen.
+	/// </summary>
 	public override void resetDragg(){
 		if (tag.Contains("Low"))
 			dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorAbajo;
@@ -129,7 +144,7 @@ public class DragCreatureAttack : DraggingActions {
 		reset = true;
 	}
 
-    // NOT USED IN THIS SCRIPT
+    //Se devuelve true porque no se usa.
     protected override bool DragSuccessful()
     {
         return true;

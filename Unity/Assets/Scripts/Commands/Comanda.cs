@@ -11,6 +11,9 @@ public class Comanda
         comandas = Comandas.Instance;
     }
 
+	/// <summary>
+	/// Función que añde a la cola una comanda y la ejecuta en caso de que sea la primera comanda.
+	/// </summary>
     public virtual void AñadirAlaCola()
     {
         comandas.Enqueue(this);
@@ -18,6 +21,9 @@ public class Comanda
             comandas.EjecutarPrimeraComanda();
     }
 
+	/// <summary>
+	/// Función que todas las comandas deben incorporar, es la que se llama al ejecutar una comanda.
+	/// </summary>
     public virtual void EmpezarEjecucionComanda()
     {
         // list of everything that we have to do with this command (draw a card, play a card, play spell effect, etc...)

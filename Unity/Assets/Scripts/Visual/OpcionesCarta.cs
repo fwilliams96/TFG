@@ -11,6 +11,9 @@ public class OpcionesCarta : OpcionesObjeto
     #region Getters/Setters
     #endregion
 
+	/// <summary>
+	/// Muestra la previsualizacion de la carta.
+	/// </summary>
     public override void MostrarOpciones()
     {
         MostrarPrevisualizacion();

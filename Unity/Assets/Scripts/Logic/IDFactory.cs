@@ -12,13 +12,19 @@ public static class IDFactory {
         Count++;
         return Count;
     }
-	
-	/*public static void ResetIDs()
+
+	/// <summary>
+	/// Elimina todos los identificadores creados
+	/// </summary>
+	public static void ResetIDs()
     {
         Count = 0;
-    }*/
+    }
 
-	public static void ResetIDs()
+	/// <summary>
+	/// Resetea hasta los elementos constantes del jugador (items y cartas)
+	/// </summary>
+	public static void EliminarIDsBatalla()
 	{
 		//Cartas enemigo
 		for (int i = 0; i < 8; i++) {

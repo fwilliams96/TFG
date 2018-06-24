@@ -47,7 +47,7 @@ public class DamageEffect : MonoBehaviour {
     }
     /// <summary>
     /// Creates the damage effect.
-    /// This is a static method, so it should be called like this: DamageEffect.CreateDamageEffect(transform.position, 5);
+    /// Muestra el daño a la criatura o jugador.
     /// </summary>
     /// <param name="position">Position.</param>
     /// <param name="amount">Amount.</param>

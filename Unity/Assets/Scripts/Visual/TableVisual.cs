@@ -64,6 +64,13 @@ public class TableVisual : MonoBehaviour
         }
         cursorSobreEstaMesa = haPasadoPorColider;
     }
+
+	/// <summary>
+	/// Añade al territorio de batalla una magica.
+	/// </summary>
+	/// <param name="ca">Ca.</param>
+	/// <param name="idUnico">Identifier unico.</param>
+	/// <param name="indiceSlot">Indice slot.</param>
     public void AñadirMagica(CartaBase ca, int idUnico, int indiceSlot)
     {
         //Debug.Log("Añadir ente magica");
@@ -72,6 +79,12 @@ public class TableVisual : MonoBehaviour
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 		
+	/// <summary>
+	/// Añade al territorio de batalla una criatura en defensa.
+	/// </summary>
+	/// <param name="ca">Ca.</param>
+	/// <param name="idUnico">Identifier unico.</param>
+	/// <param name="indiceSlot">Indice slot.</param>
     public void AñadirCriaturaDefensa(CartaBase ca, int idUnico, int indiceSlot)
     {
         //Debug.Log("Añadir ente criatura como defensa");
@@ -80,6 +93,12 @@ public class TableVisual : MonoBehaviour
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 
+	/// <summary>
+	///Añade al territorio de batalla una criatura en ataque.
+	/// </summary>
+	/// <param name="ca">Ca.</param>
+	/// <param name="idUnico">Identifier unico.</param>
+	/// <param name="indiceSlot">Indice slot.</param>
     public void AñadirCriaturaAtaque(CartaBase ca, int idUnico, int indiceSlot)
     {
         //Debug.Log("Añadir ente criatura como ataque");
@@ -89,6 +108,13 @@ public class TableVisual : MonoBehaviour
         ConfigurarEnte(creature, ca, idUnico, indiceSlot);
     }
 
+	/// <summary>
+	/// Instancia el ente y configura sus valores.
+	/// </summary>
+	/// <param name="ente">Ente.</param>
+	/// <param name="ca">Ca.</param>
+	/// <param name="idUnico">Identifier unico.</param>
+	/// <param name="indiceSlot">Indice slot.</param>
 	private void ConfigurarEnte(GameObject ente, CartaBase ca, int idUnico, int indiceSlot)
     {
 		string tagEnte ="";
@@ -127,7 +153,12 @@ public class TableVisual : MonoBehaviour
         Comandas.Instance.CompletarEjecucionComanda();
     }
 
-    public int PosicionSlotNuevaCriatura(float MouseX)
+	/// <summary>
+	/// Indica la posicion donde debe colocarse el ente.
+	/// </summary>
+	/// <returns>The slot nueva criatura.</returns>
+	/// <param name="MouseX">Mouse x.</param>
+    public int PosicionSlotNuevaEnte(float MouseX)
     {
         // if there are no creatures or if we are pointing to the right of all creatures with a mouse.
         // right - because the table slots are flipped and 0 is on the right side.
@@ -144,7 +175,11 @@ public class TableVisual : MonoBehaviour
         return 0;
     }
 
-    public void EliminarCriaturaID(int IDToRemove)
+	/// <summary>
+	/// Elimina el ente del territorio.
+	/// </summary>
+	/// <param name="IDToRemove">Identifier to remove.</param>
+    public void EliminarEnteID(int IDToRemove)
     {
         // TODO: This has to last for some time
         // Adding delay here did not work because it shows one creature die, then another creature die. 

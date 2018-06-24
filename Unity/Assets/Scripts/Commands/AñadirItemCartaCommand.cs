@@ -13,6 +13,9 @@ public class AñadirItemCartaCommand : Comanda {
 		this.item = item;
     }
 
+	/// <summary>
+	/// Función que añade el item al script  progreso visual incoporado al gameobject de la carta.
+	/// </summary>
     public override void EmpezarEjecucionComanda()
     {
 		GameObject cartaG = IDHolder.GetGameObjectWithID (carta.ID);

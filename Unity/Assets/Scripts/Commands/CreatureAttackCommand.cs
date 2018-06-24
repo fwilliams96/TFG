@@ -18,6 +18,9 @@ public class CreatureAttackCommand : Comanda
 		this.DamageTaken = damageTaken;
     }
 
+	/// <summary>
+	/// Llama al script visual que permite atacar al jugador o otra criatura.
+	/// </summary>
     public override void EmpezarEjecucionComanda()
     {
         GameObject Attacker = IDHolder.GetGameObjectWithID(AttackerUniqueID);

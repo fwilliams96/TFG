@@ -23,6 +23,9 @@ public class Eventos : MonoBehaviour {
         dragging = false;
     }
 
+	/// <summary>
+	/// Click sobre el ente o carta.
+	/// </summary>
     public void Click()
     {
         //Creamos un plano con la normal y la posicion del objeto intersectado
@@ -36,6 +39,9 @@ public class Eventos : MonoBehaviour {
         m0 = transform.position - mRay.GetPoint(rayDistance);
     }
 
+	/// <summary>
+	/// Se mantiene clicada la carta o ente.
+	/// </summary>
 	public void Still(){
 		if (da != null) {
 			if (!da.SePuedeArrastrar && dragging) { 
@@ -46,6 +52,9 @@ public class Eventos : MonoBehaviour {
 
 	}
 
+	/// <summary>
+	/// Se mueve la carta o ente.
+	/// </summary>
     public void Dragg()
     {
 		if (da != null) {
@@ -73,6 +82,9 @@ public class Eventos : MonoBehaviour {
         //mostrar previsualizacion
     }
 
+	/// <summary>
+	/// Se suelta la carta o ente.
+	/// </summary>
     public void End()
     {
 		if (!dragging) {

@@ -21,7 +21,9 @@ public class CartaPartida : IIdentifiable
 		Recursos.CartasCreadasEnElJuego.Add(idCarta, this);
     }
 
-    // method to set or reset mana cost
+    /// <summary>
+    /// Resetea el coste de mana de la carta.
+    /// </summary>
     public void ResetCosteMana()
     {
         CosteManaActual = assetCarta.CosteMana;

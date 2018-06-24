@@ -16,6 +16,9 @@ public class PlayAEntityCommand : Comanda
         this.ente = ente;
     }
 
+	/// <summary>
+	/// Función que permite jugar una carta al jugador.
+	/// </summary>
     public override void EmpezarEjecucionComanda()
     {
         //Eliminar la carta de la mano del jugador y elimina el gameobject

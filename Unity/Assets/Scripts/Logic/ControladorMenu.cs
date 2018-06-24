@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+//Determina la pantalla en que nos encontramos
 public enum PANTALLA_MENU
 {
 	INVENTARIO,
@@ -33,6 +34,9 @@ public class ControladorMenu : MonoBehaviour {
 		
 	}
 
+	/// <summary>
+	/// Permite iniciar la musica del menu.
+	/// </summary>
 	void IniciarMusica(){
 		if (!ConfiguracionUsuario.Instance.Musica) {
 			Camera.main.GetComponent<AudioSource> ().Pause ();
@@ -49,6 +53,11 @@ public class ControladorMenu : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Permite agregar un item a la carta.
+	/// </summary>
+	/// <param name="idCarta">Identifier carta.</param>
+	/// <param name="idItem">Identifier item.</param>
 	public void AgregarItemCarta(int idCarta, int idItem){
 
 		Carta carta = BuscarCarta (idCarta);
@@ -89,6 +98,10 @@ public class ControladorMenu : MonoBehaviour {
 
 	}
 
+	/// <summary>
+	/// Permite añadir experiencia al jugador cuando se usa un item.
+	/// </summary>
+	/// <returns>The experiencia jugador.</returns>
 	private int AñadirExperienciaJugador(){
 		ConfiguracionUsuario settings = ConfiguracionUsuario.Instance;
 		int min = 0;
@@ -113,6 +126,11 @@ public class ControladorMenu : MonoBehaviour {
 		return exp;
 	}
 
+	/// <summary>
+	/// Busca la carta a partir de su identificador
+	/// </summary>
+	/// <returns>The carta.</returns>
+	/// <param name="idCarta">Identifier carta.</param>
 	private Carta BuscarCarta(int idCarta){
 		bool trobat = false;
 		int i = 0;
@@ -128,6 +146,11 @@ public class ControladorMenu : MonoBehaviour {
 		return carta;
 	}
 
+	/// <summary>
+	/// Busca el item a partir de su identificador.
+	/// </summary>
+	/// <returns>The item.</returns>
+	/// <param name="idItem">Identifier item.</param>
 	private Item BuscarItem(int idItem){
 		bool trobat = false;
 		int i = 0;
@@ -143,16 +166,31 @@ public class ControladorMenu : MonoBehaviour {
 		return item;
 	}
 
+	/// <summary>
+	/// Devuelve si se puede evolucionar la carta o no.
+	/// </summary>
+	/// <returns><c>true</c>, if puede evolucionar was sed, <c>false</c> otherwise.</returns>
+	/// <param name="idCarta">Identifier carta.</param>
 	public bool SePuedeEvolucionar(int idCarta){
 		Carta carta = BuscarCarta (idCarta);
 		return ExisteEvolucion(carta) && carta.Progreso.Piedra >= 100f && carta.Progreso.Pocion >= 100f;
 	}
 
+	/// <summary>
+	/// Devuelve si existe una evolucion para la carta.
+	/// </summary>
+	/// <returns><c>true</c>, if evolucion was existed, <c>false</c> otherwise.</returns>
+	/// <param name="idCarta">Identifier carta.</param>
 	public bool ExisteEvolucion(int idCarta){
 		Carta carta = BuscarCarta (idCarta);
 		return ExisteEvolucion (carta);
 	}
 
+	/// <summary>
+	/// Devuelve si existe una evolucion para la carta.
+	/// </summary>
+	/// <returns><c>true</c>, if evolucion was existed, <c>false</c> otherwise.</returns>
+	/// <param name="carta">Carta.</param>
 	private bool ExisteEvolucion(Carta carta){
 		Familia familia = carta.AssetCarta.Familia;
 		int evolucionActual = carta.AssetCarta.Evolucion;
@@ -161,10 +199,21 @@ public class ControladorMenu : MonoBehaviour {
 		return !"".Equals(evolucion.Key)  && null != evolucion.Value;
 	}
 
+	/// <summary>
+	/// Busca la siguiente evolucion en base de datos.
+	/// </summary>
+	/// <returns>The evolucion.</returns>
+	/// <param name="familia">Familia.</param>
+	/// <param name="evolucionActual">Evolucion actual.</param>
+	/// <param name="idEvolucion">Identifier evolucion.</param>
 	public KeyValuePair<string,CartaBase> BuscarEvolucion(Familia familia, int evolucionActual, int idEvolucion){
 		return BaseDatos.Instance.BuscarEvolucion (familia, evolucionActual, idEvolucion);
 	}
 
+	/// <summary>
+	/// Permite evolucionar la carta.
+	/// </summary>
+	/// <param name="cartaG">Carta g.</param>
 	public void EvolucionarCarta(GameObject cartaG){
 		Carta carta = BuscarCarta (cartaG.GetComponent<IDHolder>().UniqueID);
 		//Buscamos la evolución
@@ -187,6 +236,10 @@ public class ControladorMenu : MonoBehaviour {
 		BaseDatos.Instance.ActualizarCartaBaseDatos (carta);
 	}
 
+	/// <summary>
+	/// Muestra la accion principal segun la pantalla que nos encontremos.
+	/// </summary>
+	/// <param name="carta">Carta.</param>
 	public void MostrarAccion(GameObject carta){
 		switch (pantallaActual) {
 			case PANTALLA_MENU.INVENTARIO:
@@ -201,6 +254,9 @@ public class ControladorMenu : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Permite cerrar la accion principal segun la pantalla que nos encontremos.
+	/// </summary>
 	public void CerrarAccion(){
 		switch (pantallaActual) {
 			case PANTALLA_MENU.INVENTARIO:
@@ -214,6 +270,11 @@ public class ControladorMenu : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// A la hora de editar el mazo de batalla, permite decir en que scroll view nos encontramos.
+	/// </summary>
+	/// <returns>The actual.</returns>
+	/// <param name="gObj">G object.</param>
 	public static TablaCartas TablaActual(GameObject gObj){
 		TablaCartas tabla = null;
 		if(gObj.tag.Equals("CartaFueraMazo")){
@@ -224,6 +285,10 @@ public class ControladorMenu : MonoBehaviour {
 		return tabla;
 	}
 
+	/// <summary>
+	/// Añade una carta de las cartas fuera del mazo al mazo.
+	/// </summary>
+	/// <param name="carta">Carta.</param>
 	public void AñadirElementoMazo(GameObject carta){
 		TablaCartas tabla = GameObject.FindGameObjectWithTag("TablaMazo").GetComponent<TablaCartas>();
 		if (tabla.NumElementos () < 8)
@@ -233,11 +298,19 @@ public class ControladorMenu : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Añade una carta del mazo a las cartas fuera del mazo.
+	/// </summary>
+	/// <param name="carta">Carta.</param>
 	public void AñadirElementoCartas(GameObject carta){
 		TablaCartas tabla = GameObject.FindGameObjectWithTag("TablaCartas").GetComponent<TablaCartas>();
 		tabla.AñadirCarta (carta);
 	}
 
+	/// <summary>
+	/// Guarda el nuevo mazo.
+	/// </summary>
+	/// <returns>The nuevo mazo.</returns>
 	public int GuardarNuevoMazo(){
 		int result = 0;
 		TablaCartas tabla = GameObject.FindGameObjectWithTag("TablaMazo").GetComponent<TablaCartas>();
@@ -251,6 +324,10 @@ public class ControladorMenu : MonoBehaviour {
 		return result;
 	}
 
+	/// <summary>
+	/// Obtiene las cartas del scroll view del mazo y las guarda en el mazo.
+	/// </summary>
+	/// <param name="cartasMazo">Cartas mazo.</param>
 	private void ModificarMazo(List<GameObject> cartasMazo){
 		Jugador jugador = BaseDatos.Instance.Local;
 		List<int> idCartasMazo = new List<int>();
@@ -263,6 +340,11 @@ public class ControladorMenu : MonoBehaviour {
 		BaseDatos.Instance.ActualizarMazoBaseDatos ();
 	}
 
+	/// <summary>
+	/// Determina si la carta pertence al mazo actual o no.
+	/// </summary>
+	/// <returns><c>true</c>, if fuera mazo was cartaed, <c>false</c> otherwise.</returns>
+	/// <param name="carta">Carta.</param>
 	public bool CartaFueraMazo(Carta carta){
 		Jugador jugador = BaseDatos.Instance.Local;
 		int indice = jugador.BuscarPosicionCarta (carta);
@@ -275,14 +357,27 @@ public class ControladorMenu : MonoBehaviour {
 		return !trobat;
 	}
 
+	/// <summary>
+	/// Devuelve el nivel del jugador
+	/// </summary>
+	/// <returns>The nivel jugador.</returns>
 	public string ObtenerNivelJugador(){
 		return BaseDatos.Instance.Local.Nivel.ToString ();
 	}
 
+	/// <summary>
+	/// Devuelve la experiencia del jugador.
+	/// </summary>
+	/// <returns>The experiencia jugador.</returns>
 	public float ObtenerExperienciaJugador(){
 		return BaseDatos.Instance.Local.Experiencia / 100f;
 	}
 
+	/// <summary>
+	/// Funcion global que devuelve items, todas las cartas, las cartas del mazo o las cartas de fuera de lmazo.
+	/// </summary>
+	/// <returns>The elemento.</returns>
+	/// <param name="tipoElementos">Tipo elementos.</param>
 	public List<System.Object> RecogerElemento(Elementos.TIPO_ELEMENTOS tipoElementos){
 		List<System.Object> elementos;
 		switch (tipoElementos) {
@@ -309,6 +404,10 @@ public class ControladorMenu : MonoBehaviour {
 		return elementos;
 	}
 
+	/// <summary>
+	/// Devuelve las cartas fuera del mazo.
+	/// </summary>
+	/// <returns>The cartas fuera mazo.</returns>
 	private List<System.Object> BuscarCartasFueraMazo(){
 		List<System.Object> cartasFueraMazo = new List<System.Object> ();
 		foreach (Carta carta in BaseDatos.Instance.Local.Cartas()) {
@@ -319,6 +418,10 @@ public class ControladorMenu : MonoBehaviour {
 		return cartasFueraMazo;
 	}
 
+	/// <summary>
+	/// Actualiza los ajustes de musica.
+	/// </summary>
+	/// <param name="musica">If set to <c>true</c> musica.</param>
 	public void ActualizarMusica(bool musica){
 		if (musica) {
 			if(!Camera.main.GetComponent<AudioSource> ().isPlaying)
@@ -329,8 +432,12 @@ public class ControladorMenu : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Cierra sesión del jugador actual, eliminando todos los datos.
+	/// </summary>
 	public void CerrarSesión(){
 		SesionUsuario.Instance.CerrarSesión ();
+		IDFactory.ResetIDs ();
 		GameObject objetosGenerales = GameObject.FindGameObjectWithTag ("ObjetosGenerales");
 		GameObject confUsuario = GameObject.FindGameObjectWithTag ("ConfiguracionUsuario");
 		Destroy (objetosGenerales);

@@ -12,6 +12,9 @@ public class ChangeCreaturePosition : Comanda
         this.pos = pos;
     }
 
+	/// <summary>
+	/// Función que cambia la posición de la criatura (defensa o ataque)
+	/// </summary>
     public override void EmpezarEjecucionComanda()
     {
         GameObject Attacker = IDHolder.GetGameObjectWithID(AttackerUniqueID);

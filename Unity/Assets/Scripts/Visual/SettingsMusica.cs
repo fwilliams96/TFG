@@ -19,6 +19,10 @@ public class SettingsMusica : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Actualiza la musica en settings.
+	/// </summary>
+	/// <param name="valor">Valor.</param>
 	public void CambiarMusica(int valor){
 		ConfiguracionUsuario settings = ConfiguracionUsuario.Instance;
 		if (valor == 0) {

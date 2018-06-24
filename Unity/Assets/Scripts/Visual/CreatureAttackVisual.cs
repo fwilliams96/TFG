@@ -5,6 +5,12 @@ using DG.Tweening;
 public class CreatureAttackVisual : EnteVisual
 {
 
+	/// <summary>
+	/// Realiza el ataque visual a la criatura objetivo.
+	/// </summary>
+	/// <param name="targetUniqueID">Target unique I.</param>
+	/// <param name="damageTaken">Damage taken.</param>
+	/// <param name="targetHealthAfter">Target health after.</param>
     public void AttackTarget(int targetUniqueID, int damageTaken,int targetHealthAfter)
     {
         manager.PuedeAtacar = false;
@@ -37,6 +43,10 @@ public class CreatureAttackVisual : EnteVisual
         });
     }
 
+	/// <summary>
+	/// Cambia la posición de la criatura.
+	/// </summary>
+	/// <param name="pos">Position.</param>
     public void ChangePosition(PosicionCriatura pos) //OPTIONAL 0 para ataque, 1 para defensa
     {
         if(pos.Equals(PosicionCriatura.ATAQUE))

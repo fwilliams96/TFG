@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-public class Global {
+public class CartasXML {
 
     public static class CARTAS
     {
         public static string[] FAMILIAS = { "Agua", "Fuego", "Tierra", "Aire", "Magica", "Ancestral" };
-		//public static string[] FAMILIAS = {"Magica" };
+		//Nombre de las cartas para cada familia.
         public static class FAMILIA
         {
 			public static string[] AIRE = { "Grifo", "Arpia","Arpia2","Tengu"};

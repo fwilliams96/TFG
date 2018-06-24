@@ -21,6 +21,9 @@ public class RopeTimer : MonoBehaviour, IEventSystemHandler
     {
     }
 
+	/// <summary>
+	/// Empieza el contador
+	/// </summary>
     public void StartTimer()
 	{
         timeTillZero = TimeForOneTurn;
@@ -28,12 +31,16 @@ public class RopeTimer : MonoBehaviour, IEventSystemHandler
         ropeIsBurning = false;
 	} 
 
+	/// <summary>
+	/// Para el contador.
+	/// </summary>
 	public void StopTimer()
 	{
 		counting = false;
 	}
 	
 	// Update is called once per frame
+	//Actualiza el tiempo en el text de la batalla.
 	void Update () 
 	{
 		if (counting) 

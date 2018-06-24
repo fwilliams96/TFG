@@ -42,6 +42,10 @@ public class Progreso
         }
     }
 
+	/// <summary>
+	/// Determina los atributos necesarios que se guardan en base de datos del progreso.
+	/// </summary>
+	/// <returns>The dictionary.</returns>
     public Dictionary<string, System.Object> ToDictionary()
     {
         Dictionary<string, System.Object> result = new Dictionary<string, System.Object>();

@@ -7,7 +7,7 @@ public class SameDistanceChildren : MonoBehaviour {
 
     public Transform[] Children;
 
-	// Use this for initialization
+	//Ajusta la distancia entre los slots
 	void Awake () 
     {
         Vector3 firstElementPos = Children[0].transform.position;

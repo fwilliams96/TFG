@@ -12,6 +12,9 @@ public class UpdatePlayerHealthCommand : Comanda {
 		this.vidaActual = vidaActual;
     }
 
+	/// <summary>
+	/// Función que actualiza de forma visual la vida del jugador usuario.
+	/// </summary>
     public override void EmpezarEjecucionComanda()
     {
         PlayerArea areaJugador = Controlador.Instance.AreaJugador(p);

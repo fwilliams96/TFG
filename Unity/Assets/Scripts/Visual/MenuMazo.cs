@@ -14,6 +14,9 @@ public class MenuMazo : MonoBehaviour {
 		ControladorMenu.Instance.CerrarAccion ();
 	}
 
+	/// <summary>
+	/// Guarda o no el nuevo mazo.
+	/// </summary>
 	public void Aceptar(){
 		if (ControladorMenu.Instance.GuardarNuevoMazo () == 0) {
 			menus.GetComponent<Menu> ().Batalla ();

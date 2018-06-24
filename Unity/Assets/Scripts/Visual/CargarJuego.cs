@@ -18,13 +18,16 @@ public class CargarJuego : MonoBehaviour {
 		StartCoroutine (CheckForConnection ());
 	}
 
+	/// <summary>
+	/// Carga el juego o no según haya internet.
+	/// </summary>
+	/// <returns>The for connection.</returns>
 	private IEnumerator CheckForConnection() {
 		float startTime = Time.time;
 		while (!ExistsConnection() && Time.time < startTime + 6.0f) {
 			yield return new WaitForSeconds(0.1f);
 		}
 		if (existsConnection) {
-			//MessageManager.Instance.ShowMessage ("Hay conexion",1.5f);
 			if (!BaseDatos.Instance.BaseDatosInicializada)
 				BaseDatos.Instance.InicializarBase (Callback);
 		} else {
@@ -33,6 +36,10 @@ public class CargarJuego : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Mira si existe conexión a internet.
+	/// </summary>
+	/// <returns><c>true</c>, if connection was existsed, <c>false</c> otherwise.</returns>
 	public bool ExistsConnection()
 	{
 		string html = string.Empty;
@@ -51,15 +58,19 @@ public class CargarJuego : MonoBehaviour {
 		return isSuccess;
 	}
 
+	/// <summary>
+	/// Funcion de callback una vez el juego ha descargado la informacion completamente o no.
+	/// </summary>
+	/// <param name="message">Message.</param>
 	public void Callback(string message)
     {
 		if ("".Equals (message)) {
-			//Recursos.InicializarCartas();
-			if (SesionUsuario.Instance.ExisteSesion ()) {
-				BaseDatos.Instance.RecogerJugador (SesionUsuario.Instance.User.UserId, CargaJugador);
-			} else {
-				CargarEscenaLogin ();
-			}
+			//Descomentar esta linea y comentar las siguientes para inicializar Firebase con las cartas nuevas 
+			//Recursos.AñadirCartasAFirebase();
+			//Descomentar esta linea y comentar las demas para subir solo una carta a Firebase, cambiar familia y nombre del XML
+			//Recursos.AñadirCartaAFirebase("Magica","Destructor");
+			//Descomentar para no iniciar el juego y añadir a Firebase las nuevas cartas
+			IniciarJuego();
 		} else {
 			ProgressBar.Instance.OcultarBarraProgreso ();
 			MessageManager.Instance.ShowMessage (message,1.5f);
@@ -67,6 +78,21 @@ public class CargarJuego : MonoBehaviour {
         
     }
 
+	/// <summary>
+	/// Inicia el juego recogiendo los datos del jugador.
+	/// </summary>
+	private void IniciarJuego(){
+		if (SesionUsuario.Instance.ExisteSesion ()) {
+			BaseDatos.Instance.RecogerJugador (SesionUsuario.Instance.User.UserId, CargaJugador);
+		} else {
+			CargarEscenaLogin ();
+		}
+	}
+
+	/// <summary>
+	/// Carga la escena menú.
+	/// </summary>
+	/// <param name="message">Message.</param>
 	public void CargaJugador(string message){
 		if ("".Equals (message))
 			CargarEscenaMenu ();
