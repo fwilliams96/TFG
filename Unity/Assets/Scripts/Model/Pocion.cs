@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class Pocion : Item
 {
-	public Pocion() : base() {}
-
 	public Pocion(string rutaImagen, int cantidad) : base(rutaImagen,cantidad) {}
 
 	/// <summary>

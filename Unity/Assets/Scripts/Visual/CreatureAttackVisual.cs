@@ -23,7 +23,7 @@ public class CreatureAttackVisual : EnteVisual
         transform.DOMove(target.transform.position, 0.5f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.InCubic).OnComplete(() =>
         {
 
-				if (targetUniqueID == Controlador.Instance.Local.ID || targetUniqueID == Controlador.Instance.Enemigo.ID)
+			if (targetUniqueID == Controlador.Instance.Local.ID || targetUniqueID == Controlador.Instance.Enemigo.ID)
 			{
 				target.GetComponent<PlayerPortraitVisual>().HacerDaño(damageTaken,targetHealthAfter);
 			}else{
@@ -32,8 +32,10 @@ public class CreatureAttackVisual : EnteVisual
 				else
 					target.GetComponent<OneMagicaManager>().HacerDaño();
 			}
-			if(target.GetComponent<AudioSource>() != null && ConfiguracionUsuario.Instance.Musica)
-				target.GetComponent<AudioSource>().Play();
+			if(target.GetComponents<AudioSource>()[1] != null && target.GetComponents<AudioSource>()[1].clip != null && ConfiguracionUsuario.Instance.Musica){
+				target.GetComponents<AudioSource>()[1].Play();
+			}
+
             w.SetearOrdenCriatura();
             /*w.EstadoVisual = tempState;*/
 

@@ -72,7 +72,7 @@ public class Ente : ICharacter
         this.assetCarta = ca;
         defensa = ca.Defensa;
         ataque = ca.Ataque;
-        idCriatura = IDFactory.GetUniqueID();
+		idCriatura = IDFactory.GetBattleUniqueID();
         Recursos.EntesCreadosEnElJuego.Add(idCriatura, this);
     }
 

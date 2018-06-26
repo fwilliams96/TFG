@@ -20,7 +20,7 @@ public class Carta : IIdentifiable
         this.idAsset = idAsset;
         this.assetCarta = ca;
         // get unique int ID
-        idCarta = IDFactory.GetUniqueID();
+		idCarta = IDFactory.GetMenuUniqueID();
         progreso = new Progreso();
     }
 

@@ -17,8 +17,6 @@ public class BaseDatos
     private DataSnapshot assets;
 	private bool existsConnection;
 	public delegate void CallBack(string message);
-    //private SesionUsuario.CallBack callBack;
-	public Dictionary<int, Carta> Cartas;
     #endregion
 
     private BaseDatos()
@@ -26,7 +24,6 @@ public class BaseDatos
         this.assets = null;
         this.usuarioActual = null;
 		this.jugadores = new List<Jugador>();
-		Cartas = new Dictionary<int, Carta>();
     }
 
     public static BaseDatos Instance
@@ -300,7 +297,6 @@ public class BaseDatos
         string assetJSON = assets.Child(idAsset).GetRawJsonValue();
         CartaBase asset = JsonUtility.FromJson<CartaBase>(assetJSON);
         Carta carta = new Carta(idAsset, asset);
-		Cartas.Add (carta.ID, carta);
         if(progreso != null)
             carta.Progreso = progreso;
         return carta;
@@ -460,9 +456,6 @@ public class BaseDatos
 	/// Elimina el jugador enemigo de los jugadores de esta instancia.
 	/// </summary>
 	private void EliminarEnemigo(){
-		foreach (Carta carta in Enemigo.Cartas()) {
-			Cartas.Remove (carta.ID);
-		}
 		jugadores.Remove (Enemigo);
 	}
 
@@ -622,7 +615,6 @@ public class BaseDatos
 	/// </summary>
 	public void CerrarSesión(){
 		jugadores.Clear ();
-		Cartas.Clear ();
 		userIDActual = "";
 		usuarioActual = null;
 	}

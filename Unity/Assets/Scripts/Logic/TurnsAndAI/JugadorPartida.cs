@@ -19,7 +19,7 @@ public abstract class JugadorPartida : MonoBehaviour,ICharacter, IIdentifiable
 	protected AreaPosition area;
 
 	protected virtual void Awake(){
-		PlayerID = IDFactory.GetUniqueID();
+		PlayerID = IDFactory.GetBattleUniqueID();
 		Reset ();
 	}
 

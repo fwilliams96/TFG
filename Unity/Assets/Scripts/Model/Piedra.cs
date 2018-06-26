@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class Piedra : Item
 {
-	public Piedra() : base(){ }
-
 	public Piedra (string rutaImagen, int cantidad) : base (rutaImagen, cantidad){}
 
 	/// <summary>

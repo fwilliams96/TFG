@@ -212,8 +212,10 @@ public class ControladorJugador
         PararControlJugadores();
 		Button salirPartida = GameObject.FindGameObjectWithTag ("SalirPartida").GetComponent<Button> ();
 		salirPartida.interactable = false;
+		GameObject.FindGameObjectWithTag ("BotonFinTurno").GetComponent<Button> ().interactable = false;
         Controlador.Instance.StopTheTimer();
 		new MuerteJugadorCommand (jugador).AñadirAlaCola ();
+		IDFactory.RecoverCountMenu ();
 		int exp = AñadirExperienciaJugador (jugador);	
 		if (jugador.GetType() == typeof(JugadorHumano)) {
 			new GameOverCommand (jugador,exp).AñadirAlaCola ();
@@ -223,6 +225,7 @@ public class ControladorJugador
 			Carta carta = ObtenerCartaPremio ();
 			List<Item> items = ObtenerItemsPremio ();
 			AñadirPremioJugador (ganador,carta,items);
+			IDFactory.SaveCountMenu ();
 			new PremioPartidaCommand (jugador,carta,items,exp).AñadirAlaCola ();
 			BaseDatos.Instance.ActualizarJugadorBaseDatos (carta != null);
 		}

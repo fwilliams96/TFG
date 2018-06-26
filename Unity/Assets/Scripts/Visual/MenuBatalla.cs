@@ -22,6 +22,7 @@ public class MenuBatalla : MonoBehaviour {
     {
 		if (ControladorMenu.Instance.JugadorPuedeJugarBatalla ()) {
 			IDHolder.ClearIDHoldersList ();
+			IDFactory.SaveCountMenu ();
 			SceneManager.LoadScene ("Batalla");
 		} else {
 			MessageManager.Instance.ShowMessage ("Tu mazo de batalla no contiene 8 cartas", 1.5f);

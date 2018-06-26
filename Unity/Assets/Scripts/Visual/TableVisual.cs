@@ -143,6 +143,9 @@ public class TableVisual : MonoBehaviour
             w.EstadoVisual = VisualStates.MesaJugadorAbajo;
         else
             w.EstadoVisual = VisualStates.MesaJugadorArriba;
+		if (ente.GetComponents<AudioSource> () [0] != null && ente.GetComponents<AudioSource> () [0].clip != null) {
+			ente.GetComponents<AudioSource>()[0].Play();
+		}
         // add our unique ID to this creature
         IDHolder id = ente.AddComponent<IDHolder>();
         id.UniqueID = idUnico;

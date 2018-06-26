@@ -17,7 +17,7 @@ public class CartaPartida : IIdentifiable
         this.assetCarta = ca;
         // get unique int ID
 		ResetCosteMana();
-        idCarta = IDFactory.GetUniqueID();
+		idCarta = IDFactory.GetBattleUniqueID();
 		Recursos.CartasCreadasEnElJuego.Add(idCarta, this);
     }
 

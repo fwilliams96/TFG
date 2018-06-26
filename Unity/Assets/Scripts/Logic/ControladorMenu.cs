@@ -437,7 +437,7 @@ public class ControladorMenu : MonoBehaviour {
 	/// </summary>
 	public void CerrarSesión(){
 		SesionUsuario.Instance.CerrarSesión ();
-		IDFactory.ResetIDs ();
+		IDFactory.ResetAllIDs ();
 		GameObject objetosGenerales = GameObject.FindGameObjectWithTag ("ObjetosGenerales");
 		GameObject confUsuario = GameObject.FindGameObjectWithTag ("ConfiguracionUsuario");
 		Destroy (objetosGenerales);

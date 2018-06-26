@@ -19,7 +19,8 @@ public class SceneReloader: MonoBehaviour {
         Debug.Log("Scene reloaded");
         // reset all card and creature IDs
 		//TODO mirar si esto no afecta a las cartas e items del inventario
-		IDFactory.EliminarIDsBatalla();
+		IDFactory.ResetIDsBattle();
+		IDFactory.RecoverCountMenu ();
         IDHolder.ClearIDHoldersList();
         Comandas.Instance.Clear();
         Comandas.Instance.CompletarEjecucionComanda();

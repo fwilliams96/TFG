@@ -42,9 +42,9 @@ public class DragCreatureAttack : DraggingActions {
         {
             try
             {
-
-				return base.SePuedeControlar && manager.PuedeAtacar && Controlador.Instance.EstaEnPosicionAtaque(GetComponentInParent<IDHolder
-                    >().UniqueID);
+				return base.SePuedeControlar && manager.PuedeAtacar;
+				/*return base.SePuedeControlar && manager.PuedeAtacar && Controlador.Instance.EstaEnPosicionAtaque(GetComponentInParent<IDHolder
+                    >().UniqueID);*/
             }
             catch (System.Exception e)
             {
@@ -104,25 +104,31 @@ public class DragCreatureAttack : DraggingActions {
 	/// </summary>
     public override void OnEndDrag()
     {
-        Target = FindTarget();
-
-        if (Target != null)
-        {
-            int targetID = Target.GetComponent<IDHolder>().UniqueID;
-			if (targetID == Controlador.Instance.Local.ID || targetID == Controlador.Instance.Enemigo.ID) {
-				if (Controlador.Instance.SePuedeAtacarJugadorDeCara (targetID)) {
-					Controlador.Instance.AtacarJugador (GetComponentInParent<IDHolder> ().UniqueID, targetID);
+		if (Controlador.Instance.EstaEnPosicionAtaque (GetComponentInParent<IDHolder
+			> ().UniqueID)) {
+			Target = FindTarget ();
+			if (Target != null)
+			{
+				int targetID = Target.GetComponent<IDHolder>().UniqueID;
+				if (targetID == Controlador.Instance.Local.ID || targetID == Controlador.Instance.Enemigo.ID) {
+					if (Controlador.Instance.SePuedeAtacarJugadorDeCara (targetID)) {
+						Controlador.Instance.AtacarJugador (GetComponentInParent<IDHolder> ().UniqueID, targetID);
+					} else {
+						new ShowMessageCommand ("Todavía tienes enemigos cerca...", 2.0f).AñadirAlaCola ();
+					}
 				} else {
-					new ShowMessageCommand ("Todavía tienes enemigos cerca...", 2.0f).AñadirAlaCola ();
-				}
-			} else {
-				//Debug.Log("Target ID: " + targetID);
-				if (Recursos.EntesCreadosEnElJuego[targetID] != null)
-				{
-					Controlador.Instance.AtacarEnte(GetComponentInParent<IDHolder>().UniqueID, targetID);
+					//Debug.Log("Target ID: " + targetID);
+					if (Recursos.EntesCreadosEnElJuego[targetID] != null)
+					{
+						Controlador.Instance.AtacarEnte(GetComponentInParent<IDHolder>().UniqueID, targetID);
+					}
 				}
 			}
-        }
+		} else {
+			new ShowMessageCommand ("¡Antes debes cambiar a posición de ataque!", 1.5f).AñadirAlaCola ();
+		}
+
+        
 		resetDragg ();
     }
 
