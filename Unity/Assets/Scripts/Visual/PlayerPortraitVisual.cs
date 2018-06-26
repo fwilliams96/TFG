@@ -16,6 +16,9 @@ public class PlayerPortraitVisual : MonoBehaviour {
             AplicarEstiloPersonajeAsset();
     }
 
+	/// <summary>
+	/// Cambia como se ve la vida del jugador y su avatar.
+	/// </summary>
     public void AplicarEstiloPersonajeAsset()
     {
 		if (ConfiguracionUsuario.Instance.ConfiguracionBatalla.Equals (ConfiguracionUsuario.TIPO_CONFIGURACION.ENTERO)) {
@@ -30,6 +33,11 @@ public class PlayerPortraitVisual : MonoBehaviour {
 
     }
 
+	/// <summary>
+	/// Añade vida al jugador.
+	/// </summary>
+	/// <param name="vidaActual">Vida actual.</param>
+	/// <param name="vidaDespues">Vida despues.</param>
 	public void AumentarVida(int vidaActual, int vidaDespues){
 		StartCoroutine (AumentarVidaProgresivamente(vidaActual,vidaDespues));
 
@@ -50,6 +58,11 @@ public class PlayerPortraitVisual : MonoBehaviour {
 		Comandas.Instance.CompletarEjecucionComanda();
 	}
 
+	/// <summary>
+	/// Crea el daño visual en el jugador.
+	/// </summary>
+	/// <param name="daño">Daño.</param>
+	/// <param name="vida">Vida.</param>
     public void HacerDaño(int daño, int vida)
     {
         if (daño > 0)
@@ -64,6 +77,9 @@ public class PlayerPortraitVisual : MonoBehaviour {
         }
     }
 
+	/// <summary>
+	/// Animación de explosión del jugador.
+	/// </summary>
     public void Explotar()
     {
         Instantiate(ObjetosGenerales.Instance.ExplosionPrefab, transform.position, Quaternion.identity);

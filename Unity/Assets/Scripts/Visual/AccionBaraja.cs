@@ -30,6 +30,12 @@ public class AccionBaraja : MonoBehaviour {
 		BotonAccion.SetActive (false);
 	}
 
+	/// <summary>
+	/// Muestra la acción en el menú de editar mazo.
+	/// </summary>
+	/// <param name="carta">Carta.</param>
+	/// <param name="tipo">Tipo.</param>
+	/// <param name="funcion">Funcion.</param>
 	public void MostrarAccion(GameObject carta, TIPO_ACCION tipo, RegistrarFuncion funcion){
 		this.elementoActual = carta;
 		this.elementoActual.GetComponent<OneCardManager> ().PuedeSerJugada = true;

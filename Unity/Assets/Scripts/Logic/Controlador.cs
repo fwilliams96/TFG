@@ -3,29 +3,21 @@ using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-
-public enum PosicionCriatura { ATAQUE, DEFENSA };
-
 // this class will take care of switching turns and counting down time until the turn expires
 //
 public class Controlador : MonoBehaviour
 {
 
     #region Atributos
-    // PUBLIC FIELDS
-    // for Singleton Pattern
     public static Controlador Instance;
     private ControladorJugador controladorJugador;
     private ControladorEnte controladorEnte;
 	private List<JugadorPartida> jugadores;
-
-    // PRIVATE FIELDS
-    // reference to a timer to measure 
     private RopeTimer timer;
     #endregion
     #region Getters/Setters
-    // PROPERTIES
-   
+
+	//Jugador actual de la partida.
     public JugadorPartida JugadorActual
     {
         get
@@ -39,6 +31,7 @@ public class Controlador : MonoBehaviour
         }
     }
 
+	//Jugador que corresponde al usuario del juego.
     public JugadorPartida Local
     {
         get
@@ -47,6 +40,7 @@ public class Controlador : MonoBehaviour
         }
     }
 
+	//Jugador que corresponde al contrincante bot del juego.
 	public JugadorPartida Enemigo
     {
         get
@@ -78,6 +72,9 @@ public class Controlador : MonoBehaviour
         //INICIALIZAR CONTROLS PLAYER,ENTE
     }
 
+	/// <summary>
+	/// Inicializa la música de la batalla en función de la configuración.
+	/// </summary>
 	void IniciarMusica(){
 		if (!ConfiguracionUsuario.Instance.Musica) {
 			Camera.main.GetComponent<AudioSource> ().Pause ();
@@ -89,6 +86,9 @@ public class Controlador : MonoBehaviour
         InicializacionJuego();
     }
 
+	/// <summary>
+	/// Se inicia la partida, inicializando los valores de cada jugador, repartiendo cartas y empezando el primer turno.
+	/// </summary>
     public void InicializacionJuego()
     {
         //Debug.Log("In TurnManager.OnGameStart()");
@@ -131,6 +131,10 @@ public class Controlador : MonoBehaviour
         });
     }
 
+	/// <summary>
+	/// Función que se llama al terminarse un turno, cierra los menus abiertos, 
+	/// para el temporizador y el control del jugador y inicia un nuevo turno.
+	/// </summary>
     public void EndTurn()
     {
 		if (Comandas.Instance.ComandasDeCambioTurnoPendientes ())
@@ -147,11 +151,18 @@ public class Controlador : MonoBehaviour
         	new StartATurnCommand(OtroJugador(JugadorActual)).AñadirAlaCola();
     }
 
+	/// <summary>
+	/// Stops the timer.
+	/// </summary>
     public void StopTheTimer()
     {
         timer.StopTimer();
     }
 
+	/// <summary>
+	/// Actualiza los valores del jugador al iniciarse un turno.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
 	public void ActualizarValoresJugador(JugadorPartida jugador)
     {
 		timer.StartTimer();
@@ -166,6 +177,10 @@ public class Controlador : MonoBehaviour
         return controladorJugador.SePermiteControlarElJugador(ownerPlayer);
     }
 
+	/// <summary>
+	/// Habilita o deshabilita el botón de fin de turno en función del jugador.
+	/// </summary>
+	/// <param name="P">P.</param>
 	public void ActivarBotonFinDeTurno(JugadorPartida P)
     {
 		
@@ -204,15 +219,9 @@ public class Controlador : MonoBehaviour
         {
             if (jugador.NumCartasMano() < 4)
             {
-                //Carta newCard = new Carta(jugador.CartasEnElMazo()[0]);
 				//Esto nos devuelve la carta actual del mazo que se recorre infinitamente
 				Carta newCard = (Carta)jugador.CartaActual();
 				CartaPartida carta = new CartaPartida (newCard.AssetCarta);
-				//Recursos.CartasCreadasEnElJuego
-				//TODO ver si ya existe la carta en baraja, si existe volver a crear una instancia para cambiar el id
-				/*if (jugador.ContieneCarta (newCard)) {
-					newCard = newCard.
-				}*/
 				jugador.AñadirCartaMano(0, carta);
                 // Debug.Log(hand.CardsInHand.Count);
                 new DrawACardCommand(jugador.CartasEnLaMano()[0], jugador, fast, fromDeck: true).AñadirAlaCola();
@@ -304,11 +313,7 @@ public class Controlador : MonoBehaviour
     {
         controladorJugador.RestarManaCarta(jugador, carta);
     }
-
-    /// <summary>
-	/// Muestra cartas jugables de la mano del jugador
-    /// </summary>
-    /// <param name="jugador">Jugador.</param>
+		
     public void MostrarCartasJugablesJugador(JugadorPartida jugador)
     {
 		controladorJugador.ActualizarEstadoCartasJugadorActual(jugador);
@@ -343,12 +348,23 @@ public class Controlador : MonoBehaviour
 		return controladorJugador.SePuedeAtacarJugadorDeCara (idJugador);
 	}
 
+	/// <summary>
+	/// Permite añadir vida adicinal al jugador.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
+	/// <param name="vida">Vida.</param>
 	public  void GiveHealth(JugadorPartida jugador, int vida){
 		jugador.Defensa += vida;
 		if(jugador.GetType() == typeof(JugadorHumano))
 			new ShowMessageCommand ("¡Obtienes "+vida+" de vida!", 1.0f).AñadirAlaCola ();
 		ActualizarVidaJugador (jugador, jugador.Defensa - vida);
 	}
+
+	/// <summary>
+	/// Permite añadir mana adicinal al jugador.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
+	/// <param name="mana">Mana.</param>
 	public void GiveManaBonus(JugadorPartida jugador, int mana)
 	{
 		jugador.ConseguirManaExtra(mana);
@@ -388,6 +404,11 @@ public class Controlador : MonoBehaviour
         return controladorEnte.EsMagica(idEnte);
     }
 
+	/// <summary>
+	/// Determina el jugador dueño del ente.
+	/// </summary>
+	/// <returns>The dueño ente.</returns>
+	/// <param name="ente">Ente.</param>
 	public JugadorPartida ObtenerDueñoEnte(Ente ente){
 
 		JugadorPartida jugador = Controlador.Instance.Local.Area.Equals (ente.Area) ? Controlador.Instance.Local : Controlador.Instance.Enemigo;
@@ -395,6 +416,12 @@ public class Controlador : MonoBehaviour
 		return jugador;
 	}	
 
+	/// <summary>
+	/// Permite dañar una criatura sin mostrar un ataque visual, en caso de que se encuentre en defensa y 
+	/// muera se quita vida al jugador, en ataque siempre se quita vida al jugador.
+	/// </summary>
+	/// <param name="criaturaObjetivo">Criatura objetivo.</param>
+	/// <param name="daño">Daño.</param>
 	public void DañarCriatura(Criatura criaturaObjetivo,int daño){
 		JugadorPartida objetivo = ObtenerDueñoEnte (criaturaObjetivo);
 		controladorEnte.QuitarVidaCriatura(criaturaObjetivo,daño);
@@ -403,19 +430,28 @@ public class Controlador : MonoBehaviour
 		else if (criaturaObjetivo.PosicionCriatura.Equals(PosicionCriatura.DEFENSA) && controladorEnte.CriaturaMuerta(criaturaObjetivo))
 			controladorJugador.QuitarVidaJugador(objetivo,criaturaObjetivo.Defensa);
 	}
-
+		
 	public void DañarCriatura(Criatura criaturaAtacante, Criatura criaturaObjetivo){
 		DañarCriatura (criaturaObjetivo,criaturaAtacante.Ataque);
 	}
 
+	/// <summary>
+	/// Función que permite que la criatura ataque al jugador.
+	/// </summary>
+	/// <param name="idCriaturaAtacante">Identifier criatura atacante.</param>
+	/// <param name="idJugadorObjetivo">Identifier jugador objetivo.</param>
 	public void AtacarJugador(int idCriaturaAtacante, int idJugadorObjetivo){
 		Criatura atacante = (Criatura)Recursos.EntesCreadosEnElJuego[idCriaturaAtacante];
 		JugadorPartida jugador = Controlador.Instance.Local.ID == idJugadorObjetivo ? Controlador.Instance.Local : Controlador.Instance.Enemigo;
 		atacante.HaAtacado = true;
-		controladorJugador.AtacarJugador (atacante, jugador);
-		
+		controladorJugador.AtacarJugador (atacante, jugador);	
 	}
 
+	/// <summary>
+	/// Permite atacar a una criatura, mostrándose la animación de ataque.
+	/// </summary>
+	/// <param name="criaturaAtacante">Criatura atacante.</param>
+	/// <param name="criaturaObjetivo">Criatura objetivo.</param>
 	public void AtacarCriatura(Criatura criaturaAtacante, Criatura criaturaObjetivo){
 		JugadorPartida objetivo = ObtenerDueñoEnte (criaturaObjetivo);
 		controladorEnte.AtacarCriatura(criaturaAtacante, criaturaObjetivo);
@@ -426,12 +462,22 @@ public class Controlador : MonoBehaviour
 			controladorJugador.QuitarVidaJugador (objetivo, System.Math.Abs (criaturaObjetivo.Defensa));
 	}
 
+	/// <summary>
+	/// Función que se llama cuando se ataca a un ente mágico.
+	/// </summary>
+	/// <param name="criaturaAtacante">Criatura atacante.</param>
+	/// <param name="magicaObjetivo">Magica objetivo.</param>
 	public void AtacarMagica(Criatura criaturaAtacante, Magica magicaObjetivo){
 		JugadorPartida objetivo = ObtenerDueñoEnte (magicaObjetivo);
 		controladorEnte.AtacarMagica(criaturaAtacante, magicaObjetivo);
 		controladorJugador.QuitarVidaJugador(objetivo,criaturaAtacante.Ataque);
 	}
 
+	/// <summary>
+	/// Función que permite atacar a un ente.
+	/// </summary>
+	/// <param name="idAtacante">Identifier atacante.</param>
+	/// <param name="idObjetivo">Identifier objetivo.</param>
 	public void AtacarEnte(int idAtacante, int idObjetivo)
     {
         Ente atacante = Recursos.EntesCreadosEnElJuego[idAtacante];
@@ -470,6 +516,9 @@ public class Controlador : MonoBehaviour
         controladorEnte.MostrarAccion(idEnte);
     }
 
+	/// <summary>
+	/// Vacía los datos de la partida.
+	/// </summary>
 	public void Clear(){
 		BaseDatos.Instance.Clear ();
 		jugadores.Clear ();

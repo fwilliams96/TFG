@@ -10,6 +10,7 @@ public class TouchManagerMenu : MonoBehaviour {
     GameObject gObj;
     Plane objPlane;
     Vector3 m0;
+	//Determina si se ha pulsado un boton.
 	GameObject current;
 	public GameObject ObjetoActual {
 		get {
@@ -29,7 +30,11 @@ public class TouchManagerMenu : MonoBehaviour {
 	void Start () {
 		
 	}
-		
+	/// <summary>
+	/// Genera un rayo de la posicion del dedo a la camara.
+	/// </summary>
+	/// <returns>The mouse ray.</returns>
+	/// <param name="touchPos">Touch position.</param>
 	Ray GenerateMouseRay(Vector3 touchPos)
 	{
 		Vector3 mousePosFar = new Vector3(touchPos.x, touchPos.y, Camera.main.farClipPlane);
@@ -69,6 +74,7 @@ public class TouchManagerMenu : MonoBehaviour {
 			else if(Input.GetTouch(0).phase == TouchPhase.Stationary)
 			{
 			}
+			//Segun el menu mira unos objetos u otros.
             else if(Input.GetTouch(0).phase == TouchPhase.Ended)
             {
 				if (null != gObj && current == null) {

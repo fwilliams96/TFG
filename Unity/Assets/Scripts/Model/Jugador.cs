@@ -86,6 +86,11 @@ public class Jugador
 		cartas.Remove(carta);
     }
 
+	/// <summary>
+	/// Retorna la posicion del item en los items del jugador
+	/// </summary>
+	/// <returns>The posicion item.</returns>
+	/// <param name="item">Item.</param>
 	public int BuscarPosicionItem(Item item){
 		bool trobat = false;
 		int i = 0; 
@@ -99,6 +104,11 @@ public class Jugador
 		return i;
 	}
 
+	/// <summary>
+	/// Busca la posicion de la carta en las cartas del jugador.
+	/// </summary>
+	/// <returns>The posicion carta.</returns>
+	/// <param name="carta">Carta.</param>
 	public int BuscarPosicionCarta(Carta carta){
 		bool trobat = false;
 		int i = 0; 
@@ -137,9 +147,17 @@ public class Jugador
         return cartas;
     }
 
+	public int NumCartas(){
+		return cartas.Count;
+	}
+
 	public List<System.Object> Items()
 	{
 		return items;
+	}
+
+	public int NumItems(){
+		return items.Count;
 	}
 		
 	public List<System.Object> CartasEnElMazo()
@@ -152,6 +170,10 @@ public class Jugador
         return mazo.CartasEnMazo.Count;
     }
 		
+	/// <summary>
+	/// Datos del jugador que se guardan luego en base de datos.
+	/// </summary>
+	/// <returns>The dictionary.</returns>
     public Dictionary<string, System.Object> ToDictionary()
     {
         Dictionary <string, System.Object> result = new Dictionary<string, System.Object>();
@@ -163,6 +185,10 @@ public class Jugador
         return result;
     }
 
+	/// <summary>
+	/// Del mazo solo se cogen los identificadores de las cartas que se encuentran dentro.
+	/// </summary>
+	/// <returns>The to dictionary.</returns>
 	public string MazoToDictionary(){
 		string idCartas = "";
 		foreach (int idCartaMazo in idCartasMazo)
@@ -172,6 +198,10 @@ public class Jugador
 		return idCartas.Substring (0, idCartas.Length - 1);
 	}
 
+	/// <summary>
+	/// Para las cartas, su identificador es su posición dentro del array.
+	/// </summary>
+	/// <returns>The to dictionary.</returns>
 	public Dictionary<string, System.Object> CartasToDictionary(){
 		int i = 0;
 		Dictionary<string, System.Object> cards = new Dictionary<string, System.Object>();
@@ -183,6 +213,10 @@ public class Jugador
 		return cards;
 	}
 
+	/// <summary>
+	/// Para los items, su identificador es su posición dentro del array.
+	/// </summary>
+	/// <returns>The to dictionary.</returns>
 	public Dictionary<string, System.Object> ItemsToDictionary(){
 		int i = 0;
 		Dictionary<string, System.Object> dictItems = new Dictionary<string, System.Object>();
@@ -194,6 +228,9 @@ public class Jugador
 		return dictItems;
 	}
 
+	/// <summary>
+	/// A partir de los identificadores, añade las cartas pertenecientes al mazo.
+	/// </summary>
 	public void InicializarMazo(){
 		foreach (int indiceCarta in idCartasMazo) {
 			AñadirCartaMazo ((Carta)cartas[indiceCarta]);

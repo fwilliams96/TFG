@@ -21,7 +21,9 @@ public class Login : MonoBehaviour {
 	void Update () {
 		
 	}
-
+	/// <summary>
+	/// Inicia sesión en firebase.
+	/// </summary>
     public void Logearse()
     {
 		ProgressBar.Instance.MostrarBarraProgreso();
@@ -30,6 +32,10 @@ public class Login : MonoBehaviour {
         SesionUsuario.Instance.Login(email.text, password.text, Callback);
     }
 
+	/// <summary>
+	/// Si no hay error, se carga la escena menu.
+	/// </summary>
+	/// <param name="message">Message.</param>
 	public void Callback(string message)
     {
 		if("".Equals(message)){

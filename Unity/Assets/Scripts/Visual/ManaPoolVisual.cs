@@ -10,6 +10,10 @@ public class ManaPoolVisual : MonoBehaviour {
     public Image[] Crystals;
     public Text ProgressText;
     private int totalCrystals;
+	/// <summary>
+	/// Actualiza el denominador de los cristales de mana.
+	/// </summary>
+	/// <value>The total crystals.</value>
     public int TotalCrystals
     {
         get{ return totalCrystals; }
@@ -42,6 +46,10 @@ public class ManaPoolVisual : MonoBehaviour {
     }
 
     private int availableCrystals;
+	/// <summary>
+	/// Actualiza el numerador de los cristales de mana.
+	/// </summary>
+	/// <value>The available crystals.</value>
     public int AvailableCrystals
     {
         get{ return availableCrystals; }

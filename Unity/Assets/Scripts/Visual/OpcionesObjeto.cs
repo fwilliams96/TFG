@@ -58,6 +58,9 @@ public class OpcionesObjeto : MonoBehaviour
         MostrarAccion();
     }
 
+	/// <summary>
+	/// Muestra la accion del ente.
+	/// </summary>
     public virtual void MostrarAccion()
     {
         //Se ha de mirar si es magica o criatura. En caso de criatura se debe mirar si esta en ataque o defensa
@@ -65,6 +68,9 @@ public class OpcionesObjeto : MonoBehaviour
             Controlador.Instance.MostrarAccion(GetComponentInParent<IDHolder>().UniqueID);
     }
 
+	/// <summary>
+	/// Muestra la previsualizacion de lacarta.
+	/// </summary>
     protected void MostrarPrevisualizacion()
     {
         if(PrevisualizandoAlgunaCarta())

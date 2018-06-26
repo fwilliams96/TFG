@@ -15,6 +15,11 @@ public class TouchManagerBatalla : MonoBehaviour {
 		
 	}
 
+	/// <summary>
+	/// Genera un rayo de la posicion del dedo a la camara.
+	/// </summary>
+	/// <returns>The mouse ray.</returns>
+	/// <param name="touchPos">Touch position.</param>
     Ray GenerateMouseRay(Vector3 touchPos)
     {
         Vector3 mousePosFar = new Vector3(touchPos.x, touchPos.y, Camera.main.farClipPlane);
@@ -57,14 +62,17 @@ public class TouchManagerBatalla : MonoBehaviour {
 				} else {
 				}
             }
+			//Se está desplazando la carta.
             else if(Input.GetTouch(0).phase == TouchPhase.Moved && gObj)
             {
                 gObj.GetComponent<Eventos>().Dragg();
             }
+			//El dedo se encuentra fijo en una posición.
 			else if(Input.GetTouch(0).phase == TouchPhase.Stationary && gObj)
             {
 				gObj.GetComponent<Eventos>().Still();
             }
+			//Se ha dejado de pulsar.
 			else if(Input.GetTouch(0).phase == TouchPhase.Ended && gObj)
 			{
 				gObj.GetComponent<Eventos>().End();

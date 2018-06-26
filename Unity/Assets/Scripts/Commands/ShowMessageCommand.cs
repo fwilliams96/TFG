@@ -13,6 +13,9 @@ public class ShowMessageCommand : Comanda {
         this.duration = duration;
     }
 
+	/// <summary>
+	/// Función que muestra un mensaje en pontalla.
+	/// </summary>
     public override void EmpezarEjecucionComanda()
     {
         MessageManager.Instance.ShowMessage(message, duration);

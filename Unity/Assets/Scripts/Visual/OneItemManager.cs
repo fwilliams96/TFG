@@ -27,6 +27,9 @@ public class OneItemManager : MonoBehaviour {
 		
 	}
 
+	/// <summary>
+	/// Muestra la cantidad en funcion de la configuracion del usuario.
+	/// </summary>
 	public void LeerDatosItem(){
 		ConfiguracionUsuario settings = ConfiguracionUsuario.Instance;
 		if (settings.ConfiguracionItems.Equals (ConfiguracionUsuario.TIPO_CONFIGURACION.ENTERO))

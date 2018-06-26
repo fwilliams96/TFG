@@ -12,6 +12,9 @@ public class GameOverCommand : Comanda{
 		this.experiencia = experiencia;
     }
 
+	/// <summary>
+	/// Muestra la pantalla de game over al jugador usuario.
+	/// </summary>
     public override void EmpezarEjecucionComanda()
     {
 		GameOver.Instance.MostrarGameOver(experiencia);

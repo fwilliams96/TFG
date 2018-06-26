@@ -11,6 +11,9 @@ public class DelayCommand : Comanda
         delay = timeToWait;    
     }
 
+	/// <summary>
+	/// Función que inserta un delay entra la comanda anterior y la siguiente.
+	/// </summary>
     public override void EmpezarEjecucionComanda()
     {
         Sequence s = DOTween.Sequence();

@@ -12,6 +12,9 @@ public class ProgresoVisual : MonoBehaviour
 	public Slider ProgresoPocion;
 	public Text ProgresoPocionText;
 
+	/// <summary>
+	/// Lee el progreso de una carta.
+	/// </summary>
 	public void LeerProgreso()
 	{
 		if (ProgresoPiedra != null) {
@@ -26,6 +29,11 @@ public class ProgresoVisual : MonoBehaviour
 			
 	}
 
+	/// <summary>
+	/// Determina como se verá la cantidad de progreso.
+	/// </summary>
+	/// <param name="cantidadText">Cantidad text.</param>
+	/// <param name="cantidad">Cantidad.</param>
 	private void AñadirCantidad(Text cantidadText, int cantidad){
 		ConfiguracionUsuario settings = ConfiguracionUsuario.Instance;
 		switch (settings.ConfiguracionItems) {
@@ -41,6 +49,11 @@ public class ProgresoVisual : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Aumenta el progreso de una carta.
+	/// </summary>
+	/// <param name="tipoItem">Tipo item.</param>
+	/// <param name="cantidad">Cantidad.</param>
 	public void AñadirItem(int tipoItem, int cantidad){
 		if (tipoItem == 1)
 			PorcentajeProgresoPiedra += cantidad;

@@ -31,7 +31,7 @@ public class DragMagicEffect : DraggingActions {
            
         }
     }
-
+		
     public override void OnStartDrag()
     {
         dondeEstaCartaOCriatura.EstadoVisual = VisualStates.Arrastrando;
@@ -42,7 +42,9 @@ public class DragMagicEffect : DraggingActions {
     {
             
     }
-
+	/// <summary>
+	/// Restablece el estado visual de la mágica.
+	/// </summary>
     public override void OnEndDrag()
     {
         if(tag.Contains("Low"))

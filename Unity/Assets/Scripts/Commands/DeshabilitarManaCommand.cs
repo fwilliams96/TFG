@@ -10,6 +10,9 @@ public class DeshabilitarManaCommand : Comanda {
         this.p = p;
     }
 
+	/// <summary>
+	/// Función que deshabilita para el jugador bot el visor de mana.
+	/// </summary>
     public override void EmpezarEjecucionComanda()
     {
         PlayerArea areaJugador = Controlador.Instance.AreaJugador(p);

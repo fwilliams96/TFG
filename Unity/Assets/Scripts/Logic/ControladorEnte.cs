@@ -14,7 +14,6 @@ public class ControladorEnte
     private ControladorEnte()
     {
         Recursos.EntesCreadosEnElJuego.Clear();
-        //Recursos.InicializarCartas();
     }
 
     public static ControladorEnte Instance
@@ -27,6 +26,11 @@ public class ControladorEnte
         }
     }
 
+	/// <summary>
+	/// Permite quitar vida a una criatura.
+	/// </summary>
+	/// <param name="objetivo">Objetivo.</param>
+	/// <param name="daño">Daño.</param>
 	public void QuitarVidaCriatura(Criatura objetivo,int daño)
 	{
 		new DealDamageCommand(objetivo.ID, daño,objetivo.Defensa).AñadirAlaCola();
@@ -49,6 +53,11 @@ public class ControladorEnte
             MuerteEnte(objetivo.ID);
     }
 
+	/// <summary>
+	/// Permite atacar a una mágica.
+	/// </summary>
+	/// <param name="atacante">Atacante.</param>
+	/// <param name="objetivo">Objetivo.</param>
 	public void AtacarMagica(Criatura atacante,  Magica objetivo)
 	{
 		atacante.AtaquesRestantesEnTurno--;
@@ -60,6 +69,11 @@ public class ControladorEnte
 		ActivarEfectoMagica (idMagica, -1);
 	}
 
+	/// <summary>
+	/// Activa el efecto de una mágica, en función de su tipo hará una cosa u otra.
+	/// </summary>
+	/// <param name="idMagica">Identifier magica.</param>
+	/// <param name="idAtacante">Identifier atacante.</param>
 	public void ActivarEfectoMagica(int idMagica, int idAtacante)
     {
 		Criatura criaturaAtacante = null;
@@ -95,6 +109,11 @@ public class ControladorEnte
 		//MuerteEnte(magica.ID);
     }
 
+	/// <summary>
+	/// Ataca a todas las criaturas del territorio enemigo, solo criaturas.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
+	/// <param name="daño">Daño.</param>
 	public void DamageAllCreatures(JugadorPartida jugador, int daño)
 	{
 		ArrayList array = new ArrayList(jugador.EntesEnLaMesa());
@@ -105,28 +124,41 @@ public class ControladorEnte
 				Controlador.Instance.DañarCriatura ((Criatura)cl,daño);
 			}
 		}
-		/*Ente [] CreaturesToDamage = jugador.EntesEnLaMesa().ToArray();
-		foreach (Ente cl in CreaturesToDamage) {
-			if (cl.GetType () == typeof(Criatura)) {
-				Controlador.Instance.DañarCriatura ((Criatura)cl,daño);
-			}
-		}*/
 	}
 
+	/// <summary>
+	/// Da al jugador vida extra.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
+	/// <param name="vida">Vida.</param>
 	public  void GiveHealth(JugadorPartida jugador, int vida){
 		Controlador.Instance.GiveHealth (jugador, vida);
 	}
 
+	/// <summary>
+	/// Da al jugador mana extra.
+	/// </summary>
+	/// <param name="jugador">Jugador.</param>
+	/// <param name="mana">Mana.</param>
 	public void GiveManaBonus(JugadorPartida jugador, int mana)
 	{
 		Controlador.Instance.GiveManaBonus (jugador, mana);
 	}
 
+	/// <summary>
+	/// Permite dañar a una criatura.
+	/// </summary>
+	/// <param name="criatura">Criatura.</param>
+	/// <param name="daño">Daño.</param>
 	public void DealDamageToTarget(Criatura criatura, int daño)
 	{
 		Controlador.Instance.DañarCriatura (criatura, daño);
 	}
 
+	/// <summary>
+	/// Cambia la posicion de una criatura.
+	/// </summary>
+	/// <param name="idCriatura">Identifier criatura.</param>
     public void CambiarPosicionCriatura(int idCriatura)
     {
         Criatura criatura = (Criatura)Recursos.EntesCreadosEnElJuego[idCriatura];
@@ -142,6 +174,10 @@ public class ControladorEnte
         }
     }
 
+	/// <summary>
+	/// Muestra la accion (ataque, defensa, activar) correspondiente al ente en la batalla.
+	/// </summary>
+	/// <param name="idEnte">Identifier ente.</param>
     public void MostrarAccion(int idEnte)
     {
         Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
@@ -198,20 +234,34 @@ public class ControladorEnte
 		return criatura.HaAtacado;
 	}
 
+	/// <summary>
+	/// Función que mata un ente.
+	/// </summary>
+	/// <param name="idEnte">Identifier ente.</param>
     public void MuerteEnte(int idEnte)
     {
         Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
 		JugadorPartida jugadorObjetivo = Controlador.Instance.ObtenerDueñoEnte (ente);
         jugadorObjetivo.EliminarEnteMesa(ente);
         ente.Morir();
-        new CreatureDieCommand(idEnte, jugadorObjetivo).AñadirAlaCola();
+        new EnteDieCommand(idEnte, jugadorObjetivo).AñadirAlaCola();
     }
 		
+	/// <summary>
+	/// Mira si la criatura ha muerto.
+	/// </summary>
+	/// <returns><c>true</c>, if muerta was criaturaed, <c>false</c> otherwise.</returns>
+	/// <param name="objetivo">Objetivo.</param>
     public bool CriaturaMuerta(Criatura objetivo)
     {
         return objetivo.Defensa <= 0;
     }
 
+	/// <summary>
+	/// Mira si la criatura se encuentra en posicion de ataque.
+	/// </summary>
+	/// <returns><c>true</c>, if en posicion ataque was estaed, <c>false</c> otherwise.</returns>
+	/// <param name="idEnte">Identifier ente.</param>
     public bool EstaEnPosicionAtaque(int idEnte)
     {
         Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
@@ -222,12 +272,20 @@ public class ControladorEnte
 		return false;
     }
 
+	/// <summary>
+	/// Mira si el ente es mágico.
+	/// </summary>
+	/// <returns><c>true</c>, if magica was esed, <c>false</c> otherwise.</returns>
+	/// <param name="idEnte">Identifier ente.</param>
     public bool EsMagica(int idEnte)
     {
         Ente ente = Recursos.EntesCreadosEnElJuego[idEnte];
         return ente.GetType() == typeof(Magica);
     }
 
+	/// <summary>
+	/// Elimina la instancia.
+	/// </summary>
 	public void Clear(){
 		instance = null;
 	}

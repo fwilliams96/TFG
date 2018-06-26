@@ -14,6 +14,9 @@ public class UpdateManaCrystalsCommand : Comanda {
         this.AvailableMana = AvailableMana;
     }
 
+	/// <summary>
+	/// Función que actualiza de forma visual el mana del jugador usuario.
+	/// </summary>
     public override void EmpezarEjecucionComanda()
     {
         PlayerArea areaJugador = Controlador.Instance.AreaJugador(p);

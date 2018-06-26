@@ -17,11 +17,13 @@ public class CartaPartida : IIdentifiable
         this.assetCarta = ca;
         // get unique int ID
 		ResetCosteMana();
-        idCarta = IDFactory.GetUniqueID();
+		idCarta = IDFactory.GetBattleUniqueID();
 		Recursos.CartasCreadasEnElJuego.Add(idCarta, this);
     }
 
-    // method to set or reset mana cost
+    /// <summary>
+    /// Resetea el coste de mana de la carta.
+    /// </summary>
     public void ResetCosteMana()
     {
         CosteManaActual = assetCarta.CosteMana;

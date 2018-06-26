@@ -5,6 +5,12 @@ using DG.Tweening;
 public class CreatureAttackVisual : EnteVisual
 {
 
+	/// <summary>
+	/// Realiza el ataque visual a la criatura objetivo.
+	/// </summary>
+	/// <param name="targetUniqueID">Target unique I.</param>
+	/// <param name="damageTaken">Damage taken.</param>
+	/// <param name="targetHealthAfter">Target health after.</param>
     public void AttackTarget(int targetUniqueID, int damageTaken,int targetHealthAfter)
     {
         manager.PuedeAtacar = false;
@@ -17,7 +23,7 @@ public class CreatureAttackVisual : EnteVisual
         transform.DOMove(target.transform.position, 0.5f).SetLoops(2, LoopType.Yoyo).SetEase(Ease.InCubic).OnComplete(() =>
         {
 
-				if (targetUniqueID == Controlador.Instance.Local.ID || targetUniqueID == Controlador.Instance.Enemigo.ID)
+			if (targetUniqueID == Controlador.Instance.Local.ID || targetUniqueID == Controlador.Instance.Enemigo.ID)
 			{
 				target.GetComponent<PlayerPortraitVisual>().HacerDaño(damageTaken,targetHealthAfter);
 			}else{
@@ -26,8 +32,10 @@ public class CreatureAttackVisual : EnteVisual
 				else
 					target.GetComponent<OneMagicaManager>().HacerDaño();
 			}
-			if(target.GetComponent<AudioSource>() != null && ConfiguracionUsuario.Instance.Musica)
-				target.GetComponent<AudioSource>().Play();
+			if(target.GetComponents<AudioSource>()[1] != null && target.GetComponents<AudioSource>()[1].clip != null && ConfiguracionUsuario.Instance.Musica){
+				target.GetComponents<AudioSource>()[1].Play();
+			}
+
             w.SetearOrdenCriatura();
             /*w.EstadoVisual = tempState;*/
 
@@ -37,6 +45,10 @@ public class CreatureAttackVisual : EnteVisual
         });
     }
 
+	/// <summary>
+	/// Cambia la posición de la criatura.
+	/// </summary>
+	/// <param name="pos">Position.</param>
     public void ChangePosition(PosicionCriatura pos) //OPTIONAL 0 para ataque, 1 para defensa
     {
         if(pos.Equals(PosicionCriatura.ATAQUE))

@@ -72,7 +72,7 @@ public class Ente : ICharacter
         this.assetCarta = ca;
         defensa = ca.Defensa;
         ataque = ca.Ataque;
-        idCriatura = IDFactory.GetUniqueID();
+		idCriatura = IDFactory.GetBattleUniqueID();
         Recursos.EntesCreadosEnElJuego.Add(idCriatura, this);
     }
 
@@ -80,6 +80,9 @@ public class Ente : ICharacter
     {
     }
 
+	/// <summary>
+	/// Restablece los ataques o veces de uso disponibles
+	/// </summary>
     public virtual void OnTurnStart()
     {
         AtaquesRestantesEnTurno = attacksForOneTurn;

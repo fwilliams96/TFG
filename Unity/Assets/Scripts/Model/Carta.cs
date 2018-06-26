@@ -20,10 +20,14 @@ public class Carta : IIdentifiable
         this.idAsset = idAsset;
         this.assetCarta = ca;
         // get unique int ID
-        idCarta = IDFactory.GetUniqueID();
+		idCarta = IDFactory.GetMenuUniqueID();
         progreso = new Progreso();
     }
 
+	/// <summary>
+	/// Datos de la carta que se subirán a base de datos.
+	/// </summary>
+	/// <returns>The dictionary.</returns>
     public Dictionary<string, System.Object> ToDictionary()
     {
         Dictionary<string, System.Object> result = new Dictionary<string, System.Object>();
@@ -34,7 +38,7 @@ public class Carta : IIdentifiable
 
     #region Getters/Setters
 
-    // PROPERTIES
+    //Identificador de la carta base en base de datos
 	public string IdAsset{
 		get{
 			return idAsset;

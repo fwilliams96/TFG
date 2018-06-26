@@ -32,15 +32,19 @@ public class DragCreatureAttack : DraggingActions {
         dondeEstaCartaOCriatura = GetComponentInParent<WhereIsTheCardOrEntity>();
     }
 
+	/// <summary>
+	/// Determina si la carta puede controlarse por el jugador, si está disponible para moverse y si no se encuentra en defensa.
+	/// </summary>
+	/// <value><c>true</c> if se puede arrastrar; otherwise, <c>false</c>.</value>
     public override bool SePuedeArrastrar
     {
         get
         {
             try
             {
-
-				return base.SePuedeControlar && manager.PuedeAtacar && Controlador.Instance.EstaEnPosicionAtaque(GetComponentInParent<IDHolder
-                    >().UniqueID);
+				return base.SePuedeControlar && manager.PuedeAtacar;
+				/*return base.SePuedeControlar && manager.PuedeAtacar && Controlador.Instance.EstaEnPosicionAtaque(GetComponentInParent<IDHolder
+                    >().UniqueID);*/
             }
             catch (System.Exception e)
             {
@@ -50,7 +54,9 @@ public class DragCreatureAttack : DraggingActions {
            
         }
     }
-
+	/// <summary>
+	/// Empieza el dragg de la criatura.
+	/// </summary>
     public override void OnStartDrag()
     {
         dondeEstaCartaOCriatura.EstadoVisual = VisualStates.Arrastrando;
@@ -61,6 +67,9 @@ public class DragCreatureAttack : DraggingActions {
 		reset = false;
     }
 
+	/// <summary>
+	/// Se muestra la flecha roja que permite apuntar al objetivo.
+	/// </summary>
     public override void OnDraggingInUpdate()
     {
        
@@ -90,30 +99,42 @@ public class DragCreatureAttack : DraggingActions {
             
     }
 
+	/// <summary>
+	/// Determina si se ha apuntado a un enemigo correcto.
+	/// </summary>
     public override void OnEndDrag()
     {
-        Target = FindTarget();
-
-        if (Target != null)
-        {
-            int targetID = Target.GetComponent<IDHolder>().UniqueID;
-			if (targetID == Controlador.Instance.Local.ID || targetID == Controlador.Instance.Enemigo.ID) {
-				if (Controlador.Instance.SePuedeAtacarJugadorDeCara (targetID)) {
-					Controlador.Instance.AtacarJugador (GetComponentInParent<IDHolder> ().UniqueID, targetID);
+		if (Controlador.Instance.EstaEnPosicionAtaque (GetComponentInParent<IDHolder
+			> ().UniqueID)) {
+			Target = FindTarget ();
+			if (Target != null)
+			{
+				int targetID = Target.GetComponent<IDHolder>().UniqueID;
+				if (targetID == Controlador.Instance.Local.ID || targetID == Controlador.Instance.Enemigo.ID) {
+					if (Controlador.Instance.SePuedeAtacarJugadorDeCara (targetID)) {
+						Controlador.Instance.AtacarJugador (GetComponentInParent<IDHolder> ().UniqueID, targetID);
+					} else {
+						new ShowMessageCommand ("Todavía tienes enemigos cerca...", 2.0f).AñadirAlaCola ();
+					}
 				} else {
-					new ShowMessageCommand ("Todavía tienes enemigos cerca...", 2.0f).AñadirAlaCola ();
-				}
-			} else {
-				//Debug.Log("Target ID: " + targetID);
-				if (Recursos.EntesCreadosEnElJuego[targetID] != null)
-				{
-					Controlador.Instance.AtacarEnte(GetComponentInParent<IDHolder>().UniqueID, targetID);
+					//Debug.Log("Target ID: " + targetID);
+					if (Recursos.EntesCreadosEnElJuego[targetID] != null)
+					{
+						Controlador.Instance.AtacarEnte(GetComponentInParent<IDHolder>().UniqueID, targetID);
+					}
 				}
 			}
-        }
+		} else {
+			new ShowMessageCommand ("¡Antes debes cambiar a posición de ataque!", 1.5f).AñadirAlaCola ();
+		}
+
+        
 		resetDragg ();
     }
 
+	/// <summary>
+	/// Retorna la flecha a su origen.
+	/// </summary>
 	public override void resetDragg(){
 		if (tag.Contains("Low"))
 			dondeEstaCartaOCriatura.EstadoVisual = VisualStates.MesaJugadorAbajo;
@@ -129,7 +150,7 @@ public class DragCreatureAttack : DraggingActions {
 		reset = true;
 	}
 
-    // NOT USED IN THIS SCRIPT
+    //Se devuelve true porque no se usa.
     protected override bool DragSuccessful()
     {
         return true;
