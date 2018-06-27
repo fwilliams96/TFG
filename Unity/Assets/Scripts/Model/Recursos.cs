@@ -118,7 +118,6 @@ public class Recursos  {
 					asset.IDEvolucion = idEvolucion;
 
                     GuardarAssetBaseDatos(familia, asset);
-                    //GuardarJSONApartirCartaAsset(asset, obtenerRutaJSON(familia, carpetaCarta),nombre+".json");
 
                 }
             }
@@ -150,30 +149,7 @@ public class Recursos  {
     {
         return obtenerRutaFamiliaImagen(familia) + carpetaCarta + "/" + nombreImagen;
     }
-
-	/// <summary>
-	/// Devuelve la ruta de los archivos JSON locales de las cartas.
-	/// </summary>
-	/// <returns>The ruta JSO.</returns>
-	/// <param name="familia">Familia.</param>
-	/// <param name="carpetaCarta">Carpeta carta.</param>
-	/// <param name="nombreJSON">Nombre JSO.</param>
-    private static string obtenerRutaJSON(string familia, string carpetaCarta, string nombreJSON)
-    {
-        return "files/"+obtenerCarpetaFamilia(familia) + carpetaCarta + "/" + nombreJSON;
-    }
-
-	/// <summary>
-	/// Devuelve la ruta de la carpeta padre de los archivos JSON locales de las cartas.
-	/// </summary>
-	/// <returns>The ruta JSO.</returns>
-	/// <param name="familia">Familia.</param>
-	/// <param name="carpetaCarta">Carpeta carta.</param>
-    private static string obtenerRutaJSON(string familia, string carpetaCarta)
-    {
-        return "files/" + obtenerCarpetaFamilia(familia) + carpetaCarta+"/";
-    }
-
+		
 	/// <summary>
 	/// Devuelve la ruta de la familia de la carta.
 	/// </summary>
@@ -281,29 +257,6 @@ public class Recursos  {
                 break;
         }
         return tipo;
-    }
-
-	/// <summary>
-	/// Guarda de forma local un JSON en la ruta files/.
-	/// </summary>
-	/// <param name="asset">Asset.</param>
-	/// <param name="rutaArchivo">Ruta archivo.</param>
-	/// <param name="nombreArchivo">Nombre archivo.</param>
-    public static void GuardarJSONApartirCartaAsset(CartaBase asset, string rutaArchivo, string nombreArchivo)
-    {
-        //string path = Application.persistentDataPath;
-        string path = (Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer ? Application.persistentDataPath : Application.dataPath);
-        string ruta = Path.Combine(path, rutaArchivo);
-        bool dirExists = Directory.Exists(ruta);
-        if (!dirExists)
-            Directory.CreateDirectory(ruta);
-        Debug.Log("Guardar json");
-        string json = JsonUtility.ToJson(asset);
-        ruta = Path.Combine(ruta, nombreArchivo);
-        //BaseDatos.Instance.GuardarCartaJugador(SesionUsuario.Instance.UserID,json);
-        Debug.Log("Ruta: " + ruta);
-        File.WriteAllText(ruta, json);
-        Debug.Log("Asset guardado con exito");
     }
 
 	/// <summary>
