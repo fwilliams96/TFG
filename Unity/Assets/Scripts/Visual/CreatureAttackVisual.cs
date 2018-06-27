@@ -26,15 +26,19 @@ public class CreatureAttackVisual : EnteVisual
 			if (targetUniqueID == Controlador.Instance.Local.ID || targetUniqueID == Controlador.Instance.Enemigo.ID)
 			{
 				target.GetComponent<PlayerPortraitVisual>().HacerDaño(damageTaken,targetHealthAfter);
+				if(target.GetComponent<AudioSource>() != null && target.GetComponent<AudioSource>().clip != null && ConfiguracionUsuario.Instance.Musica){
+					target.GetComponent<AudioSource>().Play();
+				}
 			}else{
 				if(target.tag.Contains("Criatura"))
 					target.GetComponent<OneCreatureManager>().HacerDaño(damageTaken, targetHealthAfter);
 				else
 					target.GetComponent<OneMagicaManager>().HacerDaño();
+				if(target.GetComponents<AudioSource>()[1] != null && target.GetComponents<AudioSource>()[1].clip != null && ConfiguracionUsuario.Instance.Musica){
+					target.GetComponents<AudioSource>()[1].Play();
+				}
 			}
-			if(target.GetComponents<AudioSource>()[1] != null && target.GetComponents<AudioSource>()[1].clip != null && ConfiguracionUsuario.Instance.Musica){
-				target.GetComponents<AudioSource>()[1].Play();
-			}
+			
 
             w.SetearOrdenCriatura();
             /*w.EstadoVisual = tempState;*/
