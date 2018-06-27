@@ -33,6 +33,10 @@ public class AccionesPopUp : MonoBehaviour {
         MostrarAccion(TipoAccion.EFECTO);
     }
 
+	/// <summary>
+	/// Muestra las acciones del ente.
+	/// </summary>
+	/// <param name="accion">Accion.</param>
     private void MostrarAccion(TipoAccion accion) 
     {
         MostrarPopup();

@@ -12,12 +12,17 @@ public class Recursos  {
 
     public static Dictionary<int, Ente> EntesCreadosEnElJuego = new Dictionary<int, Ente>();
 
-    public static void InicializarCartas()
+    public static void AñadirCartasAFirebase()
     {
 		SubirTodasCartas();
     }
 
-	public static void SubirCarta(string familia, string nombreCartaXML){
+	/// <summary>
+	/// Permite subir una carta XML a la base de datos Firebase a partir del nombre de la familia y su nombre.
+	/// </summary>
+	/// <param name="familia">Familia.</param>
+	/// <param name="nombreCartaXML">Nombre carta XM.</param>
+	public static void AñadirCartaAFirebase(string familia, string nombreCartaXML){
 		Dictionary<string, Dictionary<string, SimpleJSON.JSONNode>> cartas = new Dictionary<string, Dictionary<string, SimpleJSON.JSONNode>>();
 		string cardPath = Application.streamingAssetsPath + "/XML" + "/" + familia + "/" + nombreCartaXML + ".xml";
 		var json = JSONUtils.XMLFileToJSON(cardPath);
@@ -27,6 +32,9 @@ public class Recursos  {
 		CrearAssetsCartas (cartas);
 	}
 
+	/// <summary>
+	/// Permite subir todas las cartas de los XML que se encuentren en StreamingAssets/XML.
+	/// </summary>
     private static void SubirTodasCartas()
     {
 		Dictionary<string, Dictionary<string, SimpleJSON.JSONNode>> cartas = new Dictionary<string, Dictionary<string, SimpleJSON.JSONNode>>();
@@ -34,9 +42,9 @@ public class Recursos  {
 
         string filePath = Application.streamingAssetsPath + "/XML";
         string cardPath;
-        foreach (string familia in Global.CARTAS.FAMILIAS)
+        foreach (string familia in CartasXML.CARTAS.FAMILIAS)
         {
-            var prop = typeof(Global.CARTAS.FAMILIA).GetField(familia.ToUpper());
+            var prop = typeof(CartasXML.CARTAS.FAMILIA).GetField(familia.ToUpper());
 
             string[] arrayFamilia = (string[])prop.GetValue(null);
             diccionarioTemp = new Dictionary<string, SimpleJSON.JSONNode>();
@@ -60,9 +68,13 @@ public class Recursos  {
 		CrearAssetsCartas (cartas);
     }
 
+	/// <summary>
+	/// Permite crear assets de las cartas y subirlas a Firebase.
+	/// </summary>
+	/// <param name="cartas">Cartas.</param>
 	private static void CrearAssetsCartas(Dictionary<string, Dictionary<string, SimpleJSON.JSONNode>> cartas)
     {
-        foreach(string familia in Global.CARTAS.FAMILIAS)
+        foreach(string familia in CartasXML.CARTAS.FAMILIAS)
         {
             if (cartas.ContainsKey(familia))
             {
@@ -115,6 +127,11 @@ public class Recursos  {
 
     }
 
+	/// <summary>
+	/// Se obtiene el formato del nombre del directorio correcto.
+	/// </summary>
+	/// <returns>The formato nombre correcto directorio.</returns>
+	/// <param name="carpeta">Carpeta.</param>
     private static string obtenerFormatoNombreCorrectoDirectorio(string carpeta)
     {
 		if(carpeta.Length > 1)
@@ -122,46 +139,77 @@ public class Recursos  {
 		return carpeta;
     }
 
+	/// <summary>
+	/// Permite devolver la ruta de la imagen a partir de su nombre, nombre de carpeta y familia.
+	/// </summary>
+	/// <returns>The ruta imagen.</returns>
+	/// <param name="familia">Familia.</param>
+	/// <param name="carpetaCarta">Carpeta carta.</param>
+	/// <param name="nombreImagen">Nombre imagen.</param>
     private static string obtenerRutaImagen(string familia, string carpetaCarta, string nombreImagen)
     {
         return obtenerRutaFamiliaImagen(familia) + carpetaCarta + "/" + nombreImagen;
     }
 
+	/// <summary>
+	/// Devuelve la ruta de los archivos JSON locales de las cartas.
+	/// </summary>
+	/// <returns>The ruta JSO.</returns>
+	/// <param name="familia">Familia.</param>
+	/// <param name="carpetaCarta">Carpeta carta.</param>
+	/// <param name="nombreJSON">Nombre JSO.</param>
     private static string obtenerRutaJSON(string familia, string carpetaCarta, string nombreJSON)
     {
         return "files/"+obtenerCarpetaFamilia(familia) + carpetaCarta + "/" + nombreJSON;
     }
 
+	/// <summary>
+	/// Devuelve la ruta de la carpeta padre de los archivos JSON locales de las cartas.
+	/// </summary>
+	/// <returns>The ruta JSO.</returns>
+	/// <param name="familia">Familia.</param>
+	/// <param name="carpetaCarta">Carpeta carta.</param>
     private static string obtenerRutaJSON(string familia, string carpetaCarta)
     {
         return "files/" + obtenerCarpetaFamilia(familia) + carpetaCarta+"/";
     }
+
+	/// <summary>
+	/// Devuelve la ruta de la familia de la carta.
+	/// </summary>
+	/// <returns>The ruta familia imagen.</returns>
+	/// <param name="familia">Familia.</param>
     private static string obtenerRutaFamiliaImagen(string familia)
     {
         return "Sprites/Cartas/" + obtenerCarpetaFamilia(familia);
     }
 
+	/// <summary>
+	/// Devuelve el nombre de la carpeta de la familia de la carta.
+	/// </summary>
+	/// <returns>The carpeta familia.</returns>
+	/// <param name="familia">Familia.</param>
     private static string obtenerCarpetaFamilia(string familia)
     {
         string carpetaFamilia = "";
         switch (familia.ToLower())
         {
-            case Global.CARTAS.TIPO_CARTA.AGUA:
+            case CartasXML.CARTAS.TIPO_CARTA.AGUA:
                 carpetaFamilia = "Agua/";
                 break;
-			case Global.CARTAS.TIPO_CARTA.AIRE:
+			case CartasXML.CARTAS.TIPO_CARTA.AIRE:
 				carpetaFamilia = "Aire/";
 				break;
-            case Global.CARTAS.TIPO_CARTA.FUEGO:
+            case CartasXML.CARTAS.TIPO_CARTA.FUEGO:
                 carpetaFamilia = "Fuego/";
                 break;
-            case Global.CARTAS.TIPO_CARTA.TIERRA:
+            case CartasXML.CARTAS.TIPO_CARTA.TIERRA:
                 carpetaFamilia = "Tierra/";
                 break;
-            case Global.CARTAS.TIPO_CARTA.MAGICA:
+            case CartasXML.CARTAS.TIPO_CARTA.MAGICA:
                 carpetaFamilia = "Magica/";
                 break;
-            case Global.CARTAS.TIPO_CARTA.ANCESTRAL:
+            case CartasXML.CARTAS.TIPO_CARTA.ANCESTRAL:
                 carpetaFamilia = "Ancestral/";
                 break;
             default:
@@ -171,20 +219,25 @@ public class Recursos  {
         return carpetaFamilia;
     }
 
+	/// <summary>
+	/// Obtiene el efecto de la magica.
+	/// </summary>
+	/// <returns>The efecto.</returns>
+	/// <param name="nombreEfecto">Nombre efecto.</param>
 	private static Efecto obtenerEfecto(string nombreEfecto){
 		nombreEfecto = nombreEfecto.ToLower ();
 		Efecto efecto;
 		switch (nombreEfecto) {
-			case Global.MAGICA.TIPO_EFECTO.Destructor:
+			case CartasXML.MAGICA.TIPO_EFECTO.Destructor:
 				efecto = Efecto.Destructor;
 				break;
-			case Global.MAGICA.TIPO_EFECTO.Espejo:
+			case CartasXML.MAGICA.TIPO_EFECTO.Espejo:
 				efecto = Efecto.Espejo;
 				break;
-			case Global.MAGICA.TIPO_EFECTO.Mana:
+			case CartasXML.MAGICA.TIPO_EFECTO.Mana:
 				efecto = Efecto.Mana;
 				break;
-			case Global.MAGICA.TIPO_EFECTO.Vida:
+			case CartasXML.MAGICA.TIPO_EFECTO.Vida:
 				efecto = Efecto.Vida;
 				break;
 			default:
@@ -195,27 +248,32 @@ public class Recursos  {
 		return efecto;
 	}
 
+	/// <summary>
+	/// Devuelve el tipo de familia de la carta.
+	/// </summary>
+	/// <returns>The tipo carta.</returns>
+	/// <param name="familia">Familia.</param>
     private static Familia obtenerTipoCarta(string familia)
     {
         Familia tipo = Familia.Magica;
         switch (familia.ToLower())
         {
-			case Global.CARTAS.TIPO_CARTA.AIRE:
+			case CartasXML.CARTAS.TIPO_CARTA.AIRE:
 				tipo = Familia.Aire;
 				break;
-            case Global.CARTAS.TIPO_CARTA.AGUA:
+            case CartasXML.CARTAS.TIPO_CARTA.AGUA:
                 tipo = Familia.Agua;
                 break;
-            case Global.CARTAS.TIPO_CARTA.FUEGO:
+            case CartasXML.CARTAS.TIPO_CARTA.FUEGO:
                 tipo = Familia.Fuego;
                 break;
-            case Global.CARTAS.TIPO_CARTA.TIERRA:
+            case CartasXML.CARTAS.TIPO_CARTA.TIERRA:
                 tipo = Familia.Tierra;
                 break;
-            case Global.CARTAS.TIPO_CARTA.MAGICA:
+            case CartasXML.CARTAS.TIPO_CARTA.MAGICA:
                 tipo = Familia.Magica;
                 break;
-            case Global.CARTAS.TIPO_CARTA.ANCESTRAL:
+            case CartasXML.CARTAS.TIPO_CARTA.ANCESTRAL:
                 tipo = Familia.Ancestral;
                 break;
             default:
@@ -225,6 +283,12 @@ public class Recursos  {
         return tipo;
     }
 
+	/// <summary>
+	/// Guarda de forma local un JSON en la ruta files/.
+	/// </summary>
+	/// <param name="asset">Asset.</param>
+	/// <param name="rutaArchivo">Ruta archivo.</param>
+	/// <param name="nombreArchivo">Nombre archivo.</param>
     public static void GuardarJSONApartirCartaAsset(CartaBase asset, string rutaArchivo, string nombreArchivo)
     {
         //string path = Application.persistentDataPath;
@@ -242,6 +306,11 @@ public class Recursos  {
         Debug.Log("Asset guardado con exito");
     }
 
+	/// <summary>
+	/// Permite subir a firebase una carta.
+	/// </summary>
+	/// <param name="familia">Familia.</param>
+	/// <param name="asset">Asset.</param>
     public static void GuardarAssetBaseDatos(string familia,CartaBase asset)
     {
         BaseDatos.Instance.GuardarCarta(familia, asset);

@@ -24,7 +24,10 @@ public class HandVisual : MonoBehaviour
     public GameObject LastDealtCard { get; set; }
     #endregion
 
-    //TODO nombre funciones en español
+    /// <summary>
+    /// Añade la carta a la mano visual del jugador.
+    /// </summary>
+    /// <param name="card">Card.</param>
     public void AñadirCarta(GameObject card)
     {
         CartasEnMano.Insert(0, card);
@@ -35,6 +38,10 @@ public class HandVisual : MonoBehaviour
         ActualizarSlots();
     }
 
+	/// <summary>
+	/// Elimina la carta de la mano visual del jugador.
+	/// </summary>
+	/// <param name="card">Card.</param>
     public void EliminarCarta(GameObject card)
     {
         CartasEnMano.Remove(card);
@@ -56,6 +63,9 @@ public class HandVisual : MonoBehaviour
         ActualizarSlots();
     }
 
+	/// <summary>
+	/// Actualiza la posición de las cartas en la mano visual.
+	/// </summary>
     void ActualizarSlots()
     {
         float posX;
@@ -67,7 +77,9 @@ public class HandVisual : MonoBehaviour
         slots.gameObject.transform.DOLocalMoveX(posX, 0.3f);
     }
 
-
+	/// <summary>
+	/// Desplaza las cartas de la mano para que quede centrado.
+	/// </summary>
     void MoverSlotCartas()
     {
         foreach (GameObject g in CartasEnMano)
@@ -80,7 +92,14 @@ public class HandVisual : MonoBehaviour
         }
     }
 
-    // CARD DRAW METHODS
+    /// <summary>
+    /// Instancia la carta visual del jugador y la reparte.
+    /// </summary>
+    /// <param name="c">C.</param>
+    /// <param name="UniqueID">Unique I.</param>
+    /// <param name="fast">If set to <c>true</c> fast.</param>
+    /// <param name="fromDeck">If set to <c>true</c> from deck.</param>
+    /// <param name="rotarDeCara">If set to <c>true</c> rotar de cara.</param>
 	public void DarCartaJugador(CartaPartida c, int UniqueID, bool fast = false, bool fromDeck = true, bool rotarDeCara = false)
     {
 		if (!rotarDeCara)
@@ -144,6 +163,11 @@ public class HandVisual : MonoBehaviour
         s.OnComplete(() => CambiarEstadoCartaAMano(card, w));
     }
 
+	/// <summary>
+	/// Resetea el estado visual de la carta de la mano.
+	/// </summary>
+	/// <param name="card">Card.</param>
+	/// <param name="w">The width.</param>
     void CambiarEstadoCartaAMano(GameObject card, WhereIsTheCardOrEntity w)
     {
         //Debug.Log("Changing state to Hand for card: " + card.gameObject.name);
@@ -156,6 +180,13 @@ public class HandVisual : MonoBehaviour
 		Comandas.Instance.CompletarEjecucionComanda();
     }
 
+	/// <summary>
+	/// Devuelve una carta a partir de la posición indexada en la mano del jugador.
+	/// </summary>
+	/// <returns>The carta por posicion.</returns>
+	/// <param name="c">C.</param>
+	/// <param name="position">Position.</param>
+	/// <param name="eulerAngles">Euler angles.</param>
 	GameObject CrearCartaPorPosicion(CartaPartida c, Vector3 position, Vector3 eulerAngles)
     {
         // Instantiate a card depending on its type
@@ -181,6 +212,11 @@ public class HandVisual : MonoBehaviour
     {
         GirarMano(0);
     }
+
+	/// <summary>
+	/// Gira la mano en el eje Y, lo que permite poner toda la mano boca abajo o boca arriba (No se usa).
+	/// </summary>
+	/// <param name="grado">Grado.</param>
     private void GirarMano(int grado)
     {
         foreach (GameObject carta in CartasEnMano)

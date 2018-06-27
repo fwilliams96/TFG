@@ -33,6 +33,9 @@ public class Elementos : MonoBehaviour {
 	void OnDisable(){
 	}
 
+	/// <summary>
+	/// Muestro los elementos en un scroll view, según los elementos que se quieran mostrar.
+	/// </summary>
 	public void MostrarElementos () {
 		VaciarElementos ();
 		if (tipoElementos.Equals (TIPO_ELEMENTOS.CARTAS)) {
@@ -65,6 +68,9 @@ public class Elementos : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Devuelve las cartas que no estan en el mazo.
+	/// </summary>
 	private void RellenarConCartasFueraMazo(){
 		List<System.Object> listaCartas = ControladorMenu.Instance.RecogerElemento (tipoElementos);
 		GameObject elemento;
@@ -79,6 +85,9 @@ public class Elementos : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Devuelve todas las cartas del jugador.
+	/// </summary>
 	private void RellenarConCartas(){
 		gridLayoutGroup.cellSize = new Vector2 (270f, 400f);
 		List<System.Object> listaCartas = ControladorMenu.Instance.RecogerElemento (tipoElementos);
@@ -94,6 +103,9 @@ public class Elementos : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Devuelve las cartas del mazo.s
+	/// </summary>
 	private void RellenarConMazo(){
 		List<System.Object> listaCartas = ControladorMenu.Instance.RecogerElemento (tipoElementos);
 		GameObject elemento;
@@ -106,6 +118,9 @@ public class Elementos : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Devuelve los items del jugador.
+	/// </summary>
 	private void RellenarConItems(){
 		if(tipoTag.Equals(TIPO_TAG.CONSUMIR))
 			gridLayoutGroup.cellSize = new Vector2 (200f, 200f);

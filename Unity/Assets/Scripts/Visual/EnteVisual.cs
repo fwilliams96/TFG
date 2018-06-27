@@ -13,6 +13,12 @@ public class EnteVisual : MonoBehaviour
         w = GetComponent<WhereIsTheCardOrEntity>();
     }
 
+	/// <summary>
+	/// Rota el ente en el eje Y (boca abajo o boca arriba)
+	/// </summary>
+	/// <param name="objeto">Objeto.</param>
+	/// <param name="grados">Grados.</param>
+	/// <param name="tiempoTransicion">Tiempo transicion.</param>
     protected void RotarObjetoEjeY(GameObject objeto, int grados, float tiempoTransicion)
     {
         float x = objeto.transform.eulerAngles.x;
@@ -21,6 +27,12 @@ public class EnteVisual : MonoBehaviour
         objeto.transform.DORotate(new Vector3(x, y, z), tiempoTransicion);
     }
 
+	/// <summary>
+	/// Rota el ente en el eje Z (defensa o ataque)
+	/// </summary>
+	/// <param name="objeto">Objeto.</param>
+	/// <param name="grados">Grados.</param>
+	/// <param name="tiempoTransicion">Tiempo transicion.</param>
     protected void RotarObjetoEjeZ(GameObject objeto, int grados, float tiempoTransicion)
     {
         float x = objeto.transform.eulerAngles.x;

@@ -14,7 +14,9 @@ public class Menu : MonoBehaviour {
     void Awake()
     {
     }
-
+	/// <summary>
+	/// Muestra la pantalla menu inventario
+	/// </summary>
     public void Inventario()
     {
         inventario.SetActive(true);
@@ -24,6 +26,9 @@ public class Menu : MonoBehaviour {
 		ControladorMenu.Instance.PantallaActual = PANTALLA_MENU.INVENTARIO;
     }
 
+	/// <summary>
+	/// Muestra la pantalla menu batalla
+	/// </summary>
     public void Batalla()
     {
         batalla.SetActive(true);
@@ -33,6 +38,9 @@ public class Menu : MonoBehaviour {
 		ControladorMenu.Instance.PantallaActual = PANTALLA_MENU.BATALLA;
     }
 
+	/// <summary>
+	/// Muestra la pantalla menu perfil.
+	/// </summary>
 	public void Perfil()
 	{
 		perfil.SetActive(true);
@@ -42,6 +50,9 @@ public class Menu : MonoBehaviour {
 		ControladorMenu.Instance.PantallaActual = PANTALLA_MENU.PERFIL;
 	}
 
+	/// <summary>
+	/// Muestra la pantalla menu mazo.
+	/// </summary>
 	public void  Mazo()
 	{
 		mazo.SetActive(true);

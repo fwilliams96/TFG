@@ -75,7 +75,10 @@ public class Acciones : MonoBehaviour {
 		if(!opciones.activeSelf)
 			opciones.SetActive (true);
 	}
-
+	/// <summary>
+	/// Vuelve a mostrar las diferentes opciones.
+	/// </summary>
+	/// <param name="indiceOpcion">Indice opcion.</param>
 	public void Opciones(int indiceOpcion){
 		switch (indiceOpcion) {
 		case 1:
@@ -102,6 +105,9 @@ public class Acciones : MonoBehaviour {
 		añadirItem.SetActive (true);
 	}
 
+	/// <summary>
+	/// Permite evolucionar la carta si el progreso está lleno.
+	/// </summary>
 	public void Evolucionar(){
 		if (ControladorMenu.Instance.SePuedeEvolucionar (elementoActual.GetComponent<IDHolder>().UniqueID)) {
 			ControladorMenu.Instance.EvolucionarCarta (elementoActual);
@@ -113,6 +119,9 @@ public class Acciones : MonoBehaviour {
 
 	}
 
+	/// <summary>
+	/// Busca información de la carta a partir del atributo InfoCarta de la carta base.
+	/// </summary>
 	public void BuscarInfoCarta(){
 		if (!Familia.Ancestral.Equals (elementoActual.GetComponent<OneCardManager> ().CartaAsset.Familia) &&
 		    !Familia.Magica.Equals (elementoActual.GetComponent<OneCardManager> ().CartaAsset.Familia)) {

@@ -147,6 +147,11 @@ public class JSONUtils {
         return sbOut.ToString();
     }
 
+	/// <summary>
+	/// A partir de la ruta de un archivo, pasa el XML a un objeto JSON.
+	/// </summary>
+	/// <returns>The file to JSO.</returns>
+	/// <param name="pathFromXML">Path from XM.</param>
     public static JSONNode XMLFileToJSON(string pathFromXML)
     {
         XmlDocument xmlDoc = new XmlDocument();
@@ -154,6 +159,11 @@ public class JSONUtils {
         return XMLToJSON(xmlDoc);
     }
 
+	/// <summary>
+	/// A partir de un string, lo convierte a un objeto JSON.
+	/// </summary>
+	/// <returns>The string to JSO.</returns>
+	/// <param name="xmlString">Xml string.</param>
     public static JSONNode XMLStringToJSON(string xmlString)
     {
         XmlDocument xmlDoc = new XmlDocument();
@@ -161,6 +171,11 @@ public class JSONUtils {
         return XMLToJSON(xmlDoc);
     }
 
+	/// <summary>
+	/// Pasa un xml a un objeto json.
+	/// </summary>
+	/// <returns>The to JSO.</returns>
+	/// <param name="xmlDoc">Xml document.</param>
     private static JSONNode XMLToJSON(XmlDocument xmlDoc)
     {
         StringBuilder sbJSON = new StringBuilder();
@@ -170,6 +185,11 @@ public class JSONUtils {
         return JSON.Parse(sbJSON.ToString());
     }
 
+	/// <summary>
+	/// Pasa un string a un objeto json.
+	/// </summary>
+	/// <returns>The to JSO.</returns>
+	/// <param name="json">Json.</param>
     public static JSONNode StringToJSON(string json)
     {
         return JSON.Parse(json);

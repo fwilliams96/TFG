@@ -15,11 +15,22 @@ public class MessageManager : MonoBehaviour
         MessagePanel.SetActive(false);
     }
 
+	/// <summary>
+	/// Muestra un mensaje en la escena.
+	/// </summary>
+	/// <param name="Message">Message.</param>
+	/// <param name="Duration">Duration.</param>
     public void ShowMessage(string Message, float Duration)
     {
         StartCoroutine(ShowMessageCoroutine(Message, Duration));
     }
 
+	/// <summary>
+	/// Courutine que permtie que el mensaje desaparezca cuando transcurra la duracion.
+	/// </summary>
+	/// <returns>The message coroutine.</returns>
+	/// <param name="Message">Message.</param>
+	/// <param name="Duration">Duration.</param>
     IEnumerator ShowMessageCoroutine(string Message, float Duration)
     {
         //Debug.Log("Showing some message. Duration: " + Duration);

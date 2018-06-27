@@ -10,11 +10,12 @@ public class Mazo {
 		CartasEnMazo = new List<System.Object>();
     }
 
+	/// <summary>
+	/// Se mezclan todas las cartas del mazo
+	/// </summary>
     public void Mezclar()
     {
         CartasEnMazo.Shuffle();
     }
-
-
 
 }

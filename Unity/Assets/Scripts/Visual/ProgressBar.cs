@@ -29,7 +29,7 @@ public class ProgressBar : MonoBehaviour {
 		this.currentAmount = 0;
 	}
 	
-	// Update is called once per frame
+	//Actualiza visualmente la barra de progreso, cuando llega a 100 vuelve a empezar la 'animacion'
 	void Update () {
 		if (currentAmount < 100f) {
 			currentAmount += speed * Time.deltaTime;

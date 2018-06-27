@@ -19,7 +19,7 @@ public abstract class JugadorPartida : MonoBehaviour,ICharacter, IIdentifiable
 	protected AreaPosition area;
 
 	protected virtual void Awake(){
-		PlayerID = IDFactory.GetUniqueID();
+		PlayerID = IDFactory.GetBattleUniqueID();
 		Reset ();
 	}
 
@@ -27,6 +27,9 @@ public abstract class JugadorPartida : MonoBehaviour,ICharacter, IIdentifiable
 		
 	}
 
+	/// <summary>
+	/// Resetea los datos iniciales del jugador de partida.
+	/// </summary>
 	public void Reset(){
 		this.mano = new Mano();
 		this.mesa = new Mesa();
@@ -35,6 +38,10 @@ public abstract class JugadorPartida : MonoBehaviour,ICharacter, IIdentifiable
 		this.posCartaActual = 0;
 	}
 
+	/// <summary>
+	/// Añade mana extra al jugador.
+	/// </summary>
+	/// <param name="amount">Amount.</param>
 	public void ConseguirManaExtra(int amount)
 	{
 		ManaRestante += amount;
@@ -90,6 +97,9 @@ public abstract class JugadorPartida : MonoBehaviour,ICharacter, IIdentifiable
 			EndTurnEvent.Invoke();
 	}
 
+	/// <summary>
+	/// Actualiza los datos del jugador
+	/// </summary>
 	public virtual void OnTurnStart()
 	{
 		ManaEnEsteTurno = 10;
@@ -123,6 +133,10 @@ public abstract class JugadorPartida : MonoBehaviour,ICharacter, IIdentifiable
 		}
 	}
 
+	/// <summary>
+	/// Determina que carta se debe sacar ahora del mazo.
+	/// </summary>
+	/// <value>The position carta actual.</value>
 	private int PosCartaActual {
 		get {
 			int cActual = posCartaActual;

@@ -15,6 +15,12 @@ public class PremioPartida : MonoBehaviour {
 		PremioPartidaPanel.SetActive(false);
 	}
 
+	/// <summary>
+	/// Muestra los premios obtenidos en la partida para el jugador usuario.
+	/// </summary>
+	/// <param name="carta">Carta.</param>
+	/// <param name="items">Items.</param>
+	/// <param name="experiencia">Experiencia.</param>
 	public void MostrarPremioPartida(Carta carta, List<Item> items,int experiencia){
 		puntosExp.text = "ENHORABUENA, HAS OBTENIDO " + experiencia.ToString () + " PUNTOS DE EXP";
 		PremioPartidaPanel.SetActive(true);

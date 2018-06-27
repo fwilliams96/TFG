@@ -29,6 +29,10 @@ public class OneCardManager : MonoBehaviour {
     }
 
     private bool puedeSerJugada = false;
+	/// <summary>
+	/// Determina si la carta esta disponible.
+	/// </summary>
+	/// <value><c>true</c> if puede ser jugada; otherwise, <c>false</c>.</value>
     public bool PuedeSerJugada
     {
         get
@@ -66,7 +70,9 @@ public class OneCardManager : MonoBehaviour {
             PreviewManager.LeerDatosAsset();
         }
     }
-
+	/// <summary>
+	/// Lee los datos de la carta base.
+	/// </summary>
     private void LeerDatosCarta()
     {
 
@@ -94,6 +100,9 @@ public class OneCardManager : MonoBehaviour {
         CardFaceFrameImage.color = Color.white;
     }
 
+	/// <summary>
+	/// Lee las imagenes variables de la carta.
+	/// </summary>
     private void LeerSprites()
     {
 		CardGraphicImage.sprite = Resources.Load<Sprite>(CartaAsset.RutaImagenCarta);

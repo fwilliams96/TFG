@@ -19,6 +19,9 @@ public class CargarCarta : MonoBehaviour {
 	void Awake(){
 	}
 
+	/// <summary>
+	/// Instancia la carta en el panel correspondiente segun la carta que se ha tocado en el menu de acciones.
+	/// </summary>
 	public void MostrarCarta(){
 		Debug.Log ("On enable");
 		elemento = Instantiate (Acciones.Instance.ElementoActual, transform);

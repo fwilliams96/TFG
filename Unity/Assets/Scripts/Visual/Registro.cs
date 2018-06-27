@@ -21,6 +21,9 @@ public class Registro : MonoBehaviour {
 		
 	}
 
+	/// <summary>
+	/// Permite registrarse en la base de datos.
+	/// </summary>
     public void Registrarse()
     {
 		if (!camposVacios () && password.text.Equals (password2.text)) {
@@ -40,6 +43,10 @@ public class Registro : MonoBehaviour {
         
     }
 
+	/// <summary>
+	/// Carga la escena de menu o no.
+	/// </summary>
+	/// <param name="message">Message.</param>
 	public void Callback(string message)
     {
 		if ("".Equals (message)) {

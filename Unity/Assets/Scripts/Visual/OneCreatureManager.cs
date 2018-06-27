@@ -4,7 +4,9 @@ using UnityEngine.UI;
 
 public class OneCreatureManager : OneEnteManager 
 {
-    
+    /// <summary>
+    /// Lee los datos de la carta base.
+    /// </summary>
     public override void LeerDatosAsset()
     {
         // Change the card graphic sprite
@@ -24,6 +26,11 @@ public class OneCreatureManager : OneEnteManager
         }
     }	
 
+	/// <summary>
+	/// Crea el daño visual en la criatura.
+	/// </summary>
+	/// <param name="daño">Daño.</param>
+	/// <param name="vida">Vida.</param>
 	public void HacerDaño(int daño, int vida)
     {
 		if (vida > 0)

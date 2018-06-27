@@ -43,16 +43,33 @@ public class ConfiguracionUsuario : MonoBehaviour {
 		ConfiguracionItems = TIPO_CONFIGURACION.ENTERO;	
 	}
 
+	/// <summary>
+	/// Devuelve el valor en unidades.
+	/// </summary>
+	/// <returns>The entero.</returns>
+	/// <param name="numero">Numero.</param>
 	public static string ObtenerEntero(int numero){
 		return numero.ToString () + "u";
 	}
 
+	/// <summary>
+	/// Devuelve un valor en un factor de porcentaje.
+	/// </summary>
+	/// <returns>The porcentaje.</returns>
+	/// <param name="numerador">Numerador.</param>
+	/// <param name="denominador">Denominador.</param>
 	public static string ObtenerPorcentaje(int numerador, int denominador){
 		Decimal division = Convert.ToDecimal((double)numerador / (double)denominador);
 		division = Decimal.Round (division, 2);
 		return (Convert.ToInt32 (division*100)).ToString()+"%";
 	}
 
+	/// <summary>
+	/// Devuelve una fraccion dado el numerador y denominador.
+	/// </summary>
+	/// <returns>The fraccion.</returns>
+	/// <param name="numerador">Numerador.</param>
+	/// <param name="denominador">Denominador.</param>
 	public static string ObtenerFraccion(int numerador, int denominador){
 		int gcd = MayorDenominadorComun (numerador, denominador);
 		numerador /= gcd;
@@ -62,6 +79,12 @@ public class ConfiguracionUsuario : MonoBehaviour {
 		return numerador.ToString () + "/" + denominador.ToString ();
 	}
 
+	/// <summary>
+	/// Calcula el maximo denonimador comun.
+	/// </summary>
+	/// <returns>The denominador comun.</returns>
+	/// <param name="a">The alpha component.</param>
+	/// <param name="b">The blue component.</param>
 	private static int MayorDenominadorComun (int a, int b) { 
 		while (b != 0) { 
 			int t = b; 

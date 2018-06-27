@@ -11,6 +11,10 @@ public class TablaCartas : MonoBehaviour {
 	{
 	}
 
+	/// <summary>
+	/// Añade de forma visual la carta al scroll view adecuado.
+	/// </summary>
+	/// <param name="cartaGobj">Carta gobj.</param>
 	public void AñadirCarta(GameObject cartaGobj){
 		cartaGobj.tag = cartaGobj.tag.Equals("CartaDentroMazo") ? "CartaFueraMazo": "CartaDentroMazo";
 		cartaGobj.transform.SetParent (gridLayoutGroup.gameObject.transform);
@@ -20,6 +24,10 @@ public class TablaCartas : MonoBehaviour {
 		return gridLayoutGroup.transform.childCount;
 	}
 		
+	/// <summary>
+	/// Devuelve los elementos que se encuentran en el scroll view actual.
+	/// </summary>
+	/// <returns>The elementos.</returns>
 	public List<GameObject> ObtenerElementos(){
 		List<GameObject> cartas = new List<GameObject> ();
 		for (int i = 0; i < gridLayoutGroup.transform.childCount; i++) {
@@ -29,6 +37,9 @@ public class TablaCartas : MonoBehaviour {
 	}
 
 
+	/// <summary>
+	/// Callback recibido por el boton quitar o añadir.
+	/// </summary>
 	public void Accion(){
 		if (tag.Equals ("TablaCartas"))
 			ControladorMenu.Instance.AñadirElementoMazo (AccionBaraja.Instance.ElementoActual);
@@ -42,6 +53,10 @@ public class TablaCartas : MonoBehaviour {
 		//HabilitarColliderElementos ();
 	}
 
+	/// <summary>
+	/// Muestra el mensaje de accion de la carta en funcion si es del mazo o no.
+	/// </summary>
+	/// <param name="carta">Carta.</param>
 	public void MostrarAccion(GameObject carta){
 		
 		AccionBaraja.Instance.CerrarAccion ();

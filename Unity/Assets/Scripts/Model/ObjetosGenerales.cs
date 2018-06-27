@@ -13,7 +13,6 @@ public class ObjetosGenerales: MonoBehaviour
     public GameObject MagicaPrefab;
     public GameObject DamageEffectPrefab;
     public GameObject ExplosionPrefab;
-    // SINGLETON
     public static ObjetosGenerales Instance = null;
 
     void Awake()

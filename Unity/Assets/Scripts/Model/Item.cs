@@ -8,16 +8,9 @@ public abstract class Item : IIdentifiable
 	protected int cantidad;
 	protected int idItem;
 
-	public Item()
-    {
-		idItem = IDFactory.GetUniqueID();
-		this.cantidad = 0;
-		this.rutaImagen = "";
-    }
-
 	public Item(string rutaImagen, int cantidad)
 	{
-		idItem = IDFactory.GetUniqueID();
+		idItem = IDFactory.GetMenuUniqueID();
 		this.rutaImagen = rutaImagen;
 		this.cantidad = cantidad;
 	}

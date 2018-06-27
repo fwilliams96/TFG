@@ -15,11 +15,15 @@ public class MenuBatalla : MonoBehaviour {
 		
 	}
 
+	/// <summary>
+	/// Carga la escena de batalla.
+	/// </summary>
     public void Jugar()
     {
 		if (ControladorMenu.Instance.JugadorPuedeJugarBatalla ()) {
 			IDHolder.ClearIDHoldersList ();
-			SceneManager.LoadScene ("BattleGalaxy");
+			IDFactory.SaveCountMenu ();
+			SceneManager.LoadScene ("Batalla");
 		} else {
 			MessageManager.Instance.ShowMessage ("Tu mazo de batalla no contiene 8 cartas", 1.5f);
 		}

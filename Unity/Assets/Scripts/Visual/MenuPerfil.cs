@@ -13,6 +13,9 @@ public class MenuPerfil : MonoBehaviour {
 		//experiencia.value = ControladorMenu.Instance.ObtenerExperienciaJugador ();
 	}
 
+	/// <summary>
+	/// Recoge el nivel y experiencia del jugador.
+	/// </summary>
 	void OnEnable(){
 		nivel.text = ControladorMenu.Instance.ObtenerNivelJugador ();
 		experiencia.value = ControladorMenu.Instance.ObtenerExperienciaJugador ();

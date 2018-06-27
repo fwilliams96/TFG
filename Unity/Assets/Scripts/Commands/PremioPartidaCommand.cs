@@ -17,6 +17,9 @@ public class PremioPartidaCommand : Comanda{
 		this.exp = exp;
     }
 
+	/// <summary>
+	/// Función que muestra el premio obtenido en la partida al jugador usuario.
+	/// </summary>
     public override void EmpezarEjecucionComanda()
     {
 		PremioPartida.Instance.MostrarPremioPartida(carta,items,exp);

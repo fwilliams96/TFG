@@ -25,6 +25,10 @@ public abstract class DraggingActions : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Determina si el jugador puede controlar el ente o carta.
+	/// </summary>
+	/// <value><c>true</c> if se puede controlar; otherwise, <c>false</c>.</value>
 	public virtual bool SePuedeControlar
     {
         get
@@ -35,6 +39,10 @@ public abstract class DraggingActions : MonoBehaviour {
         }
     }
 
+	/// <summary>
+	/// Devuelve el dueño del ente o carta.
+	/// </summary>
+	/// <value>The player owner.</value>
     protected virtual JugadorPartida playerOwner
     {
         get{
@@ -57,6 +65,10 @@ public abstract class DraggingActions : MonoBehaviour {
 
     protected abstract bool DragSuccessful();
 
+	/// <summary>
+	/// Retorna el objetivo del ente.s
+	/// </summary>
+	/// <returns>The target.</returns>
     public virtual GameObject FindTarget()
     {
         GameObject Target = null;

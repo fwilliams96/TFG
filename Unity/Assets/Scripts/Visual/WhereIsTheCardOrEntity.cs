@@ -94,14 +94,19 @@ public class WhereIsTheCardOrEntity : MonoBehaviour
     }
 
     // not setting sorting order inside of VisualStaes property because when the card is drawn, 
-    // we want to set an index first and set the sorting order only when the card arrives to hand. 
+    // we want to set an index first and set the sorting order only when the card arrives to hand.
+	/// <summary>
+	/// Cambia la capa de canvas a cards.
+	/// </summary>
     public void SetearOrdenCarta()
     {
         if (slot != -1)
             canvas.sortingOrder = HandSortingOrder(slot);
         canvas.sortingLayerName = "Cards";
     }
-
+	/// <summary>
+	/// Cambia la capa de canvas a creatures.
+	/// </summary>
     public void SetearOrdenCriatura()
     {
         canvas.sortingOrder = 0;

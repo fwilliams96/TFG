@@ -14,6 +14,9 @@ public class DealDamageCommand : Comanda {
         this.health = health;
     }
 
+	/// <summary>
+	/// Función que permite hacer daño a un jugador o una criatura.
+	/// </summary>
 	public override void EmpezarEjecucionComanda()
 	{
 		GameObject target = IDHolder.GetGameObjectWithID(targetID);
